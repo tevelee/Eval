@@ -1,73 +1,7 @@
 import Foundation
 
-public enum MatchResult: Equatable {
-    case noMatch
-    case possibleMatch
-    case exactMatch(length: Int, output: String, variables: [String: String])
-    case anyMatch
-    
-    public static func ==(lhs: MatchResult, rhs: MatchResult) -> Bool {
-        switch (lhs, rhs) {
-        case (.noMatch, .noMatch), (.possibleMatch, .possibleMatch), (.anyMatch, .anyMatch):
-            return true
-        case (.exactMatch(let leftLength, let leftOutput, let leftVariables),
-              .exactMatch(let rightLength, let rightOutput, let rightVariables)):
-            return leftLength == rightLength && leftOutput == rightOutput && leftVariables == rightVariables
-        default:
-            return false
-        }
-    }
-    
-    func isMatch() -> Bool {
-        if case .exactMatch(length: _, output: _, variables: _) = self {
-            return true
-        }
-        return false
-    }
-}
-
 public protocol Element {
     func matches(prefix: String) -> MatchResult
-}
-
-func +(left: Element, right: Element) -> [Element] {
-    return [left, right]
-}
-
-func +<A>(left: [A], right: A) -> [A] {
-    return left + [right]
-}
-
-func +=<A> (left: inout [A], right: A) {
-    left = left + right
-}
-
-func += (left: inout String, right: Character) {
-    left = left + String(right)
-}
-
-extension CharacterSet {
-    func contains(_ character: Character) -> Bool {
-        if let string = String(character).unicodeScalars.first {
-            return self.contains(string)
-        } else {
-            return false
-        }
-    }
-}
-
-extension String {
-    subscript (i: Int) -> Character {
-        return self[index(startIndex, offsetBy: i)]
-    }
-    
-    subscript (range: CountableRange<Int>) -> Substring {
-        return self[index(startIndex, offsetBy: range.startIndex) ..< index(startIndex, offsetBy: range.endIndex)]
-    }
-    
-    subscript (range: PartialRangeUpTo<Int>) -> Substring {
-        return self[..<index(startIndex, offsetBy: range.upperBound)]
-    }
 }
 
 public struct Pattern : Element {
@@ -149,20 +83,14 @@ public struct Variable : Element {
     }
 }
 
-public protocol Filter {
-    
-}
-
-public class TemplateLanguage : Language {
+public class TemplateLanguageInterpreter : Interpreter {
     let statements: [Pattern]
-    let filters: [Filter]
     
-    init(statements: [Pattern], filters: [Filter]) {
+    init(statements: [Pattern]) {
         self.statements = statements
-        self.filters = filters
     }
     
-    public func interpret(input: String) -> String {
+    public func interpret(_ input: String) -> String {
         var output = ""
         
         var position = 0
@@ -204,20 +132,3 @@ public class TemplateLanguage : Language {
         return .noMatch
     }
 }
-
-public protocol Expression {
-    
-}
-
-public struct BooleanExpression : Expression {
-    let expression: String
-    
-    public init(_ expression: String) {
-        self.expression = expression
-    }
-    
-    public func evaluate() -> Bool {
-        return true
-    }
-}
-

@@ -2,23 +2,24 @@ import Foundation
 
 public enum MatchResult: Equatable {
     case noMatch
-    case prefix
-    case match(position: Int, output: String)
-    case any
+    case possibleMatch
+    case exactMatch(length: Int, output: String, variables: [String: String])
+    case anyMatch
     
     public static func ==(lhs: MatchResult, rhs: MatchResult) -> Bool {
         switch (lhs, rhs) {
-        case (.noMatch, .noMatch), (.prefix, .prefix), (.any, .any):
+        case (.noMatch, .noMatch), (.possibleMatch, .possibleMatch), (.anyMatch, .anyMatch):
             return true
-        case (.match(let leftPosition, let leftOutput), .match(let rightPosition, let rightOutput)):
-            return leftPosition == rightPosition && leftOutput == rightOutput
+        case (.exactMatch(let leftLength, let leftOutput, let leftVariables),
+              .exactMatch(let rightLength, let rightOutput, let rightVariables)):
+            return leftLength == rightLength && leftOutput == rightOutput && leftVariables == rightVariables
         default:
             return false
         }
     }
     
     func isMatch() -> Bool {
-        if case .match(position: _, output: _) = self {
+        if case .exactMatch(length: _, output: _, variables: _) = self {
             return true
         }
         return false
@@ -71,37 +72,50 @@ extension String {
 
 public struct Pattern : Element {
     let elements: [Element]
-    let handler: ([String: String]) -> String?
+    let renderer: ([String: String]) -> String?
     
-    public init(_ elements: [Element], handler: @escaping ([String: String]) -> String? = { _ in nil }) {
+    public init(_ elements: [Element], renderer: @escaping ([String: String]) -> String? = { _ in nil }) {
         self.elements = elements
-        self.handler = handler
+        self.renderer = renderer
     }
     
     public func matches(prefix: String) -> MatchResult {
-        var elements = self.elements
-        
-        var position = 1
-        repeat {
-            let stringSoFar = String(prefix[..<position])
-            if let current = elements.first {
-                let result = current.matches(prefix: stringSoFar)
-                switch result {
-                case .noMatch:
+        var elementIndex = 0
+        var input = prefix
+        var variables: [String: String] = [:]
+        var currentlyActiveVariable: (name: String, value: String)? = nil
+        elementSearch: repeat {
+            let element = elements[elementIndex]
+            let result = element.matches(prefix: input)
+            
+            switch result {
+            case .noMatch:
+                if let previous = currentlyActiveVariable, !input.isEmpty {
+                    currentlyActiveVariable = (previous.name, previous.value + String(input.removeFirst()))
+                } else {
                     return .noMatch
-                case .prefix, .any:
-                    position += 1
-                    continue
-                case .match(let position, let output):
-                    elements.remove(at: 0)
-                    if elements.count == 0 {
-                        return .match(position: position, output: output)
-                    }
                 }
+            case .possibleMatch:
+                return .possibleMatch
+            case .anyMatch:
+                if !input.isEmpty, let variable = element as? Variable {
+                    currentlyActiveVariable = (variable.name, String(input.removeFirst()))
+                }
+                elementIndex += 1
+            case .exactMatch(let length, _, let embeddedVariables):
+                variables.merge(embeddedVariables) { (key, value) in key }
+                if let variable = currentlyActiveVariable {
+                    variables[variable.name] = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
+                    currentlyActiveVariable = nil
+                }
+                input.removeFirst(length)
+                input = input.trimmingCharacters(in: .whitespacesAndNewlines)
+                elementIndex += 1
             }
-        } while position < prefix.count
+        } while elementIndex < elements.count
         
-        return .prefix
+        let renderedOutput = renderer(variables) ?? ""
+        return .exactMatch(length: prefix.count - input.count, output: renderedOutput, variables: variables)
     }
 }
 
@@ -109,14 +123,14 @@ public struct Keyword : Element {
     let name: String
     
     public init(_ name: String) {
-        self.name = name
+        self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     public func matches(prefix: String) -> MatchResult {
-        if name == prefix {
-            return .match(position: name.count, output: name)
+        if name == prefix || prefix.hasPrefix(name) {
+            return .exactMatch(length: name.count, output: name, variables: [:])
         } else if name.hasPrefix(prefix) {
-            return .prefix
+            return .possibleMatch
         } else {
             return .noMatch
         }
@@ -131,7 +145,7 @@ public struct Variable : Element {
     }
     
     public func matches(prefix: String) -> MatchResult {
-        return .any
+        return .anyMatch
     }
 }
 
@@ -153,14 +167,14 @@ public class TemplateLanguage : Language {
         
         var position = 0
         repeat {
-            let result = matchStatements(in: input, from: position)
+            let result = isStatement(in: input, from: position)
             switch result {
             case .noMatch:
                 output += input[position]
                 position += 1
-            case .match(let endPosition, let matchOutput):
+            case .exactMatch(let length, let matchOutput, _):
                 output += matchOutput
-                position += endPosition
+                position += length
             default:
                 assertionFailure("Invalid result")
             }
@@ -169,21 +183,22 @@ public class TemplateLanguage : Language {
         return output
     }
     
-    func matchStatements(in input: String, from start: Int, until length: Int = 1) -> MatchResult {
+    func isStatement(in input: String, from start: Int, until length: Int = 1) -> MatchResult {
         let prefix = String(input[start ..< start + length])
-        let elements = statements.map { ($0, result: $0.matches(prefix: prefix)) }.filter { $0.result != .noMatch }
+        let elements = statements.map { (element: $0, result: $0.matches(prefix: prefix)) }.filter { $0.result != .noMatch }
         
         if elements.count == 0 {
             return .noMatch
         }
-        if let matchingElement = elements.first(where: { $0.result.isMatch() }), case .match(let position, let output) = matchingElement.result {
-            return .match(position: start + position, output: output)
+        if let matchingElement = elements.first(where: { $0.result.isMatch() }),
+            case .exactMatch(let length, let output, let variables) = matchingElement.result {
+            return .exactMatch(length: length, output: output, variables: variables)
         }
-        if elements.contains(where: { $0.result == .prefix }) {
+        if elements.contains(where: { $0.result == .possibleMatch }) {
             if input.count == start + length {
-                return .match(position: start + length, output: prefix)
+                return .exactMatch(length: start + length, output: prefix, variables: [:]) //FIXME: is this really a match?
             } else {
-                return matchStatements(in: input, from: start, until: length + 1)
+                return isStatement(in: input, from: start, until: length + 1)
             }
         }
         return .noMatch

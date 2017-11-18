@@ -1,17 +1,17 @@
 import Foundation
 
 public protocol Renderer {
-    func render(variables: [String: String]) -> String
+    func render(variables: [String: Any]) -> String
 }
 
 public class StaticRenderer: Renderer {
-    let renderingBlock: ([String: String]) -> String
+    let renderingBlock: ([String: Any]) -> String
     
-    init(renderingBlock: @escaping ([String: String]) -> String) {
+    init(renderingBlock: @escaping ([String: Any]) -> String) {
         self.renderingBlock = renderingBlock
     }
     
-    public func render(variables: [String: String]) -> String {
+    public func render(variables: [String: Any]) -> String {
         return self.renderingBlock(variables)
     }
 }
@@ -24,7 +24,7 @@ public class Pattern : Element {
     let elements: [Element]
     let renderer: Renderer
     
-    public convenience init(_ elements: [Element], renderingBlock: @escaping ([String: String]) -> String? = { _ in nil }) {
+    public convenience init(_ elements: [Element], renderingBlock: @escaping ([String: Any]) -> String? = { _ in nil }) {
         self.init(elements, renderer: StaticRenderer(renderingBlock: { variables in renderingBlock(variables) ?? "" }))
     }
     
@@ -71,7 +71,7 @@ public class Pattern : Element {
             case .exactMatch(let length, _, let embeddedVariables):
                 variables.merge(embeddedVariables) { (key, value) in key }
                 if let variable = currentlyActiveVariable {
-                    variables[variable.name] = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
+                    variables[variable.name] = variable.value
                     currentlyActiveVariable = nil
                 }
                 input.removeFirst(length)

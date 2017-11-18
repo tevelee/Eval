@@ -38,4 +38,8 @@ extension String {
     subscript (range: PartialRangeUpTo<Int>) -> Substring {
         return self[..<index(startIndex, offsetBy: range.upperBound)]
     }
+    
+    public func trim() -> String {
+        return trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 }

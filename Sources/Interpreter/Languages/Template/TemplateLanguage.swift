@@ -1,12 +1,12 @@
 import Foundation
 
 public struct RenderingContext {
-    typealias Function = ([String]) -> String
+    public typealias Function = ([String]) -> String
     
-    var variables: [String: String]
+    var variables: [String: Any]
     var functions: [String: Function]
     
-    init(variables: [String: String] = [:],
+    public init(variables: [String: Any] = [:],
          functions: [String: Function] = [:]) {
         self.variables = variables
         self.functions = functions
@@ -16,11 +16,11 @@ public struct RenderingContext {
 public class ContextAwareRenderer {
     var context: RenderingContext
     
-    init(context: RenderingContext) {
+    public init(context: RenderingContext) {
         self.context = context
     }
     
-    func contextAwareRender(renderer: @escaping ([String: String], inout RenderingContext) -> String?) -> StaticRenderer {
+    public func contextAwareRender(renderer: @escaping ([String: Any], inout RenderingContext) -> String?) -> StaticRenderer {
         return StaticRenderer { variables in renderer(variables, &self.context) ?? "" }
     }
 }

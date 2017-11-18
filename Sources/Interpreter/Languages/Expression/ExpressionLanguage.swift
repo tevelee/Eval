@@ -1,7 +1,13 @@
 import Foundation
 
-public class BooleanExpressionInterpreter : Interpreter {
+public class NumericExpressionInterpreter : TemplateLanguageInterpreter {
+    public func evaluate(_ expression: String) -> Double {
+        return Double(interpret(expression)) ?? 0
+    }
+}
+
+public class BooleanExpressionInterpreter : TemplateLanguageInterpreter {
     public func evaluate(_ expression: String) -> Bool {
-        return true
+        return interpret(expression) == "true"
     }
 }

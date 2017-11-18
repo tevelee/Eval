@@ -45,8 +45,9 @@ class InterpreterTests: XCTestCase {
         let tagPrefix = "{%"
         let tagSuffix = "%}"
         let pattern = ifStatement(tagPrefix: tagPrefix, tagSuffix: tagSuffix)
-        XCTAssertEqual(pattern.matches(prefix: "{% if 12 > 5 %}x{% endif %}"), .exactMatch(length: 27, output: "x", variables: ["condition": "12 > 5",
-                                                                                                                                "body": "x"]))
+        XCTAssertEqual(pattern.matches(prefix: "{% if 12 > 5 %}x{% endif %}"), .exactMatch(length: 27,
+                                                                                           output: "x",
+                                                                                           variables: ["condition": "12 > 5", "body": "x"]))
 
         let interpreter = TemplateLanguageInterpreter(statements: [pattern])
         XCTAssertEqual(interpreter.interpret("123 {% if 12 > 5 %}x{% endif %}"), "123 x")
@@ -61,7 +62,7 @@ class InterpreterTests: XCTestCase {
             ifStatement(tagPrefix: tagPrefix, tagSuffix: tagSuffix),
             commentBlock()
             ])
-        XCTAssertEqual(interpreter.interpret("a{# asd asd #}sd 123 {% if 12 > 5 %}x{% else %}y{% endif %}"), "asd 123 x")
+        XCTAssertEqual(interpreter.interpret("a{# asd asd #}sd 123 {% if 5 + 1 > 5 %}x{% else %}y{% endif %}"), "asd 123 x")
     }
 
     static var allTests = [
@@ -70,11 +71,35 @@ class InterpreterTests: XCTestCase {
         ("testCompositeExample2", testCompositeExample2),
         ]
     
+    func numericExpressionInterpreter() -> NumericExpressionInterpreter {
+        let plus = Pattern(Variable("lhs") + Keyword("+") + Variable("rhs")) { variables in
+            if let lhs = variables["lhs"], let rhs = variables["rhs"] {
+                let lhsValue = self.numericExpressionInterpreter().evaluate(lhs)
+                let rhsValue = self.numericExpressionInterpreter().evaluate(rhs)
+                return String(lhsValue + rhsValue)
+            }
+            return ""
+        }
+        return NumericExpressionInterpreter(statements: [plus])
+    }
+    
+    func booleanExpressionInterpreter() -> BooleanExpressionInterpreter {
+        let greaterThan = Pattern(Variable("lhs") + Keyword(">") + Variable("rhs")) { variables in
+            if let lhs = variables["lhs"], let rhs = variables["rhs"] {
+                let lhsValue = self.numericExpressionInterpreter().evaluate(lhs)
+                let rhsValue = self.numericExpressionInterpreter().evaluate(rhs)
+                return lhsValue > rhsValue ? "true" : "false"
+            }
+            return "false"
+        }
+        return BooleanExpressionInterpreter(statements: [greaterThan])
+    }
+    
     func ifStatement(tagPrefix: String, tagSuffix: String) -> Pattern {
         let ifOpeningTag = Pattern(Keyword(tagPrefix) + Keyword("if") + Variable("condition") + Keyword(tagSuffix))
         let ifClosingTag = Pattern(Keyword(tagPrefix) + Keyword("endif") + Keyword(tagSuffix))
         return Pattern(ifOpeningTag + Variable("body") + ifClosingTag) { variables in
-            if let condition = variables["condition"], BooleanExpressionInterpreter().evaluate(condition) {
+            if let condition = variables["condition"], self.booleanExpressionInterpreter().evaluate(condition) {
                 return variables["body"]
             } else {
                 return nil
@@ -87,7 +112,7 @@ class InterpreterTests: XCTestCase {
         let elseTag = Pattern(Keyword(tagPrefix) + Keyword("else") + Keyword(tagSuffix))
         let ifClosingTag = Pattern(Keyword(tagPrefix) + Keyword("endif") + Keyword(tagSuffix))
         return Pattern(ifOpeningTag + Variable("body") + elseTag + Variable("else") + ifClosingTag) { variables in
-            if let condition = variables["condition"], BooleanExpressionInterpreter().evaluate(condition) {
+            if let condition = variables["condition"], self.booleanExpressionInterpreter().evaluate(condition) {
                 return variables["body"]
             } else {
                 return variables["else"]

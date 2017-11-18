@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol Element {
-    func matches(prefix: String) -> MatchResult
+    func matches(prefix: String, isLast: Bool) -> MatchResult
 }
 
 public struct Pattern : Element {
@@ -9,18 +9,23 @@ public struct Pattern : Element {
     let renderer: ([String: String]) -> String?
     
     public init(_ elements: [Element], renderer: @escaping ([String: String]) -> String? = { _ in nil }) {
+        var elements = elements
+        if let last = elements.last as? Variable {
+            elements.removeLast()
+            elements.append(Variable(last.name, shortest: false))
+        }
         self.elements = elements
         self.renderer = renderer
     }
     
-    public func matches(prefix: String) -> MatchResult {
+    public func matches(prefix: String, isLast: Bool = false) -> MatchResult {
         var elementIndex = 0
         var input = prefix
         var variables: [String: String] = [:]
         var currentlyActiveVariable: (name: String, value: String)? = nil
         elementSearch: repeat {
             let element = elements[elementIndex]
-            let result = element.matches(prefix: input)
+            let result = element.matches(prefix: input, isLast: isLast)
             
             switch result {
             case .noMatch:
@@ -31,9 +36,16 @@ public struct Pattern : Element {
                 }
             case .possibleMatch:
                 return .possibleMatch
-            case .anyMatch:
+            case .anyMatch(let shortest):
                 if !input.isEmpty, let variable = element as? Variable {
                     currentlyActiveVariable = (variable.name, String(input.removeFirst()))
+                }
+                if !shortest {
+                    if isLast, let variable = currentlyActiveVariable {
+                        variables[variable.name] = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
+                    } else {
+                        return .possibleMatch
+                    }
                 }
                 elementIndex += 1
             case .exactMatch(let length, _, let embeddedVariables):
@@ -60,7 +72,7 @@ public struct Keyword : Element {
         self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
-    public func matches(prefix: String) -> MatchResult {
+    public func matches(prefix: String, isLast: Bool = false) -> MatchResult {
         if name == prefix || prefix.hasPrefix(name) {
             return .exactMatch(length: name.count, output: name, variables: [:])
         } else if name.hasPrefix(prefix) {
@@ -73,13 +85,15 @@ public struct Keyword : Element {
 
 public struct Variable : Element {
     let name: String
+    let shortest: Bool
     
-    public init(_ name: String) {
+    public init(_ name: String, shortest: Bool = true) {
         self.name = name
+        self.shortest = shortest
     }
     
-    public func matches(prefix: String) -> MatchResult {
-        return .anyMatch
+    public func matches(prefix: String, isLast: Bool = false) -> MatchResult {
+        return .anyMatch(shortest: shortest)
     }
 }
 
@@ -113,7 +127,8 @@ public class TemplateLanguageInterpreter : Interpreter {
     
     func isStatement(in input: String, from start: Int, until length: Int = 1) -> MatchResult {
         let prefix = String(input[start ..< start + length])
-        let elements = statements.map { (element: $0, result: $0.matches(prefix: prefix)) }.filter { $0.result != .noMatch }
+        let isLast = input.count == start + length
+        let elements = statements.map { (element: $0, result: $0.matches(prefix: prefix, isLast: isLast)) }.filter { $0.result != .noMatch }
         
         if elements.count == 0 {
             return .noMatch

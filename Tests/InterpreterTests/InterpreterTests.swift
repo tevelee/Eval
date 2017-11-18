@@ -1,6 +1,6 @@
 import XCTest
 @testable import Interpreter
-import struct Interpreter.Pattern
+import class Interpreter.Pattern
 
 class InterpreterTests: XCTestCase {
     func testSimpleExample() {
@@ -14,8 +14,8 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(pattern.matches(prefix: "i"), .possibleMatch)
         XCTAssertEqual(pattern.matches(prefix: "if"), .exactMatch(length: 2, output: "x", variables: [:]))
 
-        let interpreter = TemplateLanguageInterpreter(statements: [pattern])
-        XCTAssertEqual(interpreter.interpret("aifb"), "axb")
+        let interpreter = StringExpressionInterpreter(statements: [pattern])
+        XCTAssertEqual(interpreter.evaluate("aifb"), "axb")
 
         let pattern2 = Pattern(keyword + Keyword("fi")) { _ in "y" }
         XCTAssertEqual(pattern2.matches(prefix: "asd"), .noMatch)
@@ -24,8 +24,8 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(pattern2.matches(prefix: "iff"), .possibleMatch)
         XCTAssertEqual(pattern2.matches(prefix: "iffi"), .exactMatch(length: 4, output: "y", variables: [:]))
 
-        let interpreter2 = TemplateLanguageInterpreter(statements: [pattern2])
-        XCTAssertEqual(interpreter2.interpret("aiffib"), "ayb")
+        let interpreter2 = StringExpressionInterpreter(statements: [pattern2])
+        XCTAssertEqual(interpreter2.evaluate("aiffib"), "ayb")
         
         let pattern3 = Pattern(Keyword("{%") + Variable("any") + Keyword("%}")) { _ in "z" }
         XCTAssertEqual(pattern3.matches(prefix: "asd"), .noMatch)
@@ -37,8 +37,8 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(pattern3.matches(prefix: "{%a a %"), .possibleMatch)
         XCTAssertEqual(pattern3.matches(prefix: "{%a a %}"), .exactMatch(length: 8, output: "z", variables: ["any": "a a"]))
         
-        let interpreter3 = TemplateLanguageInterpreter(statements: [pattern3])
-        XCTAssertEqual(interpreter3.interpret("a{%a a %}b"), "azb")
+        let interpreter3 = StringExpressionInterpreter(statements: [pattern3])
+        XCTAssertEqual(interpreter3.evaluate("a{%a a %}b"), "azb")
     }
     
     func testCompositeExample1() {
@@ -49,20 +49,21 @@ class InterpreterTests: XCTestCase {
                                                                                            output: "x",
                                                                                            variables: ["condition": "12 > 5", "body": "x"]))
 
-        let interpreter = TemplateLanguageInterpreter(statements: [pattern])
-        XCTAssertEqual(interpreter.interpret("123 {% if 12 > 5 %}x{% endif %}"), "123 x")
+        let interpreter = StringExpressionInterpreter(statements: [pattern])
+//        XCTAssertEqual(interpreter.interpret("123 {% if 1 + (5 * 2) == 11 %}x{% endif %}"), "123 x")
+        XCTAssertEqual(interpreter.evaluate("123 {% if 3 * 2 == 6 %}x{% endif %}"), "123 x")
     }
     
     func testCompositeExample2() {
         let tagPrefix = "{%"
         let tagSuffix = "%}"
 
-        let interpreter = TemplateLanguageInterpreter(statements: [
+        let interpreter = StringExpressionInterpreter(statements: [
             ifElseStatement(tagPrefix: tagPrefix, tagSuffix: tagSuffix),
             ifStatement(tagPrefix: tagPrefix, tagSuffix: tagSuffix),
             commentBlock()
             ])
-        XCTAssertEqual(interpreter.interpret("a{# asd asd #}sd 123 {% if 5 + 1 > 5 %}x{% else %}y{% endif %}"), "asd 123 x")
+        XCTAssertEqual(interpreter.evaluate("a{# asd asd #}sd 123 {% if 12 > 5 %}x{% else %}y{% endif %}"), "asd 123 x")
     }
 
     static var allTests = [
@@ -71,28 +72,44 @@ class InterpreterTests: XCTestCase {
         ("testCompositeExample2", testCompositeExample2),
         ]
     
-    func numericExpressionInterpreter() -> NumericExpressionInterpreter {
-        let plus = Pattern(Variable("lhs") + Keyword("+") + Variable("rhs")) { variables in
+    func boolOperator(keyword: String, parser: @escaping (Double, Double) -> Bool) -> Pattern {
+        return Pattern(Variable("lhs") + Keyword(keyword) + Variable("rhs")) { variables in
             if let lhs = variables["lhs"], let rhs = variables["rhs"] {
-                let lhsValue = self.numericExpressionInterpreter().evaluate(lhs)
-                let rhsValue = self.numericExpressionInterpreter().evaluate(rhs)
-                return String(lhsValue + rhsValue)
-            }
-            return ""
-        }
-        return NumericExpressionInterpreter(statements: [plus])
-    }
-    
-    func booleanExpressionInterpreter() -> BooleanExpressionInterpreter {
-        let greaterThan = Pattern(Variable("lhs") + Keyword(">") + Variable("rhs")) { variables in
-            if let lhs = variables["lhs"], let rhs = variables["rhs"] {
-                let lhsValue = self.numericExpressionInterpreter().evaluate(lhs)
-                let rhsValue = self.numericExpressionInterpreter().evaluate(rhs)
-                return lhsValue > rhsValue ? "true" : "false"
+                let lhsValue : Double = self.numericExpressionInterpreter().evaluate(lhs)
+                let rhsValue : Double = self.numericExpressionInterpreter().evaluate(rhs)
+                return parser(lhsValue, rhsValue) ? "true" : "false"
             }
             return "false"
         }
-        return BooleanExpressionInterpreter(statements: [greaterThan])
+    }
+    
+    func numericOperator(keyword: String, parser: @escaping (Double, Double) -> Double) -> Pattern {
+        return Pattern(Variable("lhs") + Keyword(keyword) + Variable("rhs")) { variables in
+            if let lhs = variables["lhs"], let rhs = variables["rhs"] {
+                let lhsValue : Double = self.numericExpressionInterpreter().evaluate(lhs)
+                let rhsValue : Double = self.numericExpressionInterpreter().evaluate(rhs)
+                return String(parser(lhsValue, rhsValue))
+            }
+            return ""
+        }
+    }
+    
+    func numericExpressionInterpreter() -> NumericExpressionInterpreter {
+        let brackets = Pattern(Keyword("(") + Variable("body") + Keyword(")")) { $0["body"] }
+        let plus = numericOperator(keyword: "+") { lhs, rhs in lhs + rhs }
+        let minus = numericOperator(keyword: "-") { lhs, rhs in lhs - rhs }
+        let multiplication = numericOperator(keyword: "*") { lhs, rhs in lhs * rhs }
+        let division = numericOperator(keyword: "/") { lhs, rhs in lhs / rhs }
+        return NumericExpressionInterpreter(statements: [brackets, division, multiplication, plus, minus])
+    }
+    
+    func booleanExpressionInterpreter() -> BooleanExpressionInterpreter {
+        let equal = boolOperator(keyword: "==") { (lhs: Double, rhs: Double) in lhs == rhs }
+        let greaterThan = boolOperator(keyword: ">") { lhs, rhs in lhs > rhs }
+        let greaterThanOrEqual = boolOperator(keyword: ">=") { lhs, rhs in lhs >= rhs }
+        let lessThan = boolOperator(keyword: "<") { lhs, rhs in lhs < rhs }
+        let lessThanOrEqual = boolOperator(keyword: "<=") { lhs, rhs in lhs <= rhs }
+        return BooleanExpressionInterpreter(statements: [equal, greaterThanOrEqual, greaterThan, lessThanOrEqual, lessThan])
     }
     
     func ifStatement(tagPrefix: String, tagSuffix: String) -> Pattern {

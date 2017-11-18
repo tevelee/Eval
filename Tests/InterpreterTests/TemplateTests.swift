@@ -28,10 +28,20 @@ class TemplateTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("x {% for y in array %}{{ y }} {% endfor %}y"), "x 1 2 3 4 5 y")
     }
     
+    func testFunctions() {
+        let renderer = ContextAwareRenderer(context: RenderingContext(variables: ["x": 1]))
+        let interpreter = StringExpressionInterpreter(statements: [printStatement(tagPrefix: "{{", tagSuffix: "}}", renderer: renderer),
+                                                                   inc(renderer: renderer),
+                                                                   incFilter(renderer: renderer)])
+        XCTAssertEqual(interpreter.evaluate("-inc(x)-"), "-2-")
+        XCTAssertEqual(interpreter.evaluate("x|inc"), "2")
+    }
+    
     static var allTests = [
         ("testVariable", testVariable),
         ("testSet", testSet),
         ("testLoop", testLoop),
+        ("testFunctions", testFunctions),
     ]
     
     func printStatement(tagPrefix: String, tagSuffix: String, renderer: ContextAwareRenderer) -> Pattern {
@@ -126,6 +136,29 @@ class TemplateTests: XCTestCase {
             } else {
                 return nil
             }
+        })
+    }
+    
+    func inc(renderer: ContextAwareRenderer) -> Pattern {
+        return Pattern(Keyword("inc") + Keyword("(") + Variable("arguments") + Keyword(")"),
+                       renderer: renderer.contextAwareRender { variables, context in
+            if let args = variables["arguments"] as? String,
+                let variable = args.trim().components(separatedBy: ",").first,
+                let value = context.variables[variable] as? Int {
+                return String(value + 1)
+            }
+            return nil
+        })
+    }
+    
+    func incFilter(renderer: ContextAwareRenderer) -> Pattern {
+        return Pattern(Variable("variable") + Keyword("|") + Keyword("inc"),
+                       renderer: renderer.contextAwareRender { variables, context in
+                        if let variable = variables["variable"] as? String,
+                            let value = context.variables[variable] as? Int {
+                            return String(value + 1)
+                        }
+                        return nil
         })
     }
 }

@@ -1,19 +1,27 @@
 import Foundation
 
 public protocol Renderer {
-    func render(variables: [String: Any]) -> String
+    func render(variables: [String: Any], interpreterFactory: InterpreterFactory?) -> String
 }
 
-public class StaticRenderer: Renderer {
-    let renderingBlock: ([String: Any]) -> String
+public typealias RenderingBlock = ([String: Any], InterpreterFactory?) -> String
+
+class StaticRenderer: Renderer {
+    let renderingBlock: RenderingBlock
     
-    init(renderingBlock: @escaping ([String: Any]) -> String) {
+    init(renderingBlock: @escaping RenderingBlock) {
         self.renderingBlock = renderingBlock
     }
     
-    public func render(variables: [String: Any]) -> String {
-        return self.renderingBlock(variables)
+    public func render(variables: [String: Any], interpreterFactory: InterpreterFactory?) -> String {
+        return self.renderingBlock(variables, interpreterFactory)
     }
+}
+
+public protocol InterpreterFactory {
+    func stringExpressionInterpreter() -> StringExpressionInterpreter
+    func booleanExpressionInterpreter() -> BooleanExpressionInterpreter
+    func numericExpressionInterpreter() -> NumericExpressionInterpreter
 }
 
 public protocol Element {
@@ -23,12 +31,15 @@ public protocol Element {
 public class Pattern : Element {
     let elements: [Element]
     let renderer: Renderer
+    let interpreterFactory: InterpreterFactory?
     
-    public convenience init(_ elements: [Element], renderingBlock: @escaping ([String: Any]) -> String? = { _ in nil }) {
-        self.init(elements, renderer: StaticRenderer(renderingBlock: { variables in renderingBlock(variables) ?? "" }))
+    public convenience init(_ elements: [Element],
+                            interpreterFactory: InterpreterFactory? = nil,
+                            renderingBlock: @escaping RenderingBlock = { _,_ in "" }) {
+        self.init(elements, interpreterFactory: interpreterFactory, renderer: StaticRenderer(renderingBlock: renderingBlock))
     }
     
-    public init(_ elements: [Element], renderer: Renderer) {
+    public init(_ elements: [Element], interpreterFactory: InterpreterFactory? = nil, renderer: Renderer) {
         var elements = elements
         if let last = elements.last as? Variable {
             elements.removeLast()
@@ -36,6 +47,7 @@ public class Pattern : Element {
         }
         self.elements = elements
         self.renderer = renderer
+        self.interpreterFactory = interpreterFactory
     }
     
     public func matches(prefix: String, isLast: Bool = false) -> MatchResult {
@@ -80,8 +92,12 @@ public class Pattern : Element {
             }
         } while elementIndex < elements.count
         
-        let renderedOutput = renderer.render(variables: variables)
+        let renderedOutput = render(variables: variables)
         return .exactMatch(length: prefix.count - input.count, output: renderedOutput, variables: variables)
+    }
+    
+    func render(variables: [String: String]) -> String {
+        return renderer.render(variables: variables, interpreterFactory: interpreterFactory)
     }
 }
 
@@ -118,7 +134,7 @@ public struct Variable : Element {
 }
 
 public class StringExpressionInterpreter : Interpreter {
-    let statements: [Pattern]
+    var statements: [Pattern]
     
     public init(statements: [Pattern]) {
         self.statements = statements
@@ -148,7 +164,9 @@ public class StringExpressionInterpreter : Interpreter {
     func isStatement(in input: String, from start: Int, until length: Int = 1) -> MatchResult {
         let prefix = String(input[start ..< start + length])
         let isLast = input.count == start + length
-        let elements = statements.map { (element: $0, result: $0.matches(prefix: prefix, isLast: isLast)) }.filter { $0.result != .noMatch }
+        let elements = statements
+            .map { (element: $0, result: $0.matches(prefix: prefix, isLast: isLast)) }
+            .filter { $0.result != .noMatch }
         
         if elements.count == 0 {
             return .noMatch

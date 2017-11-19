@@ -1,6 +1,6 @@
 import Foundation
 
-func +(left: Element, right: Element) -> [Element] {
+public func +(left: Element, right: Element) -> [Element] {
     return [left, right]
 }
 

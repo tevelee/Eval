@@ -3,8 +3,8 @@ import Foundation
 public struct RenderingContext {
     public typealias Function = ([String]) -> String
     
-    var variables: [String: Any]
-    var functions: [String: Function]
+    public var variables: [String: Any]
+    public var functions: [String: Function]
     
     public init(variables: [String: Any] = [:],
          functions: [String: Function] = [:]) {
@@ -14,13 +14,13 @@ public struct RenderingContext {
 }
 
 public class ContextAwareRenderer {
-    var context: RenderingContext
+    public var context: RenderingContext
     
     public init(context: RenderingContext) {
         self.context = context
     }
     
-    public func contextAwareRender(renderer: @escaping ([String: Any], inout RenderingContext) -> String?) -> StaticRenderer {
-        return StaticRenderer { variables in renderer(variables, &self.context) ?? "" }
+    public func render(renderer: @escaping ([String: Any], InterpreterFactory?, inout RenderingContext) -> String) -> Renderer {
+        return StaticRenderer { variables, interpreterFactory in renderer(variables, interpreterFactory, &self.context) }
     }
 }

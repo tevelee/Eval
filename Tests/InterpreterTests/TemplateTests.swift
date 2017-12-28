@@ -56,14 +56,35 @@ class TemplateTests: XCTestCase {
     func testComputations() {
         let platform = RenderingPlatform()
         let stringInterpreterFactory = platform.add(capability: StringInterpreterFactory.self)
-//        let contextHandler = platform.add(capability: ContextHandler.self)
+        let contextHandler = platform.add(capability: ContextHandler.self)
         let _ = platform.add(capability: BooleanInterpreterFactory.self)
         let _ = platform.add(capability: NumericInterpreterFactory.self)
         
         let interpreter = stringInterpreterFactory.stringExpressionInterpreter()
         XCTAssertEqual(try! interpreter.evaluate("{{ 5 * 17 }}"), "85")
+        XCTAssertEqual(try! interpreter.evaluate("The answer is: {{ 2 * 3.6 }}!"), "The answer is: 7.2!")
         XCTAssertEqual(try! interpreter.evaluate("{% if 12 >= 5 %}asd{% endif %}"), "asd")
         XCTAssertEqual(try! interpreter.evaluate("{% if 12 / 2 + 1 >= 6 % 2 %}asd{% endif %}"), "asd")
+        XCTAssertEqual(try! interpreter.evaluate("{% set var = 12 %}x{{ var * 2 }}y"), "x24y")
+        
+        contextHandler.context.variables["test"] = 13
+        XCTAssertEqual(try! interpreter.evaluate("{{ test + 2 }}"), "15")
+        XCTAssertEqual(try! interpreter.evaluate("{{ sqrt(max(test, 25)) }}"), "5")
+        XCTAssertEqual(try! interpreter.evaluate("{{ -1 }}"), "-1")
+    }
+    
+    func testConditions() {
+        let platform = RenderingPlatform()
+        let stringInterpreterFactory = platform.add(capability: StringInterpreterFactory.self)
+        let contextHandler = platform.add(capability: ContextHandler.self)
+        let _ = platform.add(capability: BooleanInterpreterFactory.self)
+        let _ = platform.add(capability: NumericInterpreterFactory.self)
+        
+        let interpreter = stringInterpreterFactory.stringExpressionInterpreter()
+        
+        contextHandler.context.variables["c"] = "0"
+        XCTAssertEqual(try! interpreter.evaluate("{% if !c %}asd{% endif %}"), "asd")
+        XCTAssertEqual(try! interpreter.evaluate("{% if 0 == c %}asd{% endif %}"), "asd")
     }
     
     static var allTests = [

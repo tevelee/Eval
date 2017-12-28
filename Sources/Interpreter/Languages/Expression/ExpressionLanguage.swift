@@ -164,12 +164,8 @@ public struct Variable : Element {
     }
 }
 
-public final class StringExpressionInterpreter : Interpreter {
+public class StringExpressionInterpreter : Interpreter {
     var statements: [Pattern]
-    
-    public convenience init() {
-        self.init(statements: [])
-    }
     
     public init(statements: [Pattern] = []) {
         self.statements = statements
@@ -222,19 +218,47 @@ public final class StringExpressionInterpreter : Interpreter {
 }
 
 public class NumericExpressionInterpreter : Interpreter {
-    public required init() {
+    let platform: RenderingPlatform?
+    
+    public required init(platform: RenderingPlatform?) {
+        self.platform = platform
     }
     
     public func evaluate(_ expression: String) throws -> Double {
-        return try Expression(expression, options: [], constants: [:], arrays: [:], symbols: [:]).evaluate()
+        return try evaluateExpression(expression, platform: platform)
     }
 }
 
 public class BooleanExpressionInterpreter : Interpreter {
-    public required init() {
+    let platform: RenderingPlatform?
+    
+    public required init(platform: RenderingPlatform?) {
+        self.platform = platform
     }
     
     public func evaluate(_ expression: String) throws -> Bool {
-        return try Expression(expression, options: [.boolSymbols], constants: [:], arrays: [:], symbols: [:]).evaluate() == 1
+        return try evaluateExpression(expression, options: .boolSymbols, platform: platform) == 1
     }
+}
+
+func evaluateExpression(_ expression: String, options: Expression.Options = [], platform: RenderingPlatform?) throws -> Double {
+    var symbols: [Expression.Symbol: ([Double]) -> Double] = [:]
+    if let context = platform?.capability(of: ContextHandlerFeature.self)?.context {
+        for (_, variable) in context.variables.mapValues({ (variable) -> Double? in
+            if let value = variable as? String, let double = Double(value) {
+                return double
+            } else if let value = variable as? Int {
+                return Double(value)
+            } else if let value = variable as? Float {
+                return Double(value)
+            } else if let value = variable as? Double {
+                return value
+            }
+            return nil
+        }).enumerated() where variable.value != nil {
+            symbols[.variable(variable.key)] = { _ in variable.value! }
+        }
+    }
+    
+    return try Expression(expression, options: options, constants: [:], arrays: [:], symbols: symbols).evaluate()
 }

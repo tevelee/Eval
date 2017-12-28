@@ -4,33 +4,45 @@ import class Interpreter.Pattern
 import struct Interpreter.Variable
 import struct Interpreter.Keyword
 
-class TestInterpreterFactory: InterpreterFactory {
-    func stringExpressionInterpreter() -> StringExpressionInterpreter {
-        return stringExpressionInterpreter(context: RenderingContext())
+public class BooleanInterpreterFactory : BooleanInterpreterProviderFeature {
+    public weak var platform: RenderingPlatform?
+    
+    public required init(platform: RenderingPlatform) {
+        self.platform = platform
     }
     
-    func booleanExpressionInterpreter() -> BooleanExpressionInterpreter {
-        return booleanExpressionInterpreter(context: RenderingContext())
-    }
-    
-    func booleanExpressionInterpreter(context: RenderingContext) -> BooleanExpressionInterpreter {
-        let renderer = ContextAwareRenderer(context: context)
-        
-        let equal = boolOperator(keyword: "==", renderer: renderer) { (lhs: Double, rhs: Double) in lhs == rhs }
-        let greaterThan = boolOperator(keyword: ">", renderer: renderer) { lhs, rhs in lhs > rhs }
-        let greaterThanOrEqual = boolOperator(keyword: ">=", renderer: renderer) { lhs, rhs in lhs >= rhs }
-        let lessThan = boolOperator(keyword: "<", renderer: renderer) { lhs, rhs in lhs < rhs }
-        let lessThanOrEqual = boolOperator(keyword: "<=", renderer: renderer) { lhs, rhs in lhs <= rhs }
+    public func booleanExpressionInterpreter() -> BooleanExpressionInterpreter {
+        let equal = boolOperator(keyword: "==") { (lhs: Double, rhs: Double) in lhs == rhs }
+        let greaterThan = boolOperator(keyword: ">") { lhs, rhs in lhs > rhs }
+        let greaterThanOrEqual = boolOperator(keyword: ">=") { lhs, rhs in lhs >= rhs }
+        let lessThan = boolOperator(keyword: "<") { lhs, rhs in lhs < rhs }
+        let lessThanOrEqual = boolOperator(keyword: "<=") { lhs, rhs in lhs <= rhs }
         return BooleanExpressionInterpreter(statements: [equal, greaterThanOrEqual, greaterThan, lessThanOrEqual, lessThan])
     }
     
-    func numericExpressionInterpreter() -> NumericExpressionInterpreter {
-        let brackets = Pattern([Keyword("("), Variable("body"), Keyword(")")]) { variables, _ in
-            if let content = variables["body"] as? String {
-                return content
+    func boolOperator(keyword: String, parser: @escaping (Double, Double) -> Bool) -> Pattern {
+        return Pattern([Variable("lhs"), Keyword(keyword), Variable("rhs")], platform: platform) { platform, variables in
+            if let lhs = variables["lhs"] as? String,
+                let rhs = variables["rhs"] as? String,
+                let numericInterpreter = platform.capability(of: NumericInterpreterProviderFeature.self)?.numericExpressionInterpreter() {
+                let lhsValue : Double = numericInterpreter.evaluate(lhs.trim())
+                let rhsValue : Double = numericInterpreter.evaluate(rhs.trim())
+                return parser(lhsValue, rhsValue) ? "true" : "false"
             }
-            return ""
+            return "false"
         }
+    }
+}
+
+public class NumericInterpreterFactory : NumericInterpreterProviderFeature {
+    public weak var platform: RenderingPlatform?
+    
+    public required init(platform: RenderingPlatform) {
+        self.platform = platform
+    }
+    
+    public func numericExpressionInterpreter() -> NumericExpressionInterpreter {
+        let brackets = Pattern([Keyword("("), Variable("body"), Keyword(")")], platform: platform) { platform, variables in variables["body"] as? String ?? "" }
         let plus = numericOperator(keyword: "+") { lhs, rhs in lhs + rhs }
         let minus = numericOperator(keyword: "-") { lhs, rhs in lhs - rhs }
         let multiplication = numericOperator(keyword: "*") { lhs, rhs in lhs * rhs }
@@ -38,34 +50,8 @@ class TestInterpreterFactory: InterpreterFactory {
         return NumericExpressionInterpreter(statements: [brackets, division, multiplication, plus, minus])
     }
     
-    func stringExpressionInterpreter(context: RenderingContext) -> StringExpressionInterpreter {
-        let renderer = ContextAwareRenderer(context: context)
-        return StringExpressionInterpreter(statements:
-            [
-                commentBlock(interpreterFactory: self),
-                ifElseStatement(tagPrefix: "{%", tagSuffix: "%}", renderer: renderer, interpreterFactory: self),
-                ifStatement(tagPrefix: "{%", tagSuffix: "%}", renderer: renderer, interpreterFactory: self),
-                printStatement(tagPrefix: "{{", tagSuffix: "}}", renderer: renderer),
-                setStatement(tagPrefix: "{%", tagSuffix: "%}", renderer: renderer),
-                setAlternativeStatement(tagPrefix: "{%", tagSuffix: "%}", renderer: renderer),
-                forStatement(tagPrefix: "{%", tagSuffix: "%}", renderer: renderer, interpreterFactory: self),
-                forAlternativeStatement(tagPrefix: "{%", tagSuffix: "%}", renderer: renderer, interpreterFactory: self),
-            ])
-    }
-    
-    func boolOperator(keyword: String, renderer: ContextAwareRenderer, parser: @escaping (Double, Double) -> Bool) -> Pattern {
-        return Pattern([Variable("lhs"), Keyword(keyword), Variable("rhs")], renderer: renderer.render { variables, _, context in
-            if let lhs = variables["lhs"] as? String, let rhs = variables["rhs"] as? String {
-                let lhsValue : Double = self.numericExpressionInterpreter().evaluate(lhs.trim())
-                let rhsValue : Double = self.numericExpressionInterpreter().evaluate(rhs.trim())
-                return parser(lhsValue, rhsValue) ? "true" : "false"
-            }
-            return "false"
-        })
-    }
-    
     func numericOperator(keyword: String, parser: @escaping (Double, Double) -> Double) -> Pattern {
-        return Pattern([Variable("lhs"), Keyword(keyword), Variable("rhs")]) { variables, _ in
+        return Pattern([Variable("lhs"), Keyword(keyword), Variable("rhs")]) { renderer, variables in
             if let lhs = variables["lhs"] as? String, let rhs = variables["rhs"] as? String {
                 let lhsValue : Double = self.numericExpressionInterpreter().evaluate(lhs.trim())
                 let rhsValue : Double = self.numericExpressionInterpreter().evaluate(rhs.trim())
@@ -76,144 +62,142 @@ class TestInterpreterFactory: InterpreterFactory {
     }
 }
 
-func printStatement(tagPrefix: String, tagSuffix: String, renderer: ContextAwareRenderer) -> Pattern {
-    return Pattern([Keyword(tagPrefix), Variable("body"), Keyword(tagSuffix)], renderer: renderer.render { variables, _, context in
-        if let variable = variables["body"] as? String,
-            let result = context.variables[variable.trim()] as? String {
-            return result
-        }
-        return ""
-    })
-}
+public class StringInterpreterFactory : StringInterpreterProviderFeature {
+    public weak var platform: RenderingPlatform?
+    
+    public required init(platform: RenderingPlatform) {
+        self.platform = platform
+    }
+    
+    public func stringExpressionInterpreter() -> StringExpressionInterpreter {
+        return StringExpressionInterpreter(statements: [
+            commentBlock(),
+            ifElseStatement(tagPrefix: "{%", tagSuffix: "%}"),
+            ifStatement(tagPrefix: "{%", tagSuffix: "%}"),
+            printStatement(tagPrefix: "{{", tagSuffix: "}}"),
+            setStatement(tagPrefix: "{%", tagSuffix: "%}"),
+            setAlternativeStatement(tagPrefix: "{%", tagSuffix: "%}"),
+            forStatement(tagPrefix: "{%", tagSuffix: "%}"),
+            forAlternativeStatement(tagPrefix: "{%", tagSuffix: "%}"),
+        ])
+    }
 
-func ifStatement(tagPrefix: String, tagSuffix: String, renderer: ContextAwareRenderer, interpreterFactory: InterpreterFactory? = nil) -> Pattern {
-    let ifOpeningTag = Pattern([Keyword(tagPrefix), Keyword("if"), Variable("condition"), Keyword(tagSuffix)])
-    let ifClosingTag = Pattern([Keyword(tagPrefix), Keyword("endif"), Keyword(tagSuffix)])
-    return Pattern([ifOpeningTag, Variable("body"), ifClosingTag],
-                   interpreterFactory: interpreterFactory,
-                   renderer: renderer.render { variables, interpreterFactory, context in
-        if let condition = variables["condition"] as? String,
-            let body = variables["body"] as? String,
-            let factory = interpreterFactory as? TestInterpreterFactory,
-            factory.booleanExpressionInterpreter(context: context).evaluate(condition.trim()) {
-            return body
-        } else {
+    func printStatement(tagPrefix: String, tagSuffix: String) -> Pattern {
+        return Pattern([Keyword(tagPrefix), Variable("body"), Keyword(tagSuffix)], platform: platform) { platform, variables in
+            guard let contextHandler = platform.capability(of: ContextHandler.self),
+                let variable = variables["body"] as? String else { return "" }
+            return contextHandler.context.variables[variable.trim()] as? String ?? ""
+        }
+    }
+
+    func ifStatement(tagPrefix: String, tagSuffix: String) -> Pattern {
+        return Pattern([Keyword(tagPrefix), Keyword("if"), Variable("condition"), Keyword(tagSuffix),
+                        Variable("body"),
+                        Keyword(tagPrefix), Keyword("endif"), Keyword(tagSuffix)],
+                       platform: platform) { platform, variables in
+            guard let condition = variables["condition"] as? String, let body = variables["body"] as? String,
+                let booleanInterpreter = platform.capability(of: BooleanInterpreterProviderFeature.self)?.booleanExpressionInterpreter() else { return "" }
+            return booleanInterpreter.evaluate(condition.trim()) ? body : ""
+        }
+    }
+
+    func ifElseStatement(tagPrefix: String, tagSuffix: String) -> Pattern {
+        let ifOpeningTag = Pattern([Keyword(tagPrefix), Keyword("if"), Variable("condition"), Keyword(tagSuffix)])
+        let elseTag = Pattern([Keyword(tagPrefix), Keyword("else"), Keyword(tagSuffix)])
+        let ifClosingTag = Pattern([Keyword(tagPrefix), Keyword("endif"), Keyword(tagSuffix)])
+        return Pattern([ifOpeningTag, Variable("body"), elseTag, Variable("else"), ifClosingTag], platform: platform) { platform, variables in
+            guard let condition = variables["condition"] as? String, let body = variables["body"] as? String,
+                let booleanInterpreter = platform.capability(of: BooleanInterpreterProviderFeature.self)?.booleanExpressionInterpreter() else { return "" }
+            if booleanInterpreter.evaluate(condition.trim()) {
+                return body
+            } else if let body = variables["else"] as? String {
+                return body
+            }
             return ""
         }
-    })
-}
+    }
 
-func ifElseStatement(tagPrefix: String, tagSuffix: String, renderer: ContextAwareRenderer, interpreterFactory: InterpreterFactory) -> Pattern {
-    let ifOpeningTag = Pattern([Keyword(tagPrefix), Keyword("if"), Variable("condition"), Keyword(tagSuffix)], interpreterFactory: interpreterFactory)
-    let elseTag = Pattern([Keyword(tagPrefix), Keyword("else"), Keyword(tagSuffix)], interpreterFactory: interpreterFactory)
-    let ifClosingTag = Pattern([Keyword(tagPrefix), Keyword("endif"), Keyword(tagSuffix)], interpreterFactory: interpreterFactory)
-    return Pattern([ifOpeningTag, Variable("body"), elseTag, Variable("else"), ifClosingTag], interpreterFactory: interpreterFactory, renderer: renderer.render { variables, _, context in
-        if let condition = variables["condition"] as? String,
+    func commentBlock() -> Pattern {
+        return Pattern([Keyword("{#"), Variable("body"), Keyword("#}")])
+    }
+
+    func setStatement(tagPrefix: String, tagSuffix: String) -> Pattern {
+        let setOpeningTag = Pattern([Keyword(tagPrefix), Keyword("set"), Variable("variable"), Keyword(tagSuffix)])
+        let setClosingTag = Pattern([Keyword(tagPrefix), Keyword("endset"), Keyword(tagSuffix)])
+        return Pattern([setOpeningTag, Variable("value"), setClosingTag], platform: platform) { platform, variables in
+            guard let variable = variables["variable"] as? String, let value = variables["value"] as? String,
+                let contextHandler = platform.capability(of: ContextHandlerFeature.self) else { return "" }
+            contextHandler.context.variables[variable.trim()] = value.trim()
+            return ""
+        }
+    }
+
+    func setAlternativeStatement(tagPrefix: String, tagSuffix: String) -> Pattern {
+        return Pattern([Keyword(tagPrefix), Keyword("set"), Variable("variable"), Keyword("="), Variable("value"), Keyword(tagSuffix)], platform: platform) { platform, variables in
+            guard let variable = variables["variable"] as? String, let value = variables["value"] as? String,
+                let contextHandler = platform.capability(of: ContextHandlerFeature.self) else { return "" }
+            contextHandler.context.variables[variable.trim()] = value.trim()
+            return ""
+        }
+    }
+
+    func forStatement(tagPrefix: String, tagSuffix: String) -> Pattern {
+        let ifOpeningTag = Pattern([Keyword(tagPrefix), Keyword("for"), Variable("variable"), Keyword("from"), Variable("from"), Keyword("to"), Variable("to"), Keyword(tagSuffix)])
+        let ifClosingTag = Pattern([Keyword(tagPrefix), Keyword("endfor"), Keyword(tagSuffix)])
+        return Pattern([ifOpeningTag, Variable("body"), ifClosingTag], platform: platform) { platform, variables in
+            guard let variable = variables["variable"] as? String,
+            let from = variables["from"] as? String,
+            let to = variables["to"] as? String,
             let body = variables["body"] as? String,
-            let factory = interpreterFactory as? TestInterpreterFactory,
-            factory.booleanExpressionInterpreter(context: context).evaluate(condition.trim()) {
-            return body
-        } else if let body = variables["else"] as? String {
-            return body
-        }
-        return ""
-    })
-}
-
-func commentBlock(interpreterFactory: InterpreterFactory) -> Pattern {
-    return Pattern([Keyword("{#"), Variable("body"), Keyword("#}")], interpreterFactory: interpreterFactory)
-}
-
-func setStatement(tagPrefix: String, tagSuffix: String, renderer: ContextAwareRenderer) -> Pattern {
-    let setOpeningTag = Pattern([Keyword(tagPrefix), Keyword("set"), Variable("variable"), Keyword(tagSuffix)])
-    let setClosingTag = Pattern([Keyword(tagPrefix), Keyword("endset"), Keyword(tagSuffix)])
-    return Pattern([setOpeningTag, Variable("value"), setClosingTag], renderer: renderer.render { variables, _, context in
-        if let variable = variables["variable"] as? String,
-            let value = variables["value"] as? String {
-            context.variables[variable.trim()] = value.trim()
-        }
-        return ""
-    })
-}
-
-func setAlternativeStatement(tagPrefix: String, tagSuffix: String, renderer: ContextAwareRenderer) -> Pattern {
-    return Pattern([Keyword(tagPrefix), Keyword("set"), Variable("variable"), Keyword("="), Variable("value"), Keyword(tagSuffix)], renderer: renderer.render { variables, _, context in
-        if let variable = variables["variable"] as? String,
-            let value = variables["value"] as? String {
-            context.variables[variable.trim()] = value.trim()
-        }
-        return ""
-    })
-}
-
-func forStatement(tagPrefix: String, tagSuffix: String, renderer: ContextAwareRenderer, interpreterFactory: InterpreterFactory? = nil) -> Pattern {
-    let ifOpeningTag = Pattern([Keyword(tagPrefix), Keyword("for"), Variable("variable"), Keyword("from"), Variable("from"), Keyword("to"), Variable("to"), Keyword(tagSuffix)])
-    let ifClosingTag = Pattern([Keyword(tagPrefix), Keyword("endfor"), Keyword(tagSuffix)])
-    return Pattern([ifOpeningTag, Variable("body"), ifClosingTag],
-                   interpreterFactory: interpreterFactory,
-                   renderer: renderer.render { variables, interpreter, context in
-                    if let variable = variables["variable"] as? String,
-                        let from = variables["from"] as? String,
-                        let to = variables["to"] as? String,
-                        let body = variables["body"] as? String,
-                        let fromInt = Int(from.trim()), let toInt = Int(to.trim()),
-                        let stringInterpreter = interpreter as? TestInterpreterFactory {
-                        
-                        var result = ""
-                        for x in fromInt ... toInt {
-                            context.variables[variable.trim()] = String(x)
-                            result += stringInterpreter.stringExpressionInterpreter(context: context).evaluate(body)
-                        }
-                        return result
-                    } else {
-                        return ""
-                    }
-    })
-}
-
-func forAlternativeStatement(tagPrefix: String, tagSuffix: String, renderer: ContextAwareRenderer, interpreterFactory: InterpreterFactory? = nil) -> Pattern {
-    let ifOpeningTag = Pattern([Keyword(tagPrefix), Keyword("for"), Variable("variable"), Keyword("in"), Variable("source"), Keyword(tagSuffix)])
-    let ifClosingTag = Pattern([Keyword(tagPrefix), Keyword("endfor"), Keyword(tagSuffix)])
-    return Pattern([ifOpeningTag, Variable("body"), ifClosingTag], interpreterFactory: interpreterFactory, renderer: renderer.render { variables, _, context in
-        if let variable = variables["variable"] as? String,
-            let source = variables["source"] as? String,
-            let body = variables["body"] as? String,
-            let sourceArray = context.variables[source.trim()] as? [Int] {
-            
-            let renderer = ContextAwareRenderer(context: context)
-            let interpreter = StringExpressionInterpreter(statements: [printStatement(tagPrefix: "{{", tagSuffix: "}}", renderer: renderer)])
+            let fromInt = Int(from.trim()), let toInt = Int(to.trim()),
+            let contextHandler = platform.capability(of: ContextHandlerFeature.self),
+            let stringInterpreter = platform.capability(of: StringInterpreterProviderFeature.self)?.stringExpressionInterpreter() else { return "" }
             
             var result = ""
-            for x in sourceArray {
-                renderer.context.variables[variable.trim()] = String(x)
-                result += interpreter.evaluate(body)
+            for x in fromInt ... toInt {
+                contextHandler.context.variables[variable.trim()] = String(x)
+                result += stringInterpreter.evaluate(body)
             }
             return result
-        } else {
-            return ""
         }
-    })
-}
+    }
 
-func inc(renderer: ContextAwareRenderer) -> Pattern {
-    return Pattern([Keyword("inc"), Keyword("("), Variable("arguments"), Keyword(")")],
-                   renderer: renderer.render { variables, _, context in
-                    if let args = variables["arguments"] as? String,
-                        let variable = args.trim().components(separatedBy: ",").first,
-                        let value = context.variables[variable] as? Int {
-                        return String(value + 1)
-                    }
-                    return ""
-    })
-}
+    func forAlternativeStatement(tagPrefix: String, tagSuffix: String) -> Pattern {
+        let ifOpeningTag = Pattern([Keyword(tagPrefix), Keyword("for"), Variable("variable"), Keyword("in"), Variable("source"), Keyword(tagSuffix)])
+        let ifClosingTag = Pattern([Keyword(tagPrefix), Keyword("endfor"), Keyword(tagSuffix)])
+        return Pattern([ifOpeningTag, Variable("body"), ifClosingTag], platform: platform) { platform, variables in
+            guard let variable = variables["variable"] as? String,
+                let source = variables["source"] as? String,
+                let body = variables["body"] as? String,
+                let contextHandler = platform.capability(of: ContextHandlerFeature.self),
+                let stringInterpreter = platform.capability(of: StringInterpreterProviderFeature.self)?.stringExpressionInterpreter(),
+                let sourceArray = contextHandler.context.variables[source.trim()] as? [Int] else { return "" }
+                
+            var result = ""
+            for x in sourceArray {
+                contextHandler.context.variables[variable.trim()] = String(x)
+                result += stringInterpreter.evaluate(body)
+            }
+            return result
+        }
+    }
 
-func incFilter(renderer: ContextAwareRenderer) -> Pattern {
-    return Pattern([Variable("variable"), Keyword("|"), Keyword("inc")],
-                   renderer: renderer.render { variables, _, context in
-                    if let variable = variables["variable"] as? String,
-                        let value = context.variables[variable] as? Int {
-                        return String(value + 1)
-                    }
-                    return ""
-    })
+    func inc() -> Pattern {
+        return Pattern([Keyword("inc"), Keyword("("), Variable("arguments"), Keyword(")")], platform: platform) { platform, variables in
+            guard let args = variables["arguments"] as? String,
+                let variable = args.trim().components(separatedBy: ",").first,
+                let contextHandler = platform.capability(of: ContextHandlerFeature.self),
+                let value = contextHandler.context.variables[variable] as? Int else { return "" }
+            return String(value + 1)
+        }
+    }
+
+    func incFilter() -> Pattern {
+        return Pattern([Variable("variable"), Keyword("|"), Keyword("inc")], platform: platform) { platform, variables in
+            guard let variable = variables["variable"] as? String,
+                let contextHandler = platform.capability(of: ContextHandlerFeature.self),
+                let value = contextHandler.context.variables[variable] as? Int else { return "" }
+            return String(value + 1)
+        }
+    }
 }

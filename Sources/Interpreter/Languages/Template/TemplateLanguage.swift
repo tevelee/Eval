@@ -13,14 +13,15 @@ public struct RenderingContext {
     }
 }
 
-public class ContextAwareRenderer {
-    public var context: RenderingContext
+public protocol ContextHandlerFeature: class, RenderingFeature {
+    var context: RenderingContext { get set }
+}
+
+public class ContextHandler : ContextHandlerFeature {
+    public var context: RenderingContext = RenderingContext()
+    public weak var platform: RenderingPlatform?
     
-    public init(context: RenderingContext) {
-        self.context = context
-    }
-    
-    public func render(renderer: @escaping ([String: Any], InterpreterFactory?, inout RenderingContext) -> String) -> Renderer {
-        return StaticRenderer { variables, interpreterFactory in renderer(variables, interpreterFactory, &self.context) }
+    public required init(platform: RenderingPlatform) {
+        self.platform = platform
     }
 }

@@ -42,20 +42,25 @@ class InterpreterTests: XCTestCase {
     }
     
     func testCompositeExample1() {
-        let renderer = ContextAwareRenderer(context: RenderingContext())
-        let pattern = ifStatement(tagPrefix: "{%", tagSuffix: "%}", renderer: renderer, interpreterFactory: TestInterpreterFactory())
+        let platform = RenderingPlatform()
+        let stringInterpreterFactory = platform.add(capability: StringInterpreterFactory.self)
+        let _ = platform.add(capability: BooleanInterpreterFactory.self)
+        let _ = platform.add(capability: NumericInterpreterFactory.self)
+        let pattern = stringInterpreterFactory.ifStatement(tagPrefix: "{%", tagSuffix: "%}")
         XCTAssertEqual(pattern.matches(prefix: "{% if 12 > 5 %}x{% endif %}"), .exactMatch(length: 27,
                                                                                            output: "x",
                                                                                            variables: ["condition": "12 > 5 ", "body": "x"]))
 
-        let interpreterFactory = TestInterpreterFactory()
-        let interpreter = interpreterFactory.stringExpressionInterpreter()
+        let interpreter = stringInterpreterFactory.stringExpressionInterpreter()
         XCTAssertEqual(interpreter.evaluate("123 {% if 3 * 2 == 6 %}x{% endif %}"), "123 x")
     }
     
     func testCompositeExample2() {
-        let interpreterFactory = TestInterpreterFactory()
-        let interpreter = interpreterFactory.stringExpressionInterpreter()
+        let platform = RenderingPlatform()
+        let stringInterpreterFactory = platform.add(capability: StringInterpreterFactory.self)
+        let _ = platform.add(capability: BooleanInterpreterFactory.self)
+        let _ = platform.add(capability: NumericInterpreterFactory.self)
+        let interpreter = stringInterpreterFactory.stringExpressionInterpreter()
         XCTAssertEqual(interpreter.evaluate("a{# asd asd #}sd 123 {% if 12 > 5 %}x{% else %}y{% endif %}"), "asd 123 x")
     }
 

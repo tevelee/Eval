@@ -1,27 +1,60 @@
 import Foundation
 
-public protocol Renderer {
-    func render(variables: [String: Any], interpreterFactory: InterpreterFactory?) -> String
+public protocol RenderingFeature {
+    weak var platform: RenderingPlatform? { get }
+    init(platform: RenderingPlatform)
 }
 
-public typealias RenderingBlock = ([String: Any], InterpreterFactory?) -> String
+public protocol StringInterpreterProviderFeature: RenderingFeature {
+    func stringExpressionInterpreter() -> StringExpressionInterpreter
+}
 
-class StaticRenderer: Renderer {
+public protocol BooleanInterpreterProviderFeature: RenderingFeature {
+    func booleanExpressionInterpreter() -> BooleanExpressionInterpreter
+}
+
+public protocol NumericInterpreterProviderFeature: RenderingFeature {
+    func numericExpressionInterpreter() -> NumericExpressionInterpreter
+}
+
+public class RenderingPlatform {
+    var capabilities: [RenderingFeature]
+    
+    public init(capabilities: [RenderingFeature] = []) {
+        self.capabilities = capabilities
+    }
+    
+    public func add(capability: RenderingFeature) {
+        capabilities.append(capability)
+    }
+    
+    public func add<T: RenderingFeature>(capability type: T.Type) -> T {
+        let capability = type.init(platform: self)
+        capabilities.append(capability)
+        return capability
+    }
+    
+    public func capability<T>(of type: T.Type) -> T? {
+        return capabilities.first { $0 is T } as? T
+    }
+}
+
+public protocol Renderer {
+    func render(platform: RenderingPlatform, variables: [String: Any]) -> String
+}
+
+public typealias RenderingBlock = (RenderingPlatform, [String: Any]) -> String
+
+class BlockRenderer: Renderer {
     let renderingBlock: RenderingBlock
     
     init(renderingBlock: @escaping RenderingBlock) {
         self.renderingBlock = renderingBlock
     }
     
-    public func render(variables: [String: Any], interpreterFactory: InterpreterFactory?) -> String {
-        return self.renderingBlock(variables, interpreterFactory)
+    public func render(platform: RenderingPlatform, variables: [String: Any]) -> String {
+        return self.renderingBlock(platform, variables)
     }
-}
-
-public protocol InterpreterFactory {
-    func stringExpressionInterpreter() -> StringExpressionInterpreter
-    func booleanExpressionInterpreter() -> BooleanExpressionInterpreter
-    func numericExpressionInterpreter() -> NumericExpressionInterpreter
 }
 
 public protocol Element {
@@ -31,23 +64,20 @@ public protocol Element {
 public class Pattern : Element {
     let elements: [Element]
     let renderer: Renderer
-    let interpreterFactory: InterpreterFactory?
+    let charactersToIgnore: CharacterSet = .whitespacesAndNewlines
+    let platform: RenderingPlatform
     
-    public convenience init(_ elements: [Element],
-                            interpreterFactory: InterpreterFactory? = nil,
-                            renderingBlock: @escaping RenderingBlock = { _,_ in "" }) {
-        self.init(elements, interpreterFactory: interpreterFactory, renderer: StaticRenderer(renderingBlock: renderingBlock))
-    }
-    
-    public init(_ elements: [Element], interpreterFactory: InterpreterFactory? = nil, renderer: Renderer) {
+    public init(_ elements: [Element],
+                platform: RenderingPlatform? = nil,
+                renderingBlock: @escaping RenderingBlock = { _,_ in "" }) {
         var elements = elements
         if let last = elements.last as? Variable {
             elements.removeLast()
             elements.append(Variable(last.name, shortest: false))
         }
         self.elements = elements
-        self.renderer = renderer
-        self.interpreterFactory = interpreterFactory
+        self.platform = platform ?? RenderingPlatform(capabilities: [])
+        self.renderer = BlockRenderer(renderingBlock: renderingBlock)
     }
     
     public func matches(prefix: String, isLast: Bool = false) -> MatchResult {
@@ -74,7 +104,7 @@ public class Pattern : Element {
                 }
                 if !shortest {
                     if isLast, let variable = currentlyActiveVariable {
-                        variables[variable.name] = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
+                        variables[variable.name] = variable.value.trimmingCharacters(in: charactersToIgnore)
                     } else {
                         return .possibleMatch
                     }
@@ -87,7 +117,7 @@ public class Pattern : Element {
                     currentlyActiveVariable = nil
                 }
                 input.removeFirst(length)
-                input = input.trimmingCharacters(in: .whitespacesAndNewlines)
+                input = input.trimmingCharacters(in: charactersToIgnore)
                 elementIndex += 1
             }
         } while elementIndex < elements.count
@@ -97,7 +127,7 @@ public class Pattern : Element {
     }
     
     func render(variables: [String: String]) -> String {
-        return renderer.render(variables: variables, interpreterFactory: interpreterFactory)
+        return renderer.render(platform: platform, variables: variables)
     }
 }
 

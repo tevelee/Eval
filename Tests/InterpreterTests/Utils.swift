@@ -12,26 +12,27 @@ public class BooleanInterpreterFactory : BooleanInterpreterProviderFeature {
     }
     
     public func booleanExpressionInterpreter() -> BooleanExpressionInterpreter {
-        let equal = boolOperator(keyword: "==") { (lhs: Double, rhs: Double) in lhs == rhs }
-        let greaterThan = boolOperator(keyword: ">") { lhs, rhs in lhs > rhs }
-        let greaterThanOrEqual = boolOperator(keyword: ">=") { lhs, rhs in lhs >= rhs }
-        let lessThan = boolOperator(keyword: "<") { lhs, rhs in lhs < rhs }
-        let lessThanOrEqual = boolOperator(keyword: "<=") { lhs, rhs in lhs <= rhs }
-        return BooleanExpressionInterpreter(statements: [equal, greaterThanOrEqual, greaterThan, lessThanOrEqual, lessThan])
+//        let equal = boolOperator(keyword: "==") { (lhs: Double, rhs: Double) in lhs == rhs }
+//        let greaterThan = boolOperator(keyword: ">") { lhs, rhs in lhs > rhs }
+//        let greaterThanOrEqual = boolOperator(keyword: ">=") { lhs, rhs in lhs >= rhs }
+//        let lessThan = boolOperator(keyword: "<") { lhs, rhs in lhs < rhs }
+//        let lessThanOrEqual = boolOperator(keyword: "<=") { lhs, rhs in lhs <= rhs }
+//        return BooleanExpressionInterpreter(statements: [equal, greaterThanOrEqual, greaterThan, lessThanOrEqual, lessThan])
+        return BooleanExpressionInterpreter()
     }
     
-    func boolOperator(keyword: String, parser: @escaping (Double, Double) -> Bool) -> Pattern {
-        return Pattern([Variable("lhs"), Keyword(keyword), Variable("rhs")], platform: platform) { platform, variables in
-            if let lhs = variables["lhs"] as? String,
-                let rhs = variables["rhs"] as? String,
-                let numericInterpreter = platform.capability(of: NumericInterpreterProviderFeature.self)?.numericExpressionInterpreter() {
-                let lhsValue : Double = numericInterpreter.evaluate(lhs.trim())
-                let rhsValue : Double = numericInterpreter.evaluate(rhs.trim())
-                return parser(lhsValue, rhsValue) ? "true" : "false"
-            }
-            return "false"
-        }
-    }
+//    func boolOperator(keyword: String, parser: @escaping (Double, Double) -> Bool) -> Pattern {
+//        return Pattern([Variable("lhs"), Keyword(keyword), Variable("rhs")], platform: platform) { platform, variables in
+//            if let lhs = variables["lhs"] as? String,
+//                let rhs = variables["rhs"] as? String,
+//                let numericInterpreter = platform.capability(of: NumericInterpreterProviderFeature.self)?.numericExpressionInterpreter() {
+//                let lhsValue = try? numericInterpreter.evaluate(lhs.trim())
+//                let rhsValue = try? numericInterpreter.evaluate(rhs.trim())
+//                return parser(lhsValue, rhsValue) ? "true" : "false"
+//            }
+//            return "false"
+//        }
+//    }
 }
 
 public class NumericInterpreterFactory : NumericInterpreterProviderFeature {
@@ -42,24 +43,25 @@ public class NumericInterpreterFactory : NumericInterpreterProviderFeature {
     }
     
     public func numericExpressionInterpreter() -> NumericExpressionInterpreter {
-        let brackets = Pattern([Keyword("("), Variable("body"), Keyword(")")], platform: platform) { platform, variables in variables["body"] as? String ?? "" }
-        let plus = numericOperator(keyword: "+") { lhs, rhs in lhs + rhs }
-        let minus = numericOperator(keyword: "-") { lhs, rhs in lhs - rhs }
-        let multiplication = numericOperator(keyword: "*") { lhs, rhs in lhs * rhs }
-        let division = numericOperator(keyword: "/") { lhs, rhs in lhs / rhs }
-        return NumericExpressionInterpreter(statements: [brackets, division, multiplication, plus, minus])
+//        let brackets = Pattern([Keyword("("), Variable("body"), Keyword(")")], platform: platform) { platform, variables in variables["body"] as? String ?? "" }
+//        let plus = numericOperator(keyword: "+") { lhs, rhs in lhs + rhs }
+//        let minus = numericOperator(keyword: "-") { lhs, rhs in lhs - rhs }
+//        let multiplication = numericOperator(keyword: "*") { lhs, rhs in lhs * rhs }
+//        let division = numericOperator(keyword: "/") { lhs, rhs in lhs / rhs }
+//        return NumericExpressionInterpreter(statements: [brackets, division, multiplication, plus, minus])
+        return NumericExpressionInterpreter()
     }
     
-    func numericOperator(keyword: String, parser: @escaping (Double, Double) -> Double) -> Pattern {
-        return Pattern([Variable("lhs"), Keyword(keyword), Variable("rhs")]) { renderer, variables in
-            if let lhs = variables["lhs"] as? String, let rhs = variables["rhs"] as? String {
-                let lhsValue : Double = self.numericExpressionInterpreter().evaluate(lhs.trim())
-                let rhsValue : Double = self.numericExpressionInterpreter().evaluate(rhs.trim())
-                return String(parser(lhsValue, rhsValue))
-            }
-            return ""
-        }
-    }
+//    func numericOperator(keyword: String, parser: @escaping (Double, Double) -> Double) -> Pattern {
+//        return Pattern([Variable("lhs"), Keyword(keyword), Variable("rhs")]) { renderer, variables in
+//            if let lhs = variables["lhs"] as? String, let rhs = variables["rhs"] as? String {
+//                let lhsValue : Double = try? self.numericExpressionInterpreter().evaluate(lhs.trim())
+//                let rhsValue : Double = try? self.numericExpressionInterpreter().evaluate(rhs.trim())
+//                return String(parser(lhsValue, rhsValue))
+//            }
+//            return ""
+//        }
+//    }
 }
 
 public class StringInterpreterFactory : StringInterpreterProviderFeature {
@@ -84,9 +86,17 @@ public class StringInterpreterFactory : StringInterpreterProviderFeature {
 
     func printStatement(tagPrefix: String, tagSuffix: String) -> Pattern {
         return Pattern([Keyword(tagPrefix), Variable("body"), Keyword(tagSuffix)], platform: platform) { platform, variables in
-            guard let contextHandler = platform.capability(of: ContextHandler.self),
-                let variable = variables["body"] as? String else { return "" }
-            return contextHandler.context.variables[variable.trim()] as? String ?? ""
+            guard let variable = variables["body"] as? String else { return "" }
+            if let contextHandler = platform.capability(of: ContextHandler.self),
+                let result = contextHandler.context.variables[variable.trim()] as? String {
+                return result
+            } else if let numericInterpreter = platform.capability(of: NumericInterpreterProviderFeature.self)?.numericExpressionInterpreter(),
+                let numericResult = try? numericInterpreter.evaluate(variable) {
+                return numericResult.truncatingRemainder(dividingBy: 1) == 0 ?
+                    String(format: "%.0f", numericResult) :
+                    String(numericResult) // avoid zero sufffix (e.g. 5.0) when result is whole number
+            }
+            return ""
         }
     }
 
@@ -97,7 +107,10 @@ public class StringInterpreterFactory : StringInterpreterProviderFeature {
                        platform: platform) { platform, variables in
             guard let condition = variables["condition"] as? String, let body = variables["body"] as? String,
                 let booleanInterpreter = platform.capability(of: BooleanInterpreterProviderFeature.self)?.booleanExpressionInterpreter() else { return "" }
-            return booleanInterpreter.evaluate(condition.trim()) ? body : ""
+            if let result = try? booleanInterpreter.evaluate(condition.trim()), result {
+                return body
+            }
+            return ""
         }
     }
 
@@ -108,7 +121,7 @@ public class StringInterpreterFactory : StringInterpreterProviderFeature {
         return Pattern([ifOpeningTag, Variable("body"), elseTag, Variable("else"), ifClosingTag], platform: platform) { platform, variables in
             guard let condition = variables["condition"] as? String, let body = variables["body"] as? String,
                 let booleanInterpreter = platform.capability(of: BooleanInterpreterProviderFeature.self)?.booleanExpressionInterpreter() else { return "" }
-            if booleanInterpreter.evaluate(condition.trim()) {
+            if let result = try? booleanInterpreter.evaluate(condition.trim()), result {
                 return body
             } else if let body = variables["else"] as? String {
                 return body
@@ -156,7 +169,7 @@ public class StringInterpreterFactory : StringInterpreterProviderFeature {
             var result = ""
             for x in fromInt ... toInt {
                 contextHandler.context.variables[variable.trim()] = String(x)
-                result += stringInterpreter.evaluate(body)
+                result += try! stringInterpreter.evaluate(body)
             }
             return result
         }
@@ -176,7 +189,7 @@ public class StringInterpreterFactory : StringInterpreterProviderFeature {
             var result = ""
             for x in sourceArray {
                 contextHandler.context.variables[variable.trim()] = String(x)
-                result += stringInterpreter.evaluate(body)
+                result += try! stringInterpreter.evaluate(body)
             }
             return result
         }

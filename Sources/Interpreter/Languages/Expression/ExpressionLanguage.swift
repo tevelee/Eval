@@ -1,4 +1,5 @@
 import Foundation
+import Expression
 
 public protocol RenderingFeature {
     weak var platform: RenderingPlatform? { get }
@@ -163,14 +164,18 @@ public struct Variable : Element {
     }
 }
 
-public class StringExpressionInterpreter : Interpreter {
+public final class StringExpressionInterpreter : Interpreter {
     var statements: [Pattern]
     
-    public init(statements: [Pattern]) {
+    public convenience init() {
+        self.init(statements: [])
+    }
+    
+    public init(statements: [Pattern] = []) {
         self.statements = statements
     }
     
-    public func evaluate(_ input: String) -> String {
+    public func evaluate(_ input: String) throws -> String {
         var output = ""
         
         var position = 0
@@ -216,14 +221,20 @@ public class StringExpressionInterpreter : Interpreter {
     }
 }
 
-public class NumericExpressionInterpreter : StringExpressionInterpreter {
-    public func evaluate(_ expression: String) -> Double {
-        return Double(evaluate(expression)) ?? 0
+public class NumericExpressionInterpreter : Interpreter {
+    public required init() {
+    }
+    
+    public func evaluate(_ expression: String) throws -> Double {
+        return try Expression(expression, options: [], constants: [:], arrays: [:], symbols: [:]).evaluate()
     }
 }
 
-public class BooleanExpressionInterpreter : StringExpressionInterpreter {
-    public func evaluate(_ expression: String) -> Bool {
-        return evaluate(expression) == "true"
+public class BooleanExpressionInterpreter : Interpreter {
+    public required init() {
+    }
+    
+    public func evaluate(_ expression: String) throws -> Bool {
+        return try Expression(expression, options: [.boolSymbols], constants: [:], arrays: [:], symbols: [:]).evaluate() == 1
     }
 }

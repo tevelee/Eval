@@ -12,7 +12,7 @@ class TemplateTests: XCTestCase {
         
         let interpreter = StringExpressionInterpreter(statements: [stringInterpreterFactory.ifStatement(tagPrefix: "{%", tagSuffix: "%}"),
                                                                    stringInterpreterFactory.printStatement(tagPrefix: "{{", tagSuffix: "}}")])
-        XCTAssertEqual(interpreter.evaluate("x{{ variable }}y"), "xasdy")
+        XCTAssertEqual(try! interpreter.evaluate("x{{ variable }}y"), "xasdy")
     }
     
     func testSet() {
@@ -23,8 +23,8 @@ class TemplateTests: XCTestCase {
         let interpreter = StringExpressionInterpreter(statements: [stringInterpreterFactory.setStatement(tagPrefix: "{%", tagSuffix: "%}"),
                                                                    stringInterpreterFactory.setAlternativeStatement(tagPrefix: "{%", tagSuffix: "%}"),
                                                                    stringInterpreterFactory.printStatement(tagPrefix: "{{", tagSuffix: "}}")])
-        XCTAssertEqual(interpreter.evaluate("{% set var1 %}123{% endset %}x{{ var1 }}y"), "x123y")
-        XCTAssertEqual(interpreter.evaluate("{% set var2 = asd %}x{{ var2 }}y"), "xasdy")
+        XCTAssertEqual(try! interpreter.evaluate("{% set var1 %}123{% endset %}x{{ var1 }}y"), "x123y")
+        XCTAssertEqual(try! interpreter.evaluate("{% set var2 = asd %}x{{ var2 }}y"), "xasdy")
     }
     
     func testLoop() {
@@ -35,8 +35,8 @@ class TemplateTests: XCTestCase {
         contextHandler.context.variables["array"] = [1, 2, 3, 4, 5]
         
         let interpreter = stringInterpreterFactory.stringExpressionInterpreter()
-        XCTAssertEqual(interpreter.evaluate("x{% for x from 1 to 3 %}{{ x }}{% endfor %}y"), "x123y")
-        XCTAssertEqual(interpreter.evaluate("x {% for y in array %}{{ y }} {% endfor %}y"), "x 1 2 3 4 5 y")
+        XCTAssertEqual(try! interpreter.evaluate("x{% for x from 1 to 3 %}{{ x }}{% endfor %}y"), "x123y")
+        XCTAssertEqual(try! interpreter.evaluate("x {% for y in array %}{{ y }} {% endfor %}y"), "x 1 2 3 4 5 y")
     }
     
     func testFunctions() {
@@ -49,8 +49,21 @@ class TemplateTests: XCTestCase {
         let interpreter = StringExpressionInterpreter(statements: [stringInterpreterFactory.printStatement(tagPrefix: "{{", tagSuffix: "}}"),
                                                                    stringInterpreterFactory.inc(),
                                                                    stringInterpreterFactory.incFilter()])
-        XCTAssertEqual(interpreter.evaluate("-inc(x)-"), "-2-")
-        XCTAssertEqual(interpreter.evaluate("x|inc"), "2")
+        XCTAssertEqual(try! interpreter.evaluate("-inc(x)-"), "-2-")
+        XCTAssertEqual(try! interpreter.evaluate("x|inc"), "2")
+    }
+    
+    func testComputations() {
+        let platform = RenderingPlatform()
+        let stringInterpreterFactory = platform.add(capability: StringInterpreterFactory.self)
+//        let contextHandler = platform.add(capability: ContextHandler.self)
+        let _ = platform.add(capability: BooleanInterpreterFactory.self)
+        let _ = platform.add(capability: NumericInterpreterFactory.self)
+        
+        let interpreter = stringInterpreterFactory.stringExpressionInterpreter()
+        XCTAssertEqual(try! interpreter.evaluate("{{ 5 * 17 }}"), "85")
+        XCTAssertEqual(try! interpreter.evaluate("{% if 12 >= 5 %}asd{% endif %}"), "asd")
+        XCTAssertEqual(try! interpreter.evaluate("{% if 12 / 2 + 1 >= 6 % 2 %}asd{% endif %}"), "asd")
     }
     
     static var allTests = [

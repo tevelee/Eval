@@ -15,7 +15,7 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(pattern.matches(prefix: "if"), .exactMatch(length: 2, output: "x", variables: [:]))
 
         let interpreter = StringExpressionInterpreter(statements: [pattern])
-        XCTAssertEqual(interpreter.evaluate("aifb"), "axb")
+        XCTAssertEqual(try! interpreter.evaluate("aifb"), "axb")
 
         let pattern2 = Pattern(keyword + Keyword("fi")) { _,_ in "y" }
         XCTAssertEqual(pattern2.matches(prefix: "asd"), .noMatch)
@@ -25,7 +25,7 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(pattern2.matches(prefix: "iffi"), .exactMatch(length: 4, output: "y", variables: [:]))
 
         let interpreter2 = StringExpressionInterpreter(statements: [pattern2])
-        XCTAssertEqual(interpreter2.evaluate("aiffib"), "ayb")
+        XCTAssertEqual(try! interpreter2.evaluate("aiffib"), "ayb")
         
         let pattern3 = Pattern(Keyword("{%") + Variable("any") + Keyword("%}")) { _,_ in "z" }
         XCTAssertEqual(pattern3.matches(prefix: "asd"), .noMatch)
@@ -38,7 +38,7 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(pattern3.matches(prefix: "{%a a %}"), .exactMatch(length: 8, output: "z", variables: ["any": "a a "]))
         
         let interpreter3 = StringExpressionInterpreter(statements: [pattern3])
-        XCTAssertEqual(interpreter3.evaluate("a{%a a %}b"), "azb")
+        XCTAssertEqual(try! interpreter3.evaluate("a{%a a %}b"), "azb")
     }
     
     func testCompositeExample1() {
@@ -52,7 +52,7 @@ class InterpreterTests: XCTestCase {
                                                                                            variables: ["condition": "12 > 5 ", "body": "x"]))
 
         let interpreter = stringInterpreterFactory.stringExpressionInterpreter()
-        XCTAssertEqual(interpreter.evaluate("123 {% if 3 * 2 == 6 %}x{% endif %}"), "123 x")
+        XCTAssertEqual(try! interpreter.evaluate("123 {% if 3 * 2 == 6 %}x{% endif %}"), "123 x")
     }
     
     func testCompositeExample2() {
@@ -61,7 +61,7 @@ class InterpreterTests: XCTestCase {
         let _ = platform.add(capability: BooleanInterpreterFactory.self)
         let _ = platform.add(capability: NumericInterpreterFactory.self)
         let interpreter = stringInterpreterFactory.stringExpressionInterpreter()
-        XCTAssertEqual(interpreter.evaluate("a{# asd asd #}sd 123 {% if 12 > 5 %}x{% else %}y{% endif %}"), "asd 123 x")
+        XCTAssertEqual(try! interpreter.evaluate("a{# asd asd #}sd 123 {% if 12 > 5 %}x{% else %}y{% endif %}"), "asd 123 x")
     }
 
     static var allTests = [

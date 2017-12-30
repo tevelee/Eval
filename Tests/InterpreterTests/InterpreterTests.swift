@@ -79,14 +79,14 @@ class InterpreterTests: XCTestCase {
     }
 
     func testGenericInterpreter() {
-        let number = DataType(name: "number", type: Double.self, literals: [Literal { v,_ in Double(v) },
+        let number = DataType(type: Double.self, literals: [Literal { v,_ in Double(v) },
                                                                             Literal { v,_ in v == "pi" ? Double.pi : nil } ]) { String(describing: $0) }
         
         let singleQuotesLiteral = Literal { (input, _) -> String? in
             guard let first = input.first, let last = input.last, first == last, first == "'" else { return nil }
             return input.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
         }
-        let string = DataType(name: "string", type: String.self, literals: [singleQuotesLiteral]) { $0 }
+        let string = DataType(type: String.self, literals: [singleQuotesLiteral]) { $0 }
         
         let arrayLiteral = Literal { (input, interpreter) -> [CustomStringConvertible]? in
             guard let first = input.first, let last = input.last, first == "[", last == "]" else { return nil }
@@ -96,12 +96,12 @@ class InterpreterTests: XCTestCase {
                 .map{ $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                 .map{ interpreter.evaluate(String($0)) as? CustomStringConvertible ?? String($0) }
         }
-        let array = DataType(name: "array", type: [CustomStringConvertible].self, literals: [arrayLiteral]) { $0.map{ $0.description }.joined(separator: ",") }
+        let array = DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { $0.map{ $0.description }.joined(separator: ",") }
         
-        let boolean = DataType(name: "boolean", type: Bool.self, literals: [Literal { v,_ in v == "false" ? false : nil },
+        let boolean = DataType(type: Bool.self, literals: [Literal { v,_ in v == "false" ? false : nil },
                                                                             Literal { v,_ in v == "true" ? true : nil }]) { $0 ? "true" : "false" }
         
-        let add = Function(name: "add", patterns: [
+        let add = Function(patterns: [
             Matcher<Double>([Static("add"), Static("("), Placeholder("lhs", shortest: true), Static(","), Placeholder("rhs", shortest: true), Static(")")]) { arguments in
                 if let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double {
                     return Double(lhs) + Double(rhs)
@@ -110,7 +110,7 @@ class InterpreterTests: XCTestCase {
             }
         ])
         
-        let multipicationOperator = Function(name: "*", patterns: [
+        let multipicationOperator = Function(patterns: [
             Matcher<Double>([Placeholder("lhs", shortest: true), Static("*"), Placeholder("rhs", shortest: false)]) { arguments in
                 if let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double {
                     return Double(lhs) * Double(rhs)
@@ -119,7 +119,7 @@ class InterpreterTests: XCTestCase {
             }
         ])
         
-        let methodCall = Function(name: "methodCall", patterns: [
+        let methodCall = Function(patterns: [
             Matcher<Double>([Placeholder("lhs", shortest: true), Static("."), Placeholder("rhs", shortest: false, interpreted: false)]) { arguments in
                 if let lhs = arguments["lhs"] as? NSObjectProtocol,
                     let rhs = arguments["rhs"] as? String,
@@ -130,7 +130,7 @@ class InterpreterTests: XCTestCase {
             }
         ])
         
-        let max = Function(name: "max", patterns: [
+        let max = Function(patterns: [
             Matcher<Double>([Placeholder("lhs", shortest: true), Static("."), Placeholder("rhs", shortest: false)]) { arguments in
                 if let lhs = arguments["lhs"] as? [Double], let rhs = arguments["rhs"] as? String, rhs == "max" {
                     return lhs.max()
@@ -139,8 +139,38 @@ class InterpreterTests: XCTestCase {
             }
         ])
         
+        let inArray = Function(patterns: [
+            Matcher<Bool>([Placeholder("lhs", shortest: true), Static("in"), Placeholder("rhs", shortest: false)]) { arguments in
+                if let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? [Double] {
+                    return rhs.contains(lhs)
+                }
+                if let lhs = arguments["lhs"] as? String, let rhs = arguments["rhs"] as? [String] {
+                    return rhs.contains(lhs)
+                }
+                return nil
+            }
+        ])
+        
+        let range = Function(patterns: [
+            Matcher<[Double]>([Placeholder("lhs", shortest: true), Static("..."), Placeholder("rhs", shortest: false)]) { arguments in
+                if let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double {
+                    return CountableClosedRange(uncheckedBounds: (lower: Int(lhs), upper: Int(rhs))).map { Double($0) }
+                }
+                return nil
+            }
+        ])
+        
+        let isOdd = Function(patterns: [
+            Matcher<Bool>([Placeholder("value", shortest: true), Static("is"), Static("odd")]) { arguments in
+                if let value = arguments["value"] as? Double {
+                    return Int(value) % 2 == 0
+                }
+                return nil
+            }
+        ])
+        
         let interpreter = GenericInterpreter(dataTypes: [number, string, boolean, array],
-                                             functions: [multipicationOperator, add, max, methodCall])
+                                             functions: [isOdd, range, inArray, multipicationOperator, add, max, methodCall])
         XCTAssertEqual(interpreter.evaluate("123") as! Double, 123)
         XCTAssertEqual(interpreter.evaluate("'hello'") as! String, "hello")
         XCTAssertEqual(interpreter.evaluate("false") as! Bool, false)
@@ -153,7 +183,16 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("'hello'.length") as! Double, 5)
         XCTAssertEqual(interpreter.evaluate("[0,3,1,2].max") as! Double, 3)
         XCTAssertEqual(interpreter.evaluate("pi * 2") as! Double, Double.pi * 2)
+        XCTAssertEqual(interpreter.evaluate("1 in [3,2,1,2,3]") as! Bool, true)
+        XCTAssertEqual(interpreter.evaluate("'b' in ['a','c','d']") as! Bool, false)
+        XCTAssertEqual(interpreter.evaluate("1...5") as! [Double], [1, 2, 3, 4, 5])
+        XCTAssertEqual(interpreter.evaluate("2 in 1...5") as! Bool,true)
+        XCTAssertEqual(interpreter.evaluate("5 is odd") as! Bool, false)
+        XCTAssertEqual(interpreter.evaluate("2 is odd") as! Bool, true)
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))
     }
 }
+
+// stricter placeholder (type/block check)
+// map on placeholders

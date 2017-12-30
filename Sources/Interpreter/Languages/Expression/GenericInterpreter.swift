@@ -13,21 +13,17 @@ public class Literal<T> {
 }
 
 public protocol DataTypeProtocol {
-    var name: String { get }
     func convert(input: String, interpreter: GenericInterpreter) -> Any?
 }
 
 public class DataType<T> : DataTypeProtocol {
-    public let name: String
     let type: T.Type
     let literals: [Literal<T>]
     let print: (T) -> String
 
-    init (name: String,
-          type: T.Type,
+    init (type: T.Type,
           literals: [Literal<T>],
           print: @escaping (T) -> String) {
-        self.name = name
         self.type = type
         self.literals = literals
         self.print = print
@@ -38,32 +34,14 @@ public class DataType<T> : DataTypeProtocol {
     }
 }
 
-//public protocol InstanceProtocol {
-//}
-//
-//public class Instance<T>: InstanceProtocol {
-//    let dataType: DataType<T>
-//    let value: T
-//
-//    init(dataType: DataType<T>,
-//         value: T) {
-//        self.dataType = dataType
-//        self.value = value
-//    }
-//}
-
 public protocol FunctionProtocol {
-    var name: String { get }
     func convert(input: String, interpreter: GenericInterpreter) -> Any?
 }
 
 public class Function<T> : FunctionProtocol {
-    public let name: String
     var patterns: [Matcher<T>]
     
-    init(name: String,
-         patterns: [Matcher<T>]) {
-        self.name = name
+    init(patterns: [Matcher<T>]) {
         self.patterns = patterns
     }
     
@@ -210,12 +188,7 @@ public class Matcher<T> {
                         if !input.isEmpty {
                             currentlyActiveVariable = (variable.name, variable.value + String(input.removeFirst()), variable.interpreted)
                         } else {
-                            let value = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
-                            if variable.interpreted, let output = interpreter.evaluate(value) {
-                                variables[variable.name] = output
-                            } else {
-                                variables[variable.name] = value
-                            }
+                            variables[variable.name] = finaliseVariable(variable, interpreter: interpreter)
                             elementIndex += 1
                         }
                     } else {
@@ -227,12 +200,7 @@ public class Matcher<T> {
             case .exactMatch(let length, _, let embeddedVariables):
                 variables.merge(embeddedVariables) { (key, value) in key }
                 if let variable = currentlyActiveVariable {
-                    let value = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
-                    if variable.interpreted, let output = interpreter.evaluate(value) {
-                        variables[variable.name] = output
-                    } else {
-                        variables[variable.name] = value
-                    }
+                    variables[variable.name] = finaliseVariable(variable, interpreter: interpreter)
                     currentlyActiveVariable = nil
                 }
                 input.removeFirst(length)
@@ -247,23 +215,24 @@ public class Matcher<T> {
             return .noMatch
         }
     }
-}
-
-public class Constant {
     
+    func finaliseVariable(_ variable: (name: String, value: String, interpreted: Bool), interpreter: GenericInterpreter) -> Any {
+        let value = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
+        if variable.interpreted, let output = interpreter.evaluate(value) {
+            return output
+        }
+        return value
+    }
 }
 
 public class GenericInterpreter {
     let dataTypes: [DataTypeProtocol]
     let functions: [FunctionProtocol]
-    let constants: [Constant]
     
     init(dataTypes: [DataTypeProtocol] = [],
-        functions: [FunctionProtocol] = [],
-        constants: [Constant] = []) {
+        functions: [FunctionProtocol] = []) {
         self.dataTypes = dataTypes
         self.functions = functions
-        self.constants = constants
     }
     
     public func evaluate(_ expression: String) -> Any? {
@@ -290,7 +259,7 @@ public class GenericInterpreter {
 //"person.name|capitalised|map('Hello #{%s}!')"
 //"{'a': 1}"
 //"1 in [1,2]"
-//"1 in odd"
+//"1 is odd"
 //"3..5"
 //"'Name' starts with 'N'"
 //"value|default('none')"

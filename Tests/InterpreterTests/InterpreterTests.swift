@@ -79,7 +79,8 @@ class InterpreterTests: XCTestCase {
     }
 
     func testGenericInterpreter() {
-        let number = DataType(name: "number", type: Double.self, literals: [Literal { v,_ in Double(v) } ]) { String(describing: $0) }
+        let number = DataType(name: "number", type: Double.self, literals: [Literal { v,_ in Double(v) },
+                                                                            Literal { v,_ in v == "pi" ? Double.pi : nil } ]) { String(describing: $0) }
         
         let singleQuotesLiteral = Literal { (input, _) -> String? in
             guard let first = input.first, let last = input.last, first == last, first == "'" else { return nil }
@@ -109,8 +110,17 @@ class InterpreterTests: XCTestCase {
             }
         ])
         
+        let multipicationOperator = Function(name: "*", patterns: [
+            Matcher<Double>([Placeholder("lhs", shortest: true), Static("*"), Placeholder("rhs", shortest: false)]) { arguments in
+                if let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double {
+                    return Double(lhs) * Double(rhs)
+                }
+                return nil
+            }
+        ])
+        
         let methodCall = Function(name: "methodCall", patterns: [
-            Matcher<Double>([Placeholder("lhs", shortest: true), Static("."), Placeholder("rhs", shortest: false)]) { arguments in
+            Matcher<Double>([Placeholder("lhs", shortest: true), Static("."), Placeholder("rhs", shortest: false, interpreted: false)]) { arguments in
                 if let lhs = arguments["lhs"] as? NSObjectProtocol,
                     let rhs = arguments["rhs"] as? String,
                     let result = lhs.perform(Selector(rhs)) {
@@ -120,8 +130,17 @@ class InterpreterTests: XCTestCase {
             }
         ])
         
+        let max = Function(name: "max", patterns: [
+            Matcher<Double>([Placeholder("lhs", shortest: true), Static("."), Placeholder("rhs", shortest: false)]) { arguments in
+                if let lhs = arguments["lhs"] as? [Double], let rhs = arguments["rhs"] as? String, rhs == "max" {
+                    return lhs.max()
+                }
+                return nil
+            }
+        ])
+        
         let interpreter = GenericInterpreter(dataTypes: [number, string, boolean, array],
-                                             functions: [add, methodCall])
+                                             functions: [multipicationOperator, add, max, methodCall])
         XCTAssertEqual(interpreter.evaluate("123") as! Double, 123)
         XCTAssertEqual(interpreter.evaluate("'hello'") as! String, "hello")
         XCTAssertEqual(interpreter.evaluate("false") as! Bool, false)
@@ -132,6 +151,8 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("[true, false]") as! [Bool], [true, false])
         XCTAssertEqual(interpreter.evaluate("[1,2].count") as! Double, 2)
         XCTAssertEqual(interpreter.evaluate("'hello'.length") as! Double, 5)
+        XCTAssertEqual(interpreter.evaluate("[0,3,1,2].max") as! Double, 3)
+        XCTAssertEqual(interpreter.evaluate("pi * 2") as! Double, Double.pi * 2)
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))
     }

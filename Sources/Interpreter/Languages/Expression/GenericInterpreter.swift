@@ -21,8 +21,6 @@ public class DataType<T> : DataTypeProtocol {
     public let name: String
     let type: T.Type
     let literals: [Literal<T>]
-//    let properties: [Property] = []
-//    let functions: [Function] = []
     let print: (T) -> String
 
     init (name: String,
@@ -40,19 +38,19 @@ public class DataType<T> : DataTypeProtocol {
     }
 }
 
-public protocol InstanceProtocol {
-}
-
-public class Instance<T>: InstanceProtocol {
-    let dataType: DataType<T>
-    let value: T
-    
-    init(dataType: DataType<T>,
-         value: T) {
-        self.dataType = dataType
-        self.value = value
-    }
-}
+//public protocol InstanceProtocol {
+//}
+//
+//public class Instance<T>: InstanceProtocol {
+//    let dataType: DataType<T>
+//    let value: T
+//
+//    init(dataType: DataType<T>,
+//         value: T) {
+//        self.dataType = dataType
+//        self.value = value
+//    }
+//}
 
 public protocol FunctionProtocol {
     var name: String { get }
@@ -156,10 +154,12 @@ public class Static : MatchElement {
 public class Placeholder : MatchElement {
     let name: String
     let shortest: Bool
+    let interpreted: Bool
     
-    public init(_ name: String, shortest: Bool = true) {
+    public init(_ name: String, shortest: Bool = true, interpreted: Bool = true) {
         self.name = name
         self.shortest = shortest
+        self.interpreted = interpreted
     }
     
     public func matches(prefix: String, isLast: Bool = false) -> MatchType<Any> {
@@ -187,7 +187,7 @@ public class Matcher<T> {
         var elementIndex = 0
         var input = prefix
         var variables: [String: Any] = [:]
-        var currentlyActiveVariable: (name: String, value: String)? = nil
+        var currentlyActiveVariable: (name: String, value: String, interpreted: Bool)? = nil
         repeat {
             let element = elements[elementIndex]
             let result = element.matches(prefix: input, isLast: isLast)
@@ -195,7 +195,7 @@ public class Matcher<T> {
             switch result {
             case .noMatch:
                 if let previous = currentlyActiveVariable, !input.isEmpty {
-                    currentlyActiveVariable = (previous.name, previous.value + String(input.removeFirst()))
+                    currentlyActiveVariable = (previous.name, previous.value + String(input.removeFirst()), previous.interpreted)
                 } else {
                     return .noMatch
                 }
@@ -203,14 +203,19 @@ public class Matcher<T> {
                 return .possibleMatch
             case .anyMatch(let shortest):
                 if !input.isEmpty, currentlyActiveVariable == nil, let variable = element as? Placeholder {
-                    currentlyActiveVariable = (variable.name, String(input.removeFirst()))
+                    currentlyActiveVariable = (variable.name, String(input.removeFirst()), variable.interpreted)
                 }
                 if !shortest {
                     if isLast, let variable = currentlyActiveVariable {
-                        variables[variable.name] = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
                         if !input.isEmpty {
-                            currentlyActiveVariable = (variable.name, variable.value + String(input.removeFirst()))
+                            currentlyActiveVariable = (variable.name, variable.value + String(input.removeFirst()), variable.interpreted)
                         } else {
+                            let value = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
+                            if variable.interpreted, let output = interpreter.evaluate(value) {
+                                variables[variable.name] = output
+                            } else {
+                                variables[variable.name] = value
+                            }
                             elementIndex += 1
                         }
                     } else {
@@ -222,10 +227,11 @@ public class Matcher<T> {
             case .exactMatch(let length, _, let embeddedVariables):
                 variables.merge(embeddedVariables) { (key, value) in key }
                 if let variable = currentlyActiveVariable {
-                    if let value = interpreter.evaluate(variable.value) {
-                        variables[variable.name] = value
+                    let value = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if variable.interpreted, let output = interpreter.evaluate(value) {
+                        variables[variable.name] = output
                     } else {
-                        variables[variable.name] = variable.value
+                        variables[variable.name] = value
                     }
                     currentlyActiveVariable = nil
                 }
@@ -275,7 +281,7 @@ public class GenericInterpreter {
     }
 }
 
-//GOAL: To be able to parse the followings expressions
+//GOAL: To be able to parse the following expressions
 //"[1,2,3,0]|max + variable"
 //"['a', 'b']|join(', ')"
 //"'hello'|length + 1"

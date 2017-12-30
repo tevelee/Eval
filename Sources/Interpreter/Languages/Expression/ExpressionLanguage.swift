@@ -100,17 +100,23 @@ public class Pattern : Element {
             case .possibleMatch:
                 return .possibleMatch
             case .anyMatch(let shortest):
-                if !input.isEmpty, let variable = element as? Variable {
+                if !input.isEmpty, currentlyActiveVariable == nil, let variable = element as? Variable {
                     currentlyActiveVariable = (variable.name, String(input.removeFirst()))
                 }
                 if !shortest {
                     if isLast, let variable = currentlyActiveVariable {
                         variables[variable.name] = variable.value.trimmingCharacters(in: charactersToIgnore)
+                        if !input.isEmpty {
+                            currentlyActiveVariable = (variable.name, variable.value + String(input.removeFirst()))
+                        } else {
+                            elementIndex += 1
+                        }
                     } else {
                         return .possibleMatch
                     }
+                } else {
+                    elementIndex += 1
                 }
-                elementIndex += 1
             case .exactMatch(let length, _, let embeddedVariables):
                 variables.merge(embeddedVariables) { (key, value) in key }
                 if let variable = currentlyActiveVariable {

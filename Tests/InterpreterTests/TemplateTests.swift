@@ -86,11 +86,4 @@ class TemplateTests: XCTestCase {
         XCTAssertEqual(try! interpreter.evaluate("{% if !c %}asd{% endif %}"), "asd")
         XCTAssertEqual(try! interpreter.evaluate("{% if 0 == c %}asd{% endif %}"), "asd")
     }
-    
-    static var allTests = [
-        ("testVariable", testVariable),
-        ("testSet", testSet),
-        ("testLoop", testLoop),
-        ("testFunctions", testFunctions),
-    ]
 }

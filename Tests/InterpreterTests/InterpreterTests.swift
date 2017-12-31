@@ -84,7 +84,8 @@ class InterpreterTests: XCTestCase {
         
         let singleQuotesLiteral = Literal { (input, _) -> String? in
             guard let first = input.first, let last = input.last, first == last, first == "'" else { return nil }
-            return input.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
+            let trimmed = input.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
+            return trimmed.contains("'") ? nil : trimmed
         }
         let string = DataType(type: String.self, literals: [singleQuotesLiteral]) { $0 }
         
@@ -156,10 +157,11 @@ class InterpreterTests: XCTestCase {
         let inArrayNumber = infixOperator("in") { (lhs: Double, rhs: [Double]) in rhs.contains(lhs) }
         let inArrayString = infixOperator("in") { (lhs: String, rhs: [String]) in rhs.contains(lhs) }
         let range = infixOperator("...") { (lhs: Double, rhs: Double) in CountableClosedRange(uncheckedBounds: (lower: Int(lhs), upper: Int(rhs))).map { Double($0) } }
+        let prefix = infixOperator("starts with") { (lhs: String, rhs: String) in lhs.hasPrefix(lhs) }
         let parenthesis = Function([Static("("), Placeholder("body"), Static(")")]) { $0["body"] }
         
         let interpreter = GenericInterpreter(dataTypes: [number, string, boolean, array],
-                                             functions: [concat, parenthesis, methodCall, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, range, add, max, not, not2],
+                                             functions: [concat, parenthesis, methodCall, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, range, add, max, not, not2, prefix],
                                              variables: ["test": 2.0, "name": "Teve"])
         XCTAssertEqual(interpreter.evaluate("123") as! Double, 123)
         XCTAssertEqual(interpreter.evaluate("1 + 2 + 3") as! Double, 6)
@@ -188,6 +190,7 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("2 in 1...5") as! Bool,true)
         XCTAssertEqual(interpreter.evaluate("5 is odd") as! Bool, false)
         XCTAssertEqual(interpreter.evaluate("2 is odd") as! Bool, true)
+        XCTAssertEqual(interpreter.evaluate("'Teve' starts with 'T'") as! Bool, true)
         XCTAssertEqual(interpreter.evaluate("'Hello ' + name") as! String, "Hello Teve")
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))

@@ -80,7 +80,7 @@ class InterpreterTests: XCTestCase {
 
     func testGenericInterpreter() {
         let number = DataType(type: Double.self, literals: [Literal { v,_ in Double(v) },
-                                                            Literal { v,_ in v == "pi" ? Double.pi : nil } ]) { String(describing: $0) }
+                                                            Literal(for: Double.pi, when: "pi") ]) { String(describing: $0) }
         
         let singleQuotesLiteral = Literal { (input, _) -> String? in
             guard let first = input.first, let last = input.last, first == last, first == "'" else { return nil }
@@ -98,8 +98,8 @@ class InterpreterTests: XCTestCase {
         }
         let array = DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { $0.map{ $0.description }.joined(separator: ",") }
         
-        let boolean = DataType(type: Bool.self, literals: [Literal { v,_ in v == "false" ? false : nil },
-                                                           Literal { v,_ in v == "true" ? true : nil }]) { $0 ? "true" : "false" }
+        let boolean = DataType(type: Bool.self, literals: [Literal(for: false, when: "false"),
+                                                           Literal(for: true, when: "true")]) { $0 ? "true" : "false" }
         
         let add = Function(patterns: [
             Matcher<Double>([Static("add"), Static("("), Placeholder("lhs", shortest: true), Static(","), Placeholder("rhs", shortest: true), Static(")")]) { arguments in

@@ -7,6 +7,10 @@ public class Literal<T> {
         self.convert = convert
     }
     
+    init(for value: T, when check: String) {
+        self.convert = { input,_ in check == input ? value : nil }
+    }
+    
     public func convert(input: String, interpreter: GenericInterpreter) -> T? {
         return convert(input, interpreter)
     }

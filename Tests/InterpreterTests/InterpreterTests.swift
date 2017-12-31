@@ -166,14 +166,10 @@ class InterpreterTests: XCTestCase {
             }
         ])
         
-        let range = Function(patterns: [
-            Matcher<[Double]>([Placeholder("lhs", shortest: true), Static("..."), Placeholder("rhs", shortest: false)]) { arguments in
-                if let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double {
-                    return CountableClosedRange(uncheckedBounds: (lower: Int(lhs), upper: Int(rhs))).map { Double($0) }
-                }
-                return nil
-            }
-        ])
+        let range = Function<[Double]>([Placeholder("lhs", shortest: true), Static("..."), Placeholder("rhs", shortest: false)]) { arguments in
+            guard let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double else { return nil }
+            return CountableClosedRange(uncheckedBounds: (lower: Int(lhs), upper: Int(rhs))).map { Double($0) }
+        }
         
         let isOdd = Function(patterns: [
             Matcher<Bool>([Placeholder("value", shortest: true), Static("is"), Static("odd")]) { arguments in

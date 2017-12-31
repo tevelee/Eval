@@ -45,6 +45,11 @@ public class Function<T> : FunctionProtocol {
         self.patterns = patterns
     }
     
+    init(_ elements: [MatchElement],
+         matcher: @escaping ([String: Any]) -> T?) {
+        self.patterns = [Matcher(elements, matcher: matcher)]
+    }
+    
     public func convert(input: String, interpreter: GenericInterpreter) -> Any? {
         if case let .exactMatch(_, output, _) = isStatement(in: input, interpreter: interpreter) {
             return output

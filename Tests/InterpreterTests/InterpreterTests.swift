@@ -110,6 +110,13 @@ class InterpreterTests: XCTestCase {
             }
         ])
         
+        let plusOperator = Function(patterns: [
+            Matcher<Double>([Placeholder("lhs", shortest: true), Static("+"), Placeholder("rhs", shortest: false)]) { arguments in
+                guard let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double else { return nil }
+                return Double(lhs) + Double(rhs)
+            }
+        ])
+        
         let multipicationOperator = Function(patterns: [
             Matcher<Double>([Placeholder("lhs", shortest: true), Static("*"), Placeholder("rhs", shortest: false)]) { arguments in
                 if let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double {
@@ -171,8 +178,11 @@ class InterpreterTests: XCTestCase {
         ])
         
         let interpreter = GenericInterpreter(dataTypes: [number, string, boolean, array],
-                                             functions: [isOdd, range, inArray, multipicationOperator, add, max, methodCall])
+                                             functions: [isOdd, range, inArray, plusOperator, multipicationOperator, add, max, methodCall])
         XCTAssertEqual(interpreter.evaluate("123") as! Double, 123)
+        XCTAssertEqual(interpreter.evaluate("1 + 2 + 3") as! Double, 6)
+        XCTAssertEqual(interpreter.evaluate("2 + 3 * 4") as! Double, 14)
+        XCTAssertEqual(interpreter.evaluate("2 * 3 + 4") as! Double, 10)
         XCTAssertEqual(interpreter.evaluate("'hello'") as! String, "hello")
         XCTAssertEqual(interpreter.evaluate("false") as! Bool, false)
         XCTAssertEqual(interpreter.evaluate("true") as! Bool, true)

@@ -257,18 +257,3 @@ public class GenericInterpreter {
         return nil
     }
 }
-
-//GOAL: To be able to parse the following expressions
-//"[1,2,3,0]|max + variable"
-//"['a', 'b']|join(', ')"
-//"'hello'|length + 1"
-//"Date(2017,12,13)|format('yyyy-mm-dd')"
-//"string|escape('%')"
-//"person.name|capitalised|map('Hello #{%s}!')"
-//"{'a': 1}"
-//"1 in [1,2]"
-//"1 is odd"
-//"3..5"
-//"'Name' starts with 'N'"
-//"value|default('none')"
-//"range(low=1, high=10, step=2)"

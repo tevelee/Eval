@@ -80,7 +80,7 @@ class InterpreterTests: XCTestCase {
 
     func testGenericInterpreter() {
         let number = DataType(type: Double.self, literals: [Literal { v,_ in Double(v) },
-                                                                            Literal { v,_ in v == "pi" ? Double.pi : nil } ]) { String(describing: $0) }
+                                                            Literal { v,_ in v == "pi" ? Double.pi : nil } ]) { String(describing: $0) }
         
         let singleQuotesLiteral = Literal { (input, _) -> String? in
             guard let first = input.first, let last = input.last, first == last, first == "'" else { return nil }
@@ -99,7 +99,7 @@ class InterpreterTests: XCTestCase {
         let array = DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { $0.map{ $0.description }.joined(separator: ",") }
         
         let boolean = DataType(type: Bool.self, literals: [Literal { v,_ in v == "false" ? false : nil },
-                                                                            Literal { v,_ in v == "true" ? true : nil }]) { $0 ? "true" : "false" }
+                                                           Literal { v,_ in v == "true" ? true : nil }]) { $0 ? "true" : "false" }
         
         let add = Function(patterns: [
             Matcher<Double>([Static("add"), Static("("), Placeholder("lhs", shortest: true), Static(","), Placeholder("rhs", shortest: true), Static(")")]) { arguments in
@@ -131,11 +131,12 @@ class InterpreterTests: XCTestCase {
         ])
         
         let max = Function(patterns: [
-            Matcher<Double>([Placeholder("lhs", shortest: true), Static("."), Placeholder("rhs", shortest: false)]) { arguments in
-                if let lhs = arguments["lhs"] as? [Double], let rhs = arguments["rhs"] as? String, rhs == "max" {
-                    return lhs.max()
-                }
-                return nil
+            Matcher<Double>([Placeholder("lhs", shortest: true), Static("."), Placeholder("rhs", shortest: false) {
+                guard let value = $0 as? String, value == "max" else { return nil }
+                return value
+            }]) { arguments in
+                guard let lhs = arguments["lhs"] as? [Double], arguments["rhs"] != nil else { return nil }
+                return lhs.max()
             }
         ])
         
@@ -193,6 +194,3 @@ class InterpreterTests: XCTestCase {
         XCTAssertNil(interpreter.evaluate("hello"))
     }
 }
-
-// stricter placeholder (type/block check)
-// map on placeholders

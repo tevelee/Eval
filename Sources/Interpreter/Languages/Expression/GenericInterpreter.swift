@@ -129,19 +129,27 @@ public class Static : MatchElement {
     }
 }
 
+public typealias ValueMap = (Any) -> Any?
+
 public class Placeholder : MatchElement {
     let name: String
     let shortest: Bool
     let interpreted: Bool
+    let map: ValueMap
     
-    public init(_ name: String, shortest: Bool = true, interpreted: Bool = true) {
+    public init(_ name: String, shortest: Bool = true, interpreted: Bool = true, map: @escaping ValueMap = { $0 }) {
         self.name = name
         self.shortest = shortest
         self.interpreted = interpreted
+        self.map = map
     }
     
     public func matches(prefix: String, isLast: Bool = false) -> MatchType<Any> {
         return .anyMatch(shortest: shortest)
+    }
+    
+    public func map(value: String) -> Any? {
+        return map(value)
     }
 }
 
@@ -156,7 +164,7 @@ public class Matcher<T> {
         var elements = elements
         if let last = elements.last as? Placeholder {
             elements.removeLast()
-            elements.append(Placeholder(last.name, shortest: false))
+            elements.append(Placeholder(last.name, shortest: false, map: last.map))
         }
         self.elements = elements
     }
@@ -165,15 +173,15 @@ public class Matcher<T> {
         var elementIndex = 0
         var input = prefix
         var variables: [String: Any] = [:]
-        var currentlyActiveVariable: (name: String, value: String, interpreted: Bool)? = nil
+        var currentlyActiveVariable: (name: String, value: String, interpreted: Bool, map: ValueMap)? = nil
         repeat {
             let element = elements[elementIndex]
             let result = element.matches(prefix: input, isLast: isLast)
             
             switch result {
             case .noMatch:
-                if let previous = currentlyActiveVariable, !input.isEmpty {
-                    currentlyActiveVariable = (previous.name, previous.value + String(input.removeFirst()), previous.interpreted)
+                if let variable = currentlyActiveVariable, !input.isEmpty {
+                    currentlyActiveVariable = (variable.name, variable.value + String(input.removeFirst()), variable.interpreted, variable.map)
                 } else {
                     return .noMatch
                 }
@@ -181,12 +189,12 @@ public class Matcher<T> {
                 return .possibleMatch
             case .anyMatch(let shortest):
                 if !input.isEmpty, currentlyActiveVariable == nil, let variable = element as? Placeholder {
-                    currentlyActiveVariable = (variable.name, String(input.removeFirst()), variable.interpreted)
+                    currentlyActiveVariable = (variable.name, String(input.removeFirst()), variable.interpreted, variable.map)
                 }
                 if !shortest {
                     if isLast, let variable = currentlyActiveVariable {
                         if !input.isEmpty {
-                            currentlyActiveVariable = (variable.name, variable.value + String(input.removeFirst()), variable.interpreted)
+                            currentlyActiveVariable = (variable.name, variable.value + String(input.removeFirst()), variable.interpreted, variable.map)
                         } else {
                             variables[variable.name] = finaliseVariable(variable, interpreter: interpreter)
                             elementIndex += 1
@@ -216,12 +224,12 @@ public class Matcher<T> {
         }
     }
     
-    func finaliseVariable(_ variable: (name: String, value: String, interpreted: Bool), interpreter: GenericInterpreter) -> Any {
+    func finaliseVariable(_ variable: (name: String, value: String, interpreted: Bool, map: ValueMap), interpreter: GenericInterpreter) -> Any? {
         let value = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
         if variable.interpreted, let output = interpreter.evaluate(value) {
-            return output
+            return variable.map(output)
         }
-        return value
+        return variable.map(value)
     }
 }
 

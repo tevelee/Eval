@@ -236,20 +236,28 @@ public class Matcher<T> {
 public class GenericInterpreter {
     let dataTypes: [DataTypeProtocol]
     let functions: [FunctionProtocol]
+    let variables: [String: Any]
     
     init(dataTypes: [DataTypeProtocol] = [],
-        functions: [FunctionProtocol] = []) {
+        functions: [FunctionProtocol] = [],
+        variables: [String: Any] = [:]) {
         self.dataTypes = dataTypes
         self.functions = functions
+        self.variables = variables
     }
     
     public func evaluate(_ expression: String) -> Any? {
-        for dataType in dataTypes {
+        let expression = expression.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        for dataType in dataTypes.reversed() {
             if let value = dataType.convert(input: expression, interpreter: self) {
                 return value
             }
         }
-        for function in functions {
+        for variable in variables where expression == variable.key {
+            return variable.value
+        }
+        for function in functions.reversed() {
             if let value = function.convert(input: expression, interpreter: self) {
                 return value
             }

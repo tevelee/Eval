@@ -117,6 +117,13 @@ class InterpreterTests: XCTestCase {
             }
         ])
         
+        let concat = Function(patterns: [
+            Matcher<String>([Placeholder("lhs", shortest: true), Static("+"), Placeholder("rhs", shortest: false)]) { arguments in
+                guard let lhs = arguments["lhs"] as? String, let rhs = arguments["rhs"] as? String else { return nil }
+                return lhs + rhs
+            }
+        ])
+        
         let multipicationOperator = Function(patterns: [
             Matcher<Double>([Placeholder("lhs", shortest: true), Static("*"), Placeholder("rhs", shortest: false)]) { arguments in
                 if let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double {
@@ -177,12 +184,17 @@ class InterpreterTests: XCTestCase {
             }
         ])
         
+        let parenthesis = Function(patterns: [Matcher<Any>([Static("("), Placeholder("body", shortest: true), Static(")")]) { $0["body"] }])
+        
         let interpreter = GenericInterpreter(dataTypes: [number, string, boolean, array],
-                                             functions: [isOdd, range, inArray, plusOperator, multipicationOperator, add, max, methodCall])
+                                             functions: [concat, parenthesis, methodCall, multipicationOperator, plusOperator, inArray, isOdd, range, add, max],
+                                             variables: ["test": 2.0, "name": "Teve"])
         XCTAssertEqual(interpreter.evaluate("123") as! Double, 123)
         XCTAssertEqual(interpreter.evaluate("1 + 2 + 3") as! Double, 6)
         XCTAssertEqual(interpreter.evaluate("2 + 3 * 4") as! Double, 14)
         XCTAssertEqual(interpreter.evaluate("2 * 3 + 4") as! Double, 10)
+        XCTAssertEqual(interpreter.evaluate("2 * (3 + 4)") as! Double, 14)
+        XCTAssertEqual(interpreter.evaluate("(3 + 4) * 2") as! Double, 14)
         XCTAssertEqual(interpreter.evaluate("'hello'") as! String, "hello")
         XCTAssertEqual(interpreter.evaluate("false") as! Bool, false)
         XCTAssertEqual(interpreter.evaluate("true") as! Bool, true)
@@ -197,9 +209,11 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("1 in [3,2,1,2,3]") as! Bool, true)
         XCTAssertEqual(interpreter.evaluate("'b' in ['a','c','d']") as! Bool, false)
         XCTAssertEqual(interpreter.evaluate("1...5") as! [Double], [1, 2, 3, 4, 5])
+        XCTAssertEqual(interpreter.evaluate("[1, test]") as! [Double], [1, 2])
         XCTAssertEqual(interpreter.evaluate("2 in 1...5") as! Bool,true)
         XCTAssertEqual(interpreter.evaluate("5 is odd") as! Bool, false)
         XCTAssertEqual(interpreter.evaluate("2 is odd") as! Bool, true)
+        XCTAssertEqual(interpreter.evaluate("'Hello ' + name") as! String, "Hello Teve")
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))
     }

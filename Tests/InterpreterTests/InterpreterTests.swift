@@ -110,29 +110,6 @@ class InterpreterTests: XCTestCase {
             }
         ])
         
-        let plusOperator = Function(patterns: [
-            Matcher<Double>([Placeholder("lhs", shortest: true), Static("+"), Placeholder("rhs", shortest: false)]) { arguments in
-                guard let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double else { return nil }
-                return Double(lhs) + Double(rhs)
-            }
-        ])
-        
-        let concat = Function(patterns: [
-            Matcher<String>([Placeholder("lhs", shortest: true), Static("+"), Placeholder("rhs", shortest: false)]) { arguments in
-                guard let lhs = arguments["lhs"] as? String, let rhs = arguments["rhs"] as? String else { return nil }
-                return lhs + rhs
-            }
-        ])
-        
-        let multipicationOperator = Function(patterns: [
-            Matcher<Double>([Placeholder("lhs", shortest: true), Static("*"), Placeholder("rhs", shortest: false)]) { arguments in
-                if let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double {
-                    return Double(lhs) * Double(rhs)
-                }
-                return nil
-            }
-        ])
-        
         let methodCall = Function(patterns: [
             Matcher<Double>([Placeholder("lhs", shortest: true), Static("."), Placeholder("rhs", shortest: false, interpreted: false)]) { arguments in
                 if let lhs = arguments["lhs"] as? NSObjectProtocol,
@@ -154,23 +131,6 @@ class InterpreterTests: XCTestCase {
             }
         ])
         
-        let inArray = Function(patterns: [
-            Matcher<Bool>([Placeholder("lhs", shortest: true), Static("in"), Placeholder("rhs", shortest: false)]) { arguments in
-                if let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? [Double] {
-                    return rhs.contains(lhs)
-                }
-                if let lhs = arguments["lhs"] as? String, let rhs = arguments["rhs"] as? [String] {
-                    return rhs.contains(lhs)
-                }
-                return nil
-            }
-        ])
-        
-        let range = Function<[Double]>([Placeholder("lhs", shortest: true), Static("..."), Placeholder("rhs", shortest: false)]) { arguments in
-            guard let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double else { return nil }
-            return CountableClosedRange(uncheckedBounds: (lower: Int(lhs), upper: Int(rhs))).map { Double($0) }
-        }
-        
         let isOdd = Function(patterns: [
             Matcher<Bool>([Placeholder("value", shortest: true), Static("is"), Static("odd")]) { arguments in
                 if let value = arguments["value"] as? Double {
@@ -180,10 +140,16 @@ class InterpreterTests: XCTestCase {
             }
         ])
         
-        let parenthesis = Function(patterns: [Matcher<Any>([Static("("), Placeholder("body", shortest: true), Static(")")]) { $0["body"] }])
+        let plusOperator = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
+        let concat = infixOperator("+") { (lhs: String, rhs: String) in lhs + rhs }
+        let multipicationOperator = infixOperator("*") { (lhs: Double, rhs: Double) in lhs * rhs }
+        let inArrayNumber = infixOperator("in") { (lhs: Double, rhs: [Double]) in rhs.contains(lhs) }
+        let inArrayString = infixOperator("in") { (lhs: String, rhs: [String]) in rhs.contains(lhs) }
+        let range = infixOperator("...") { (lhs: Double, rhs: Double) in CountableClosedRange(uncheckedBounds: (lower: Int(lhs), upper: Int(rhs))).map { Double($0) } }
+        let parenthesis = Function([Static("("), Placeholder("body"), Static(")")]) { $0["body"] }
         
         let interpreter = GenericInterpreter(dataTypes: [number, string, boolean, array],
-                                             functions: [concat, parenthesis, methodCall, multipicationOperator, plusOperator, inArray, isOdd, range, add, max],
+                                             functions: [concat, parenthesis, methodCall, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, range, add, max],
                                              variables: ["test": 2.0, "name": "Teve"])
         XCTAssertEqual(interpreter.evaluate("123") as! Double, 123)
         XCTAssertEqual(interpreter.evaluate("1 + 2 + 3") as! Double, 6)
@@ -212,5 +178,12 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("'Hello ' + name") as! String, "Hello Teve")
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))
+    }
+    
+    func infixOperator<A,B,T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T> {
+        return Function([Placeholder("lhs", shortest: true), Static(symbol), Placeholder("rhs", shortest: false)]) { arguments in
+            guard let lhs = arguments["lhs"] as? A, let rhs = arguments["rhs"] as? B else { return nil }
+            return body(lhs, rhs)
+        }
     }
 }

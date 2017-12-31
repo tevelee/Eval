@@ -49,41 +49,38 @@ public class Function<T> : FunctionProtocol {
         self.patterns = patterns
     }
     
-    init(_ elements: [MatchElement],
-         matcher: @escaping ([String: Any]) -> T?) {
+    init(_ elements: [MatchElement], matcher: @escaping ([String: Any]) -> T?) {
         self.patterns = [Matcher(elements, matcher: matcher)]
     }
     
     public func convert(input: String, interpreter: GenericInterpreter) -> Any? {
-        if case let .exactMatch(_, output, _) = isStatement(in: input, interpreter: interpreter) {
-            return output
-        }
-        return nil
+        guard case let .exactMatch(_, output, _) = isStatement(statements: patterns, in: input, interpreter: interpreter) else { return nil }
+        return output
     }
+}
+
+func isStatement<T>(statements: [Matcher<T>], in input: String, from start: Int = 0, until length: Int = 1, interpreter: GenericInterpreter) -> MatchType<Any> {
+    let prefix = String(input[start ..< start + length])
+    let isLast = input.count == start + length
+    let elements = statements
+        .map { (element: $0, result: $0.matches(prefix: prefix, interpreter: interpreter, isLast: isLast)) }
+        .filter { !$0.result.isNoMatch() }
     
-    func isStatement(in input: String, from start: Int = 0, until length: Int = 1, interpreter: GenericInterpreter) -> MatchType<Any> {
-        let prefix = String(input[start ..< start + length])
-        let isLast = input.count == start + length
-        let elements = patterns
-            .map { (element: $0, result: $0.matches(prefix: prefix, interpreter: interpreter, isLast: isLast)) }
-            .filter { !$0.result.isNoMatch() }
-        
-        if elements.count == 0 {
-            return .noMatch
-        }
-        if let matchingElement = elements.first(where: { $0.result.isMatch() }),
-            case .exactMatch(let length, let output, let variables) = matchingElement.result {
-            return .exactMatch(length: length, output: output, variables: variables)
-        }
-        if elements.contains(where: { $0.result.isPossibleMatch() }) {
-            if isLast {
-                return .noMatch
-            } else {
-                return isStatement(in: input, from: start, until: length + 1, interpreter: interpreter)
-            }
-        }
+    if elements.count == 0 {
         return .noMatch
     }
+    if let matchingElement = elements.first(where: { $0.result.isMatch() }),
+        case .exactMatch(let length, let output, let variables) = matchingElement.result {
+        return .exactMatch(length: length, output: output, variables: variables)
+    }
+    if elements.contains(where: { $0.result.isPossibleMatch() }) {
+        if isLast {
+            return .noMatch
+        } else {
+            return isStatement(statements: statements, in: input, from: start, until: length + 1, interpreter: interpreter)
+        }
+    }
+    return .noMatch
 }
 
 public enum MatchType<T> {

@@ -1,9 +1,17 @@
 import Foundation
 
 public protocol Evaluator {
-    associatedtype T
+    associatedtype EvaluatedType
+    func evaluate(_ expression: String) -> EvaluatedType
+}
+
+public protocol ContextAware {
     var context: InterpreterContext { get }
-    func evaluate(_ expression: String) -> T
+}
+
+public protocol VariableEvaluator: Evaluator, ContextAware {
+    associatedtype VariableEvaluator: Evaluator
+    var interpreterForEvaluatingVariables: VariableEvaluator { get }
 }
 
 public class InterpreterContext {

@@ -1,8 +1,11 @@
 import Foundation
 
-public class TypedInterpreterBase: Evaluator {
-    public typealias T = Any?
+public class TypedInterpreterBase: VariableEvaluator {
+    public typealias EvaluatedType = Any?
+    public typealias VariableEvaluator = TypedInterpreterBase
+    
     public let context: InterpreterContext
+    public lazy var interpreterForEvaluatingVariables: TypedInterpreterBase = { [unowned self] in self }()
     
     init(context: InterpreterContext) {
         self.context = context
@@ -103,4 +106,13 @@ public class Literal<T> {
     public func convert(input: String, interpreter: TypedInterpreterBase) -> T? {
         return convert(input, interpreter)
     }
+}
+
+public class TypedVariable<T> : Variable<T, TypedInterpreter> {
+}
+
+public class AnyVariable : TypedVariable<Any> {
+}
+
+public class StringVariable : TypedVariable<String> {
 }

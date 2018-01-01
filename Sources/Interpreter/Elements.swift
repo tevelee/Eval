@@ -28,16 +28,16 @@ protocol VariableProtocol {
     var name: String { get }
     var shortest: Bool { get }
     var interpreted: Bool { get }
-    func performMap(input: Any) -> Any?
+    func performMap(input: Any, interpreter: Any) -> Any?
 }
 
-public class Variable<T> : VariableProtocol, MatchElement {
+public class Variable<T, E: VariableEvaluator> : VariableProtocol, MatchElement {
     let name: String
     let shortest: Bool
     let interpreted: Bool
-    let map: ValueMap<Any, T>
+    let map: (Any, E) -> T?
     
-    public init(_ name: String, shortest: Bool = true, interpreted: Bool = true, map: @escaping ValueMap<Any, T> = { $0 as? T }) {
+    public init(_ name: String, shortest: Bool = true, interpreted: Bool = true, map: @escaping (Any, E) -> T? = { (value,_) in value as? T }) {
         self.name = name
         self.shortest = shortest
         self.interpreted = interpreted
@@ -48,14 +48,15 @@ public class Variable<T> : VariableProtocol, MatchElement {
         return .anyMatch(shortest: shortest)
     }
     
-    func mapped<K>(_ map: @escaping ValueMap<T, K>) -> Variable<K> {
-        return Variable<K>(name, shortest: shortest, interpreted: interpreted, map: {
-            guard let value = self.map($0) else { return nil }
+    func mapped<K>(_ map: @escaping ValueMap<T, K>) -> Variable<K, E> {
+        return Variable<K, E>(name, shortest: shortest, interpreted: interpreted, map: { value, interpreter in
+            guard let value = self.map(value, interpreter) else { return nil }
             return map(value)
         })
     }
     
-    func performMap(input: Any) -> Any? {
-        return map(input)
+    func performMap(input: Any, interpreter: Any) -> Any? {
+        guard let interpreter = interpreter as? E else { return nil }
+        return map(input, interpreter)
     }
 }

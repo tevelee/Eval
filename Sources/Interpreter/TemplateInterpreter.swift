@@ -1,11 +1,13 @@
 import Foundation
 
-public class TemplateInterpreter : Evaluator {
-    public typealias T = String
+public class TemplateInterpreter : VariableEvaluator {
+    public typealias EvaluatedType = String
+    public typealias VariableEvaluator = TypedInterpreterBase
     
     let statements: [Matcher<String, TemplateInterpreter>]
     public let context: InterpreterContext
     public let interpreter: TypedInterpreter
+    public lazy var interpreterForEvaluatingVariables: TypedInterpreterBase = { [unowned self] in interpreter }()
     
     init(statements: [Matcher<String, TemplateInterpreter>],
          interpreter: TypedInterpreter,
@@ -34,5 +36,14 @@ public class TemplateInterpreter : Evaluator {
         } while position < expression.count
         
         return output
+    }
+}
+
+public class TemplateVariable : Variable<String, TemplateInterpreter> {
+    public init(_ name: String, shortest: Bool = true) {
+        super.init(name, shortest: shortest, interpreted: false) { value, interpreter in
+            guard let stringValue = value as? String else { return "" }
+            return interpreter.evaluate(stringValue)
+        }
     }
 }

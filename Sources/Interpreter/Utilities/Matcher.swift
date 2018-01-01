@@ -2,7 +2,7 @@ import Foundation
 
 typealias MatcherBlock<T, E: Evaluator> = ([String: Any], E) -> T?
 
-public class Matcher<T, E: Evaluator> {
+public class Matcher<T, E: VariableEvaluator> {
     let elements: [MatchElement]
     let matcher: MatcherBlock<T, E>
     
@@ -11,7 +11,7 @@ public class Matcher<T, E: Evaluator> {
         self.matcher = matcher
         
         var elements = elements
-        if let last = elements.last as? Variable<E.T> {
+        if let last = elements.last as? Variable<E.EvaluatedType, E> {
             elements.removeLast()
             elements.append(Variable(last.name, shortest: false, map: last.map))
         }
@@ -22,7 +22,7 @@ public class Matcher<T, E: Evaluator> {
         var elementIndex = 0
         var input = prefix
         var variables: [String: Any] = [:]
-        var currentlyActiveVariable: (name: String, value: String, interpreted: Bool, map: ValueMap<Any, Any>)? = nil
+        var currentlyActiveVariable: (name: String, value: String, interpreted: Bool, map: (Any, Any) -> Any?)? = nil
         repeat {
             let element = elements[elementIndex]
             let result = element.matches(prefix: input, isLast: isLast)
@@ -73,12 +73,13 @@ public class Matcher<T, E: Evaluator> {
         }
     }
     
-    func finaliseVariable(_ variable: (name: String, value: String, interpreted: Bool, map: ValueMap<Any, Any>), interpreter: E) -> Any? {
+    func finaliseVariable(_ variable: (name: String, value: String, interpreted: Bool, map: (Any, Any) -> Any?), interpreter: E) -> Any? {
         let value = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
         if variable.interpreted {
-            let output = interpreter.evaluate(value)
-            return variable.map(output)
+            let variableInterpreter = interpreter.interpreterForEvaluatingVariables
+            let output = variableInterpreter.evaluate(value)
+            return variable.map(output, variableInterpreter)
         }
-        return variable.map(value)
+        return variable.map(value, interpreter)
     }
 }

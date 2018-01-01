@@ -1,6 +1,8 @@
 import Foundation
 
-public func +(left: Element, right: Element) -> [Element] {
+public typealias ValueMap<A, B> = (A) -> B?
+
+public func +(left: MatchElement, right: MatchElement) -> [MatchElement] {
     return [left, right]
 }
 

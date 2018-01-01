@@ -7,7 +7,7 @@ public class Literal<T> {
         self.convert = convert
     }
     
-    init(for value: T, when check: String) {
+    init(_ check: String, convertsTo value: T) {
         self.convert = { input,_ in check == input ? value : nil }
     }
     
@@ -42,31 +42,30 @@ public protocol FunctionProtocol {
     func convert(input: String, interpreter: GenericInterpreterProtocol) -> Any?
 }
 
-typealias MatcherBlock<T> = ([String: Any], GenericInterpreterProtocol) -> T?
+typealias MatcherBlock<T, E: Evaluator> = ([String: Any], E) -> T?
 
 public class Function<T> : FunctionProtocol {
-    var patterns: [Matcher<T>]
+    var patterns: [Matcher<T, GenericInterpreterProtocol>]
     
-    init(patterns: [Matcher<T>]) {
+    init(patterns: [Matcher<T, GenericInterpreterProtocol>]) {
         self.patterns = patterns
     }
     
-    init(_ elements: [MatchElement], matcher: @escaping MatcherBlock<T>) {
+    init(_ elements: [MatchElement], matcher: @escaping MatcherBlock<T, GenericInterpreterProtocol>) {
         self.patterns = [Matcher(elements, matcher: matcher)]
     }
     
     public func convert(input: String, interpreter: GenericInterpreterProtocol) -> Any? {
-        guard case let .exactMatch(_, output, _) = isStatement(statements: patterns, in: input, interpreter: interpreter) else { return nil }
+        guard case let .exactMatch(_, output, _) = isStatement(statements: patterns, in: input, until: input.count, interpreter: interpreter) else { return nil }
         return output
     }
 }
 
-func isStatement<T>(statements: [Matcher<T>], in input: String, from start: Int = 0, until length: Int = 1, interpreter: GenericInterpreterProtocol) -> MatchType<Any> {
+func isStatement<T, E>(statements: [Matcher<T, E>], in input: String, from start: Int = 0, until length: Int = 1, interpreter: E) -> MatchType<T> {
     let prefix = String(input[start ..< start + length])
     let isLast = input.count == start + length
-    let elements = statements
-        .map { (element: $0, result: $0.matches(prefix: prefix, interpreter: interpreter, isLast: isLast)) }
-        .filter { !$0.result.isNoMatch() }
+    let results = statements.map { (element: $0, result: $0.matches(prefix: prefix, interpreter: interpreter, isLast: isLast)) }
+    let elements = results.filter { !$0.result.isNoMatch() }
     
     if elements.count == 0 {
         return .noMatch
@@ -137,15 +136,22 @@ public class Static : MatchElement {
     }
 }
 
-public typealias ValueMap = (Any) -> Any?
+public typealias ValueMap<A, B> = (A) -> B?
 
-public class Placeholder : MatchElement {
+protocol PlaceholderProtocol {
+    var name: String { get }
+    var shortest: Bool { get }
+    var interpreted: Bool { get }
+    func performMap(input: Any) -> Any?
+}
+
+public class Placeholder<T> : PlaceholderProtocol, MatchElement {
     let name: String
     let shortest: Bool
     let interpreted: Bool
-    let map: ValueMap
+    let map: ValueMap<Any, T>
     
-    public init(_ name: String, shortest: Bool = true, interpreted: Bool = true, map: @escaping ValueMap = { $0 }) {
+    public init(_ name: String, shortest: Bool = true, interpreted: Bool = true, map: @escaping ValueMap<Any, T> = { $0 as? T }) {
         self.name = name
         self.shortest = shortest
         self.interpreted = interpreted
@@ -156,32 +162,39 @@ public class Placeholder : MatchElement {
         return .anyMatch(shortest: shortest)
     }
     
-    public func map(value: String) -> Any? {
-        return map(value)
+    func mapped<K>(_ map: @escaping ValueMap<T, K>) -> Placeholder<K> {
+        return Placeholder<K>(name, shortest: shortest, interpreted: interpreted, map: {
+            guard let value = self.map($0) else { return nil }
+            return map(value)
+        })
+    }
+    
+    func performMap(input: Any) -> Any? {
+        return map(input)
     }
 }
 
-public class Matcher<T> {
+public class Matcher<T, E: Evaluator> {
     let elements: [MatchElement]
-    let matcher: MatcherBlock<T>
+    let matcher: MatcherBlock<T, E>
     
     init(_ elements: [MatchElement],
-         matcher: @escaping MatcherBlock<T>) {
+         matcher: @escaping MatcherBlock<T, E>) {
         self.matcher = matcher
 
         var elements = elements
-        if let last = elements.last as? Placeholder {
+        if let last = elements.last as? Placeholder<E.T> {
             elements.removeLast()
             elements.append(Placeholder(last.name, shortest: false, map: last.map))
         }
         self.elements = elements
     }
     
-    public func matches(prefix: String, interpreter: GenericInterpreterProtocol, isLast: Bool = false) -> MatchType<T> {
+    public func matches(prefix: String, interpreter: E, isLast: Bool = false) -> MatchType<T> {
         var elementIndex = 0
         var input = prefix
         var variables: [String: Any] = [:]
-        var currentlyActiveVariable: (name: String, value: String, interpreted: Bool, map: ValueMap)? = nil
+        var currentlyActiveVariable: (name: String, value: String, interpreted: Bool, map: ValueMap<Any, Any>)? = nil
         repeat {
             let element = elements[elementIndex]
             let result = element.matches(prefix: input, isLast: isLast)
@@ -196,8 +209,8 @@ public class Matcher<T> {
             case .possibleMatch:
                 return .possibleMatch
             case .anyMatch(let shortest):
-                if !input.isEmpty, currentlyActiveVariable == nil, let variable = element as? Placeholder {
-                    currentlyActiveVariable = (variable.name, String(input.removeFirst()), variable.interpreted, variable.map)
+                if !input.isEmpty, currentlyActiveVariable == nil, let variable = element as? PlaceholderProtocol {
+                    currentlyActiveVariable = (variable.name, String(input.removeFirst()), variable.interpreted, variable.performMap)
                 }
                 if !shortest {
                     if isLast, let variable = currentlyActiveVariable {
@@ -232,9 +245,10 @@ public class Matcher<T> {
         }
     }
     
-    func finaliseVariable(_ variable: (name: String, value: String, interpreted: Bool, map: ValueMap), interpreter: GenericInterpreterProtocol) -> Any? {
+    func finaliseVariable(_ variable: (name: String, value: String, interpreted: Bool, map: ValueMap<Any, Any>), interpreter: E) -> Any? {
         let value = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
-        if variable.interpreted, let output = interpreter.evaluate(value) {
+        if variable.interpreted {
+            let output = interpreter.evaluate(value)
             return variable.map(output)
         }
         return variable.map(value)
@@ -249,25 +263,38 @@ public class InterpreterContext {
     }
 }
 
-public protocol GenericInterpreterProtocol {
+public protocol Evaluator {
+    associatedtype T
     var context: InterpreterContext { get }
-    func evaluate(_ expression: String) -> Any?
+    func evaluate(_ expression: String) -> T
+}
+
+public class GenericInterpreterProtocol: Evaluator {
+    public typealias T = Any?
+    public let context: InterpreterContext
+    
+    init(context: InterpreterContext) {
+        self.context = context
+    }
+    
+    public func evaluate(_ expression: String) -> Any? {
+        return nil
+    }
 }
 
 public class GenericInterpreter : GenericInterpreterProtocol {
     let dataTypes: [DataTypeProtocol]
     let functions: [FunctionProtocol]
-    public let context: InterpreterContext
     
     init(dataTypes: [DataTypeProtocol] = [],
         functions: [FunctionProtocol] = [],
         context: InterpreterContext) {
         self.dataTypes = dataTypes
         self.functions = functions
-        self.context = context
+        super.init(context: context)
     }
     
-    public func evaluate(_ expression: String) -> Any? {
+    public override func evaluate(_ expression: String) -> Any? {
         let expression = expression.trimmingCharacters(in: .whitespacesAndNewlines)
         
         for dataType in dataTypes.reversed() {
@@ -284,5 +311,39 @@ public class GenericInterpreter : GenericInterpreterProtocol {
             }
         }
         return nil
+    }
+}
+
+public class TemplateInterpreter : Evaluator {
+    public typealias T = String
+    
+    let statements: [Matcher<String, TemplateInterpreter>]
+    public let context: InterpreterContext
+    
+    init(statements: [Matcher<String, TemplateInterpreter>],
+         context: InterpreterContext) {
+        self.statements = statements
+        self.context = context
+    }
+    
+    public func evaluate(_ expression: String) -> String {
+        var output = ""
+        
+        var position = 0
+        repeat {
+            let result = isStatement(statements: statements, in: expression, from: position, interpreter: self)
+            switch result {
+            case .noMatch:
+                output += expression[position]
+                position += 1
+            case .exactMatch(let length, let matchOutput, _):
+                output += matchOutput
+                position += length
+            default:
+                assertionFailure("Invalid result")
+            }
+        } while position < expression.count
+        
+        return output
     }
 }

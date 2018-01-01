@@ -135,7 +135,7 @@ class InterpreterTests: XCTestCase {
         let isOdd = Function(patterns: [
             Matcher<Bool>([Placeholder("value", shortest: true), Static("is"), Static("odd")]) { arguments,_ in
                 if let value = arguments["value"] as? Double {
-                    return Int(value) % 2 == 0
+                    return Int(value) % 2 == 1
                 }
                 return nil
             }
@@ -198,8 +198,8 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("1...5") as! [Double], [1, 2, 3, 4, 5])
         XCTAssertEqual(interpreter.evaluate("[1, test]") as! [Double], [1, 2])
         XCTAssertEqual(interpreter.evaluate("2 in 1...5") as! Bool,true)
-        XCTAssertEqual(interpreter.evaluate("5 is odd") as! Bool, false)
-        XCTAssertEqual(interpreter.evaluate("2 is odd") as! Bool, true)
+        XCTAssertEqual(interpreter.evaluate("5 is odd") as! Bool, true)
+        XCTAssertEqual(interpreter.evaluate("2 is odd") as! Bool, false)
         XCTAssertEqual(interpreter.evaluate("'Teve' starts with 'T'") as! Bool, true)
         XCTAssertEqual(interpreter.evaluate("'Hello ' + name") as! String, "Hello Teve")
         XCTAssertEqual(interpreter.evaluate("12++") as! Double, 13)

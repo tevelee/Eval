@@ -156,6 +156,7 @@ class InterpreterTests: XCTestCase {
         let range = infixOperator("...") { (lhs: Double, rhs: Double) in CountableClosedRange(uncheckedBounds: (lower: Int(lhs), upper: Int(rhs))).map { Double($0) } }
         let prefix = infixOperator("starts with") { (lhs: String, rhs: String) in lhs.hasPrefix(lhs) }
         let parenthesis = Function([Static("("), Placeholder<Any>("body"), Static(")")]) { arguments,_ in arguments["body"] }
+        let lessThan = infixOperator("<") { (lhs: Double, rhs: Double) in lhs < rhs }
         
         let increment = Function([Placeholder<Any>("value", interpreted: false), Static("++")]) { (arguments, interpreter) -> Double? in
             if let argument = arguments["value"] as? String {
@@ -171,7 +172,7 @@ class InterpreterTests: XCTestCase {
         }
         
         let interpreter = GenericInterpreter(dataTypes: [number, string, boolean, array],
-                                             functions: [concat, parenthesis, methodCall, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, range, add, max, not, not2, prefix, increment],
+                                             functions: [concat, parenthesis, methodCall, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, range, add, max, not, not2, prefix, increment, lessThan],
                                              context: InterpreterContext(variables: ["test": 2.0, "name": "Teve"]))
         XCTAssertEqual(interpreter.evaluate("123") as! Double, 123)
         XCTAssertEqual(interpreter.evaluate("1 + 2 + 3") as! Double, 6)
@@ -200,6 +201,7 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("2 in 1...5") as! Bool,true)
         XCTAssertEqual(interpreter.evaluate("5 is odd") as! Bool, true)
         XCTAssertEqual(interpreter.evaluate("2 is odd") as! Bool, false)
+        XCTAssertEqual(interpreter.evaluate("2 < 3") as! Bool, true)
         XCTAssertEqual(interpreter.evaluate("'Teve' starts with 'T'") as! Bool, true)
         XCTAssertEqual(interpreter.evaluate("'Hello ' + name") as! String, "Hello Teve")
         XCTAssertEqual(interpreter.evaluate("12++") as! Double, 13)
@@ -208,6 +210,18 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("test") as! Double, 3)
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))
+        
+        let ifStatement = Matcher([Static("{%"), Static("if"), Placeholder<String>("condition"), Static("%}"), Placeholder<String>("body"), Static("{%"), Static("endif"), Static("%}")]) { (variables, interpreter: TemplateInterpreter) -> String? in
+            guard let condition = variables["condition"] as? String, let body = variables["body"] as? String,
+                let conditionValue = interpreter.interpreter.evaluate(condition) as? Bool else { return nil }
+            if conditionValue {
+                return body
+            }
+            return nil
+        }
+        
+        let template = TemplateInterpreter(statements: [ifStatement], interpreter: interpreter, context: InterpreterContext())
+        XCTAssertEqual(template.evaluate("asd {% if 10 < 21 %}Hello{% endif %} asd"), "asd Hello asd")
     }
     
     func infixOperator<A,B,T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T?> {

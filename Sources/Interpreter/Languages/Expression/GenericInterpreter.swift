@@ -319,10 +319,13 @@ public class TemplateInterpreter : Evaluator {
     
     let statements: [Matcher<String, TemplateInterpreter>]
     public let context: InterpreterContext
+    public let interpreter: GenericInterpreter
     
     init(statements: [Matcher<String, TemplateInterpreter>],
+         interpreter: GenericInterpreter,
          context: InterpreterContext) {
         self.statements = statements
+        self.interpreter = interpreter
         self.context = context
     }
     

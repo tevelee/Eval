@@ -103,7 +103,7 @@ class InterpreterTests: XCTestCase {
                                                            Literal(for: true, when: "true")]) { $0 ? "true" : "false" }
         
         let add = Function(patterns: [
-            Matcher<Double>([Static("add"), Static("("), Placeholder("lhs", shortest: true), Static(","), Placeholder("rhs", shortest: true), Static(")")]) { arguments in
+            Matcher<Double>([Static("add"), Static("("), Placeholder("lhs", shortest: true), Static(","), Placeholder("rhs", shortest: true), Static(")")]) { arguments,_ in
                 if let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double {
                     return Double(lhs) + Double(rhs)
                 }
@@ -112,7 +112,7 @@ class InterpreterTests: XCTestCase {
         ])
         
         let methodCall = Function(patterns: [
-            Matcher<Double>([Placeholder("lhs", shortest: true), Static("."), Placeholder("rhs", shortest: false, interpreted: false)]) { arguments in
+            Matcher<Double>([Placeholder("lhs", shortest: true), Static("."), Placeholder("rhs", shortest: false, interpreted: false)]) { arguments,_ in
                 if let lhs = arguments["lhs"] as? NSObjectProtocol,
                     let rhs = arguments["rhs"] as? String,
                     let result = lhs.perform(Selector(rhs)) {
@@ -126,14 +126,14 @@ class InterpreterTests: XCTestCase {
             Matcher<Double>([Placeholder("lhs", shortest: true), Static("."), Placeholder("rhs", shortest: false) {
                 guard let value = $0 as? String, value == "max" else { return nil }
                 return value
-            }]) { arguments in
+            }]) { arguments,_ in
                 guard let lhs = arguments["lhs"] as? [Double], arguments["rhs"] != nil else { return nil }
                 return lhs.max()
             }
         ])
         
         let isOdd = Function(patterns: [
-            Matcher<Bool>([Placeholder("value", shortest: true), Static("is"), Static("odd")]) { arguments in
+            Matcher<Bool>([Placeholder("value", shortest: true), Static("is"), Static("odd")]) { arguments,_ in
                 if let value = arguments["value"] as? Double {
                     return Int(value) % 2 == 0
                 }
@@ -143,7 +143,7 @@ class InterpreterTests: XCTestCase {
         
         let not = prefixOperator("!") { (value: Bool) in !value }
         
-        let not2 = Function<Bool>([Static("not"), Static("("), Placeholder("value", shortest: true), Static(")")]) { arguments in
+        let not2 = Function<Bool>([Static("not"), Static("("), Placeholder("value", shortest: true), Static(")")]) { arguments,_ in
             guard let value = arguments["value"] as? Bool else { return nil }
             return !value
         }
@@ -155,12 +155,24 @@ class InterpreterTests: XCTestCase {
         let inArrayString = infixOperator("in") { (lhs: String, rhs: [String]) in rhs.contains(lhs) }
         let range = infixOperator("...") { (lhs: Double, rhs: Double) in CountableClosedRange(uncheckedBounds: (lower: Int(lhs), upper: Int(rhs))).map { Double($0) } }
         let prefix = infixOperator("starts with") { (lhs: String, rhs: String) in lhs.hasPrefix(lhs) }
-        let increment = suffixOperator("++") { (value: Double) in value + 1 }
-        let parenthesis = Function([Static("("), Placeholder("body"), Static(")")]) { $0["body"] }
+        let parenthesis = Function([Static("("), Placeholder("body"), Static(")")]) { arguments,_ in arguments["body"] }
+        
+        let increment = Function<Double>([Placeholder("value", interpreted: false), Static("++")]) { arguments, interpreter in
+            if let argument = arguments["value"] as? String {
+                if let variable = interpreter.context.variables.first(where: { argument == $0.key }), let value = variable.value as? Double {
+                    let incremented = value + 1
+                    interpreter.context.variables[variable.key] = incremented
+                    return incremented
+                } else if let argument = interpreter.evaluate(argument) as? Double {
+                    return argument + 1
+                }
+            }
+            return nil
+        }
         
         let interpreter = GenericInterpreter(dataTypes: [number, string, boolean, array],
                                              functions: [concat, parenthesis, methodCall, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, range, add, max, not, not2, prefix, increment],
-                                             variables: ["test": 2.0, "name": "Teve"])
+                                             context: InterpreterContext(variables: ["test": 2.0, "name": "Teve"]))
         XCTAssertEqual(interpreter.evaluate("123") as! Double, 123)
         XCTAssertEqual(interpreter.evaluate("1 + 2 + 3") as! Double, 6)
         XCTAssertEqual(interpreter.evaluate("2 + 3 * 4") as! Double, 14)
@@ -181,7 +193,7 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("[0,3,1,2].max") as! Double, 3)
         XCTAssertEqual(interpreter.evaluate("pi * 2") as! Double, Double.pi * 2)
         XCTAssertEqual(interpreter.evaluate("1 in [3,2,1,2,3]") as! Bool, true)
-        XCTAssertEqual(interpreter.evaluate("not(1 in [3,2,1,2,3])") as! Bool, false)
+        XCTAssertEqual(interpreter.evaluate("not(1 in [1])") as! Bool, false)
         XCTAssertEqual(interpreter.evaluate("'b' in ['a','c','d']") as! Bool, false)
         XCTAssertEqual(interpreter.evaluate("1...5") as! [Double], [1, 2, 3, 4, 5])
         XCTAssertEqual(interpreter.evaluate("[1, test]") as! [Double], [1, 2])
@@ -191,26 +203,28 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("'Teve' starts with 'T'") as! Bool, true)
         XCTAssertEqual(interpreter.evaluate("'Hello ' + name") as! String, "Hello Teve")
         XCTAssertEqual(interpreter.evaluate("12++") as! Double, 13)
+        XCTAssertEqual(interpreter.evaluate("test++") as! Double, 3)
+        XCTAssertEqual(interpreter.evaluate("test") as! Double, 3)
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))
     }
     
     func infixOperator<A,B,T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T> {
-        return Function([Placeholder("lhs", shortest: true), Static(symbol), Placeholder("rhs", shortest: false)]) { arguments in
+        return Function([Placeholder("lhs", shortest: true), Static(symbol), Placeholder("rhs", shortest: false)]) { arguments,_ in
             guard let lhs = arguments["lhs"] as? A, let rhs = arguments["rhs"] as? B else { return nil }
             return body(lhs, rhs)
         }
     }
     
     func prefixOperator<A,T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T> {
-        return Function([Static(symbol), Placeholder("value", shortest: false)]) { arguments in
+        return Function([Static(symbol), Placeholder("value", shortest: false)]) { arguments,_ in
             guard let value = arguments["value"] as? A else { return nil }
             return body(value)
         }
     }
     
     func suffixOperator<A,T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T> {
-        return Function([Placeholder("value", shortest: true), Static(symbol)]) { arguments in
+        return Function([Placeholder("value", shortest: true), Static(symbol)]) { arguments,_ in
             guard let value = arguments["value"] as? A else { return nil }
             return body(value)
         }

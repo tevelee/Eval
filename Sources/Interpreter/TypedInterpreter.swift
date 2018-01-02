@@ -114,8 +114,8 @@ public class Literal<T> {
         self.convert = convert
     }
     
-    init(_ check: String, convertsTo value: T) {
-        self.convert = { input,_ in check == input ? value : nil }
+    init(_ check: String, convertsTo value: @autoclosure @escaping () -> T) {
+        self.convert = { input,_ in check == input ? value() : nil }
     }
     
     public func convert(input: String, interpreter: TypedInterpreterBase) -> T? {

@@ -13,6 +13,12 @@ class InterpreterTests: XCTestCase {
         }
         let string = DataType(type: String.self, literals: [singleQuotesLiteral]) { $0 }
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        let date = DataType(type: Date.self, literals: [Literal<Date>("now", convertsTo: Date())]) { dateFormatter.string(from: $0) }
+        
         let arrayLiteral = Literal { (input, interpreter) -> [CustomStringConvertible]? in
             guard let first = input.first, let last = input.last, first == "[", last == "]" else { return nil }
             return input
@@ -40,6 +46,14 @@ class InterpreterTests: XCTestCase {
         let max = objectFunction("max") { (object: [Double]) -> Double? in object.max() }
         let min = objectFunction("min") { (object: [Double]) -> Double? in object.min() }
         
+        let format = objectFunctionWithParameters("format") { (object: Date, arguments: [Any]) -> String? in
+            guard let format = arguments.first as? String else { return nil }
+            let dateFormatter = DateFormatter()
+            dateFormatter.calendar = Calendar(identifier: .gregorian)
+            dateFormatter.dateFormat = format
+            return dateFormatter.string(from: object)
+        }
+        
         let not = prefixOperator("!") { (value: Bool) in !value }
         let not2 = function("not") { (arguments: [Any]) -> Bool? in
             guard let boolArgument = arguments.first as? Bool else { return nil }
@@ -48,6 +62,18 @@ class InterpreterTests: XCTestCase {
         let add = function("add") { (arguments: [Any]) -> Double? in
             guard let arguments = arguments as? [Double] else { return nil }
             return arguments.reduce(0, +)
+        }
+        let dateFactory = function("Date") { (arguments: [Any]) -> Date? in
+            guard let arguments = arguments as? [Double], arguments.count >= 3 else { return nil }
+            var components = DateComponents()
+            components.calendar = Calendar(identifier: .gregorian)
+            components.year = Int(arguments[0])
+            components.month = Int(arguments[1])
+            components.day = Int(arguments[2])
+            components.hour = arguments.count > 3 ? Int(arguments[3]) : 0
+            components.minute = arguments.count > 4 ? Int(arguments[4]) : 0
+            components.second = arguments.count > 5 ? Int(arguments[5]) : 0
+            return components.date
         }
         let parenthesis = Function([Keyword("("), Variable<Any>("body"), Keyword(")")]) { arguments,_ in arguments["body"] }
         let plusOperator = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
@@ -74,8 +100,8 @@ class InterpreterTests: XCTestCase {
             return nil
         }
         
-        let interpreter = TypedInterpreter(dataTypes: [number, string, boolean, array],
-                                             functions: [concat, parenthesis, methodCall, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, isEven, range, add, max, min, not, not2, prefix, increment, lessThan],
+        let interpreter = TypedInterpreter(dataTypes: [number, string, boolean, array, date],
+                                             functions: [concat, parenthesis, methodCall, dateFactory, format, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, isEven, range, add, max, min, not, not2, prefix, increment, lessThan],
                                              context: InterpreterContext(variables: ["test": 2.0, "name": "Teve"]))
         XCTAssertEqual(interpreter.evaluate("123") as! Double, 123)
         XCTAssertEqual(interpreter.evaluate("1 + 2 + 3") as! Double, 6)
@@ -112,6 +138,8 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("(test + 2)++") as! Double, 5)
         XCTAssertEqual(interpreter.evaluate("test++") as! Double, 3)
         XCTAssertEqual(interpreter.evaluate("test") as! Double, 3)
+        XCTAssertNotNil(interpreter.evaluate("now.format('yyyy-MM-dd')"))
+        XCTAssertEqual(interpreter.evaluate("Date(2018, 12, 13).format('yyyy-MM-dd')") as! String, "2018-12-13")
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))
         
@@ -171,6 +199,17 @@ class InterpreterTests: XCTestCase {
         }]) { variables, interpreter in
             guard let object = variables["lhs"] as? O, variables["rhs"] != nil else { return nil }
             return body(object)
+        }
+    }
+    
+    func objectFunctionWithParameters<O,T>(_ name: String, body: @escaping (O, [Any]) -> T?) -> Function<T> {
+        return Function([Variable<O>("lhs", shortest: true), Keyword("."), Variable<String>("rhs", interpreted: false) { value,_ in
+            guard let value = value as? String, value == name else { return nil }
+            return value
+        }, Keyword("("), Variable<String>("arguments", interpreted: false), Keyword(")")]) { variables, interpreter in
+            guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
+            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0)) }
+            return body(object, interpretedArguments)
         }
     }
 }

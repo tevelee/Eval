@@ -39,7 +39,7 @@ public class TemplateInterpreter : VariableEvaluator {
     }
 }
 
-public class TemplateVariable : Variable<String, TemplateInterpreter> {
+public class TemplateVariable : GenericVariable<String, TemplateInterpreter> {
     public init(_ name: String, shortest: Bool = true) {
         super.init(name, shortest: shortest, interpreted: false) { value, interpreter in
             guard let stringValue = value as? String else { return "" }

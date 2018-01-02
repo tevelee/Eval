@@ -123,11 +123,5 @@ public class Literal<T> {
     }
 }
 
-public class TypedVariable<T> : Variable<T, TypedInterpreter> {
-}
-
-public class AnyVariable : TypedVariable<Any> {
-}
-
-public class StringVariable : TypedVariable<String> {
+public class Variable<T> : GenericVariable<T, TypedInterpreter> {
 }

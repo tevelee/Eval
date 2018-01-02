@@ -27,7 +27,7 @@ class InterpreterTests: XCTestCase {
                                                            Literal("true", convertsTo: true)]) { $0 ? "true" : "false" }
         
         let methodCall = Function(patterns: [
-            Matcher([AnyVariable("lhs", shortest: true), Keyword("."), StringVariable("rhs", shortest: false, interpreted: false)]) { (arguments,_) -> Double? in
+            Matcher([Variable<Any>("lhs", shortest: true), Keyword("."), Variable<String>("rhs", shortest: false, interpreted: false)]) { (arguments,_) -> Double? in
                 if let lhs = arguments["lhs"] as? NSObjectProtocol,
                     let rhs = arguments["rhs"] as? String,
                     let result = lhs.perform(Selector(rhs)) {
@@ -49,7 +49,7 @@ class InterpreterTests: XCTestCase {
             guard let arguments = arguments as? [Double] else { return nil }
             return arguments.reduce(0, +)
         }
-        let parenthesis = Function([Keyword("("), AnyVariable("body"), Keyword(")")]) { arguments,_ in arguments["body"] }
+        let parenthesis = Function([Keyword("("), Variable<Any>("body"), Keyword(")")]) { arguments,_ in arguments["body"] }
         let plusOperator = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
         let concat = infixOperator("+") { (lhs: String, rhs: String) in lhs + rhs }
         let multipicationOperator = infixOperator("*") { (lhs: Double, rhs: Double) in lhs * rhs }
@@ -61,7 +61,7 @@ class InterpreterTests: XCTestCase {
         let isEven = suffixOperator("is even") { (value: Double) in Int(value) % 2 == 0 }
         let lessThan = infixOperator("<") { (lhs: Double, rhs: Double) in lhs < rhs }
         
-        let increment = Function([AnyVariable("value", interpreted: false), Keyword("++")]) { (arguments, interpreter) -> Double? in
+        let increment = Function([Variable<Any>("value", interpreted: false), Keyword("++")]) { (arguments, interpreter) -> Double? in
             if let argument = arguments["value"] as? String {
                 if let variable = interpreter.context.variables.first(where: { argument == $0.key }), let value = variable.value as? Double {
                     let incremented = value + 1
@@ -115,7 +115,7 @@ class InterpreterTests: XCTestCase {
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))
         
-        let ifStatement = Matcher([Keyword("{%"), Keyword("if"), TypedVariable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{%"), Keyword("endif"), Keyword("%}")]) { (variables, interpreter: TemplateInterpreter) -> String? in
+        let ifStatement = Matcher([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{%"), Keyword("endif"), Keyword("%}")]) { (variables, interpreter: TemplateInterpreter) -> String? in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body
@@ -123,7 +123,7 @@ class InterpreterTests: XCTestCase {
             return nil
         }
         
-        let printStatement = Matcher([Keyword("{{"), AnyVariable("body"), Keyword("}}")]) { (variables, interpreter: TemplateInterpreter) -> String? in
+        let printStatement = Matcher([Keyword("{{"), Variable<Any>("body"), Keyword("}}")]) { (variables, interpreter: TemplateInterpreter) -> String? in
             guard let body = variables["body"] else { return nil }
             return interpreter.typedInterpreter.print(body)
         }
@@ -136,28 +136,28 @@ class InterpreterTests: XCTestCase {
     }
     
     func infixOperator<A,B,T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T?> {
-        return Function([TypedVariable<A>("lhs", shortest: true), Keyword(symbol), TypedVariable<B>("rhs", shortest: false)]) { arguments,_ in
+        return Function([Variable<A>("lhs", shortest: true), Keyword(symbol), Variable<B>("rhs", shortest: false)]) { arguments,_ in
             guard let lhs = arguments["lhs"] as? A, let rhs = arguments["rhs"] as? B else { return nil }
             return body(lhs, rhs)
         }
     }
     
     func prefixOperator<A,T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T?> {
-        return Function([Keyword(symbol), TypedVariable<A>("value", shortest: false)]) { arguments,_ in
+        return Function([Keyword(symbol), Variable<A>("value", shortest: false)]) { arguments,_ in
             guard let value = arguments["value"] as? A else { return nil }
             return body(value)
         }
     }
     
     func suffixOperator<A,T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T?> {
-        return Function([TypedVariable<A>("value", shortest: true), Keyword(symbol)]) { arguments,_ in
+        return Function([Variable<A>("value", shortest: true), Keyword(symbol)]) { arguments,_ in
             guard let value = arguments["value"] as? A else { return nil }
             return body(value)
         }
     }
     
     func function<T>(_ name: String, body: @escaping ([Any]) -> T?) -> Function<T> {
-        return Function([Keyword(name), Keyword("("), StringVariable("arguments", shortest: true, interpreted: false), Keyword(")")]) { variables, interpreter in
+        return Function([Keyword(name), Keyword("("), Variable<String>("arguments", shortest: true, interpreted: false), Keyword(")")]) { variables, interpreter in
             guard let arguments = variables["arguments"] as? String else { return nil }
             let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0)) }
             return body(interpretedArguments)
@@ -165,7 +165,7 @@ class InterpreterTests: XCTestCase {
     }
     
     func objectFunction<O,T>(_ name: String, body: @escaping (O) -> T?) -> Function<T> {
-        return Function([TypedVariable<O>("lhs", shortest: true), Keyword("."), StringVariable("rhs", shortest: false, interpreted: false) { value,_ in
+        return Function([Variable<O>("lhs", shortest: true), Keyword("."), Variable<String>("rhs", shortest: false, interpreted: false) { value,_ in
             guard let value = value as? String, value == name else { return nil }
             return value
         }]) { variables, interpreter in

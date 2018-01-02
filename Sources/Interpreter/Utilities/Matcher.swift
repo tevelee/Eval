@@ -11,9 +11,9 @@ public class Matcher<T, E: VariableEvaluator> {
         self.matcher = matcher
         
         var elements = elements
-        if let last = elements.last as? Variable<E.EvaluatedType, E> {
+        if let last = elements.last as? GenericVariable<E.EvaluatedType, E> {
             elements.removeLast()
-            elements.append(Variable(last.name, shortest: false, map: last.map))
+            elements.append(GenericVariable(last.name, shortest: false, map: last.map))
         }
         self.elements = elements
     }
@@ -22,7 +22,7 @@ public class Matcher<T, E: VariableEvaluator> {
         var elementIndex = 0
         var input = prefix
         var variables: [String: Any] = [:]
-        var currentlyActiveVariable: (name: String, value: String, interpreted: Bool, map: (Any, Any) -> Any?)? = nil
+        var currentlyActiveVariable: (name: String, value: String, interpreted: Bool, acceptsNilValue: Bool, map: (Any, Any) -> Any?)? = nil
         repeat {
             let element = elements[elementIndex]
             let result = element.matches(prefix: input, isLast: isLast)
@@ -30,7 +30,7 @@ public class Matcher<T, E: VariableEvaluator> {
             switch result {
             case .noMatch:
                 if let variable = currentlyActiveVariable, !input.isEmpty {
-                    currentlyActiveVariable = (variable.name, variable.value + String(input.removeFirst()), variable.interpreted, variable.map)
+                    currentlyActiveVariable = (variable.name, variable.value + String(input.removeFirst()), variable.interpreted, variable.acceptsNilValue, variable.map)
                 } else {
                     return .noMatch
                 }
@@ -38,14 +38,17 @@ public class Matcher<T, E: VariableEvaluator> {
                 return .possibleMatch
             case .anyMatch(let shortest):
                 if !input.isEmpty, currentlyActiveVariable == nil, let variable = element as? VariableProtocol {
-                    currentlyActiveVariable = (variable.name, String(input.removeFirst()), variable.interpreted, variable.performMap)
+                    currentlyActiveVariable = (variable.name, String(input.removeFirst()), variable.interpreted, variable.acceptsNilValue, variable.performMap)
                 }
                 if !shortest {
                     if isLast, let variable = currentlyActiveVariable {
                         if !input.isEmpty {
-                            currentlyActiveVariable = (variable.name, variable.value + String(input.removeFirst()), variable.interpreted, variable.map)
+                            currentlyActiveVariable = (variable.name, variable.value + String(input.removeFirst()), variable.interpreted, variable.acceptsNilValue, variable.map)
                         } else {
                             variables[variable.name] = finaliseVariable(variable, interpreter: interpreter)
+                            if !variable.acceptsNilValue && variables[variable.name] == nil {
+                                return .noMatch
+                            }
                             elementIndex += 1
                         }
                     } else {
@@ -58,6 +61,9 @@ public class Matcher<T, E: VariableEvaluator> {
                 variables.merge(embeddedVariables) { (key, value) in key }
                 if let variable = currentlyActiveVariable {
                     variables[variable.name] = finaliseVariable(variable, interpreter: interpreter)
+                    if !variable.acceptsNilValue && variables[variable.name] == nil {
+                        return .noMatch
+                    }
                     currentlyActiveVariable = nil
                 }
                 input.removeFirst(length)
@@ -73,7 +79,7 @@ public class Matcher<T, E: VariableEvaluator> {
         }
     }
     
-    func finaliseVariable(_ variable: (name: String, value: String, interpreted: Bool, map: (Any, Any) -> Any?), interpreter: E) -> Any? {
+    func finaliseVariable(_ variable: (name: String, value: String, interpreted: Bool, acceptsNilValue: Bool, map: (Any, Any) -> Any?), interpreter: E) -> Any? {
         let value = variable.value.trimmingCharacters(in: .whitespacesAndNewlines)
         if variable.interpreted {
             let variableInterpreter = interpreter.interpreterForEvaluatingVariables

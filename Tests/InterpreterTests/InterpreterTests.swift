@@ -23,7 +23,7 @@ class InterpreterTests: XCTestCase {
             guard let first = input.first, let last = input.last, first == "[", last == "]" else { return nil }
             return input
                 .trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
-                .split(separator: Character(","))
+                .split(separator: ",")
                 .map{ $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                 .map{ interpreter.evaluate(String($0)) as? CustomStringConvertible ?? String($0) }
         }
@@ -75,6 +75,10 @@ class InterpreterTests: XCTestCase {
             components.second = arguments.count > 5 ? Int(arguments[5]) : 0
             return components.date
         }
+        let test = functionWithNamedParameters("test") { (arguments: [String: Any]) -> Double? in
+            guard let foo = arguments["foo"] as? Double, let bar = arguments["bar"] as? Double else { return nil }
+            return foo + bar
+        }
         let parenthesis = Function([Keyword("("), Variable<Any>("body"), Keyword(")")]) { arguments,_ in arguments["body"] }
         let plusOperator = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
         let concat = infixOperator("+") { (lhs: String, rhs: String) in lhs + rhs }
@@ -101,7 +105,7 @@ class InterpreterTests: XCTestCase {
         }
         
         let interpreter = TypedInterpreter(dataTypes: [number, string, boolean, array, date],
-                                             functions: [concat, parenthesis, methodCall, dateFactory, format, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, isEven, range, add, max, min, not, not2, prefix, increment, lessThan],
+                                             functions: [concat, parenthesis, methodCall, dateFactory, format, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, isEven, range, add, max, min, not, not2, prefix, increment, lessThan, test],
                                              context: InterpreterContext(variables: ["test": 2.0, "name": "Teve"]))
         XCTAssertEqual(interpreter.evaluate("123") as! Double, 123)
         XCTAssertEqual(interpreter.evaluate("1 + 2 + 3") as! Double, 6)
@@ -140,6 +144,7 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("test") as! Double, 3)
         XCTAssertNotNil(interpreter.evaluate("now.format('yyyy-MM-dd')"))
         XCTAssertEqual(interpreter.evaluate("Date(2018, 12, 13).format('yyyy-MM-dd')") as! String, "2018-12-13")
+        XCTAssertEqual(interpreter.evaluate("test(foo=1, bar=2)") as! Double, 3)
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))
         
@@ -187,7 +192,21 @@ class InterpreterTests: XCTestCase {
     func function<T>(_ name: String, body: @escaping ([Any]) -> T?) -> Function<T> {
         return Function([Keyword(name), Keyword("("), Variable<String>("arguments", shortest: true, interpreted: false), Keyword(")")]) { variables, interpreter in
             guard let arguments = variables["arguments"] as? String else { return nil }
-            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0)) }
+            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trim()) }
+            return body(interpretedArguments)
+        }
+    }
+    
+    func functionWithNamedParameters<T>(_ name: String, body: @escaping ([String: Any]) -> T?) -> Function<T> {
+        return Function([Keyword(name), Keyword("("), Variable<String>("arguments", shortest: true, interpreted: false), Keyword(")")]) { variables, interpreter in
+            guard let arguments = variables["arguments"] as? String else { return nil }
+            var interpretedArguments: [String: Any] = [:]
+            for argument in arguments.split(separator: ",") {
+                let parts = String(argument).trim().split(separator: "=")
+                if let key = parts.first, let value = parts.last {
+                    interpretedArguments[String(key)] = interpreter.evaluate(String(value))
+                }
+            }
             return body(interpretedArguments)
         }
     }
@@ -208,7 +227,24 @@ class InterpreterTests: XCTestCase {
             return value
         }, Keyword("("), Variable<String>("arguments", interpreted: false), Keyword(")")]) { variables, interpreter in
             guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
-            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0)) }
+            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trim()) }
+            return body(object, interpretedArguments)
+        }
+    }
+
+    func objectFunctionWithNamedParameters<O,T>(_ name: String, body: @escaping (O, [String: Any]) -> T?) -> Function<T> {
+        return Function([Variable<O>("lhs", shortest: true), Keyword("."), Variable<String>("rhs", interpreted: false) { value,_ in
+            guard let value = value as? String, value == name else { return nil }
+            return value
+        }, Keyword("("), Variable<String>("arguments", interpreted: false), Keyword(")")]) { variables, interpreter in
+            guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
+            var interpretedArguments: [String: Any] = [:]
+            for argument in arguments.split(separator: ",") {
+                let parts = String(argument).trim().split(separator: "=")
+                if let key = parts.first, let value = parts.last {
+                    interpretedArguments[String(key)] = interpreter.evaluate(String(value))
+                }
+            }
             return body(object, interpretedArguments)
         }
     }

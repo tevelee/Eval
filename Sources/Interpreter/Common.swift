@@ -22,10 +22,8 @@ public class InterpreterContext {
     }
 }
 
-func isStatement<T, E>(statements: [Matcher<T, E>], in input: String, from start: Int = 0, until length: Int = 1, interpreter: E) -> MatchResult<T> {
-    let prefix = String(input[start ..< start + length])
-    let isLast = input.count == start + length
-    let results = statements.map { (element: $0, result: $0.matches(prefix: prefix, interpreter: interpreter, isLast: isLast)) }
+func matchStatement<T, E>(amongst statements: [Matcher<T, E>], in input: String, from start: Int = 0, until length: Int = 1, interpreter: E) -> MatchResult<T> {
+    let results = statements.map { (element: $0, result: $0.matches(string: input, from: start, until: length, interpreter: interpreter)) }
     let elements = results.filter { !$0.result.isNoMatch() }
     
     if elements.count == 0 {
@@ -36,10 +34,10 @@ func isStatement<T, E>(statements: [Matcher<T, E>], in input: String, from start
         return .exactMatch(length: length, output: output, variables: variables)
     }
     if elements.contains(where: { $0.result.isPossibleMatch() }) {
-        if isLast {
-            return .noMatch
+        if input.count == start + length {
+            return .possibleMatch
         } else {
-            return isStatement(statements: statements, in: input, from: start, until: length + 1, interpreter: interpreter)
+            return matchStatement(amongst: statements, in: input, from: start, until: length + 1, interpreter: interpreter)
         }
     }
     return .noMatch

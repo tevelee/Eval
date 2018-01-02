@@ -22,9 +22,9 @@ public class TemplateInterpreter : VariableEvaluator {
         
         var position = 0
         repeat {
-            let result = isStatement(statements: statements, in: expression, from: position, interpreter: self)
+            let result = matchStatement(amongst: statements, in: expression, from: position, interpreter: self)
             switch result {
-            case .noMatch:
+            case .noMatch, .possibleMatch:
                 output += expression[position]
                 position += 1
             case .exactMatch(let length, let matchOutput, _):

@@ -7,7 +7,7 @@ public enum MatchResult<T> {
     case anyMatch(shortest: Bool)
     
     func isMatch() -> Bool {
-        if case .exactMatch(length: _, output: _, variables: _) = self {
+        if case .exactMatch(_,_,_) = self {
             return true
         }
         return false

@@ -5,12 +5,20 @@ public protocol MatchElement {
 }
 
 public class Keyword : MatchElement {
+    public enum KeywordType {
+        case generic
+        case openingStatement
+        case closingStatement
+    }
+    
     public typealias T = String
     
     let name: String
+    let type: KeywordType
     
-    public init(_ name: String) {
-        self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+    public init(_ name: String, type: KeywordType = .generic) {
+        self.name = name.trim()
+        self.type = type
     }
     
     public func matches(prefix: String, isLast: Bool = false) -> MatchResult<Any> {
@@ -21,6 +29,18 @@ public class Keyword : MatchElement {
         } else {
             return .noMatch
         }
+    }
+}
+
+public class OpenKeyword : Keyword {
+    public init(_ name: String) {
+        super.init(name, type: .openingStatement)
+    }
+}
+
+public class CloseKeyword : Keyword {
+    public init(_ name: String) {
+        super.init(name, type: .closingStatement)
     }
 }
 

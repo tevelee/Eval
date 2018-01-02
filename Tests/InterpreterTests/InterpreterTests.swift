@@ -212,4 +212,46 @@ class InterpreterTests: XCTestCase {
             return body(object, interpretedArguments)
         }
     }
+    
+    func testEmbeddedTags() {
+        let singleQuotesLiteral = Literal { (input, _) -> String? in
+            guard let first = input.first, let last = input.last, first == last, first == "'" else { return nil }
+            let trimmed = input.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
+            return trimmed.contains("'") ? nil : trimmed
+        }
+        let string = DataType(type: String.self, literals: [singleQuotesLiteral]) { $0 }
+        let boolean = DataType(type: Bool.self, literals: [Literal("false", convertsTo: false), Literal("true", convertsTo: true)]) { $0 ? "true" : "false" }
+        let number = DataType(type: Double.self, literals: [Literal { v,_ in Double(v) }, Literal("pi", convertsTo: Double.pi) ]) { String(describing: $0) }
+        
+        let parenthesis = Function<Any>([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { variables, _ in variables["body"] }
+        let lessThan = infixOperator("<") { (lhs: Double, rhs: Double) in lhs < rhs }
+        let addition = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
+        let interpreter = TypedInterpreter(dataTypes: [number, string, boolean],
+                                           functions: [parenthesis, lessThan, addition],
+                                           context: InterpreterContext())
+        
+        XCTAssertEqual(interpreter.evaluate("(1)") as! Double, 1)
+        XCTAssertEqual(interpreter.evaluate("(1) + (2)") as! Double, 3)
+        XCTAssertEqual(interpreter.evaluate("(1 + (2))") as! Double, 3)
+        XCTAssertEqual(interpreter.evaluate("((1) + 2)") as! Double, 3)
+        XCTAssertEqual(interpreter.evaluate("((1) + (2))") as! Double, 3)
+
+        let braces = Matcher([OpenKeyword("("), TemplateVariable("body"), CloseKeyword(")")]) { (variables, interpreter: TemplateInterpreter) -> String? in
+            return variables["body"] as? String
+        }
+        let ifStatement = Matcher([OpenKeyword("{% if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), CloseKeyword("{% endif %}")]) { (variables, interpreter: TemplateInterpreter) -> String? in
+            guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
+            if condition {
+                return body
+            }
+            return nil
+        }
+
+        let template = TemplateInterpreter(statements: [braces, ifStatement], interpreter: interpreter, context: InterpreterContext())
+        XCTAssertEqual(template.evaluate("(a)"), "a")
+        XCTAssertEqual(template.evaluate("(a(b))"), "ab")
+        XCTAssertEqual(template.evaluate("((a)b)"), "ab")
+        XCTAssertEqual(template.evaluate("(a(b)c)"), "abc")
+        XCTAssertEqual(template.evaluate("{% if 10 < 21 %}Hello {% if true %}you{% endif %}!{% endif %}"), "Hello you!")
+    }
 }

@@ -30,7 +30,7 @@ public class TypedInterpreter : TypedInterpreterBase {
     }
     
     public override func evaluate(_ expression: String) -> Any? {
-        let expression = expression.trimmingCharacters(in: .whitespacesAndNewlines)
+        let expression = expression.trim()
         
         for dataType in dataTypes.reversed() {
             if let value = dataType.convert(input: expression, interpreter: self) {
@@ -82,7 +82,7 @@ public class DataType<T> : DataTypeProtocol {
     
     public func print(value input: Any) -> String? {
         guard let input = input as? T else { return nil }
-        return print(input)
+        return self.print(input)
     }
 }
 
@@ -102,7 +102,7 @@ public class Function<T> : FunctionProtocol {
     }
     
     public func convert(input: String, interpreter: TypedInterpreterBase) -> Any? {
-        guard case let .exactMatch(_, output, _) = isStatement(statements: patterns, in: input, until: input.count, interpreter: interpreter) else { return nil }
+        guard case let .exactMatch(_, output, _) = matchStatement(amongst: patterns, in: input, until: input.count, interpreter: interpreter) else { return nil }
         return output
     }
 }

@@ -41,7 +41,15 @@ extension String {
         return self[..<index(startIndex, offsetBy: range.upperBound)]
     }
     
+    subscript (range: CountablePartialRangeFrom<Int>) -> Substring {
+        return self[index(startIndex, offsetBy: range.lowerBound)...]
+    }
+    
     public func trim() -> String {
         return trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    public func position(of target: String, from: Int = 0) -> Int? {
+        return range(of: target, options: [], range: Range(uncheckedBounds: (index(startIndex, offsetBy: from), endIndex)))?.lowerBound.encodedOffset
     }
 }

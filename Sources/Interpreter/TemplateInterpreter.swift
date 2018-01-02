@@ -6,14 +6,14 @@ public class TemplateInterpreter : VariableEvaluator {
     
     let statements: [Matcher<String, TemplateInterpreter>]
     public let context: InterpreterContext
-    public let interpreter: TypedInterpreter
-    public lazy var interpreterForEvaluatingVariables: TypedInterpreterBase = { [unowned self] in interpreter }()
+    public let typedInterpreter: TypedInterpreter
+    public lazy var interpreterForEvaluatingVariables: TypedInterpreterBase = { [unowned self] in typedInterpreter }()
     
     init(statements: [Matcher<String, TemplateInterpreter>],
          interpreter: TypedInterpreter,
          context: InterpreterContext) {
         self.statements = statements
-        self.interpreter = interpreter
+        self.typedInterpreter = interpreter
         self.context = context
     }
     

@@ -47,10 +47,20 @@ public class TypedInterpreter : TypedInterpreterBase {
         }
         return nil
     }
+    
+    public func print(_ input: Any) -> String {
+        for dataType in dataTypes {
+            if let value = dataType.print(value: input) {
+                return value
+            }
+        }
+        return ""
+    }
 }
 
 public protocol DataTypeProtocol {
     func convert(input: String, interpreter: TypedInterpreterBase) -> Any?
+    func print(value input: Any) -> String?
 }
 
 public class DataType<T> : DataTypeProtocol {
@@ -68,6 +78,11 @@ public class DataType<T> : DataTypeProtocol {
     
     public func convert(input: String, interpreter: TypedInterpreterBase) -> Any? {
         return literals.flatMap{ $0.convert(input: input, interpreter: interpreter) }.first
+    }
+    
+    public func print(value input: Any) -> String? {
+        guard let input = input as? T else { return nil }
+        return print(input)
     }
 }
 

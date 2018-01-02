@@ -123,8 +123,16 @@ class InterpreterTests: XCTestCase {
             return nil
         }
         
-        let template = TemplateInterpreter(statements: [ifStatement], interpreter: interpreter, context: InterpreterContext())
+        let printStatement = Matcher([Keyword("{{"), AnyVariable("body"), Keyword("}}")]) { (variables, interpreter: TemplateInterpreter) -> String? in
+            guard let body = variables["body"] else { return nil }
+            return interpreter.typedInterpreter.print(body)
+        }
+        
+        let template = TemplateInterpreter(statements: [ifStatement, printStatement], interpreter: interpreter, context: InterpreterContext())
+        XCTAssertEqual(template.evaluate("{{ 1 + 2 }}"), "3.0")
+        XCTAssertEqual(template.evaluate("{{ 'Hello' + ' ' + 'World' + '!' }}"), "Hello World!")
         XCTAssertEqual(template.evaluate("asd {% if 10 < 21 %}Hello{% endif %} asd"), "asd Hello asd")
+        XCTAssertEqual(template.evaluate("asd {% if 10 < 21 %}{{ 'Hello ' + name }}{% endif %} asd"), "asd Hello Teve asd")
     }
     
     func infixOperator<A,B,T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T?> {

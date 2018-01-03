@@ -12,7 +12,11 @@ public class TypedInterpreterBase: VariableEvaluator {
     }
     
     public func evaluate(_ expression: String) -> Any? {
-        assertionFailure("Shouldn't reach this point. Specific subclass must override this `evaluate` method")
+        return evaluate(expression, context: nil)
+    }
+    
+    public func evaluate(_ expression: String, context: InterpreterContext? = nil) -> Any? {
+        assertionFailure("Shouldn't reach this point. Specific subclass must override this `evaluate(:context:)` method")
         return nil
     }
 }
@@ -21,15 +25,16 @@ public class TypedInterpreter : TypedInterpreterBase {
     let dataTypes: [DataTypeProtocol]
     let functions: [FunctionProtocol]
     
-    init(dataTypes: [DataTypeProtocol] = [],
-         functions: [FunctionProtocol] = [],
-         context: InterpreterContext) {
+    public init(dataTypes: [DataTypeProtocol] = [],
+                functions: [FunctionProtocol] = [],
+                context: InterpreterContext) {
         self.dataTypes = dataTypes
         self.functions = functions
         super.init(context: context)
     }
     
-    public override func evaluate(_ expression: String) -> Any? {
+    public override func evaluate(_ expression: String, context: InterpreterContext? = nil) -> Any? {
+        let context = self.context.merge(with: context)
         let expression = expression.trim()
         
         for dataType in dataTypes.reversed() {
@@ -41,7 +46,7 @@ public class TypedInterpreter : TypedInterpreterBase {
             return variable.value
         }
         for function in functions.reversed() {
-            if let value = function.convert(input: expression, interpreter: self) {
+            if let value = function.convert(input: expression, interpreter: self, context: context) {
                 return value
             }
         }
@@ -68,9 +73,9 @@ public class DataType<T> : DataTypeProtocol {
     let literals: [Literal<T>]
     let print: (T) -> String
 
-    init (type: T.Type,
-          literals: [Literal<T>],
-          print: @escaping (T) -> String) {
+    public init (type: T.Type,
+                 literals: [Literal<T>],
+                 print: @escaping (T) -> String) {
         self.type = type
         self.literals = literals
         self.print = print
@@ -87,22 +92,22 @@ public class DataType<T> : DataTypeProtocol {
 }
 
 public protocol FunctionProtocol {
-    func convert(input: String, interpreter: TypedInterpreterBase) -> Any?
+    func convert(input: String, interpreter: TypedInterpreterBase, context: InterpreterContext) -> Any?
 }
 
 public class Function<T> : FunctionProtocol {
     var patterns: [Matcher<T, TypedInterpreterBase>]
     
-    init(patterns: [Matcher<T, TypedInterpreterBase>]) {
+    public init(patterns: [Matcher<T, TypedInterpreterBase>]) {
         self.patterns = patterns
     }
     
-    init(_ elements: [MatchElement], matcher: @escaping MatcherBlock<T, TypedInterpreterBase>) {
+    public init(_ elements: [MatchElement], matcher: @escaping MatcherBlock<T, TypedInterpreterBase>) {
         self.patterns = [Matcher(elements, matcher: matcher)]
     }
     
-    public func convert(input: String, interpreter: TypedInterpreterBase) -> Any? {
-        guard case let .exactMatch(_, output, _) = matchStatement(amongst: patterns, in: input, until: input.count, interpreter: interpreter) else { return nil }
+    public func convert(input: String, interpreter: TypedInterpreterBase, context: InterpreterContext) -> Any? {
+        guard case let .exactMatch(_, output, _) = matchStatement(amongst: patterns, in: input, until: input.count, interpreter: interpreter, context: context) else { return nil }
         return output
     }
 }
@@ -110,11 +115,11 @@ public class Function<T> : FunctionProtocol {
 public class Literal<T> {
     let convert: (String, TypedInterpreterBase) -> T?
     
-    init(convert: @escaping (String, TypedInterpreterBase) -> T?) {
+    public init(convert: @escaping (String, TypedInterpreterBase) -> T?) {
         self.convert = convert
     }
     
-    init(_ check: String, convertsTo value: @autoclosure @escaping () -> T) {
+    public init(_ check: String, convertsTo value: @autoclosure @escaping () -> T) {
         self.convert = { input,_ in check == input ? value() : nil }
     }
     

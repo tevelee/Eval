@@ -9,20 +9,25 @@ public class TemplateInterpreter : VariableEvaluator {
     public let typedInterpreter: TypedInterpreter
     public lazy var interpreterForEvaluatingVariables: TypedInterpreterBase = { [unowned self] in typedInterpreter }()
     
-    init(statements: [Matcher<String, TemplateInterpreter>],
-         interpreter: TypedInterpreter,
-         context: InterpreterContext) {
+    public init(statements: [Matcher<String, TemplateInterpreter>],
+                interpreter: TypedInterpreter,
+                context: InterpreterContext) {
         self.statements = statements
         self.typedInterpreter = interpreter
         self.context = context
     }
     
     public func evaluate(_ expression: String) -> String {
+        return evaluate(expression, context: nil)
+    }
+    
+    public func evaluate(_ expression: String, context: InterpreterContext? = nil) -> String {
+        let context = self.context.merge(with: context)
         var output = ""
         
         var position = 0
         repeat {
-            let result = matchStatement(amongst: statements, in: expression, from: position, interpreter: self)
+            let result = matchStatement(amongst: statements, in: expression, from: position, interpreter: self, context: context)
             switch result {
             case .noMatch, .possibleMatch:
                 output += expression[position]

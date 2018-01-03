@@ -1,13 +1,13 @@
 import Foundation
 
-typealias MatcherBlock<T, E: Evaluator> = ([String: Any], E) -> T?
+public typealias MatcherBlock<T, E: Evaluator> = ([String: Any], E, InterpreterContext) -> T?
 
 public class Matcher<T, E: VariableEvaluator> {
     let elements: [MatchElement]
     let matcher: MatcherBlock<T, E>
     
-    init(_ elements: [MatchElement],
-         matcher: @escaping MatcherBlock<T, E>) {
+    public init(_ elements: [MatchElement],
+                matcher: @escaping MatcherBlock<T, E>) {
         self.matcher = matcher
         
         var elements = elements
@@ -18,7 +18,7 @@ public class Matcher<T, E: VariableEvaluator> {
         self.elements = elements
     }
     
-    public func matches(string: String, from start: Int = 0, until length: Int, interpreter: E) -> MatchResult<T> {
+    public func matches(string: String, from start: Int = 0, until length: Int, interpreter: E, context: InterpreterContext) -> MatchResult<T> {
         let isLast = string.count == start + length
         let trimmed = String(string[start ..< start + length])
         var elementIndex = 0
@@ -99,7 +99,7 @@ public class Matcher<T, E: VariableEvaluator> {
             }
         } while elementIndex < elements.count
         
-        if let renderedOutput = matcher(variables, interpreter) {
+        if let renderedOutput = matcher(variables, interpreter, context) {
             return .exactMatch(length: length - remainder.count, output: renderedOutput, variables: variables)
         } else {
             return .noMatch

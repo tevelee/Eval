@@ -1,27 +1,27 @@
 import Foundation
 
-public class TemplateInterpreter : VariableEvaluator {
+public class TemplateInterpreter : Interpreter {
     public typealias EvaluatedType = String
-    public typealias VariableEvaluator = TypedInterpreterBase
+    public typealias VariableEvaluator = TypedInterpreter
     
-    let statements: [Matcher<String, TemplateInterpreter>]
+    public let statements: [Matcher<String, TemplateInterpreter>]
     public let context: InterpreterContext
     public let typedInterpreter: TypedInterpreter
-    public lazy var interpreterForEvaluatingVariables: TypedInterpreterBase = { [unowned self] in typedInterpreter }()
+    public lazy var interpreterForEvaluatingVariables: TypedInterpreter = { [unowned self] in typedInterpreter }()
     
     public init(statements: [Matcher<String, TemplateInterpreter>],
                 interpreter: TypedInterpreter,
-                context: InterpreterContext) {
+                context: InterpreterContext = InterpreterContext()) {
         self.statements = statements
         self.typedInterpreter = interpreter
         self.context = context
     }
     
     public func evaluate(_ expression: String) -> String {
-        return evaluate(expression, context: nil)
+        return evaluate(expression, context: InterpreterContext())
     }
     
-    public func evaluate(_ expression: String, context: InterpreterContext? = nil) -> String {
+    public func evaluate(_ expression: String, context: InterpreterContext) -> String {
         let context = self.context.merge(with: context)
         var output = ""
         

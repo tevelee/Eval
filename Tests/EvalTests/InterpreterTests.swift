@@ -33,7 +33,7 @@ class InterpreterTests: XCTestCase {
                                                            Literal("true", convertsTo: true)]) { $0 ? "true" : "false" }
         
         let methodCall = Function(patterns: [
-            Matcher([Variable<Any>("lhs", shortest: true), Keyword("."), Variable<String>("rhs", shortest: false, interpreted: false)]) { (arguments,_,_) -> Double? in
+            Matcher(Variable<Any>("lhs", shortest: true) + Keyword(".") + Variable<String>("rhs", shortest: false, interpreted: false)) { (arguments,_,_) -> Double? in
                 if let lhs = arguments["lhs"] as? NSObjectProtocol,
                     let rhs = arguments["rhs"] as? String,
                     let result = lhs.perform(Selector(rhs)) {

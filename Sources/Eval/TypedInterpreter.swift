@@ -1,39 +1,27 @@
 import Foundation
 
-public class TypedInterpreterBase: VariableEvaluator {
+public class TypedInterpreter : Interpreter {
     public typealias EvaluatedType = Any?
-    public typealias VariableEvaluator = TypedInterpreterBase
     
     public let context: InterpreterContext
-    public lazy var interpreterForEvaluatingVariables: TypedInterpreterBase = { [unowned self] in self }()
+    public lazy var interpreterForEvaluatingVariables: TypedInterpreter = { [unowned self] in self }()
     
-    init(context: InterpreterContext) {
+    public let dataTypes: [DataTypeProtocol]
+    public let functions: [FunctionProtocol]
+    
+    public init(dataTypes: [DataTypeProtocol] = [],
+                functions: [FunctionProtocol] = [],
+                context: InterpreterContext = InterpreterContext()) {
+        self.dataTypes = dataTypes
+        self.functions = functions
         self.context = context
     }
     
     public func evaluate(_ expression: String) -> Any? {
-        return evaluate(expression, context: nil)
+        return evaluate(expression, context: InterpreterContext())
     }
     
-    public func evaluate(_ expression: String, context: InterpreterContext? = nil) -> Any? {
-        assertionFailure("Shouldn't reach this point. Specific subclass must override this `evaluate(:context:)` method")
-        return nil
-    }
-}
-
-public class TypedInterpreter : TypedInterpreterBase {
-    let dataTypes: [DataTypeProtocol]
-    let functions: [FunctionProtocol]
-    
-    public init(dataTypes: [DataTypeProtocol] = [],
-                functions: [FunctionProtocol] = [],
-                context: InterpreterContext) {
-        self.dataTypes = dataTypes
-        self.functions = functions
-        super.init(context: context)
-    }
-    
-    public override func evaluate(_ expression: String, context: InterpreterContext? = nil) -> Any? {
+    public func evaluate(_ expression: String, context: InterpreterContext) -> Any? {
         let context = self.context.merge(with: context)
         let expression = expression.trim()
         
@@ -64,7 +52,7 @@ public class TypedInterpreter : TypedInterpreterBase {
 }
 
 public protocol DataTypeProtocol {
-    func convert(input: String, interpreter: TypedInterpreterBase) -> Any?
+    func convert(input: String, interpreter: TypedInterpreter) -> Any?
     func print(value input: Any) -> String?
 }
 
@@ -81,7 +69,7 @@ public class DataType<T> : DataTypeProtocol {
         self.print = print
     }
     
-    public func convert(input: String, interpreter: TypedInterpreterBase) -> Any? {
+    public func convert(input: String, interpreter: TypedInterpreter) -> Any? {
         return literals.flatMap{ $0.convert(input: input, interpreter: interpreter) }.first
     }
     
@@ -92,30 +80,30 @@ public class DataType<T> : DataTypeProtocol {
 }
 
 public protocol FunctionProtocol {
-    func convert(input: String, interpreter: TypedInterpreterBase, context: InterpreterContext) -> Any?
+    func convert(input: String, interpreter: TypedInterpreter, context: InterpreterContext) -> Any?
 }
 
 public class Function<T> : FunctionProtocol {
-    var patterns: [Matcher<T, TypedInterpreterBase>]
+    var patterns: [Matcher<T, TypedInterpreter>]
     
-    public init(patterns: [Matcher<T, TypedInterpreterBase>]) {
+    public init(patterns: [Matcher<T, TypedInterpreter>]) {
         self.patterns = patterns
     }
     
-    public init(_ elements: [MatchElement], matcher: @escaping MatcherBlock<T, TypedInterpreterBase>) {
+    public init(_ elements: [MatchElement], matcher: @escaping MatcherBlock<T, TypedInterpreter>) {
         self.patterns = [Matcher(elements, matcher: matcher)]
     }
     
-    public func convert(input: String, interpreter: TypedInterpreterBase, context: InterpreterContext) -> Any? {
+    public func convert(input: String, interpreter: TypedInterpreter, context: InterpreterContext) -> Any? {
         guard case let .exactMatch(_, output, _) = matchStatement(amongst: patterns, in: input, until: input.count, interpreter: interpreter, context: context) else { return nil }
         return output
     }
 }
 
 public class Literal<T> {
-    let convert: (String, TypedInterpreterBase) -> T?
+    let convert: (String, TypedInterpreter) -> T?
     
-    public init(convert: @escaping (String, TypedInterpreterBase) -> T?) {
+    public init(convert: @escaping (String, TypedInterpreter) -> T?) {
         self.convert = convert
     }
     
@@ -123,7 +111,7 @@ public class Literal<T> {
         self.convert = { input,_ in check == input ? value() : nil }
     }
     
-    public func convert(input: String, interpreter: TypedInterpreterBase) -> T? {
+    public func convert(input: String, interpreter: TypedInterpreter) -> T? {
         return convert(input, interpreter)
     }
 }

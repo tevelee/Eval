@@ -1,7 +1,5 @@
 import Foundation
 
-public typealias ValueMap<A, B> = (A) -> B?
-
 public func +(left: MatchElement, right: MatchElement) -> [MatchElement] {
     return [left, right]
 }
@@ -45,11 +43,11 @@ extension String {
         return self[index(startIndex, offsetBy: range.lowerBound)...]
     }
     
-    public func trim() -> String {
+    func trim() -> String {
         return trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
-    public func position(of target: String, from: Int = 0) -> Int? {
+    func position(of target: String, from: Int = 0) -> Int? {
         return range(of: target, options: [], range: Range(uncheckedBounds: (index(startIndex, offsetBy: from), endIndex)))?.lowerBound.encodedOffset
     }
 }

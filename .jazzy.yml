@@ -19,7 +19,7 @@ root_url: https://tevelee.github.io/Eval
 dash_url: https://tevelee.github.io/Eval/docsets/Eval.xml
 
 clean: true
-min_acl: internal
+min_acl: public
 
 framework_root: Sources
 source_directory: .

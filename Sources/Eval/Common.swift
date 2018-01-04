@@ -6,17 +6,16 @@ public protocol Evaluator {
 }
 
 public protocol EvaluatorWithContext: Evaluator {
-    func evaluate(_ expression: String, context: InterpreterContext?) -> EvaluatedType
+    func evaluate(_ expression: String, context: InterpreterContext) -> EvaluatedType
 }
 
 public protocol ContextAware {
     var context: InterpreterContext { get }
 }
 
-public protocol VariableEvaluator: EvaluatorWithContext, ContextAware {
+public protocol Interpreter: EvaluatorWithContext, ContextAware {
     associatedtype VariableEvaluator: EvaluatorWithContext
     var interpreterForEvaluatingVariables: VariableEvaluator { get }
-    func evaluate(_ expression: String, context: InterpreterContext?) -> EvaluatedType
 }
 
 public class InterpreterContext {

@@ -2,7 +2,7 @@ import Foundation
 
 public typealias MatcherBlock<T, E: Evaluator> = ([String: Any], E, InterpreterContext) -> T?
 
-public class Matcher<T, E: VariableEvaluator> {
+public class Matcher<T, E: Interpreter> {
     let elements: [MatchElement]
     let matcher: MatcherBlock<T, E>
     

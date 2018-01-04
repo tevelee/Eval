@@ -52,7 +52,7 @@ protocol VariableProtocol {
     func performMap(input: Any, interpreter: Any) -> Any?
 }
 
-public class GenericVariable<T, E: VariableEvaluator> : VariableProtocol, MatchElement {
+public class GenericVariable<T, E: Interpreter> : VariableProtocol, MatchElement {
     let name: String
     let shortest: Bool
     let interpreted: Bool
@@ -71,7 +71,7 @@ public class GenericVariable<T, E: VariableEvaluator> : VariableProtocol, MatchE
         return .anyMatch(shortest: shortest)
     }
     
-    func mapped<K>(_ map: @escaping ValueMap<T, K>) -> GenericVariable<K, E> {
+    func mapped<K>(_ map: @escaping (T) -> K?) -> GenericVariable<K, E> {
         return GenericVariable<K, E>(name, shortest: shortest, interpreted: interpreted, map: { value, interpreter in
             guard let value = self.map(value, interpreter) else { return nil }
             return map(value)

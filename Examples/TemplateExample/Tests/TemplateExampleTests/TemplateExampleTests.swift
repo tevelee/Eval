@@ -1,5 +1,5 @@
 import XCTest
-import Interpreter
+import Eval
 @testable import TemplateExample
 
 class TemplateExampleTests: XCTestCase {

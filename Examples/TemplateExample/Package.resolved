@@ -2,11 +2,11 @@
   "object": {
     "pins": [
       {
-        "package": "Interpreter",
+        "package": "Eval",
         "repositoryURL": "/Users/laszloteveli/Documents/Interpreter",
         "state": {
           "branch": null,
-          "revision": "9972918435f43052dacb23d55680b427f77b6baf",
+          "revision": "950e142cbfbfc67e526465363d4a8374bb749dde",
           "version": "1.0.0"
         }
       }

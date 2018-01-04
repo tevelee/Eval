@@ -1,5 +1,5 @@
 import XCTest
-@testable import Interpreter
+@testable import Eval
 
 class InterpreterTests: XCTestCase {
     func testGenericInterpreter() {

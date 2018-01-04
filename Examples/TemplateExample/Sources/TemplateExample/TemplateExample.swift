@@ -1,5 +1,5 @@
 import Foundation
-import Interpreter
+import Eval
 
 public class TemplateLanguage: EvaluatorWithContext {
     public typealias EvaluatedType = String

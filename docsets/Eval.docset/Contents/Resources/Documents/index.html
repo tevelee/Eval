@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Eval  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+
+    <a title="Eval  Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="index.html">
+          Eval Docs
+        </a>
+         (1% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/tevelee/Eval">
+            <img class="header-icon" src="img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="dash-feed://https%3A%2F%2Ftevelee%2Egithub%2Eio%2FEval%2Fdocsets%2FEval%2Exml">
+            <img class="header-icon" src="img/dash.png"/>
+            Install in Dash
+          </a>
+        </p>
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="index.html">Eval Reference</a>
+      <img class="carat" src="img/carat.png" />
+      Eval  Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="page.html">Page</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="readme.html">README</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/CloseKeyword.html">CloseKeyword</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/DataType.html">DataType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Function.html">Function</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/GenericVariable.html">GenericVariable</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/InterpreterContext.html">InterpreterContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Keyword.html">Keyword</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Keyword/KeywordType.html">– KeywordType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Literal.html">Literal</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Matcher.html">Matcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/OpenKeyword.html">OpenKeyword</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/TemplateInterpreter.html">TemplateInterpreter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/TemplateVariable.html">TemplateVariable</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/TypedInterpreter.html">TypedInterpreter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/TypedInterpreterBase.html">TypedInterpreterBase</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes.html#/s:4Eval8VariableC">Variable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/MatchResult.html">MatchResult</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/CharacterSet.html">CharacterSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/String.html">String</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:4Eval1poiSayxGAC_xtlF">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:4Eval2peoiySSz_s9CharacterVtF">+=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:4Eval2peoiySayxGz_xtlF">+=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromSi5untilq_11interpreterAA18InterpreterContextC7contexttAA17VariableEvaluatorR_r0_lF">matchStatement(amongst:in:from:until:interpreter:context:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/ContextAware.html">ContextAware</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/DataTypeProtocol.html">DataTypeProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/Evaluator.html">Evaluator</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/EvaluatorWithContext.html">EvaluatorWithContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/FunctionProtocol.html">FunctionProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/MatchElement.html">MatchElement</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/VariableEvaluator.html">VariableEvaluator</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/VariableProtocol.html">VariableProtocol</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            
+            <h1 id='eval' class='heading'>{ Eval }</h1>
+
+<p><img src="https://img.shields.io/badge/Language-Swift-red.svg" alt="">
+<img src="https://img.shields.io/badge/Version-1.0.0-yellow.svg" alt="">
+<img src="https://img.shields.io/badge/Swift-4.0-green.svg" alt=""></p>
+
+<!-- Platform, language, code coverage, documentation, license -->
+
+<!-- ![](https://img.shields.io/badge/Build-Passing-green.svg) -->
+
+<!-- ![](https://img.shields.io/badge/Coverage-TBD-yellow.svg) -->
+
+<!-- ![](https://img.shields.io/badge/Documentation-TBD-yellow.svg) -->
+
+<ul>
+<li><a href="#-about">👨🏻‍💻 About</a></li>
+<li><a href="#-getting-started">📈 Getting Started</a>
+
+<ul>
+<li><a href="#-short-example">🤓 Short Example</a></li>
+<li><a href="#%EF%B8%8F-how-does-it-work">⁉️ How does it work?</a></li>
+</ul></li>
+<li><a href="#-motivation">💡 Motivation</a></li>
+<li><a href="#-examples">📚 Examples</a></li>
+<li><a href="#-contribution">🙋 Contribution</a></li>
+<li><a href="#-details">👀 Details</a></li>
+<li><a href="#-author">👤 Author</a></li>
+<li><a href="#%EF%B8%8F-license">⚖️ License</a></li>
+</ul>
+<h2 id='about' class='heading'>👨🏻‍💻 About</h2>
+
+<p><strong>Eval</strong> is a lightweight interpreter framework written in <img src="http://www.swiftapplications.com/wp-content/uploads/2016/04/swift-logo.png" width="14"> Swift, for 📱iOS, 🖥 macOS, and 🐧Linux platforms.</p>
+
+<p>It evaluates expressions at runtime, with operators and data types you define.</p>
+
+<table><thead>
+<tr>
+<th>🍏 Pros</th>
+<th>🍎 Cons</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>🐥 Lightweight - the whole engine is really just a few hundred lines of code</td>
+<td>🤓 Creating custom operators and data types, on the other hand, can take a few extra lines - depending on your needs</td>
+</tr>
+<tr>
+<td>✅ Easy to use API - create new language elements just in a matter of seconds</td>
+<td>-</td>
+</tr>
+<tr>
+<td>🎢 Fun - Since it&rsquo;s really easy to play with, you can build complex features with joy</td>
+<td>-</td>
+</tr>
+<tr>
+<td>🚀 Fast execution - I&rsquo;m trying to optimise as much as possible. Has its limitations though</td>
+<td>🌧 Since it is a really generic concept, some optimisations cannot be made, compared to native interpreters</td>
+</tr>
+</tbody></table>
+
+<p>The framework currently supports two different types of execution modes:</p>
+
+<ul>
+<li><strong>Strongly typed expressions</strong>: like a programming language</li>
+<li><strong>Template languages</strong>: evaluating expressions in arbitrary string environments</li>
+</ul>
+
+<p><em>Let&rsquo;s see just a few examples:</em></p>
+
+<p>It&rsquo;s extremely easy to formulate expressions, like </p>
+
+<ul>
+<li><code>5 in 1...3</code></li>
+<li><code>&#39;Eval&#39; starts with &#39;E&#39;</code></li>
+<li><code>&#39;b&#39; in [&#39;a&#39;,&#39;c&#39;,&#39;d&#39;]</code></li>
+<li><code>x &lt; 2 ? true : false</code></li>
+<li><code>Date(2018, 12, 13).format(&#39;yyyy-MM-dd&#39;)</code></li>
+<li><code>&#39;hello&#39;.length</code></li>
+</ul>
+
+<p>And teamples, such as</p>
+
+<ul>
+<li><code>{% if name != nil %}Hello{% else %}Bye{% endif %} {{ name }}!</code></li>
+<li><code>Sequence: {% for i in 1...5 %}{{ 2 * i }}{% endfor %}</code></li>
+</ul>
+
+<p>and so on&hellip; The result of these expressions depend on the content, determined by the evaluation. It can be any type which is returned by the function (String, [Double], Date, or even custom types of your own.)</p>
+
+<p>You can find various ways of usage in the examples section below.</p>
+<h2 id='getting-started' class='heading'>📈 Getting started</h2>
+
+<p>For the expressions to work, you&rsquo;ll need to create an interpreter instance, providing your data types and expressions you aim to support, and maybe some input variables - if you need any.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">interpreter</span> <span class="o">=</span> <span class="kt">TypedInterpreter</span><span class="p">(</span><span class="nv">dataTypes</span><span class="p">:</span> <span class="p">[</span><span class="n">number</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">boolean</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">date</span><span class="p">],</span>
+                                   <span class="nv">functions</span><span class="p">:</span> <span class="p">[</span><span class="n">multipication</span><span class="p">,</span> <span class="n">addition</span><span class="p">,</span> <span class="n">ternary</span><span class="p">],</span>
+                                   <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"x"</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">]))</span>
+</code></pre>
+
+<p>And call it with a string expression, as follows.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">result</span> <span class="o">=</span> <span class="n">interpreter</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"2*x + 1"</span><span class="p">)</span> <span class="k">as?</span> <span class="kt">Double</span>
+</code></pre>
+<h3 id='short-example' class='heading'>🤓 Short example</h3>
+
+<p>Let&rsquo;s check out a fairly complex example, and build it from scratch! Let&rsquo;s implement a language which is able to parse the following expression:</p>
+<pre class="highlight swift"><code><span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">?</span> <span class="mi">5</span> <span class="o">+</span> <span class="nv">x</span> <span class="p">:</span> <span class="n">pi</span>
+</code></pre>
+
+<p>There&rsquo;s a ternary operator <code>?:</code> in there, which we will need. Also, supporting number literals (<code>5</code>) and boolean types (<code>true/false</code>). There&rsquo;s also a not equal operator <code>!=</code> and a <code>pi</code> constant. Let&rsquo;s not forget about the addition <code>+</code> as well!</p>
+
+<p>First, here are the data types.</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">numberLiteral</span> <span class="o">=</span> <span class="kt">Literal</span> <span class="p">{</span> <span class="n">value</span><span class="p">,</span><span class="n">_</span> <span class="k">in</span> <span class="kt">Double</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="p">}</span>
+<span class="k">let</span> <span class="nv">piConstant</span> <span class="o">=</span> <span class="kt">Literal</span><span class="p">(</span><span class="s">"pi"</span><span class="p">,</span> <span class="nv">convertsTo</span><span class="p">:</span> <span class="kt">Double</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+
+<span class="k">let</span> <span class="nv">number</span> <span class="o">=</span> <span class="kt">DataType</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">Double</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">literals</span><span class="p">:</span> <span class="p">[</span><span class="n">numberLiteral</span><span class="p">,</span> <span class="n">piConstant</span><span class="p">])</span> <span class="p">{</span> <span class="kt">String</span><span class="p">(</span><span class="nv">describing</span><span class="p">:</span> <span class="nv">$0</span><span class="p">)</span> <span class="p">}</span>
+</code></pre>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">trueLiteral</span> <span class="o">=</span> <span class="kt">Literal</span><span class="p">(</span><span class="s">"true"</span><span class="p">,</span> <span class="nv">convertsTo</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">falseLiteral</span> <span class="o">=</span> <span class="kt">Literal</span><span class="p">(</span><span class="s">"false"</span><span class="p">,</span> <span class="nv">convertsTo</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+
+<span class="k">let</span> <span class="nv">boolean</span> <span class="o">=</span> <span class="kt">DataType</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">Bool</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">literals</span><span class="p">:</span> <span class="p">[</span><span class="n">trueLiteral</span><span class="p">,</span> <span class="n">falseLiteral</span><span class="p">])</span> <span class="p">{</span> <span class="nv">$0</span> <span class="p">?</span> <span class="s">"true"</span> <span class="p">:</span> <span class="s">"false"</span> <span class="p">}</span>
+</code></pre>
+
+<p>(The last parameter, expressed as a block tells the framework how to formulise this type of data, for example debug messages or other purposes)</p>
+
+<p>Now, let&rsquo;s build the operators:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">multiplication</span> <span class="o">=</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">([</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">),</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"*"</span><span class="p">),</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">)])</span> <span class="p">{</span> <span class="n">arguments</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">lhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"lhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span><span class="p">,</span> <span class="k">let</span> <span class="nv">rhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"rhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="n">lhs</span> <span class="o">*</span> <span class="n">rhs</span>
+<span class="p">}</span>
+</code></pre>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">multiplication</span> <span class="o">=</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">([</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">),</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"+"</span><span class="p">),</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">)])</span> <span class="p">{</span> <span class="n">arguments</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">lhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"lhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span><span class="p">,</span> <span class="k">let</span> <span class="nv">rhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"rhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="n">lhs</span> <span class="o">+</span> <span class="n">rhs</span>
+<span class="p">}</span>
+</code></pre>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">notEquals</span> <span class="o">=</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="o">&gt;</span><span class="p">([</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">),</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"!="</span><span class="p">),</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">)])</span> <span class="p">{</span> <span class="n">arguments</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">lhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"lhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span><span class="p">,</span> <span class="k">let</span> <span class="nv">rhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"rhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="n">lhs</span> <span class="o">!=</span> <span class="n">rhs</span>
+<span class="p">}</span>
+</code></pre>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">ternary</span> <span class="o">=</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"condition"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"?"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"true"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">":"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"false"</span><span class="p">))</span> <span class="p">{</span> <span class="n">arguments</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">condition</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"condition"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Bool</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="n">condition</span> <span class="p">{</span>
+        <span class="k">return</span>  <span class="n">arguments</span><span class="p">[</span><span class="s">"true"</span><span class="p">]</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span>  <span class="n">arguments</span><span class="p">[</span><span class="s">"false"</span><span class="p">]</span>
+     <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Looks like, we&rsquo;re all set. Let&rsquo;s evaluate our expression!</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">interpreter</span> <span class="o">=</span> <span class="kt">TypedInterpreter</span><span class="p">(</span><span class="nv">dataTypes</span><span class="p">:</span> <span class="p">[</span><span class="n">number</span><span class="p">,</span> <span class="n">boolean</span><span class="p">],</span>
+                                   <span class="nv">functions</span><span class="p">:</span> <span class="p">[</span><span class="n">multipication</span><span class="p">,</span> <span class="n">addition</span><span class="p">,</span> <span class="n">notEquals</span><span class="p">,</span> <span class="n">ternary</span><span class="p">])</span>
+
+<span class="k">let</span> <span class="nv">result</span> <span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="n">interpreter</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"2*x + 1"</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"x"</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">]))</span>
+<span class="kt">XCTAssertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span> <span class="c1">//Pass!</span>
+</code></pre>
+
+<p>Now, that we have operators and data types, we can also evaluate anything using these data types:</p>
+
+<ul>
+<li><code>interpreter.evaluate(&quot;3 != 4&quot;) as Bool</code></li>
+<li><code>interpreter.evaluate(&quot;2 + 1.5 * 6&quot;) as Double</code> (since multiplication is defined earlier in the array, it has a higher precedence, as expected)</li>
+<li><code>interpreter.evaluate(&quot;true ? 1 : 2.5&quot;) as Double</code></li>
+</ul>
+
+<p>-</p>
+
+<p>As you have seen, it&rsquo;s really easy and intuitive to build custom languages, using simple building blocks. With just a few custom data types and functions, the possibilities are endless. Operators, functions, string, arrays, dates&hellip;</p>
+
+<p>The motto of the framework: Build your own (mini) language!</p>
+<h3 id='how-does-it-work' class='heading'>⁉️ How does it work?</h3>
+
+<p>The interpreter itself does not define anything or any way to deal with the input string on its own. 
+All it does, is recognising patterns. </p>
+
+<p>By creating data types, you provide literals to the framework, which it can interpret as an element or a result of the expression. 
+These types are transformed to real-life Swift types.</p>
+
+<p>By defining functions, you provide patterns to the framework to recognise. 
+Functions are also typed, they return Swift types as a result of their evaluation.
+Functions consist of keywords and variables, nothing more. </p>
+
+<ul>
+<li>Keywords are static strings which should not be interpreted as data (such as <code>if</code>, or <code>{</code>, <code>}</code>).</li>
+<li>Variables, on the other hand, are typed values, recursively evaluated. For example, if a variable recognises something, that proves to be a further pattern, it recursively evaluates their body, until they find context-variables or literals of any given data type.</li>
+</ul>
+
+<p>Functions also have blocks, which provide the recognised variables in a key-value dictionary parameter, and you can do whatever you want with them: print them, convert them, modify or assign them to context-variables. </p>
+
+<p>The addition function above, for example, consists of two variables on each side, and the <code>+</code> keyword in the middle. It also requires a block, where both sides are given in a <code>[String:Any]</code>, so the closure can get the values of the placeholders and add them together.</p>
+
+<p>There&rsquo;s one interesting aspect of this solution: Unlike traditional - native - interpreters or compilers, this one recognises patterns from top to bottom. 
+Meaning, that it looks at the input string, your expression, and recognises patterns in priority order, and recursively go deeper and deeper until the most basic expressions are met.</p>
+
+<p>A traditional interpreter, however, parses expressions character by character, feeding the results to a lexer, the tokeniser, then builds up an abstract sytax tree (which is highly optimisable), and finally coverts it to a binary (compiler) or evaluates it at runtime (interpreter), in one word: bottom-up.</p>
+
+<p>The two solutions can be compared in various ways. The two main differences are in ease of use, and performance. 
+This version of an interpreter provides a really easy way to define patterns, types, etc., but has its cost! It cannot parse as optimally as a traditional compiler could, as it doesn&rsquo;t have an internal graph of expressions (AST), but still performs in a much more than acceptable way.
+Definition-wise, this framework provides an easily understandable way of language-elements, but the traditional one really lacks behind, because the lexer is usually an ugly, hardly understandable state machine, or regular expression, BAKED IN to the interpreter code itself.</p>
+<h2 id='motivation' class='heading'>💡 Motivation</h2>
+
+<p>I have another project, in which I&rsquo;m generating Objective-C and Swift model objects with loads of utils, based on really short templates. This project was not possible currently in Swift, as there is no template language - capable enough - to create my templates. (I ended up uing a third party PHP framework, called <a href="https://github.com/twigphp/Twig">Twig</a>). So finally, I created one for Swift!</p>
+
+<p>It turned out, that making it a little more geneic - here and there - makes the whole thing really capable and flexible to use in different use-cases.</p>
+
+<p>The pattern matching was there, but soon I realised, that I&rsquo;m going to need expressions as well, for printing, evaluating in if/while statements and so on. First, I was looking at an excellent library, <a href="https://github.com/nicklockwood/Expression">Expression</a>, created by Nick Lockwood, which is capable of evaluating numeric expressions. Unfortunately, I wanted a bit more, definig strings, dates, array, and further types and expressions, so I used my existing pattern matching solution to bring this capability to life.</p>
+
+<p>It ended up quite positively, after I discovered the capabilities of a generic solution like this. The whole thing just blew my mind, language features could have been defined in a matter of seconds, and I wanted to shared this discovery with the world, so here you are :)</p>
+<h2 id='examples' class='heading'>📚 Examples</h2>
+
+<p>​
+​I included a few use-cases, which bring significant improvements on how things are processed before - at least in my previous projects.
+​</p>
+<h3 id='a-href-examples-templateexample-template-language-a' class='heading'><a href="Examples/TemplateExample">Template language</a></h3>
+
+<p>I was able to creae a full-blown template language, completely, using this framework and nothing else. It&rsquo;s almost like a competitor of the one I mentioned (<a href="https://github.com/twigphp/Twig">Twig</a>). This is the most advanced example of them all!</p>
+
+<p>I created a standard library with all the possible operators you can imagine. With helpers, each operator is a small, one-liner addition. Added the important data types, such as arrays, strings, numbers, booelans, dates, etc., and a few functions, to be more awesome.</p>
+
+<p>Together, it makes a nice addition to my model-object generation project, and <strong>REALLY useful for server-side Swift developement as well</strong>!</p>
+<h3 id='a-href-tbd-attributed-string-parser-a' class='heading'><a href="tbd">Attributed string parser</a></h3>
+
+<p>I created another small example, parsing attribtued strings from simple expressions using XML style tags, such as bold, italic, underlined, colored, etc.</p>
+
+<p>With really just a few operators, this solution is able to deliver attributed strings from basic APIs, which otherwise would be hard to manage.</p>
+
+<p>My connected project is an iOS application, using the Spotify <a href="https://github.com/spotify/HubFramework">HUB framework</a>, in which I can now provide rich strings with my view-models and parse them from the JSON string results.</p>
+<h3 id='a-href-tbd-color-parser-a' class='heading'><a href="tbd">Color parser</a></h3>
+
+<p>A color parser is also used by the BFF project I mentioned before. It can parse Swift Color objects from many different styles of strings, such as <code>#ffddee</code>, or <code>red</code>, or <code>rgba(1,0.5,0.4,1)</code>. I included this basic example in the repository as well.</p>
+<h2 id='contribution' class='heading'>🙋 Contribution</h2>
+
+<p>Anyone is more than welcome to contribute to <strong>Eval</strong>! It can even be an addition to the docs or to the code directly, by <a href="https://github.com/tevelee/Interpreter/issues/new">raising an issue</a> or in form of a pull request. Both are equally valuable to me! Happy to assist anyone!</p>
+
+<p>In case you need help or want to report a bug - please file an issue. Make sure to provide as much information as you can, sample code also makes it a lot easier for me to help you. Check out the <a href="CONTRIBUTE.md">contribution guidelines</a> for further information. </p>
+
+<p>I collected some use cases, and great opportunities for beginner tasks if anybody is motivated to bring this project to a more awesome state!</p>
+<h2 id='details' class='heading'>👀 Details</h2>
+
+<p>This is a really early state of the project, so I&rsquo;m still deep in the process of all the open-sorucing tasks, such as firing up a CI, creating a nice documentation page, managing administrative tasks around stability.</p>
+
+<p>The upcoming Documentation pages will provide a deep-dive into the subtleties of this framework. Please stay tuned! </p>
+<h2 id='author' class='heading'>👤 Author</h2>
+
+<p>I am Laszlo Teveli, software engineer, iOS evangelist.</p>
+
+<p>Feel free to reach out to me anytime via tevelee [at] gmail [dot] com, or @tevelee in Twitter.</p>
+<h2 id='license' class='heading'>⚖️ License</h2>
+
+<p>Eval is available under the Apache 2.0 licensing rules. See the <a href="LICENSE.md">LICENSE</a> file for more information.</p>
+
+          </div>
+        </section>
+
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-05)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

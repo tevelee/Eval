@@ -1,0 +1,796 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 3,
+      "symbol": "Evaluator",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 5,
+      "symbol": "Evaluator.evaluate(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 8,
+      "symbol": "EvaluatorWithContext",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 9,
+      "symbol": "EvaluatorWithContext.evaluate(_:context:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 12,
+      "symbol": "ContextAware",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 13,
+      "symbol": "ContextAware.context",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 16,
+      "symbol": "VariableEvaluator",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 18,
+      "symbol": "VariableEvaluator.interpreterForEvaluatingVariables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 19,
+      "symbol": "VariableEvaluator.evaluate(_:context:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 22,
+      "symbol": "InterpreterContext",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 23,
+      "symbol": "InterpreterContext.variables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 25,
+      "symbol": "InterpreterContext.init(variables:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 29,
+      "symbol": "InterpreterContext.merge(with:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 38,
+      "symbol": "matchStatement(amongst:in:from:until:interpreter:context:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 3,
+      "symbol": "MatchElement",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 4,
+      "symbol": "MatchElement.matches(prefix:isLast:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 7,
+      "symbol": "Keyword",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 8,
+      "symbol": "Keyword.KeywordType",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 9,
+      "symbol": "Keyword.KeywordType.generic",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 10,
+      "symbol": "Keyword.KeywordType.openingStatement",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 11,
+      "symbol": "Keyword.KeywordType.closingStatement",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 16,
+      "symbol": "Keyword.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 17,
+      "symbol": "Keyword.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 19,
+      "symbol": "Keyword.init(_:type:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 24,
+      "symbol": "Keyword.matches(prefix:isLast:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 35,
+      "symbol": "OpenKeyword",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 36,
+      "symbol": "OpenKeyword.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 41,
+      "symbol": "CloseKeyword",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 42,
+      "symbol": "CloseKeyword.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 47,
+      "symbol": "VariableProtocol",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 48,
+      "symbol": "VariableProtocol.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 49,
+      "symbol": "VariableProtocol.shortest",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 50,
+      "symbol": "VariableProtocol.interpreted",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 51,
+      "symbol": "VariableProtocol.acceptsNilValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 52,
+      "symbol": "VariableProtocol.performMap(input:interpreter:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 55,
+      "symbol": "GenericVariable",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 56,
+      "symbol": "GenericVariable.name",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 57,
+      "symbol": "GenericVariable.shortest",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 58,
+      "symbol": "GenericVariable.interpreted",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 59,
+      "symbol": "GenericVariable.acceptsNilValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 60,
+      "symbol": "GenericVariable.map",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 62,
+      "symbol": "GenericVariable.init(_:shortest:interpreted:acceptsNilValue:map:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 70,
+      "symbol": "GenericVariable.matches(prefix:isLast:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 74,
+      "symbol": "GenericVariable.mapped(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
+      "line": 81,
+      "symbol": "GenericVariable.performMap(input:interpreter:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TemplateInterpreter.swift",
+      "line": 3,
+      "symbol": "TemplateInterpreter",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TemplateInterpreter.swift",
+      "line": 7,
+      "symbol": "TemplateInterpreter.statements",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TemplateInterpreter.swift",
+      "line": 8,
+      "symbol": "TemplateInterpreter.context",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TemplateInterpreter.swift",
+      "line": 9,
+      "symbol": "TemplateInterpreter.typedInterpreter",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TemplateInterpreter.swift",
+      "line": 10,
+      "symbol": "TemplateInterpreter.interpreterForEvaluatingVariables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TemplateInterpreter.swift",
+      "line": 12,
+      "symbol": "TemplateInterpreter.init(statements:interpreter:context:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TemplateInterpreter.swift",
+      "line": 20,
+      "symbol": "TemplateInterpreter.evaluate(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TemplateInterpreter.swift",
+      "line": 24,
+      "symbol": "TemplateInterpreter.evaluate(_:context:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TemplateInterpreter.swift",
+      "line": 47,
+      "symbol": "TemplateVariable",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TemplateInterpreter.swift",
+      "line": 48,
+      "symbol": "TemplateVariable.init(_:shortest:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 3,
+      "symbol": "TypedInterpreterBase",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 7,
+      "symbol": "TypedInterpreterBase.context",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 8,
+      "symbol": "TypedInterpreterBase.interpreterForEvaluatingVariables",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 10,
+      "symbol": "TypedInterpreterBase.init(context:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 14,
+      "symbol": "TypedInterpreterBase.evaluate(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 18,
+      "symbol": "TypedInterpreterBase.evaluate(_:context:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 24,
+      "symbol": "TypedInterpreter",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 25,
+      "symbol": "TypedInterpreter.dataTypes",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 26,
+      "symbol": "TypedInterpreter.functions",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 28,
+      "symbol": "TypedInterpreter.init(dataTypes:functions:context:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 36,
+      "symbol": "TypedInterpreter.evaluate(_:context:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 56,
+      "symbol": "TypedInterpreter.print(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 66,
+      "symbol": "DataTypeProtocol",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 67,
+      "symbol": "DataTypeProtocol.convert(input:interpreter:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 68,
+      "symbol": "DataTypeProtocol.print(value:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 71,
+      "symbol": "DataType",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 72,
+      "symbol": "DataType.type",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 73,
+      "symbol": "DataType.literals",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 74,
+      "symbol": "DataType.print",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 76,
+      "symbol": "DataType.init(type:literals:print:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 84,
+      "symbol": "DataType.convert(input:interpreter:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 88,
+      "symbol": "DataType.print(value:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 94,
+      "symbol": "FunctionProtocol",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 95,
+      "symbol": "FunctionProtocol.convert(input:interpreter:context:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 98,
+      "symbol": "Function",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 99,
+      "symbol": "Function.patterns",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 101,
+      "symbol": "Function.init(patterns:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 105,
+      "symbol": "Function.init(_:matcher:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 109,
+      "symbol": "Function.convert(input:interpreter:context:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 115,
+      "symbol": "Literal",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 116,
+      "symbol": "Literal.convert",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 118,
+      "symbol": "Literal.init(convert:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 122,
+      "symbol": "Literal.init(_:convertsTo:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 126,
+      "symbol": "Literal.convert(input:interpreter:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/TypedInterpreter.swift",
+      "line": 131,
+      "symbol": "Variable",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/MatchResult.swift",
+      "line": 3,
+      "symbol": "MatchResult",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/MatchResult.swift",
+      "line": 4,
+      "symbol": "MatchResult.noMatch",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/MatchResult.swift",
+      "line": 5,
+      "symbol": "MatchResult.possibleMatch",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/MatchResult.swift",
+      "line": 6,
+      "symbol": "MatchResult.exactMatch",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/MatchResult.swift",
+      "line": 7,
+      "symbol": "MatchResult.anyMatch",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/MatchResult.swift",
+      "line": 9,
+      "symbol": "MatchResult.isMatch()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/MatchResult.swift",
+      "line": 16,
+      "symbol": "MatchResult.isNoMatch()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/MatchResult.swift",
+      "line": 23,
+      "symbol": "MatchResult.isPossibleMatch()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Matcher.swift",
+      "line": 5,
+      "symbol": "Matcher",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Matcher.swift",
+      "line": 6,
+      "symbol": "Matcher.elements",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Matcher.swift",
+      "line": 7,
+      "symbol": "Matcher.matcher",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Matcher.swift",
+      "line": 9,
+      "symbol": "Matcher.init(_:matcher:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Matcher.swift",
+      "line": 21,
+      "symbol": "Matcher.matches(string:from:until:interpreter:context:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Matcher.swift",
+      "line": 109,
+      "symbol": "Matcher.finaliseVariable(_:interpreter:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Matcher.swift",
+      "line": 119,
+      "symbol": "Matcher.isEmbedded(element:in:at:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Matcher.swift",
+      "line": 127,
+      "symbol": "Matcher.positionOfClosingTag(in:from:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Utils.swift",
+      "line": 5,
+      "symbol": "+(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Utils.swift",
+      "line": 9,
+      "symbol": "+(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Utils.swift",
+      "line": 13,
+      "symbol": "+=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Utils.swift",
+      "line": 17,
+      "symbol": "+=(_:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Utils.swift",
+      "line": 22,
+      "symbol": "CharacterSet.contains(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Utils.swift",
+      "line": 48,
+      "symbol": "String.trim()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Utilities/Utils.swift",
+      "line": 52,
+      "symbol": "String.position(of:from:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/laszloteveli/Documents/Interpreter"
+}

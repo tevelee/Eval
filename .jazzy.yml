@@ -1,0 +1,25 @@
+author: Laszlo Teveli
+author_url: https://tevelee.github.io
+readme: README.md
+
+documentation: Documentation/*.md
+abstract: Documentation/Sections/*.md
+
+module: Eval
+module_version: 1.0.0
+xcodebuild_arguments: [-scheme,Eval-Package]
+
+output: Documentation/Output
+theme: fullwidth
+
+github_url: https://github.com/tevelee/Eval
+github_file_prefix: https://github.com/tevelee/Eval/tree/master
+
+root_url: https://tevelee.github.io/Eval
+dash_url: https://tevelee.github.io/Eval/docsets/Eval.xml
+
+clean: true
+min_acl: internal
+
+framework_root: Sources
+source_directory: .

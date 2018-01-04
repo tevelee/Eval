@@ -1,5 +1,8 @@
 .DS_Store
 /.build
+build
 /Packages
 /*.xcodeproj
 Pods
+docs
+Documentation/Output

@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Interpreter",
+        "repositoryURL": "/Users/laszloteveli/Documents/Interpreter",
+        "state": {
+          "branch": null,
+          "revision": "9972918435f43052dacb23d55680b427f77b6baf",
+          "version": "1.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

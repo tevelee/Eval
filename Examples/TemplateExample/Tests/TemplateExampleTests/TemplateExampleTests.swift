@@ -4,7 +4,7 @@ import Interpreter
 
 class TemplateExampleTests: XCTestCase {
     func testExample() {
-        XCTAssertEqual(eval("{% if x < 5 %}Hello{% endif %}!", ["x": 2.0]), "Hello!")
+        XCTAssertEqual(eval("{% if x in [1,2,3] %}Hello{% else %}Bye{% endif %} {{ name }}!", ["x": 2.0, "name": "Teve"]), "Hello Teve!")
     }
     
     func eval(_ template: String, _ variables: [String: Any]) -> String {

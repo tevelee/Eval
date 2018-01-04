@@ -26,8 +26,8 @@ public class TemplateLibrary {
     public static var standardLibrary = StandardLibrary()
     public static var templates: [Matcher<String, TemplateInterpreter>] {
         return [
-            TemplateLibrary.ifStatement,
             TemplateLibrary.ifElseStatement,
+            TemplateLibrary.ifStatement,
             TemplateLibrary.printStatement,
             TemplateLibrary.forInStatement,
             TemplateLibrary.setStatement,

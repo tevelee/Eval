@@ -241,7 +241,7 @@ I collected some use cases, and great opportunities for beginner tasks if anybod
 
 ## 👀 Details
 
-This is a really early state of the project, so I'm still deep in the process of all the open-sorucing tasks, such as firing up a CI, creating a nice documentation page, managing administrative tasks around stability.
+This is a really early state of the project, so I'm still deep in the process of all the open-sourcing tasks, such as firing up a CI, creating a nice documentation page, managing administrative tasks around stability.
 
 The upcoming Documentation pages will provide a deep-dive into the subtleties of this framework. Please stay tuned! 
 

@@ -2,7 +2,12 @@
 /.build
 build
 /Packages
+
 /*.xcodeproj
+xcuserdata
+.xcuserstate
+
 Pods
+
 docs
 Documentation/Output

@@ -1,0 +1,4 @@
+osx_image: xcode9.1
+language: swift
+script:
+- swift Scripts/main.swift

@@ -1,6 +1,6 @@
 # { Eval }
 
-[![](https://img.shields.io/badge/Build-Passing-green.svg)]()
+[![](https://travis-ci.org/tevelee/Eval.svg?branch=master)](https://travis-ci.org/tevelee/Eval)
 [![](https://img.shields.io/badge/Version-1.0.0-yellow.svg)]()
 [![](https://img.shields.io/badge/Swift-4.0-green.svg)]()
 [![](https://img.shields.io/badge/Documentation-In%20Progress-lightgray.svg)](https://tevelee.github.io/Eval/)
@@ -101,7 +101,7 @@ There's a ternary operator `?:` in there, which we will need. Also, supporting n
 First, here are the data types.
 
 ```swift
-let numberLiteral = Literal { value,_ in Double(v) }
+let numberLiteral = Literal { value,_ in Double(value) } //Converts every number literal, if it can be represented with a Double instance
 let piConstant = Literal("pi", convertsTo: Double.pi)
 
 let number = DataType(type: Double.self, literals: [numberLiteral, piConstant]) { String(describing: $0) }
@@ -114,7 +114,7 @@ let falseLiteral = Literal("false", convertsTo: false)
 let boolean = DataType(type: Bool.self, literals: [trueLiteral, falseLiteral]) { $0 ? "true" : "false" }
 ```
 
-(The last parameter, expressed as a block tells the framework how to formulise this type of data, for example debug messages or other purposes)
+(The last parameter, expressed as a block, tells the framework how to formulise this type of data as a String for debug messages or other purposes)
 
 Now, let's build the operators:
 

@@ -6,7 +6,6 @@ documentation: Documentation/*.md
 abstract: Documentation/Sections/*.md
 
 module: Eval
-module_version: 1.0.0
 xcodebuild_arguments: [-scheme,Eval-Package]
 
 output: Documentation/Output

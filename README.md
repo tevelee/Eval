@@ -1,17 +1,17 @@
 # { Eval }
 
-![](https://img.shields.io/badge/Language-Swift-red.svg)
-![](https://img.shields.io/badge/Version-1.0.0-yellow.svg)
-![](https://img.shields.io/badge/Swift-4.0-green.svg)
-<!-- Platform, language, code coverage, documentation, license -->
-<!-- ![](https://img.shields.io/badge/Build-Passing-green.svg) -->
-<!-- ![](https://img.shields.io/badge/Coverage-TBD-yellow.svg) -->
-<!-- ![](https://img.shields.io/badge/Documentation-TBD-yellow.svg) -->
+[![](https://img.shields.io/badge/Build-Passing-green.svg)]()
+[![](https://img.shields.io/badge/Version-1.0.0-yellow.svg)]()
+[![](https://img.shields.io/badge/Swift-4.0-green.svg)]()
+[![](https://img.shields.io/badge/Documentation-In%20Progress-lightgray.svg)](https://tevelee.github.io/Eval/)
+[![](https://img.shields.io/badge/Coverage-No%20Data-red.svg)]()
+[![](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE.txt)
 
 - [👨🏻‍💻 About](#-about)
 - [📈 Getting Started](#-getting-started)
 	- [🤓 Short Example](#-short-example)
 	- [⁉️ How does it work?](#%EF%B8%8F-how-does-it-work)
+- [🏃🏻 Status](#-status)
 - [💡 Motivation](#-motivation)
 - [📚 Examples](#-examples)
 - [🙋 Contribution](#-contribution)
@@ -21,15 +21,15 @@
 
 ## 👨🏻‍💻 About
 
-**Eval** is a lightweight interpreter framework written in <img src="http://www.swiftapplications.com/wp-content/uploads/2016/04/swift-logo.png" width="14"> Swift, for 📱iOS, 🖥 macOS, and 🐧Linux platforms.
+**Eval** is a lightweight interpreter framework written in <img src="http://www.swiftapplications.com/wp-content/uploads/2016/04/swift-logo.png" width="16"> Swift, for 📱iOS, 🖥 macOS, and 🐧Linux platforms.
 
 It evaluates expressions at runtime, with operators and data types you define.
 
 🍏 Pros | 🍎 Cons
 ------- | --------
 🐥 Lightweight - the whole engine is really just a few hundred lines of code | 🤓 Creating custom operators and data types, on the other hand, can take a few extra lines - depending on your needs
-✅ Easy to use API - create new language elements just in a matter of seconds | -
-🎢 Fun - Since it's really easy to play with, you can build complex features with joy | -
+✅ Easy to use API - create new language elements in just a matter of seconds | ♻️ The evaluated result of the expressions must be strongly typed, so you can only accept what type you expect the result is going to be
+🎢 Fun - Since it's really easy to play with, it's joyful to add - even complex - language features | -
 🚀 Fast execution - I'm trying to optimise as much as possible. Has its limitations though | 🌧 Since it is a really generic concept, some optimisations cannot be made, compared to native interpreters
 
 The framework currently supports two different types of execution modes:
@@ -39,23 +39,38 @@ The framework currently supports two different types of execution modes:
 
 *Let's see just a few examples:*
 
-It's extremely easy to formulate expressions, like 
+It's extremely easy to formulate expressions (and evaluate them in runtime), like 
 
-- `5 in 1...3`
-- `'Eval' starts with 'E'`
-- `'b' in ['a','c','d']`
-- `x < 2 ? true : false`
-- `Date(2018, 12, 13).format('yyyy-MM-dd')`
-- `'hello'.length`
+- `5 in 1...3` evaluates to `false` Bool type
+- `'Eval' starts with 'E'` evaluates to `true` Bool type
+- `'b' in ['a','c','d']` evaluates to `false` Bool type
+- `x < 2 ? 'a' : 'b'` evaluates to `"a"` or `"b"` String type, based on the `x` Int input variable
+- `Date(2018, 12, 13).format('yyyy-MM-dd')` evaluates to `"2018-12-13"` string
+- `'hello'.length` evaluates to `5` Integer
+- `now` evaluates to `Date()`
 
-And teamples, such as
+And templates, such as
 
-- `{% if name != nil %}Hello{% else %}Bye{% endif %} {{ name }}!`
-- `Sequence: {% for i in 1...5 %}{{ 2 * i }}{% endfor %}`
+- `{% if name != nil %}Hello{% else %}Bye{% endif %} {{ name|default('user') }}!`, whose output is `Hello Adam!` or `Bye User!`
+- `Sequence: {% for i in 1...5 %}{{ 2 * i }} {% endfor %}` which is `2 4 6 8 10 `
 
-and so on... The result of these expressions depend on the content, determined by the evaluation. It can be any type which is returned by the function (String, [Double], Date, or even custom types of your own.)
+and so on... The result of these expressions depend on the content, determined by the evaluation. It can be any type which is returned by the functions (String, [Double], Date, or even custom types of your own.)
 
 You can find various ways of usage in the examples section below.
+
+## 🏃🏻 Status
+
+- [x] Library implementation
+- [x] API finalisation
+- [x] Swift Package Manager support
+- [x] Initial documentation
+- [x] Example project (template engine)
+- [ ] CocoaPods support
+- [ ] CI
+- [ ] Code test-coverage
+- [ ] Fully detailed documentation
+- [ ] Contribution guides
+- [ ] Further example projects
 
 ## 📈 Getting started
 
@@ -78,10 +93,10 @@ let result = interpreter.evaluate("2*x + 1") as? Double
 Let's check out a fairly complex example, and build it from scratch! Let's implement a language which is able to parse the following expression:
 
 ```swift
-x != 0 ? 5 + x : pi
+x != 0 ? 5 * x : pi + 1
 ```
 
-There's a ternary operator `?:` in there, which we will need. Also, supporting number literals (`5`) and boolean types (`true/false`). There's also a not equal operator `!=` and a `pi` constant. Let's not forget about the addition `+` as well!
+There's a ternary operator `?:` in there, which we will need. Also, supporting number literals (`0`, `5`, and `1`) and boolean types (`true/false`). There's also a not equal operator `!=` and a `pi` constant. Let's not forget about the addition `+` and multiplication `*` as well!
 
 First, here are the data types.
 
@@ -104,19 +119,19 @@ let boolean = DataType(type: Bool.self, literals: [trueLiteral, falseLiteral]) {
 Now, let's build the operators:
 
 ```swift
-let multiplication = Function<Double>([Variable<Double>("lhs"), Keyword("*"), Variable<Double>("rhs")]) { arguments in
+let multiplication = Function<Double>(Variable<Double>("lhs") + Keyword("*") + Variable<Double>("rhs")) { arguments in
     guard let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double else { return nil }
     return lhs * rhs
 }
 ```
 ```swift
-let multiplication = Function<Double>([Variable<Double>("lhs"), Keyword("+"), Variable<Double>("rhs")]) { arguments in
+let addition = Function<Double>(Variable<Double>("lhs") + Keyword("+") + Variable<Double>("rhs")) { arguments in
     guard let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double else { return nil }
     return lhs + rhs
 }
 ```
 ```swift
-let notEquals = Function<Bool>([Variable<Double>("lhs"), Keyword("!="), Variable<Double>("rhs")]) { arguments in
+let notEquals = Function<Bool>(Variable<Double>("lhs") + Keyword("!=") + Variable<Double>("rhs")) { arguments in
     guard let lhs = arguments["lhs"] as? Double, let rhs = arguments["rhs"] as? Double else { return nil }
     return lhs != rhs
 }
@@ -125,10 +140,10 @@ let notEquals = Function<Bool>([Variable<Double>("lhs"), Keyword("!="), Variable
 let ternary = Function<Any>(Variable<Bool>("condition") + Keyword("?") + Variable<Any>("true") + Keyword(":") + Variable<Any>("false")) { arguments in
     guard let condition = arguments["condition"] as? Bool else { return nil }
     if condition {
-	    return  arguments["true"]
+        return  arguments["true"]
     } else {
-	    return  arguments["false"]
-	 }
+        return  arguments["false"]
+    }
 }
 ```
 
@@ -138,8 +153,8 @@ Looks like, we're all set. Let's evaluate our expression!
 let interpreter = TypedInterpreter(dataTypes: [number, boolean],
                                    functions: [multipication, addition, notEquals, ternary])
                                    
-let result : Double = interpreter.evaluate("2*x + 1", context: InterpreterContext(variables: ["x": 3.0]))
-XCTAssertEqual(result, 3.0) //Pass!
+let result : Double = interpreter.evaluate("x != 0 ? 5 * x : pi + 1", context: InterpreterContext(variables: ["x": 3.0]))
+XCTAssertEqual(result, 15.0) //Pass!
 ```
 
 Now, that we have operators and data types, we can also evaluate anything using these data types:
@@ -160,7 +175,7 @@ The interpreter itself does not define anything or any way to deal with the inpu
 All it does, is recognising patterns. 
 
 By creating data types, you provide literals to the framework, which it can interpret as an element or a result of the expression. 
-These types are transformed to real-life Swift types.
+These types are transformed to real Swift types.
 
 By defining functions, you provide patterns to the framework to recognise. 
 Functions are also typed, they return Swift types as a result of their evaluation.
@@ -238,4 +253,4 @@ Feel free to reach out to me anytime via tevelee [at] gmail [dot] com, or @tevel
 
 ## ⚖️ License
 
-Eval is available under the Apache 2.0 licensing rules. See the [LICENSE](LICENSE.md) file for more information.
+**Eval** is available under the Apache 2.0 licensing rules. See the [LICENSE](LICENSE.txt) file for more information.

@@ -22,7 +22,7 @@
         <a class="header-link" href="index.html">
           Eval Docs
         </a>
-         (1% documented)
+         (0% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -109,9 +109,6 @@
                 <a class="nav-group-task-link" href="Classes/TypedInterpreter.html">TypedInterpreter</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Classes/TypedInterpreterBase.html">TypedInterpreterBase</a>
-              </li>
-              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes.html#/s:4Eval8VariableC">Variable</a>
               </li>
             </ul>
@@ -125,33 +122,10 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a class="nav-group-name-link" href="Extensions.html">Extensions</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Extensions/CharacterSet.html">CharacterSet</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Extensions/String.html">String</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
             <a class="nav-group-name-link" href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Functions.html#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Functions.html#/s:4Eval1poiSayxGAC_xtlF">+(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Functions.html#/s:4Eval2peoiySSz_s9CharacterVtF">+=(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Functions.html#/s:4Eval2peoiySayxGz_xtlF">+=(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromSi5untilq_11interpreterAA18InterpreterContextC7contexttAA17VariableEvaluatorR_r0_lF">matchStatement(amongst:in:from:until:interpreter:context:)</a>
               </li>
             </ul>
           </li>
@@ -174,13 +148,10 @@
                 <a class="nav-group-task-link" href="Protocols/FunctionProtocol.html">FunctionProtocol</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/Interpreter.html">Interpreter</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Protocols/MatchElement.html">MatchElement</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Protocols/VariableEvaluator.html">VariableEvaluator</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Protocols/VariableProtocol.html">VariableProtocol</a>
               </li>
             </ul>
           </li>
@@ -198,40 +169,6 @@
 
         <section class="section">
           <div class="section-content">
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromSi5untilq_11interpreterAA18InterpreterContextC7contexttAA17VariableEvaluatorR_r0_lF"></a>
-                    <a name="//apple_ref/swift/Function/matchStatement(amongst:in:from:until:interpreter:context:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromSi5untilq_11interpreterAA18InterpreterContextC7contexttAA17VariableEvaluatorR_r0_lF">matchStatement(amongst:in:from:until:interpreter:context:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="n">matchStatement</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">E</span><span class="o">&gt;</span><span class="p">(</span><span class="n">amongst</span> <span class="nv">statements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="Classes/Matcher.html">Matcher</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">E</span><span class="o">&gt;</span><span class="p">],</span> <span class="k">in</span> <span class="nv">input</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">from</span> <span class="nv">start</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">until</span> <span class="nv">length</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">interpreter</span><span class="p">:</span> <span class="kt">E</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="Classes/InterpreterContext.html">InterpreterContext</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Enums/MatchResult.html">MatchResult</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L38-L60">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
             <div class="task-group">
               <ul class="item-container">
                 <li class="item">
@@ -259,97 +196,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Utils.swift#L5-L7">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval1poiSayxGAC_xtlF"></a>
-                    <a name="//apple_ref/swift/Function/+(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval1poiSayxGAC_xtlF">+(_:_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="o">+&lt;</span><span class="kt">A</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">left</span><span class="p">:</span> <span class="p">[</span><span class="kt">A</span><span class="p">],</span> <span class="nv">right</span><span class="p">:</span> <span class="kt">A</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">A</span><span class="p">]</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Utils.swift#L9-L11">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval2peoiySayxGz_xtlF"></a>
-                    <a name="//apple_ref/swift/Function/+=(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval2peoiySayxGz_xtlF">+=(_:_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="o">+=&lt;</span><span class="kt">A</span><span class="o">&gt;</span> <span class="p">(</span><span class="nv">left</span><span class="p">:</span> <span class="k">inout</span> <span class="p">[</span><span class="kt">A</span><span class="p">],</span> <span class="nv">right</span><span class="p">:</span> <span class="kt">A</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Utils.swift#L13-L15">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval2peoiySSz_s9CharacterVtF"></a>
-                    <a name="//apple_ref/swift/Function/+=(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval2peoiySSz_s9CharacterVtF">+=(_:_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="o">+=</span> <span class="p">(</span><span class="nv">left</span><span class="p">:</span> <span class="k">inout</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">right</span><span class="p">:</span> <span class="kt">Character</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Utils.swift#L17-L19">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Utils.swift#L3-L5">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

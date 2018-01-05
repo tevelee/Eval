@@ -166,15 +166,14 @@
 
 <p><img src="https://img.shields.io/badge/Language-Swift-red.svg" alt="">
 <img src="https://img.shields.io/badge/Version-1.0.0-yellow.svg" alt="">
-<img src="https://img.shields.io/badge/Swift-4.0-green.svg" alt=""></p>
+<img src="https://img.shields.io/badge/Swift-4.0-green.svg" alt="">
+<a href="https://tevelee.github.io/Eval/"><img src="https://img.shields.io/badge/Documentation-InProgress-lightgray.svg" alt=""></a></p>
 
 <!-- Platform, language, code coverage, documentation, license -->
 
 <!-- ![](https://img.shields.io/badge/Build-Passing-green.svg) -->
 
 <!-- ![](https://img.shields.io/badge/Coverage-TBD-yellow.svg) -->
-
-<!-- ![](https://img.shields.io/badge/Documentation-TBD-yellow.svg) -->
 
 <ul>
 <li><a href="#-about">👨🏻‍💻 About</a></li>
@@ -184,6 +183,7 @@
 <li><a href="#-short-example">🤓 Short Example</a></li>
 <li><a href="#%EF%B8%8F-how-does-it-work">⁉️ How does it work?</a></li>
 </ul></li>
+<li><a href="#-status">🏃🏻 Status</a></li>
 <li><a href="#-motivation">💡 Motivation</a></li>
 <li><a href="#-examples">📚 Examples</a></li>
 <li><a href="#-contribution">🙋 Contribution</a></li>
@@ -193,7 +193,7 @@
 </ul>
 <h2 id='about' class='heading'>👨🏻‍💻 About</h2>
 
-<p><strong>Eval</strong> is a lightweight interpreter framework written in <img src="http://www.swiftapplications.com/wp-content/uploads/2016/04/swift-logo.png" width="14"> Swift, for 📱iOS, 🖥 macOS, and 🐧Linux platforms.</p>
+<p><strong>Eval</strong> is a lightweight interpreter framework written in <img src="http://www.swiftapplications.com/wp-content/uploads/2016/04/swift-logo.png" width="16"> Swift, for 📱iOS, 🖥 macOS, and 🐧Linux platforms.</p>
 
 <p>It evaluates expressions at runtime, with operators and data types you define.</p>
 
@@ -208,11 +208,11 @@
 <td>🤓 Creating custom operators and data types, on the other hand, can take a few extra lines - depending on your needs</td>
 </tr>
 <tr>
-<td>✅ Easy to use API - create new language elements just in a matter of seconds</td>
+<td>✅ Easy to use API - create new language elements in just a matter of seconds</td>
 <td>-</td>
 </tr>
 <tr>
-<td>🎢 Fun - Since it&rsquo;s really easy to play with, you can build complex features with joy</td>
+<td>🎢 Fun - Since it&rsquo;s really easy to play with, it&rsquo;s joyful to add - even complex - features</td>
 <td>-</td>
 </tr>
 <tr>
@@ -230,7 +230,7 @@
 
 <p><em>Let&rsquo;s see just a few examples:</em></p>
 
-<p>It&rsquo;s extremely easy to formulate expressions, like </p>
+<p>It&rsquo;s extremely easy to formulate expressions (and evaluate them in runtime), like </p>
 
 <ul>
 <li><code>5 in 1...3</code></li>
@@ -241,16 +241,31 @@
 <li><code>&#39;hello&#39;.length</code></li>
 </ul>
 
-<p>And teamples, such as</p>
+<p>And temaplates, such as</p>
 
 <ul>
 <li><code>{% if name != nil %}Hello{% else %}Bye{% endif %} {{ name }}!</code></li>
 <li><code>Sequence: {% for i in 1...5 %}{{ 2 * i }}{% endfor %}</code></li>
 </ul>
 
-<p>and so on&hellip; The result of these expressions depend on the content, determined by the evaluation. It can be any type which is returned by the function (String, [Double], Date, or even custom types of your own.)</p>
+<p>and so on&hellip; The result of these expressions depend on the content, determined by the evaluation. It can be any type which is returned by the functions (String, [Double], Date, or even custom types of your own.)</p>
 
 <p>You can find various ways of usage in the examples section below.</p>
+<h2 id='status' class='heading'>🏃🏻 Status</h2>
+
+<ul>
+<li>[x] Library implementation</li>
+<li>[x] API finalisation</li>
+<li>[x] Swift Package Manager support</li>
+<li>[x] Initial documentation</li>
+<li>[x] Example project (template engine)</li>
+<li>[ ] CocoaPods support</li>
+<li>[ ] CI</li>
+<li>[ ] Code test-coverage</li>
+<li>[ ] Fully detailed documentation</li>
+<li>[ ] Contribution guides</li>
+<li>[ ] Further example projects</li>
+</ul>
 <h2 id='getting-started' class='heading'>📈 Getting started</h2>
 
 <p>For the expressions to work, you&rsquo;ll need to create an interpreter instance, providing your data types and expressions you aim to support, and maybe some input variables - if you need any.</p>
@@ -265,10 +280,10 @@
 <h3 id='short-example' class='heading'>🤓 Short example</h3>
 
 <p>Let&rsquo;s check out a fairly complex example, and build it from scratch! Let&rsquo;s implement a language which is able to parse the following expression:</p>
-<pre class="highlight swift"><code><span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">?</span> <span class="mi">5</span> <span class="o">+</span> <span class="nv">x</span> <span class="p">:</span> <span class="n">pi</span>
+<pre class="highlight swift"><code><span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">?</span> <span class="mi">5</span> <span class="o">*</span> <span class="nv">x</span> <span class="p">:</span> <span class="n">pi</span> <span class="o">+</span> <span class="mi">1</span>
 </code></pre>
 
-<p>There&rsquo;s a ternary operator <code>?:</code> in there, which we will need. Also, supporting number literals (<code>5</code>) and boolean types (<code>true/false</code>). There&rsquo;s also a not equal operator <code>!=</code> and a <code>pi</code> constant. Let&rsquo;s not forget about the addition <code>+</code> as well!</p>
+<p>There&rsquo;s a ternary operator <code>?:</code> in there, which we will need. Also, supporting number literals (<code>0</code>, <code>5</code>, and <code>1</code>) and boolean types (<code>true/false</code>). There&rsquo;s also a not equal operator <code>!=</code> and a <code>pi</code> constant. Let&rsquo;s not forget about the addition <code>+</code> and multiplication <code>*</code> as well!</p>
 
 <p>First, here are the data types.</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">numberLiteral</span> <span class="o">=</span> <span class="kt">Literal</span> <span class="p">{</span> <span class="n">value</span><span class="p">,</span><span class="n">_</span> <span class="k">in</span> <span class="kt">Double</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="p">}</span>
@@ -285,17 +300,17 @@
 <p>(The last parameter, expressed as a block tells the framework how to formulise this type of data, for example debug messages or other purposes)</p>
 
 <p>Now, let&rsquo;s build the operators:</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">multiplication</span> <span class="o">=</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">([</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">),</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"*"</span><span class="p">),</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">)])</span> <span class="p">{</span> <span class="n">arguments</span> <span class="k">in</span>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">multiplication</span> <span class="o">=</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"*"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">))</span> <span class="p">{</span> <span class="n">arguments</span> <span class="k">in</span>
     <span class="k">guard</span> <span class="k">let</span> <span class="nv">lhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"lhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span><span class="p">,</span> <span class="k">let</span> <span class="nv">rhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"rhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
     <span class="k">return</span> <span class="n">lhs</span> <span class="o">*</span> <span class="n">rhs</span>
 <span class="p">}</span>
 </code></pre>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">multiplication</span> <span class="o">=</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">([</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">),</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"+"</span><span class="p">),</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">)])</span> <span class="p">{</span> <span class="n">arguments</span> <span class="k">in</span>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">multiplication</span> <span class="o">=</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"+"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">))</span> <span class="p">{</span> <span class="n">arguments</span> <span class="k">in</span>
     <span class="k">guard</span> <span class="k">let</span> <span class="nv">lhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"lhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span><span class="p">,</span> <span class="k">let</span> <span class="nv">rhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"rhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
     <span class="k">return</span> <span class="n">lhs</span> <span class="o">+</span> <span class="n">rhs</span>
 <span class="p">}</span>
 </code></pre>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">notEquals</span> <span class="o">=</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="o">&gt;</span><span class="p">([</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">),</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"!="</span><span class="p">),</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">)])</span> <span class="p">{</span> <span class="n">arguments</span> <span class="k">in</span>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">notEquals</span> <span class="o">=</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"!="</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">))</span> <span class="p">{</span> <span class="n">arguments</span> <span class="k">in</span>
     <span class="k">guard</span> <span class="k">let</span> <span class="nv">lhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"lhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span><span class="p">,</span> <span class="k">let</span> <span class="nv">rhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"rhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
     <span class="k">return</span> <span class="n">lhs</span> <span class="o">!=</span> <span class="n">rhs</span>
 <span class="p">}</span>
@@ -306,7 +321,7 @@
         <span class="k">return</span>  <span class="n">arguments</span><span class="p">[</span><span class="s">"true"</span><span class="p">]</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="k">return</span>  <span class="n">arguments</span><span class="p">[</span><span class="s">"false"</span><span class="p">]</span>
-     <span class="p">}</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
 
@@ -314,8 +329,8 @@
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">interpreter</span> <span class="o">=</span> <span class="kt">TypedInterpreter</span><span class="p">(</span><span class="nv">dataTypes</span><span class="p">:</span> <span class="p">[</span><span class="n">number</span><span class="p">,</span> <span class="n">boolean</span><span class="p">],</span>
                                    <span class="nv">functions</span><span class="p">:</span> <span class="p">[</span><span class="n">multipication</span><span class="p">,</span> <span class="n">addition</span><span class="p">,</span> <span class="n">notEquals</span><span class="p">,</span> <span class="n">ternary</span><span class="p">])</span>
 
-<span class="k">let</span> <span class="nv">result</span> <span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="n">interpreter</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"2*x + 1"</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"x"</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">]))</span>
-<span class="kt">XCTAssertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span> <span class="c1">//Pass!</span>
+<span class="k">let</span> <span class="nv">result</span> <span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="n">interpreter</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"x != 0 ? 5 * x : pi + 1"</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"x"</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">]))</span>
+<span class="kt">XCTAssertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span> <span class="c1">//Pass!</span>
 </code></pre>
 
 <p>Now, that we have operators and data types, we can also evaluate anything using these data types:</p>
@@ -410,7 +425,7 @@ Definition-wise, this framework provides an easily understandable way of languag
 <p>Feel free to reach out to me anytime via tevelee [at] gmail [dot] com, or @tevelee in Twitter.</p>
 <h2 id='license' class='heading'>⚖️ License</h2>
 
-<p>Eval is available under the Apache 2.0 licensing rules. See the <a href="LICENSE.md">LICENSE</a> file for more information.</p>
+<p><strong>Eval</strong> is available under the Apache 2.0 licensing rules. See the <a href="LICENSE.md">LICENSE</a> file for more information.</p>
 
           </div>
         </section>

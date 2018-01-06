@@ -164,16 +164,12 @@
             
             <h1 id='eval' class='heading'>{ Eval }</h1>
 
-<p><img src="https://img.shields.io/badge/Language-Swift-red.svg" alt="">
-<img src="https://img.shields.io/badge/Version-1.0.0-yellow.svg" alt="">
-<img src="https://img.shields.io/badge/Swift-4.0-green.svg" alt="">
-<a href="https://tevelee.github.io/Eval/"><img src="https://img.shields.io/badge/Documentation-InProgress-lightgray.svg" alt=""></a></p>
-
-<!-- Platform, language, code coverage, documentation, license -->
-
-<!-- ![](https://img.shields.io/badge/Build-Passing-green.svg) -->
-
-<!-- ![](https://img.shields.io/badge/Coverage-TBD-yellow.svg) -->
+<p><a href="https://travis-ci.org/tevelee/Eval"><img src="https://travis-ci.org/tevelee/Eval.svg?branch=master" alt=""></a>
+<a href=""><img src="https://img.shields.io/badge/Version-1.0.0-yellow.svg" alt=""></a>
+<a href=""><img src="https://img.shields.io/badge/Swift-4.0-green.svg" alt=""></a>
+<a href="https://tevelee.github.io/Eval/"><img src="https://img.shields.io/badge/Documentation-In%20Progress-lightgray.svg" alt=""></a>
+<a href=""><img src="https://img.shields.io/badge/Coverage-No%20Data-red.svg" alt=""></a>
+<a href="LICENSE.txt"><img src="https://img.shields.io/badge/License-Apache%202.0-green.svg" alt=""></a></p>
 
 <ul>
 <li><a href="#-about">👨🏻‍💻 About</a></li>
@@ -209,10 +205,10 @@
 </tr>
 <tr>
 <td>✅ Easy to use API - create new language elements in just a matter of seconds</td>
-<td>-</td>
+<td>♻️ The evaluated result of the expressions must be strongly typed, so you can only accept what type you expect the result is going to be</td>
 </tr>
 <tr>
-<td>🎢 Fun - Since it&rsquo;s really easy to play with, it&rsquo;s joyful to add - even complex - features</td>
+<td>🎢 Fun - Since it&rsquo;s really easy to play with, it&rsquo;s joyful to add - even complex - language features</td>
 <td>-</td>
 </tr>
 <tr>
@@ -233,19 +229,20 @@
 <p>It&rsquo;s extremely easy to formulate expressions (and evaluate them in runtime), like </p>
 
 <ul>
-<li><code>5 in 1...3</code></li>
-<li><code>&#39;Eval&#39; starts with &#39;E&#39;</code></li>
-<li><code>&#39;b&#39; in [&#39;a&#39;,&#39;c&#39;,&#39;d&#39;]</code></li>
-<li><code>x &lt; 2 ? true : false</code></li>
-<li><code>Date(2018, 12, 13).format(&#39;yyyy-MM-dd&#39;)</code></li>
-<li><code>&#39;hello&#39;.length</code></li>
+<li><code>5 in 1...3</code> evaluates to <code>false</code> Bool type</li>
+<li><code>&#39;Eval&#39; starts with &#39;E&#39;</code> evaluates to <code>true</code> Bool type</li>
+<li><code>&#39;b&#39; in [&#39;a&#39;,&#39;c&#39;,&#39;d&#39;]</code> evaluates to <code>false</code> Bool type</li>
+<li><code>x &lt; 2 ? &#39;a&#39; : &#39;b&#39;</code> evaluates to <code>&quot;a&quot;</code> or <code>&quot;b&quot;</code> String type, based on the <code>x</code> Int input variable</li>
+<li><code>Date(2018, 12, 13).format(&#39;yyyy-MM-dd&#39;)</code> evaluates to <code>&quot;2018-12-13&quot;</code> string</li>
+<li><code>&#39;hello&#39;.length</code> evaluates to <code>5</code> Integer</li>
+<li><code>now</code> evaluates to <code>Date()</code></li>
 </ul>
 
-<p>And temaplates, such as</p>
+<p>And templates, such as</p>
 
 <ul>
-<li><code>{% if name != nil %}Hello{% else %}Bye{% endif %} {{ name }}!</code></li>
-<li><code>Sequence: {% for i in 1...5 %}{{ 2 * i }}{% endfor %}</code></li>
+<li><code>{% if name != nil %}Hello{% else %}Bye{% endif %} {{ name|default(&#39;user&#39;) }}!</code>, whose output is <code>Hello Adam!</code> or <code>Bye User!</code></li>
+<li><code>Sequence: {% for i in 1...5 %}{{ 2 * i }} {% endfor %}</code> which is <code>2 4 6 8 10</code></li>
 </ul>
 
 <p>and so on&hellip; The result of these expressions depend on the content, determined by the evaluation. It can be any type which is returned by the functions (String, [Double], Date, or even custom types of your own.)</p>
@@ -305,7 +302,7 @@
     <span class="k">return</span> <span class="n">lhs</span> <span class="o">*</span> <span class="n">rhs</span>
 <span class="p">}</span>
 </code></pre>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">multiplication</span> <span class="o">=</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"+"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">))</span> <span class="p">{</span> <span class="n">arguments</span> <span class="k">in</span>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">addition</span> <span class="o">=</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"+"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">))</span> <span class="p">{</span> <span class="n">arguments</span> <span class="k">in</span>
     <span class="k">guard</span> <span class="k">let</span> <span class="nv">lhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"lhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span><span class="p">,</span> <span class="k">let</span> <span class="nv">rhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"rhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
     <span class="k">return</span> <span class="n">lhs</span> <span class="o">+</span> <span class="n">rhs</span>
 <span class="p">}</span>
@@ -352,7 +349,7 @@
 All it does, is recognising patterns. </p>
 
 <p>By creating data types, you provide literals to the framework, which it can interpret as an element or a result of the expression. 
-These types are transformed to real-life Swift types.</p>
+These types are transformed to real Swift types.</p>
 
 <p>By defining functions, you provide patterns to the framework to recognise. 
 Functions are also typed, they return Swift types as a result of their evaluation.
@@ -415,7 +412,7 @@ Definition-wise, this framework provides an easily understandable way of languag
 <p>I collected some use cases, and great opportunities for beginner tasks if anybody is motivated to bring this project to a more awesome state!</p>
 <h2 id='details' class='heading'>👀 Details</h2>
 
-<p>This is a really early state of the project, so I&rsquo;m still deep in the process of all the open-sorucing tasks, such as firing up a CI, creating a nice documentation page, managing administrative tasks around stability.</p>
+<p>This is a really early state of the project, so I&rsquo;m still deep in the process of all the open-sourcing tasks, such as firing up a CI, creating a nice documentation page, managing administrative tasks around stability.</p>
 
 <p>The upcoming Documentation pages will provide a deep-dive into the subtleties of this framework. Please stay tuned! </p>
 <h2 id='author' class='heading'>👤 Author</h2>
@@ -425,7 +422,7 @@ Definition-wise, this framework provides an easily understandable way of languag
 <p>Feel free to reach out to me anytime via tevelee [at] gmail [dot] com, or @tevelee in Twitter.</p>
 <h2 id='license' class='heading'>⚖️ License</h2>
 
-<p><strong>Eval</strong> is available under the Apache 2.0 licensing rules. See the <a href="LICENSE.md">LICENSE</a> file for more information.</p>
+<p><strong>Eval</strong> is available under the Apache 2.0 licensing rules. See the <a href="LICENSE.txt">LICENSE</a> file for more information.</p>
 
           </div>
         </section>
@@ -434,7 +431,7 @@ Definition-wise, this framework provides an easily understandable way of languag
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-05)</p>
+      <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-06)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

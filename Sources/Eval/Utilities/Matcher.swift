@@ -33,12 +33,12 @@ public class Matcher<T, E: Interpreter> {
     /// This collection should be provided during the initialisation, and cannot be modified once the `Matcher` instance has been created.
     public let elements: [MatchElement]
     let matcher: MatcherBlock<T, E>
-    
+
     /// The first parameter is the pattern, that needs to be recognised. The `matcher` ending closure is called whenever the pattern has successfully been recognised, and allows the users of this framework to provide custom computations using the matched `Variable` values.
     public init(_ elements: [MatchElement],
                 matcher: @escaping MatcherBlock<T, E>) {
         self.matcher = matcher
-        
+
         var elements = elements
         if let last = elements.last as? GenericVariable<E.EvaluatedType, E> {
             elements.removeLast()
@@ -46,7 +46,7 @@ public class Matcher<T, E: Interpreter> {
         }
         self.elements = elements
     }
-    
+
     /// This matcher provides the main logic of the `Eval` framework, performing the pattern matching, trying to identify, whether the input string is somehow related, or completely matches the pattern of the `Matcher` instance.
     func matches(string: String, from start: Int = 0, until length: Int, interpreter: E, context: InterpreterContext) -> MatchResult<T> {
         let isLast = string.count == start + length
@@ -54,7 +54,7 @@ public class Matcher<T, E: Interpreter> {
         var elementIndex = 0
         var remainder = trimmed
         var variables: [String: Any] = [:]
-        
+
         typealias VariableValue = (metadata: VariableProtocol, value: String)
         var currentlyActiveVariable: VariableValue? = nil
         func tryToAppendCurrentVariable() -> Bool {
@@ -80,11 +80,11 @@ public class Matcher<T, E: Interpreter> {
             }
             return false
         }
-        
+
         repeat {
             let element = elements[elementIndex]
             let result = element.matches(prefix: remainder, isLast: isLast)
-            
+
             switch result {
             case .noMatch:
                 if !tryToAppendCurrentVariable() {
@@ -115,7 +115,7 @@ public class Matcher<T, E: Interpreter> {
                         elementIndex += 1
                     }
                 } else {
-                    variables.merge(embeddedVariables) { (key, value) in key }
+                    variables.merge(embeddedVariables) { (key, _) in key }
                     if currentlyActiveVariable != nil {
                         if !registerAndValidateVariable() {
                             return .noMatch
@@ -128,14 +128,14 @@ public class Matcher<T, E: Interpreter> {
                 }
             }
         } while elementIndex < elements.count
-        
+
         if let renderedOutput = matcher(variables, interpreter, context) {
             return .exactMatch(length: length - remainder.count, output: renderedOutput, variables: variables)
         } else {
             return .noMatch
         }
     }
-    
+
     func finaliseVariable(_ variable: (metadata: VariableProtocol, value: String), interpreter: E) -> Any? {
         let value = variable.value.trim()
         if variable.metadata.interpreted {
@@ -145,7 +145,7 @@ public class Matcher<T, E: Interpreter> {
         }
         return variable.metadata.performMap(input: value, interpreter: interpreter)
     }
-    
+
     func isEmbedded(element: MatchElement, in string: String, at currentPosition: Int) -> Bool {
         if let closingTag = element as? Keyword, closingTag.type == .closingStatement, let closingPosition = positionOfClosingTag(in: string),
             currentPosition < closingPosition {
@@ -153,7 +153,7 @@ public class Matcher<T, E: Interpreter> {
         }
         return false
     }
-    
+
     func positionOfClosingTag(in string: String, from start: Int = 0) -> Int? {
         if let opening = elements.first(where: { ($0 as? Keyword)?.type == .openingStatement }) as? Keyword,
             let closing = elements.first(where: { ($0 as? Keyword)?.type == .closingStatement }) as? Keyword {
@@ -166,13 +166,13 @@ public class Matcher<T, E: Interpreter> {
                     close < open {
                     isCloseTagEarlier = true
                 }
-                
+
                 if let open = string.position(of: opening.name, from: position), !isCloseTagEarlier {
                     counter += 1
                     position = open + opening.name.count
                 } else if let close = string.position(of: closing.name, from: position) {
                     counter -= 1
-                    if (counter == 0) {
+                    if counter == 0 {
                         return close
                     }
                     position = close + closing.name.count

@@ -24,7 +24,7 @@ import Foundation
 /// A protocol which is capable of evaluating a string expressions to a strongly typed object
 public protocol Evaluator {
     associatedtype EvaluatedType
-    
+
     /// The only method in `Evaluator` protocol which does the evaluation of a string expression, and returns a strongly typed object
     func evaluate(_ expression: String) -> EvaluatedType
 }
@@ -53,15 +53,15 @@ public protocol Interpreter: EvaluatorWithContext, ContextAware {
 public class InterpreterContext {
     /// The stored variables
     public var variables: [String: Any]
-    
+
     /// Users of the context may optionally provide an initial set of variables
     public init(variables: [String: Any] = [:]) {
         self.variables = variables
     }
-    
+
     func merge(with other: InterpreterContext? = nil) -> InterpreterContext {
         if let other = other {
-            return InterpreterContext(variables: self.variables.merging(other.variables) { (key, value) in key } )
+            return InterpreterContext(variables: self.variables.merging(other.variables) { (key, _) in key })
         } else {
             return self
         }
@@ -74,8 +74,8 @@ func matchStatement<T, E>(amongst statements: [Matcher<T, E>], in input: String,
         return (element: statement, result: result)
     }
     let elements = results.filter { !$0.result.isNoMatch() }
-    
-    if elements.count == 0 {
+
+    if elements.isEmpty {
         return .noMatch
     }
     if let matchingElement = elements.first(where: { $0.result.isMatch() }),

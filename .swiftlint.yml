@@ -1,0 +1,25 @@
+disabled_rules: 
+  - shorthand_operator
+opt_in_rules:
+  - empty_count
+included:
+  - Sources
+force_cast: warning
+force_try:
+  severity: warning
+line_length: 320
+type_body_length:
+  - 300
+  - 400
+file_length:
+  warning: 500
+  error: 1200
+type_name:
+  min_length: 4
+  max_length: 
+    warning: 20
+    error: 30
+identifier_name:
+  min_length: 
+    error: 3
+reporter: "xcode"

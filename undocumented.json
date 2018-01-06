@@ -1,19 +1,6 @@
 {
   "warnings": [
-    {
-      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
-      "line": 53,
-      "symbol": "InterpreterContext",
-      "symbol_kind": "source.lang.swift.decl.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Elements.swift",
-      "line": 139,
-      "symbol": "TemplateVariable.init(_:shortest:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    }
+
   ],
   "source_directory": "/Users/laszloteveli/Documents/Interpreter"
 }

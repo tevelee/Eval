@@ -23,7 +23,7 @@
         <a class="header-link" href="../index.html">
           Eval Docs
         </a>
-         (0% documented)
+         (97% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -156,6 +156,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -169,7 +177,7 @@
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p><code>Function</code>s can process values in given <code><a href="../Classes/DataType.html">DataType</a></code>s, allowing the expressions to be feature-rich</p>
 
           </div>
         </section>
@@ -178,6 +186,36 @@
           <div class="section-content">
             <div class="task-group">
               <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval8FunctionC8patternsSayAA7MatcherCyxAA16TypedInterpreterCGGv"></a>
+                    <a name="//apple_ref/swift/Property/patterns" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval8FunctionC8patternsSayAA7MatcherCyxAA16TypedInterpreterCGGv">patterns</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Although <code>Function</code>s typically contain only one pattern, multiple ones can be added, for semantic grouping purposes</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">patterns</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Matcher.html">Matcher</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt"><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></span><span class="o">&gt;</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L158">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -191,7 +229,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>If multiple patterns are provided use this initialiser. Otherwise, for only one, there is <code>init(_,matcher:)</code></p>
 
                       </div>
                       <div class="declaration">
@@ -203,7 +241,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L110-L112">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L161-L163">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -221,19 +259,19 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The element contains the pattern that needs to be recognised. The matcher ending closure then transforms and processes the recognised value</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">elements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/MatchElement.html">MatchElement</a></span><span class="p">],</span> <span class="nv">matcher</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt">MatcherBlock</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt"><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">elements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/MatchElement.html">MatchElement</a></span><span class="p">],</span> <span class="nv">matcher</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt"><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L114-L116">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L166-L168">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -251,7 +289,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The matching of the input expression of a given <code>Function</code> happens in this method. It only accepts matches from the matcher, that are exact matches.</p>
 
                       </div>
                       <div class="declaration">
@@ -263,7 +301,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L118-L121">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L171-L174">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

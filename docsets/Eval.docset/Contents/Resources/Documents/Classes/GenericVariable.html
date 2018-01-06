@@ -23,7 +23,7 @@
         <a class="header-link" href="../index.html">
           Eval Docs
         </a>
-         (0% documented)
+         (97% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -156,6 +156,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -169,7 +177,7 @@
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p>Generic superclass of <code><a href="../Classes.html#/s:4Eval8VariableC">Variable</a></code>s which are aware of their <code><a href="../Protocols/Interpreter.html">Interpreter</a></code> classes, as they use it when mapping their values</p>
 
           </div>
         </section>
@@ -191,7 +199,11 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code>GenericVariable</code>s have a name (unique identifier), that is used when matching and return them in the matcher.
+<code>shortest</code> provides information whether the match should be exhaustive or just use the shortest possible matching string (even zero characters in some edge cases). This depends on the surrounding <code><a href="../Classes/Keyword.html">Keyword</a></code> instances in the containing collection.
+If <code>interpreted</code> is false, the value of the recognised placeholder will not be processed. In case of true, it will be evaluated, using the <code>interpreterForEvaluatingVariables</code> property of the interpreter isntance
+If <code>interpreted</code> is true, and the result of the evaluation is <code>nil</code>, then acceptsNilValue determines if the current match result should be instant noMatch, or <code>nil</code> is an accepted value, so the matching should be continued
+The final <code>map</code> block is optional. If provided, then the result of the evaluated variable will be ran through this map function, transforming its value. By default the map tries to convert the matched value to the expected type, using the <code>as?</code> operator.</p>
 
                       </div>
                       <div class="declaration">
@@ -203,7 +215,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L83-L89">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L106-L112">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -221,7 +233,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code>GenericVariables</code> always return anyMatch MatchResult, forwarding the shortest argument, provided during initialisation</p>
 
                       </div>
                       <div class="declaration">
@@ -233,7 +245,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L91-L93">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L115-L117">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

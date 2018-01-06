@@ -23,7 +23,7 @@
         <a class="header-link" href="../index.html">
           Eval Docs
         </a>
-         (0% documented)
+         (97% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -156,6 +156,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -169,7 +177,7 @@
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p><code>Literal</code>s are used by <code><a href="../Classes/DataType.html">DataType</a></code>s to be able to recognise static values, that can be expressed as a given type</p>
 
           </div>
         </section>
@@ -191,7 +199,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>In case of more complicated expression, this initialiser accepts a <code>convert</code> block, which can be used to process static values. Return nil, if the input cannot be accepted and converted.</p>
 
                       </div>
                       <div class="declaration">
@@ -203,7 +211,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L127-L129">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L133-L135">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -221,7 +229,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>In case the literals are easily expressed, static keywords, then this initialiser is the best to use.
+The first parameter is the used keyword, the second one is the statically typed associated value. As it is expressed as an autoclosure, the provided expression will be evaluated at recognision time, not initialisation time. For example, Date() is perfectly accepted to use here.</p>
 
                       </div>
                       <div class="declaration">
@@ -233,37 +242,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L131-L133">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval7LiteralC7convertxSgSS5input_AA16TypedInterpreterC11interpretertF"></a>
-                    <a name="//apple_ref/swift/Method/convert(input:interpreter:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval7LiteralC7convertxSgSS5input_AA16TypedInterpreterC11interpretertF">convert(input:interpreter:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">convert</span><span class="p">(</span><span class="nv">input</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">interpreter</span><span class="p">:</span> <span class="kt"><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L135-L137">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L139-L141">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

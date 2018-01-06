@@ -22,7 +22,7 @@
         <a class="header-link" href="index.html">
           Eval Docs
         </a>
-         (0% documented)
+         (97% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -155,6 +155,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -283,7 +291,7 @@
 <p>There&rsquo;s a ternary operator <code>?:</code> in there, which we will need. Also, supporting number literals (<code>0</code>, <code>5</code>, and <code>1</code>) and boolean types (<code>true/false</code>). There&rsquo;s also a not equal operator <code>!=</code> and a <code>pi</code> constant. Let&rsquo;s not forget about the addition <code>+</code> and multiplication <code>*</code> as well!</p>
 
 <p>First, here are the data types.</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">numberLiteral</span> <span class="o">=</span> <span class="kt">Literal</span> <span class="p">{</span> <span class="n">value</span><span class="p">,</span><span class="n">_</span> <span class="k">in</span> <span class="kt">Double</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="p">}</span>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">numberLiteral</span> <span class="o">=</span> <span class="kt">Literal</span> <span class="p">{</span> <span class="n">value</span><span class="p">,</span><span class="n">_</span> <span class="k">in</span> <span class="kt">Double</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="p">}</span> <span class="c1">//Converts every number literal, if it can be represented with a Double instance</span>
 <span class="k">let</span> <span class="nv">piConstant</span> <span class="o">=</span> <span class="kt">Literal</span><span class="p">(</span><span class="s">"pi"</span><span class="p">,</span> <span class="nv">convertsTo</span><span class="p">:</span> <span class="kt">Double</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
 
 <span class="k">let</span> <span class="nv">number</span> <span class="o">=</span> <span class="kt">DataType</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">Double</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">literals</span><span class="p">:</span> <span class="p">[</span><span class="n">numberLiteral</span><span class="p">,</span> <span class="n">piConstant</span><span class="p">])</span> <span class="p">{</span> <span class="kt">String</span><span class="p">(</span><span class="nv">describing</span><span class="p">:</span> <span class="nv">$0</span><span class="p">)</span> <span class="p">}</span>
@@ -294,7 +302,7 @@
 <span class="k">let</span> <span class="nv">boolean</span> <span class="o">=</span> <span class="kt">DataType</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">Bool</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">literals</span><span class="p">:</span> <span class="p">[</span><span class="n">trueLiteral</span><span class="p">,</span> <span class="n">falseLiteral</span><span class="p">])</span> <span class="p">{</span> <span class="nv">$0</span> <span class="p">?</span> <span class="s">"true"</span> <span class="p">:</span> <span class="s">"false"</span> <span class="p">}</span>
 </code></pre>
 
-<p>(The last parameter, expressed as a block tells the framework how to formulise this type of data, for example debug messages or other purposes)</p>
+<p>(The last parameter, expressed as a block, tells the framework how to formulise this type of data as a String for debug messages or other purposes)</p>
 
 <p>Now, let&rsquo;s build the operators:</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">multiplication</span> <span class="o">=</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"*"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">))</span> <span class="p">{</span> <span class="n">arguments</span> <span class="k">in</span>

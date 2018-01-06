@@ -23,7 +23,7 @@
         <a class="header-link" href="../index.html">
           Eval Docs
         </a>
-         (0% documented)
+         (97% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -156,6 +156,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -169,7 +177,7 @@
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p>A type of interpreter implementation, that is capable of evaluating arbitrary string expressions to strongly typed variables</p>
 
           </div>
         </section>
@@ -178,6 +186,36 @@
           <div class="section-content">
             <div class="task-group">
               <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16TypedInterpreterC13EvaluatedTypea"></a>
+                    <a name="//apple_ref/swift/Alias/EvaluatedType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16TypedInterpreterC13EvaluatedTypea">EvaluatedType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The result is a strongly typed value or <code>nil</code> (if cannot be properly processed)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">EvaluatedType</span> <span class="o">=</span> <span class="kt">Any</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L27">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -191,7 +229,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The global context used for every evaluation with this instance</p>
 
                       </div>
                       <div class="declaration">
@@ -203,7 +241,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L30">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -221,7 +259,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The interpreter used for evaluating variable values. In case of the <code>TypedInterpreter</code>, it&rsquo;s itself</p>
 
                       </div>
                       <div class="declaration">
@@ -233,7 +271,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L33">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -251,7 +289,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The data types that the expression is capable of recognise</p>
 
                       </div>
                       <div class="declaration">
@@ -263,7 +301,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L36">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -281,7 +319,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The list of functions, that are available during the evaluation to process the recognised data types</p>
 
                       </div>
                       <div class="declaration">
@@ -293,7 +331,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L39">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -311,7 +349,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Each item of the input list (data types, functions and the context) is optional, but strongly recommended to provide them. It&rsquo;s usual that for every data type, there are a few functions provided, so the list can occasionally be pretty long.</p>
 
                       </div>
                       <div class="declaration">
@@ -325,7 +363,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L33-L39">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L42-L48">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -343,7 +381,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The evaluation method, that produces the strongly typed results. In this case only the globally avaliable context can be used</p>
 
                       </div>
                       <div class="declaration">
@@ -355,7 +393,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L41-L43">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L51-L53">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -373,7 +411,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The evaluation method, that produces the strongly typed results. In this case only the context is a result of merging the global context and the one provided in the parameter</p>
 
                       </div>
                       <div class="declaration">
@@ -385,7 +423,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L45-L63">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L56-L74">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -403,7 +441,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>A helper to be able to effectively print any result, coming out of the evaluation. The <code>print</code> method recognises the used data type, and uses its string conversion block</p>
 
                       </div>
                       <div class="declaration">
@@ -415,7 +453,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L65-L72">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L77-L84">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

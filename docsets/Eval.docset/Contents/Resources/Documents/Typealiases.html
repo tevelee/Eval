@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Enumerations  Reference</title>
+    <title>Type Aliases  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset="utf-8">
@@ -15,7 +15,7 @@
   <body>
 
 
-    <a title="Enumerations  Reference"></a>
+    <a title="Type Aliases  Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -49,7 +49,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="index.html">Eval Reference</a>
       <img class="carat" src="img/carat.png" />
-      Enumerations  Reference
+      Type Aliases  Reference
     </p>
 
     <div class="content-wrapper">
@@ -169,8 +169,8 @@
 
         <section class="section">
           <div class="section-content">
-            <h1>Enumerations</h1>
-            <p>The following enumerations are available globally.</p>
+            <h1>Type Aliases</h1>
+            <p>The following type aliases are available globally.</p>
 
           </div>
         </section>
@@ -182,9 +182,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval11MatchResultO"></a>
-                    <a name="//apple_ref/swift/Enum/MatchResult" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval11MatchResultO">MatchResult</a>
+                    <a name="/s:4Eval12MatcherBlocka"></a>
+                    <a name="//apple_ref/swift/Alias/MatcherBlock" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval12MatcherBlocka">MatcherBlock</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -192,20 +192,22 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Whenever a match operation is performed, the result is going to be a <code>MatchResult</code> instance.</p>
+                        <p><code>MatcherBlock</code> is used by <code><a href="Classes/Matcher.html">Matcher</a></code> and <code><a href="Classes/Function.html">Function</a></code> classes, when the matched expression should be processed in a custom way. It should return a strongly typed object after the evaluations.
+The first parameter contains the values of every matched <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code> instance.
+The second parameter is the evaluator. If there is a need to further process the value of the variable, creators of this block are able to use this evaluator, whose value is always the interpreter currently in use
+In its last parameter if provides information about the context, and therefore allows access to read or modify the context variables.</p>
 
-                        <a href="Enums/MatchResult.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">MatchResult</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">MatcherBlock</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">E</span><span class="p">:</span> <span class="kt"><a href="Protocols/Evaluator.html">Evaluator</a></span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">([</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">],</span> <span class="kt">E</span><span class="p">,</span> <span class="kt"><a href="Classes/InterpreterContext.html">InterpreterContext</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/MatchResult.swift#L25-L55">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L28">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

@@ -23,7 +23,7 @@
         <a class="header-link" href="../index.html">
           Eval Docs
         </a>
-         (0% documented)
+         (97% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -156,6 +156,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -169,7 +177,7 @@
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p>The implementation of a <code>DataType</code> uses the <code><a href="../Protocols/DataTypeProtocol.html">DataTypeProtocol</a></code> to convert input to a strongly typed data and print it if needed</p>
 
           </div>
         </section>
@@ -191,7 +199,9 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>In order to be able to effectively bridge the outside world, it needs to provide an already existing Swift or user-defined type. This can be class, struct, enum, or anything else, for example block or function (which is not recommended).
+The literals tell the framework which strings can be represented in the given data type
+The last print block is used to convert the value of any DataType to a string value. It does not need to be unique or always the same for the same input values.</p>
 
                       </div>
                       <div class="declaration">
@@ -205,7 +215,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L85-L91">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L107-L113">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -223,7 +233,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>For the conversion it uses the regitered literals, to be able to process the input and return an existing type</p>
 
                       </div>
                       <div class="declaration">
@@ -235,7 +245,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L93-L95">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L116-L118">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -253,7 +263,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This is a convenience method, for debugging and value printing purposes, which can return a string from the current data type.
+It does not need to be unique or always the same for the same input values.</p>
 
                       </div>
                       <div class="declaration">
@@ -265,7 +276,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L97-L100">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L122-L125">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

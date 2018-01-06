@@ -22,7 +22,7 @@
         <a class="header-link" href="index.html">
           Eval Docs
         </a>
-         (0% documented)
+         (97% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -155,6 +155,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -197,7 +205,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L42-L56">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L53-L69">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -219,7 +227,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code>Keyword</code> instances are used to provide static points in match sequences, so that they can be used as pillars of the expressions the developer tries to match</p>
 
                         <a href="Classes/Keyword.html" class="slightly-smaller">See more</a>
                       </div>
@@ -232,7 +240,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L28-L54">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L32-L67">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -250,7 +258,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>A special subclass of the <code><a href="Classes/Keyword.html">Keyword</a></code> class, which initialises a <code><a href="Classes/Keyword.html">Keyword</a></code> with an opening type. Usually used for opening parentheses: OpenKeyword(<q>[</q>)</p>
 
                         <a href="Classes/OpenKeyword.html" class="slightly-smaller">See more</a>
                       </div>
@@ -263,7 +271,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L56-L60">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L70-L75">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -281,7 +289,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>A special subclass of the <code><a href="Classes/Keyword.html">Keyword</a></code> class, which initialises a <code><a href="Classes/Keyword.html">Keyword</a></code> with an closing type. Usually used for closing parentheses: CloseKeyword(<q>]</q>)</p>
 
                         <a href="Classes/CloseKeyword.html" class="slightly-smaller">See more</a>
                       </div>
@@ -294,7 +302,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L62-L66">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L78-L83">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -312,7 +320,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Generic superclass of <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code>s which are aware of their <code><a href="Protocols/Interpreter.html">Interpreter</a></code> classes, as they use it when mapping their values</p>
 
                         <a href="Classes/GenericVariable.html" class="slightly-smaller">See more</a>
                       </div>
@@ -325,7 +333,69 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L76-L106">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L94-L130">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval8VariableC"></a>
+                    <a name="//apple_ref/swift/Class/Variable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval8VariableC">Variable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Variable</code> represents a named placeholder, so when the matcher recognises a pattern, the values of the variables are passed to them in a block.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Classes/GenericVariable.html">GenericVariable</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt"><a href="Classes/TypedInterpreter.html">TypedInterpreter</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L133-L134">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16TemplateVariableC"></a>
+                    <a name="//apple_ref/swift/Class/TemplateVariable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16TemplateVariableC">TemplateVariable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A special kind of variable, that is used in case of <code><a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a></code>s. It does not convert its content using the <code>interpreterForEvaluatingVariables</code>, but always uses the <code><a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a></code> instance.
+It&rsquo;s perfect for expressions, that have a body, that needs to be further interpreted, such as an if or while statement.</p>
+
+                        <a href="Classes/TemplateVariable.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TemplateVariable</span> <span class="p">:</span> <span class="kt"><a href="Classes/GenericVariable.html">GenericVariable</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L138-L145">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -347,7 +417,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This interpreter is used to evaluate string expressions and return a transformed string, replacing the content where it matches certain patterns.
+Typically used in web applications, where the rendering of an HTML page is provided as a template, and the application replaces certain statements, based on input parameters.</p>
 
                         <a href="Classes/TemplateInterpreter.html" class="slightly-smaller">See more</a>
                       </div>
@@ -360,38 +431,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L24-L66">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval16TemplateVariableC"></a>
-                    <a name="//apple_ref/swift/Class/TemplateVariable" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval16TemplateVariableC">TemplateVariable</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                        <a href="Classes/TemplateVariable.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TemplateVariable</span> <span class="p">:</span> <span class="kt"><a href="Classes/GenericVariable.html">GenericVariable</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a></span><span class="o">&gt;</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L68-L75">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L26-L83">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -413,7 +453,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>A type of interpreter implementation, that is capable of evaluating arbitrary string expressions to strongly typed variables</p>
 
                         <a href="Classes/TypedInterpreter.html" class="slightly-smaller">See more</a>
                       </div>
@@ -426,7 +466,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L24-L73">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L25-L85">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -444,7 +484,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The implementation of a <code>DataType</code> uses the <code><a href="Protocols/DataTypeProtocol.html">DataTypeProtocol</a></code> to convert input to a strongly typed data and print it if needed</p>
 
                         <a href="Classes/DataType.html" class="slightly-smaller">See more</a>
                       </div>
@@ -457,38 +497,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L80-L101">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval8FunctionC"></a>
-                    <a name="//apple_ref/swift/Class/Function" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval8FunctionC">Function</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                        <a href="Classes/Function.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/FunctionProtocol.html">FunctionProtocol</a></span></code></pre>
-
-                        </div>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L107-L122">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L99-L126">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -506,7 +515,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code>Literal</code>s are used by <code><a href="Classes/DataType.html">DataType</a></code>s to be able to recognise static values, that can be expressed as a given type</p>
 
                         <a href="Classes/Literal.html" class="slightly-smaller">See more</a>
                       </div>
@@ -519,7 +528,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L124-L138">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L129-L146">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -527,9 +536,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval8VariableC"></a>
-                    <a name="//apple_ref/swift/Class/Variable" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval8VariableC">Variable</a>
+                    <a name="/s:4Eval8FunctionC"></a>
+                    <a name="//apple_ref/swift/Class/Function" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval8FunctionC">Function</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -537,19 +546,20 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p><code>Function</code>s can process values in given <code><a href="Classes/DataType.html">DataType</a></code>s, allowing the expressions to be feature-rich</p>
 
+                        <a href="Classes/Function.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Classes/GenericVariable.html">GenericVariable</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt"><a href="Classes/TypedInterpreter.html">TypedInterpreter</a></span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Function</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/FunctionProtocol.html">FunctionProtocol</a></span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L140-L141">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L156-L175">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -571,7 +581,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Matchers are the heart of the Eval framework, providing pattern matching capabilities to the library.</p>
 
                         <a href="Classes/Matcher.html" class="slightly-smaller">See more</a>
                       </div>
@@ -584,7 +594,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L26-L177">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L31-L186">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

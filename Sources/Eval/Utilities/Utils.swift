@@ -21,6 +21,7 @@
 
 import Foundation
 
+/// Syntactic sugar for `MatchElement` instances to feel like concatenation, whenever the input requires an array of elements.
 public func +(left: MatchElement, right: MatchElement) -> [MatchElement] {
     return [left, right]
 }

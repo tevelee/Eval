@@ -3,7 +3,7 @@
 [![](https://travis-ci.org/tevelee/Eval.svg?branch=master)](https://travis-ci.org/tevelee/Eval)
 [![](https://img.shields.io/badge/Version-1.0.0-yellow.svg)]()
 [![](https://img.shields.io/badge/Swift-4.0-green.svg)]()
-[![](https://img.shields.io/badge/Documentation-In%20Progress-lightgray.svg)](https://tevelee.github.io/Eval/)
+[![Documentation](https://tevelee.github.io/Eval/badge.svg)](https://tevelee.github.io/Eval)
 [![](https://img.shields.io/badge/Coverage-No%20Data-red.svg)]()
 [![](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE.txt)
 

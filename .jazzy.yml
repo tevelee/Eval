@@ -15,7 +15,6 @@ github_url: https://github.com/tevelee/Eval
 github_file_prefix: https://github.com/tevelee/Eval/tree/master
 
 root_url: https://tevelee.github.io/Eval
-dash_url: https://tevelee.github.io/Eval/docsets/Eval.xml
 
 clean: true
 min_acl: public

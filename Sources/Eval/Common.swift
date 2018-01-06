@@ -21,27 +21,40 @@
 
 import Foundation
 
+/// A protocol which is capable of evaluating a string expressions to a strongly typed object
 public protocol Evaluator {
     associatedtype EvaluatedType
+    
+    /// The only method in `Evaluator` protocol which does the evaluation of a string expression, and returns a strongly typed object
     func evaluate(_ expression: String) -> EvaluatedType
 }
 
+/// A special kind of evaluator which uses an `InterpreterContext` instance to evaluate expressions
+/// The context contains variables which can be used during the evaluation
 public protocol EvaluatorWithContext: Evaluator {
+    /// Evaluates the provided string expression with the help of the context parameter, and returns a strongly typed object
     func evaluate(_ expression: String, context: InterpreterContext) -> EvaluatedType
 }
 
+/// A protocol which stores one `InterpreterContext` instance
 public protocol ContextAware {
+    /// The stored context object for helping evaluation and providing persistency
     var context: InterpreterContext { get }
 }
 
+/// The base protocol of interpreters, that are context aware, and capable of recursively evaluating variables. They use the evaluate method as their main input
 public protocol Interpreter: EvaluatorWithContext, ContextAware {
     associatedtype VariableEvaluator: EvaluatorWithContext
+    /// Sometimes interpreters don't use themselves to evaluate variables by default, maybe a third party, or another contained interpreter. For example, the `TemplateInterpreter` class uses `TypedInterpreter` instance to evaluate its variables.
     var interpreterForEvaluatingVariables: VariableEvaluator { get }
 }
 
+/// The only responsibility of the `InterpreterContext` class is to store variables, and keep them during the execution, where multiple expressions might use the same set of variables.
 public class InterpreterContext {
+    /// The stored variables
     public var variables: [String: Any]
     
+    /// Users of the context may optionally provide an initial set of variables
     public init(variables: [String: Any] = [:]) {
         self.variables = variables
     }

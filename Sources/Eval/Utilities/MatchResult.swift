@@ -21,10 +21,15 @@
 
 import Foundation
 
+/// Whenever a match operation is performed, the result is going to be a `MatchResult` instance.
 public enum MatchResult<T> {
+    /// The input could not be matched
     case noMatch
+    /// The input can possibly match, if it were continuted. (It's the prefix of the matching expression)
     case possibleMatch
+    /// The input matches the expression. It provides information about the `length` of the matched input, the `output` after the evaluation, and the `variables` that were processed during the process.
     case exactMatch(length: Int, output: T, variables: [String: Any])
+    /// In case the matching sequence only consists of one variable, the result is going to be anyMatch
     case anyMatch(shortest: Bool)
     
     func isMatch() -> Bool {

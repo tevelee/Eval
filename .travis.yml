@@ -1,4 +1,7 @@
 osx_image: xcode9.1
 language: swift
 script:
-- swift Scripts/main.swift
+- travis_retry swift Scripts/main.swift --jobs prepareForBuild,build
+- travis_retry swift Scripts/main.swift --jobs runTests
+- travis_retry swift Scripts/main.swift --jobs generateDocs
+- travis_retry swift Scripts/main.swift --jobs publishDocs

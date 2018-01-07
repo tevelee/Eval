@@ -1,9 +1,7 @@
 osx_image: xcode9.1
 language: swift
 sudo: true
+before_script:
+- sh Scripts/git_auth.sh
 script:
-- swift Scripts/main.swift --jobs prepareForBuild,build
-- swift Scripts/main.swift --jobs runTests,runLinter
-- swift Scripts/main.swift --jobs generateDocs
-- swift Scripts/main.swift --jobs publishDocs
-- swift Scripts/main.swift --jobs runCocoaPodsLinter
+- swift Scripts/main.swift

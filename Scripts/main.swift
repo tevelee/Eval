@@ -2,6 +2,8 @@ import Foundation
 
 class Eval {
     static func main() {
+        print("💁🏻‍♂️ Job type: " + TravisCI.jobType().description)
+        
         if isSpecificJob() {
             return
         }
@@ -38,7 +40,7 @@ class Eval {
         guard let jobsString = Shell.nextArg("--jobs") else { return false }
         let jobsToRun = jobsString.split(separator: ",").map({ String($0) })
         let jobsFound = jobs.filter { jobsToRun.contains($0.key) }
-        runCommands(jobsString) {
+        runCommands("Executing jobs: " + jobsString) {
             if let job = jobsToRun.first(where: { !self.jobs.keys.contains($0) }) {
                 throw CIError.logicalError(message: "Job not found: " + job)
             }
@@ -56,13 +58,11 @@ class Eval {
             
             if !TravisCI.isRunningLocally() {
                 print("travis_fold:start:" + title)
-                print("travis_time_start")
             }
             
             try commands()
             
             if !TravisCI.isRunningLocally() {
-                print("travis_time_finish")
                 print("travis_fold:end:" + title)
             }
             
@@ -106,8 +106,8 @@ class Eval {
 
     static func build() throws {
         print("♻️ Building")
-        try Shell.executeAndPrint("swift build", timeout: 30)
-        try Shell.executeAndPrint("xcodebuild clean build -configuration Release -scheme Eval-Package | bundle exec xcpretty --color", timeout: 30)
+        try Shell.executeAndPrint("swift build", timeout: 60)
+        try Shell.executeAndPrint("xcodebuild clean build -configuration Release -scheme Eval-Package | bundle exec xcpretty --color", timeout: 60)
     }
 
     static func runTests() throws {
@@ -142,18 +142,15 @@ class Eval {
             try! Shell.executeAndPrint("rm -rf " + dir)
         }
         
-        if TravisCI.isCIJob() {
-            print("📦 ⏳ Setting up git credentials")
-            try Shell.executeAndPrint("openssl aes-256-cbc -K $encrypted_f50468713ad3_key -iv $encrypted_f50468713ad3_iv -in github_rsa.enc -out " + file + " -d")
-            try Shell.executeAndPrint("chmod 600 " + file)
+//        if TravisCI.isCIJob() {
+//            print("📦 ⏳ Setting up git credentials")
+//            try Shell.executeAndPrint("openssl aes-256-cbc -K $encrypted_f50468713ad3_key -iv $encrypted_f50468713ad3_iv -in github_rsa.enc -out " + file + " -d")
+//            try Shell.executeAndPrint("chmod 600 " + file)
+//            try Shell.executeAndPrint("ssh-add " + file)
 //            try Shell.executeAndPrint("sudo ssh -o StrictHostKeyChecking=no git@github.com || true")
-            if let result = try Shell.bash(commandName: "sudo", arguments: ["ssh", "-o", "StrictHostKeyChecking=no", "git@github.com"], allowFailure: true), let errorOutput = result.error {
-                print(errorOutput)
-            }
-            try Shell.executeAndPrint("ssh-add " + file)
-            try Shell.executeAndPrint("git config --global user.email tevelee@gmail.com")
-            try Shell.executeAndPrint("git config --global user.name 'Travis CI'")
-        }
+//            try Shell.executeAndPrint("git config --global user.email tevelee@gmail.com")
+//            try Shell.executeAndPrint("git config --global user.name 'Travis CI'")
+//        }
 
         if let repo = currentRepositoryUrl()?.replacingOccurrences(of: "https://github.com/", with: "git@github.com:") {
             let branch = "gh-pages"
@@ -179,7 +176,7 @@ class Eval {
     static func runCocoaPodsLinter() throws {
         print("🔮 Validating CocoaPods support")
         let flags = TravisCI.isRunningLocally() ? " --verbose" : ""
-        try Shell.executeAndPrint("pod lib lint" + flags, timeout: 120)
+        try Shell.executeAndPrint("bundle exec pod lib lint" + flags, timeout: 300)
     }
 
     // MARK: Helpers
@@ -202,13 +199,24 @@ class Eval {
 }
 
 class TravisCI {
-    enum JobType {
+    enum JobType : CustomStringConvertible {
         case local
         case travisAPI
         case travisCron
         case travisPushOnBranch(branch: String)
         case travisPushOnTag(name: String)
         case travisPullRequest(branch: String, sha: String, slug: String)
+        
+        var description: String {
+            switch self {
+                case .local: return "Local"
+                case .travisAPI: return "Travis (API)"
+                case .travisCron: return "Travis (Cron job)"
+                case .travisPushOnBranch(let branch): return "Travis (Push on branch '\(branch)')"
+                case .travisPushOnTag(let name): return "Travis (Push of tag '\(name)')"
+                case .travisPullRequest(let branch): return "Travis (Pull Request on branch '\(branch)')"
+            }
+        }
     }
     
     static func isPullRquestJob() -> Bool {

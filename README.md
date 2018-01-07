@@ -66,12 +66,16 @@ You can find various ways of usage in the examples section below.
 - [x] Swift Package Manager support
 - [x] Initial documentation
 - [x] Example project (template engine)
-- [ ] CocoaPods support
-- [ ] CI
-- [ ] Code test-coverage
+- [x] CocoaPods support
+- [x] CI
+- [x] Code test-coverage
 - [ ] Fully detailed documentation
 - [ ] Contribution guides
 - [ ] Further example projects
+
+This is a really early stage of the project, I'm still deep in the process of all the open-sourcing related tasks, such as firing up a CI, creating a beautiful documentation page, managing administrative tasks around stability. 
+
+Please stay tuned for the updates!
 
 ## 📈 Getting started
 
@@ -216,7 +220,7 @@ It ended up quite positively after I discovered the capabilities of a generic so
 
 I was able to create a full-blown template language, completely, using this framework and nothing else. It's almost like a competitor of the one I mentioned ([Twig](https://github.com/twigphp/Twig)). This is the most advanced example of them all!
 
-I created a standard library with all the possible operators you can imagine. With helpers, each operator is a small, one-liner addition. Added the important data types, such as arrays, strings, numbers, booleans, dates, etc., and a few functions, to be more awesome.
+I created a standard library with all the possible operators you can imagine. With helpers, each operator is a small, one-liner addition. Added the important data types, such as arrays, strings, numbers, booleans, dates, etc., and a few functions, to be more awesome. [Take a look for inspiration!](Examples/TemplateExample/Sources/TemplateExample/TemplateExample.swift)
 
 Together, it makes an excellent addition to my model-object generation project, and **REALLY useful for server-side Swift development as well**!
 
@@ -230,7 +234,7 @@ My connected project is an iOS application, using the Spotify [HUB framework](ht
 
 ### [Color parser](tbd)
 
-A color parser is also used by the BFF project I mentioned before. It can parse Swift Color objects from many different styles of strings, such as `#ffddee`, or `red`, or `rgba(1,0.5,0.4,1)`. I included this basic example in the repository as well.
+A color parser is also used by the BFF (Backend For Frontend, not 👭) project I mentioned before. It can parse Swift Color objects from many different styles of strings, such as `#ffddee`, or `red`, or `rgba(1,0.5,0.4,1)`. I included this basic example in the repository as well.
 
 ## 🙋 Contribution
 
@@ -242,15 +246,13 @@ I collected some use cases, and great opportunities for beginner tasks if anybod
 
 ## 👀 Details
 
-This is a really early stage of the project, so I'm still deep in the process of all the open-sourcing tasks, such as firing up a CI, creating a beautiful documentation page, managing administrative tasks around stability.
-
-The upcoming Documentation pages will provide a deep-dive into the subtleties of this framework. Please stay tuned! 
+Please check out [https://tevelee.github.io/Eval](https://tevelee.github.io/Eval) for the more detailed documentation pages!
 
 ## 👤 Author
 
-I am Laszlo Teveli, software engineer, iOS evangelist.
+I am Laszlo Teveli, software engineer, iOS evangelist. In my free time I like to work on my hobby projects and open sourcing them 😉
 
-Feel free to reach out to me anytime via tevelee [at] gmail [dot] com, or @tevelee on Twitter.
+Feel free to reach out to me anytime via `tevelee [at] gmail [dot] com`, or `@tevelee` on Twitter.
 
 ## ⚖️ License
 

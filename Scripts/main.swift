@@ -18,9 +18,16 @@ class Eval {
     static func runPullRequestLane() {
         runCommands("Building Pull Request") {
             try prepareForBuild()
+            try prepareExamplesForBuild()
+            
             try build()
+            try buildExamples()
+            
             try runTests()
+            try runTestsOnExamples()
+            
             try runLinter()
+            
             try runDanger()
         }
     }
@@ -28,20 +35,31 @@ class Eval {
     static func runContinousIntegrationLane() {
         runCommands("Building CI") {
             try prepareForBuild()
+            try prepareExamplesForBuild()
+            
             try build()
+            try buildExamples()
+            
             try runTests()
+            try runTestsOnExamples()
+            
             try runLinter()
+            
             try generateDocs()
             try publishDocs()
+            
             try runCocoaPodsLinter()
+            
             try testCoverage()
+            
+            try runDanger()
         }
     }
     
     static func isSpecificJob() -> Bool {
         guard let jobsString = Shell.nextArg("--jobs") else { return false }
         let jobsToRun = jobsString.split(separator: ",").map({ String($0) })
-        let jobsFound = jobs.filter { jobsToRun.contains($0.key) }
+        let jobsFound = jobsToRun.flatMap { job in jobs.first { $0.key == job } }
         runCommands("Executing jobs: \(jobsString)") {
             if let job = jobsToRun.first(where: { !self.jobs.keys.contains($0) }) {
                 throw CIError.logicalError(message: "Job not found: \(job)")
@@ -88,8 +106,11 @@ class Eval {
     
     static let jobs = [
         "prepareForBuild": prepareForBuild,
+        "prepareExamplesForBuild": prepareExamplesForBuild,
         "build": build,
+        "buildExamples": buildExamples,
         "runTests": runTests,
+        "runTestsOnExamples": runTestsOnExamples,
         "runLinter": runLinter,
         "generateDocs": generateDocs,
         "publishDocs": publishDocs,
@@ -160,7 +181,7 @@ class Eval {
             let branch = "gh-pages"
 
             print("📦 📥 Fetching previous docs")
-            try Shell.executeAndPrint("git clone --depth 1 -b \(branch) \(repo) \(dir)")
+            try Shell.executeAndPrint("git clone --depth 1 -b \(branch) \(repo) \(dir)", timeout: 30)
 
             print("📦 📄 Updating to the new one")
             try Shell.executeAndPrint("cp -Rf Documentation/Output/ \(dir)")
@@ -190,11 +211,48 @@ class Eval {
     }
     
     static func runDanger() throws {
-        print("⚠️ Running Danger")
-        try Shell.executeAndPrint("bundle exec danger || true")
+        if TravisCI.isRunningLocally() {
+            print("⚠️ Running Danger in local mode")
+            try Shell.executeAndPrint("bundle exec danger local || true")
+        } else if TravisCI.isPullRquestJob() {
+            print("⚠️ Running Danger")
+            try Shell.executeAndPrint("bundle exec danger || true")
+        }
+    }
+    
+    static func prepareExamplesForBuild() throws {
+        print("🤖 Generating project file on Examples")
+        try onAllExamples { _ in
+            return "swift package generate-xcodeproj"
+        }
+    }
+    
+    static func buildExamples() throws {
+        print("♻️ Building Examples")
+        try onAllExamples { example in
+            return "xcodebuild clean build -scheme \(example)-Package | bundle exec xcpretty --color"
+        }
     }
 
+    static func runTestsOnExamples() throws {
+        print("👀 Running automated tests on Examples")
+        try onAllExamples { example in
+            return "xcodebuild test -scheme \(example)-Package | bundle exec xcpretty --color"
+        }
+    }
+    
     // MARK: Helpers
+    
+    static func onAllExamples(_ command: (String) throws -> String) throws {
+        for (name, directory) in try examples() {
+            try Shell.executeAndPrint("pushd \(directory) && \(command(name)) && popd", timeout: 60)
+        }
+    }
+    
+    static func examples() throws -> [(name: String, directory: String)] {
+        let directory = "Examples"
+        return try FileManager.default.contentsOfDirectory(atPath: directory).map { ($0, "\(directory)/\($0)") }
+    }
 
     static func currentRepositoryUrl(dir: String = ".") -> String? {
         if let command = try? Shell.execute("git -C \(dir) config --get remote.origin.url"),

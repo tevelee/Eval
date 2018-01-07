@@ -1,11 +1,12 @@
 # { Eval }
 
-[![](https://travis-ci.org/tevelee/Eval.svg?branch=master)](https://travis-ci.org/tevelee/Eval)
-[![](https://img.shields.io/badge/Version-1.0.0-yellow.svg)]()
-[![](https://img.shields.io/badge/Swift-4.0-green.svg)]()
-[![Documentation](https://tevelee.github.io/Eval/badge.svg)](https://tevelee.github.io/Eval)
-[![](https://img.shields.io/badge/Coverage-No%20Data-red.svg)]()
-[![](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE.txt)
+[![Travis CI status](https://travis-ci.org/tevelee/Eval.svg?branch=master)](https://travis-ci.org/tevelee/Eval)
+[![Framework version](https://img.shields.io/badge/Version-1.0.0-yellow.svg)]()
+[![Swift version](https://img.shields.io/badge/Swift-4.0-green.svg)]()
+[![Version](https://img.shields.io/cocoapods/v/Eval.svg?style=flat)](http://cocoapods.org/pods/Eval)
+[![Code Documentation Coverage](https://tevelee.github.io/Eval/badge.svg)](https://tevelee.github.io/Eval)
+[![Code Test Coverage](https://img.shields.io/badge/Coverage-No%20Data-red.svg)]()
+[![Lincese](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE.txt)
 
 - [👨🏻‍💻 About](#-about)
 - [📈 Getting Started](#-getting-started)

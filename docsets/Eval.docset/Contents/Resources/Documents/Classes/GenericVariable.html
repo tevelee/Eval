@@ -183,7 +183,8 @@
 
                 </div>
               </div>
-            <p>Generic superclass of <code><a href="../Classes.html#/s:4Eval8VariableC">Variable</a></code>s which are aware of their <code><a href="../Protocols/Interpreter.html">Interpreter</a></code> classes, as they use it when mapping their values</p>
+            <p>Generic superclass of <code><a href="../Classes.html#/s:4Eval8VariableC">Variable</a></code>s which are aware of their <code><a href="../Protocols/Interpreter.html">Interpreter</a></code> classes,
+as they use it when mapping their values</p>
 
           </div>
         </section>
@@ -205,23 +206,34 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p><code>GenericVariable</code>s have a name (unique identifier), that is used when matching and return them in the matcher.
-<code>shortest</code> provides information whether the match should be exhaustive or just use the shortest possible matching string (even zero characters in some edge cases). This depends on the surrounding <code><a href="../Classes/Keyword.html">Keyword</a></code> instances in the containing collection.
-If <code>interpreted</code> is false, the value of the recognised placeholder will not be processed. In case of true, it will be evaluated, using the <code>interpreterForEvaluatingVariables</code> property of the interpreter isntance
-If <code>interpreted</code> is true, and the result of the evaluation is <code>nil</code>, then acceptsNilValue determines if the current match result should be instant noMatch, or <code>nil</code> is an accepted value, so the matching should be continued
-The final <code>map</code> block is optional. If provided, then the result of the evaluated variable will be ran through this map function, transforming its value. By default the map tries to convert the matched value to the expected type, using the <code>as?</code> operator.</p>
+                        <p><code>GenericVariable</code>s have a name (unique identifier), that is used when matching and return them in the matcher.</p>
+
+<p><code>shortest</code> provides information whether the match should be exhaustive or just use the shortest possible
+ matching string (even zero characters in some edge cases).
+ This depends on the surrounding <code><a href="../Classes/Keyword.html">Keyword</a></code> instances in the containing collection.
+/
+ If <code>interpreted</code> is false, the value of the recognised placeholder will not be processed.
+ In case of true, it will be evaluated, using the <code>interpreterForEvaluatingVariables</code>
+ property of the interpreter instance</p>
+
+<p>If <code>interpreted</code> is true, and the result of the evaluation is <code>nil</code>, then
+ acceptsNilValue determines if the current match result should be instant noMatch,
+ or <code>nil</code> is an accepted value, so the matching should be continued</p>
+
+<p>The final <code>map</code> block is optional. If provided, then the result of the evaluated variable will be ran through
+ this map function, transforming its value. By default the map tries to convert the matched value to the expected type, using the <code>as?</code> operator.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">shortest</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">interpreted</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">acceptsNilValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">map</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Any</span><span class="p">,</span> <span class="kt">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?</span> <span class="o">=</span> <span class="p">{</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="n">_</span><span class="p">)</span> <span class="k">in</span> <span class="n">value</span> <span class="k">as?</span> <span class="kt">T</span> <span class="p">})</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">shortest</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">interpreted</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">acceptsNilValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">map</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Any</span><span class="p">,</span> <span class="kt">E</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?</span> <span class="o">=</span> <span class="p">{</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="k">in</span> <span class="n">value</span> <span class="k">as?</span> <span class="kt">T</span> <span class="p">})</span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L106-L112">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L119-L125">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -251,7 +263,7 @@ The final <code>map</code> block is optional. If provided, then the result of th
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L115-L117">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L128-L130">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -264,7 +276,7 @@ The final <code>map</code> block is optional. If provided, then the result of th
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-06)</p>
+      <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-07)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

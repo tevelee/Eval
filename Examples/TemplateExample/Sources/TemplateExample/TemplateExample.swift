@@ -9,8 +9,9 @@ public class TemplateLanguage: EvaluatorWithContext {
     init(dataTypes: [DataTypeProtocol] = StandardLibrary.dataTypes,
          functions: [FunctionProtocol] = StandardLibrary.functions,
          templates: [Matcher<String, TemplateInterpreter>] = TemplateLibrary.templates) {
-        let interpreter = TypedInterpreter(dataTypes: dataTypes, functions: functions, context: InterpreterContext())
-        language = TemplateInterpreter(statements: templates, interpreter: interpreter, context: InterpreterContext())
+        let context = InterpreterContext()
+        let interpreter = TypedInterpreter(dataTypes: dataTypes, functions: functions, context: context)
+        language = TemplateInterpreter(statements: templates, interpreter: interpreter, context: context)
     }
     
     public func evaluate(_ expression: String) -> String {
@@ -30,8 +31,8 @@ public class TemplateLibrary {
             TemplateLibrary.ifStatement,
             TemplateLibrary.printStatement,
             TemplateLibrary.forInStatement,
-            TemplateLibrary.setStatement,
             TemplateLibrary.setUsingBodyStatement,
+            TemplateLibrary.setStatement,
         ]
     }
     
@@ -82,17 +83,17 @@ public class TemplateLibrary {
     }
     
     public static var setStatement: Matcher<String, TemplateInterpreter> {
-        return Matcher([Keyword(tagPrefix + " set"), Variable<String>("variable", interpreted: false), Keyword(tagSuffix), TemplateVariable("body"), Keyword(tagPrefix + " endset " + tagSuffix)]) { variables, interpreter, context in
+        return Matcher([Keyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword(tagSuffix), TemplateVariable("body"), Keyword(tagPrefix + " endset " + tagSuffix)]) { variables, interpreter, context in
             guard let variableName = variables["variable"] as? String, let body = variables["body"] as? String else { return nil }
-            context.variables[variableName] = body
+            interpreter.context.variables[variableName] = body
             return nil
         }
     }
     
     public static var setUsingBodyStatement: Matcher<String, TemplateInterpreter> {
-        return Matcher([Keyword(tagPrefix + " set"), Variable<String>("variable", interpreted: false), Keyword("="), Variable<Any>("value"), Keyword(tagSuffix)]) { variables, interpreter, context in
+        return Matcher([Keyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword("="), Variable<Any>("value"), Keyword(tagSuffix)]) { variables, interpreter, context in
             guard let variableName = variables["variable"] as? String else { return nil }
-            context.variables[variableName] = variables["value"]
+            interpreter.context.variables[variableName] = variables["value"]
             return nil
         }
     }

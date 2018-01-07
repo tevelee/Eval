@@ -42,7 +42,7 @@ public class Matcher<T, E: Interpreter> {
         var elements = elements
         if let last = elements.last as? GenericVariable<E.EvaluatedType, E> {
             elements.removeLast()
-            elements.append(GenericVariable(last.name, shortest: false, map: last.map))
+            elements.append(GenericVariable(last.name, shortest: false, interpreted: last.interpreted, acceptsNilValue: last.acceptsNilValue, map: last.map))
         }
         self.elements = elements
     }

@@ -75,7 +75,7 @@ public class Matcher<T, E: Interpreter> {
         }
         func registerAndValidateVariable() -> Bool {
             if let variable = currentlyActiveVariable {
-                variables[variable.metadata.name] = finaliseVariable(variable, interpreter: interpreter)
+                variables[variable.metadata.name] = finaliseVariable(variable, interpreter: interpreter, context: context)
                 return !variable.metadata.acceptsNilValue && variables[variable.metadata.name] != nil
             }
             return false
@@ -136,11 +136,11 @@ public class Matcher<T, E: Interpreter> {
         }
     }
 
-    func finaliseVariable(_ variable: (metadata: VariableProtocol, value: String), interpreter: E) -> Any? {
+    func finaliseVariable(_ variable: (metadata: VariableProtocol, value: String), interpreter: E, context: InterpreterContext) -> Any? {
         let value = variable.value.trim()
         if variable.metadata.interpreted {
             let variableInterpreter = interpreter.interpreterForEvaluatingVariables
-            let output = variableInterpreter.evaluate(value)
+            let output = variableInterpreter.evaluate(value, context: context)
             return variable.metadata.performMap(input: output, interpreter: variableInterpreter)
         }
         return variable.metadata.performMap(input: value, interpreter: interpreter)

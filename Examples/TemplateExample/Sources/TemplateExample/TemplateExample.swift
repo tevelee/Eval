@@ -17,7 +17,7 @@ public class TemplateLanguage: EvaluatorWithContext {
         return language.evaluate(expression)
     }
     
-    public func evaluate(_ expression: String, context: InterpreterContext? = nil) -> String {
+    public func evaluate(_ expression: String, context: InterpreterContext) -> String {
         return language.evaluate(expression, context: context)
     }
 }
@@ -353,7 +353,7 @@ public class StandardLibrary {
     public static func function<T>(_ name: String, body: @escaping ([Any]) -> T?) -> Function<T> {
         return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", shortest: true, interpreted: false), CloseKeyword(")")]) { variables, interpreter, _ in
             guard let arguments = variables["arguments"] as? String else { return nil }
-            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trim()) }
+            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
             return body(interpretedArguments)
         }
     }
@@ -363,7 +363,7 @@ public class StandardLibrary {
             guard let arguments = variables["arguments"] as? String else { return nil }
             var interpretedArguments: [String: Any] = [:]
             for argument in arguments.split(separator: ",") {
-                let parts = String(argument).trim().split(separator: "=")
+                let parts = String(argument).trimmingCharacters(in: .whitespacesAndNewlines).split(separator: "=")
                 if let key = parts.first, let value = parts.last {
                     interpretedArguments[String(key)] = interpreter.evaluate(String(value))
                 }
@@ -388,7 +388,7 @@ public class StandardLibrary {
             return value
         }, Keyword("("), Variable<String>("arguments", interpreted: false), Keyword(")")]) { variables, interpreter, _ in
             guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
-            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trim()) }
+            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
             return body(object, interpretedArguments)
         }
     }
@@ -401,7 +401,7 @@ public class StandardLibrary {
             guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
             var interpretedArguments: [String: Any] = [:]
             for argument in arguments.split(separator: ",") {
-                let parts = String(argument).trim().split(separator: "=")
+                let parts = String(argument).trimmingCharacters(in: .whitespacesAndNewlines).split(separator: "=")
                 if let key = parts.first, let value = parts.last {
                     interpretedArguments[String(key)] = interpreter.evaluate(String(value))
                 }

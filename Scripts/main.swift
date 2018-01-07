@@ -2,7 +2,7 @@ import Foundation
 
 class Eval {
     static func main() {
-        print("💁🏻‍♂️ Job type: " + TravisCI.jobType().description)
+        print("💁🏻‍♂️ Job type: \(TravisCI.jobType().description)")
         
         if isSpecificJob() {
             return
@@ -33,6 +33,7 @@ class Eval {
             try generateDocs()
             try publishDocs()
             try runCocoaPodsLinter()
+            try testCoverage()
         }
     }
     
@@ -40,12 +41,12 @@ class Eval {
         guard let jobsString = Shell.nextArg("--jobs") else { return false }
         let jobsToRun = jobsString.split(separator: ",").map({ String($0) })
         let jobsFound = jobs.filter { jobsToRun.contains($0.key) }
-        runCommands("Executing jobs: " + jobsString) {
+        runCommands("Executing jobs: \(jobsString)") {
             if let job = jobsToRun.first(where: { !self.jobs.keys.contains($0) }) {
-                throw CIError.logicalError(message: "Job not found: " + job)
+                throw CIError.logicalError(message: "Job not found: \(job)")
             }
             try jobsFound.forEach {
-                print("🏃🏻 Running job " + $0.key)
+                print("🏃🏻 Running job \($0.key)")
                 try $0.value()
             }
         }
@@ -54,16 +55,16 @@ class Eval {
     
     static func runCommands(_ title: String, commands: () throws -> Void) {
         do {
-            print("ℹ️ " + title)
+            print("ℹ️ \(title)")
             
             if !TravisCI.isRunningLocally() {
-                print("travis_fold:start:" + title)
+                print("travis_fold:start: \(title)")
             }
             
             try commands()
             
             if !TravisCI.isRunningLocally() {
-                print("travis_fold:end:" + title)
+                print("travis_fold:end: \(title)")
             }
             
             print("🎉 Finished successfully")
@@ -92,6 +93,7 @@ class Eval {
         "generateDocs": generateDocs,
         "publishDocs": publishDocs,
         "runCocoaPodsLinter": runCocoaPodsLinter,
+        "testCoverage": testCoverage,
     ]
 
     static func prepareForBuild() throws {
@@ -113,7 +115,7 @@ class Eval {
     static func runTests() throws {
         print("👀 Running automated tests")
         try Shell.executeAndPrint("swift test", timeout: 60)
-        try Shell.executeAndPrint("xcodebuild test -configuration Release -scheme Eval-Package | bundle exec xcpretty --color", timeout: 60)
+        try Shell.executeAndPrint("xcodebuild test -configuration Release -scheme Eval-Package -enableCodeCoverage YES | bundle exec xcpretty --color", timeout: 60)
     }
     
     static func runLinter() throws {
@@ -133,20 +135,20 @@ class Eval {
         let file = "github_rsa"
         defer {
             print("📦 ✨ Cleaning up")
-            try! Shell.executeAndPrint("rm -f " + file)
-            try! Shell.executeAndPrint("rm -rf " + dir)
+            try! Shell.executeAndPrint("rm -f \(file)")
+            try! Shell.executeAndPrint("rm -rf \(dir)")
         }
         
         if TravisCI.isRunningLocally() {
             print("📦 ✨ Preparing")
-            try! Shell.executeAndPrint("rm -rf " + dir)
+            try! Shell.executeAndPrint("rm -rf \(dir)")
         }
         
 //        if TravisCI.isCIJob() {
 //            print("📦 ⏳ Setting up git credentials")
-//            try Shell.executeAndPrint("openssl aes-256-cbc -K $encrypted_f50468713ad3_key -iv $encrypted_f50468713ad3_iv -in github_rsa.enc -out " + file + " -d")
-//            try Shell.executeAndPrint("chmod 600 " + file)
-//            try Shell.executeAndPrint("ssh-add " + file)
+//            try Shell.executeAndPrint("openssl aes-256-cbc -K $encrypted_f50468713ad3_key -iv $encrypted_f50468713ad3_iv -in github_rsa.enc -out \(file) -d")
+//            try Shell.executeAndPrint("chmod 600 \(file)")
+//            try Shell.executeAndPrint("ssh-add \(file)")
 //            try Shell.executeAndPrint("sudo ssh -o StrictHostKeyChecking=no git@github.com || true")
 //            try Shell.executeAndPrint("git config --global user.email tevelee@gmail.com")
 //            try Shell.executeAndPrint("git config --global user.name 'Travis CI'")
@@ -156,18 +158,19 @@ class Eval {
             let branch = "gh-pages"
 
             print("📦 📥 Fetching previous docs")
-            try Shell.executeAndPrint("git clone --depth 1 -b " + branch + " " + repo + " " + dir)
+            try Shell.executeAndPrint("git clone --depth 1 -b \(branch) \(repo) \(dir)")
 
             print("📦 📄 Updating to the new one")
-            try Shell.executeAndPrint("cp -Rf Documentation/Output/ " + dir)
+            try Shell.executeAndPrint("cp -Rf Documentation/Output/ \(dir)")
 
             print("📦 👉 Committing")
-            try Shell.executeAndPrint("git -C " + dir + " add .")
-            try Shell.executeAndPrint("git -C " + dir + " commit -m 'Automatic documentation update'")
-            try Shell.executeAndPrint("git -C " + dir + " add .")
+            try Shell.executeAndPrint("git -C \(dir) add .")
+            try Shell.executeAndPrint("git -C \(dir) commit -m 'Automatic documentation update'")
+            try Shell.executeAndPrint("git -C \(dir) add .")
 
             print("📦 📤 Pushing")
-            try Shell.executeAndPrint("git -C " + dir + " push origin " + branch, timeout: 30)
+            let remote = "origin"
+            try Shell.executeAndPrint("git -C \(dir) push \(remote) \(branch)", timeout: 30)
         } else {
             throw CIError.logicalError(message: "Repository URL not found")
         }
@@ -175,14 +178,19 @@ class Eval {
     
     static func runCocoaPodsLinter() throws {
         print("🔮 Validating CocoaPods support")
-        let flags = TravisCI.isRunningLocally() ? " --verbose" : ""
-        try Shell.executeAndPrint("bundle exec pod lib lint" + flags, timeout: 300)
+        let flags = TravisCI.isRunningLocally() ? "--verbose" : ""
+        try Shell.executeAndPrint("bundle exec pod lib lint \(flags)", timeout: 300)
+    }
+    
+    static func testCoverage() throws {
+        print("☝🏻 Uploading code test coverage data")
+        try Shell.executeAndPrint("bash <(curl -s https://codecov.io/bash) -J Eval", timeout: 120)
     }
 
     // MARK: Helpers
 
     static func currentRepositoryUrl(dir: String = ".") -> String? {
-        if let command = try? Shell.execute("git -C " + dir + " config --get remote.origin.url"),
+        if let command = try? Shell.execute("git -C \(dir) config --get remote.origin.url"),
             let output = command?.output?.trimmingCharacters(in: .whitespacesAndNewlines), !output.isEmpty {
             return output
         }
@@ -190,7 +198,7 @@ class Eval {
     }
 
     static func currentBranch(dir: String = ".") -> String? {
-        if let command = try? Shell.execute("git -C " + dir + " rev-parse --abbrev-ref HEAD"),
+        if let command = try? Shell.execute("git -C \(dir) rev-parse --abbrev-ref HEAD"),
             let output = command?.output?.trimmingCharacters(in: .whitespacesAndNewlines), !output.isEmpty {
             return output
         }
@@ -258,7 +266,7 @@ enum CIError : Error {
 
 class Shell {
     static func executeAndPrint(_ command: String, timeout: Double = 10, allowFailure: Bool = false) throws {
-        print("$ " + command)
+        print("$ \(command)")
         let output = try executeShell(commandPath: "/bin/bash" , arguments:["-c", command], timeout: timeout, allowFailure: allowFailure) {
             print($0, separator: "", terminator: "")
         }

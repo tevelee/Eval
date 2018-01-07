@@ -1,0 +1,16 @@
+coverage:
+  ignore:
+  - Applications/Xcode.app/.*
+  - build/.*
+  - .build/.*
+  - Documentation/.*
+  - Example/Pods/.*
+  - Scripts/.*
+  - vendor/.*
+  precision: 2
+  round: down
+  range: "80...100"
+  status:
+    patch: yes
+    project: yes
+    changes: no

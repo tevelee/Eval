@@ -5,3 +5,4 @@ before_script:
 - sh Scripts/git_auth.sh
 script:
 - swift Scripts/main.swift
+- sleep 3

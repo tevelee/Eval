@@ -5,7 +5,7 @@
 [![Swift version](https://img.shields.io/badge/Swift-4.0-green.svg)]()
 [![Version](https://img.shields.io/cocoapods/v/Eval.svg?style=flat)](http://cocoapods.org/pods/Eval)
 [![Code Documentation Coverage](https://tevelee.github.io/Eval/badge.svg)](https://tevelee.github.io/Eval)
-[![Code Test Coverage](https://img.shields.io/badge/Coverage-No%20Data-red.svg)]()
+[![Code Test Coverage](https://codecov.io/gh/tevelee/Eval/branch/master/graph/badge.svg)](https://codecov.io/gh/tevelee/Eval)
 [![Lincese](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE.txt)
 
 - [👨🏻‍💻 About](#-about)

@@ -59,7 +59,10 @@
             <a class="nav-group-name-link" href="Guides.html">Guides</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="interpreter-details.html">Interpreter Details</a>
+                <a class="nav-group-task-link" href="example-projects.html">Example projects</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="interpreter-engine-details.html">Interpreter engine details</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="strongly-typed-evaluator.html">Strongly-typed evaluator</a>
@@ -176,7 +179,161 @@
         <section class="section">
           <div class="section-content">
             
-            <p>TBD</p>
+            <h1 id='strongly-typed-evaluator' class='heading'>Strongly typed evaluator</h1>
+
+<p>This kind of evaluator interprets its input as one function. It searches for the one with the highest precedence and works its way down from that. 
+Ocassionally, more functions are present in the same expression. In this case, it goes recursively, all the way down to the most basic elements: variables or literals, which are trivial to evaluate.</p>
+<h2 id='creation' class='heading'>Creation</h2>
+
+<p>The way to create typed interpreters is the following:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">interpreter</span> <span class="o">=</span> <span class="kt">TypedInterpreter</span><span class="p">(</span><span class="nv">dataTypes</span><span class="p">:</span> <span class="p">[</span><span class="n">number</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">boolean</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">date</span><span class="p">],</span>
+                                   <span class="nv">functions</span><span class="p">:</span> <span class="p">[</span><span class="n">concat</span><span class="p">,</span> <span class="n">add</span><span class="p">,</span> <span class="n">multiply</span><span class="p">,</span> <span class="n">substract</span><span class="p">,</span> <span class="n">divide</span><span class="p">],</span>
+                                   <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"example"</span><span class="p">:</span> <span class="mi">1</span><span class="p">]))</span>
+</code></pre>
+
+<p>First, you&rsquo;ll need the data types you are going to work with. These are a smaller subsets of the build in Swift data types, you can map them to existing types (Swift types of the ones of your own)</p>
+
+<p>The second parameter are the functions you can apply on the above listed data types. All the functions - regardless of the grouping of the data types - should be listed here.
+Typically, in case of numbers, these are numeric operators. In case of string, these can be concatenation, getters, slicing, etc.
+Or, these can be complex things, such as parentheses, data factories, or high level functional operations, such as filter, map or reduce.</p>
+
+<p>And lastly, an optional context object, if you have any global variables.</p>
+
+<p>Variables in the context can be expression specific, or global that apply to every evaluation session. </p>
+<h2 id='data-types' class='heading'>Data types</h2>
+
+<p>Data types map the outside world to the inside of the expression. They map existing types to inner data types. </p>
+
+<p>They don&rsquo;t restrict any behaviour, so these types can either be built-in Swift types, such as String, Array, Date; or they can be your custom classes, srtucts, or enums.</p>
+
+<p>Let&rsquo;s see it in action:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">number</span> <span class="o">=</span> <span class="kt">DataType</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">Double</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">literals</span><span class="p">:</span> <span class="p">[</span><span class="n">numberLiteral</span><span class="p">,</span> <span class="n">piConstant</span><span class="p">])</span> <span class="p">{</span> <span class="kt">String</span><span class="p">(</span><span class="nv">describing</span><span class="p">:</span> <span class="nv">$0</span><span class="p">)</span> <span class="p">}</span>
+</code></pre>
+
+<p>If has a type, that is the existing type of the sorrounding program. The literals, which can tell the framework whether a given string can be converted to a given type. </p>
+
+<p>Typical example is the <code>String</code> literal, which encloses something between quotes: <code>&#39;like this&#39;</code>. The can also be constants, for example <code>pi</code> for numbers of <code>true</code> for booleans.</p>
+
+<p>The last parameter is a <code>print</code> closure. It tells the framework how to render the given type when needed. Typically used while debugging, or when templates use the <code>print</code> statement.</p>
+
+<p>In summary: literals provide the input, print provides the output of a mapped type.</p>
+<h3 id='literals' class='heading'>Literals</h3>
+
+<p>Let&rsquo;s check out some literals a bit more deeply. </p>
+
+<p>The block used for literals have two parameters: the input string, and an interpreter.
+Most of the times, only the input is enough to recognise things, like numbers:</p>
+<pre class="highlight swift"><code><span class="kt">Literal</span> <span class="p">{</span> <span class="n">value</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span> <span class="kt">Double</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="p">}</span>
+</code></pre>
+
+<p>Arrays, on the other hand, should process their content (Comma <code>,</code> separated values between brackets <code>[</code> <code>]</code>). For this, the second parameter, the interpreter can be used.</p>
+<h4 id='constants' class='heading'>Constants</h4>
+
+<p>Literals are the perfect place to recognise constants, such as:</p>
+<pre class="highlight swift"><code><span class="kt">Literal</span><span class="p">(</span><span class="s">"pi"</span><span class="p">,</span> <span class="nv">convertsTo</span><span class="p">:</span> <span class="kt">Double</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+</code></pre>
+
+<p>or</p>
+<pre class="highlight swift"><code><span class="p">[</span><span class="kt">Literal</span><span class="p">(</span><span class="s">"false"</span><span class="p">,</span> <span class="nv">convertsTo</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
+</code></pre>
+
+<p>Of course, there are multiple ways to represent them (for example, as a single keyword function pattern), but this seems like a place where they can be most closely connected to their type.</p>
+
+<p>The <code>convertsTo</code> parameter of <code><a href="Classes/Literal.html">Literal</a></code>s are <code>autoclosure</code> parameters, which means, that they are going to be processed lazily.</p>
+<pre class="highlight swift"><code><span class="kt">Literal</span><span class="p">(</span><span class="s">"now"</span><span class="p">,</span> <span class="nv">convertsTo</span><span class="p">:</span> <span class="kt">Date</span><span class="p">())</span>
+</code></pre>
+
+<p>The <code>now</code> string is going to be expressed as the current timestamp at the time of the evaluation, not the time of the initialisation.</p>
+<h2 id='functions' class='heading'>Functions</h2>
+
+<p>Similarly to templates, typed interpreters use the same building blocks to build up their patterns: <code><a href="Classes/Keyword.html">Keyword</a></code>s and <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code>s.</p>
+<h3 id='keywords' class='heading'>Keywords</h3>
+
+<p><code><a href="Classes/Keyword.html">Keyword</a></code>s are the most basic elements of a pattern; they represent simple, static <code>String</code>s. You can chain them, for example <code>Keyword(&quot;&lt;&quot;) + Keyword(&quot;br/&quot;) + Keyword(&gt;}&quot;)</code>, or simply merge them <code>Keyword(&quot;&lt;br/&gt;&quot;)</code>. Logically, these two are the same, but the former accepts any number of whitespaces between the tags, while the latter allows none, as it is a strict match. </p>
+
+<p>Most of the time though, you are going to need to handle placeholders, varying number of elements. That&rsquo;s where <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code>s come into place.</p>
+<h3 id='variables' class='heading'>Variables</h3>
+
+<p>Let&rsquo;s check out the following, really straightforward pattern:</p>
+<pre class="highlight swift"><code><span class="kt">Function</span><span class="p">(</span><span class="kt">Keyword</span><span class="p">(</span><span class="s">"("</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"body"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">")"</span><span class="p">))</span> <span class="p">{</span> <span class="n">variables</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span>
+    <span class="k">return</span> <span class="n">variables</span><span class="p">[</span><span class="s">"body"</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Something between two enclosing parentheses <code>(</code>, <code>)</code>. The middle tag is a <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code>, which means that its value is going to be passed through in the block, using its name. Let&rsquo;s imagine the following input: <code>(5)</code>. Here, the <code>variables</code> dictionary is going to have <code>5</code> under the key <code>body</code>.</p>
+<h4 id='generics' class='heading'>Generics</h4>
+
+<p>Since its value is going to be processed, there is a generic sign as well, signalling that this current <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code> accepts <code>Any</code> kind of data, no transfer is needed. Let&rsquo;s imagine if we wrote <code><a href="Classes.html#/s:4Eval8VariableC">Variable&lt;String&gt;</a></code> instead. In this case, <code>5</code> would not match to the pattern, it would be intact. But, for example, <code>(&#39;Hello&#39;)</code> would do.</p>
+
+<p>Let check out a <code>+</code> operator. This could equally mean addition for numeric types</p>
+<pre class="highlight swift"><code><span class="kt">Function</span><span class="p">(</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"+"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">))</span> <span class="p">{</span> <span class="n">arguments</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">lhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"lhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span><span class="p">,</span> <span class="k">let</span> <span class="nv">rhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"rhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Double</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="n">lhs</span> <span class="o">+</span> <span class="n">rhs</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>or concatenation for strings</p>
+<pre class="highlight swift"><code><span class="kt">Function</span><span class="p">(</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"+"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">))</span> <span class="p">{</span> <span class="n">arguments</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">lhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"lhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">String</span><span class="p">,</span> <span class="k">let</span> <span class="nv">rhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"rhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">String</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="n">lhs</span> <span class="o">+</span> <span class="n">rhs</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Since the interpreter is strongly typed, always the appropriate one is going to be selected by the framework.</p>
+<h4 id='evaluation' class='heading'>Evaluation</h4>
+
+<p>Variables also have optional properties, such as <code>interpreted</code>, <code>shortest</code>, or <code>acceptsNilValue</code>. They might also have a <code>map</code> block, which by default is <code>nil</code>.</p>
+
+<ul>
+<li><code>interpreted</code> tells the framework, that its value should be evaluated. This is true, by default. But, the option exists to modify this to false. In that case, <code>(2 + 3)</code> would not generate the number <code>5</code> under the <code>body</code> key, but <code>2 + 3</code> as a <code>String</code>.</li>
+<li><code>shortest</code> signals the <q>strength</q> of the matching operation. By default it&rsquo;s false, we need the most possible characters. The only scenario where this could get tricky is if the last element of a pattern is a <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code>. In that case, the preferred setting is <code>false</code>, so we need the largest possible match!
+Let&rsquo;s find out why! A general addition operator (which looks like this <code>Variable&lt;Double&gt;(&quot;lhs&quot;) + Keyword(&quot;+&quot;) + Variable&lt;Double&gt;(&quot;rhs&quot;)</code>) would recognise the pattern <code>12 + 34</code>, but it also matches to <code>12 + 3</code>. What&rsquo;s what shortest means, the shortest match, in this case, is <code>12 + 3</code>, which - semantically - is an incorrect match. 
+But don&rsquo;t worry, the framework already knows about this, so it sets the right value for your variables, even in the last place!</li>
+<li><code>acceptsNilValue</code> informs the framework if <code>nil</code> should be accepted by the pattern. For example, <code>1 + &#39;5&#39;</code> with the previous example (<code>Double + Double</code>) would not match. But, if the <code>acceptsNilValue</code> is defined, then the block would trigger, with <code>{&#39;lhs&#39;: 1, &#39;rhs&#39;: nil}</code>, so you can decide by your own logic what to do in this case.</li>
+<li>Finally, the <code>map</code> block can be used to further transform the value of your <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code> before calling the block on the <code><a href="Classes/Matcher.html">Matcher</a></code>. Since map is a trailing closure, it&rsquo;s quite easy to add. For example, <code>Variable&lt;Int&gt;(&quot;example&quot;) { Double($0) }</code> would recognise only <code>Int</code> values, but would transform them to <code>Double</code> instances when providing them in the <code>variables</code> dictionary. This map can also return <code>nil</code> values but depends on your logic if you want to accept them or not. Side note: the previous map generates a <code><a href="Classes.html#/s:4Eval8VariableC">Variable&lt;Double&gt;</a></code> kind of variable instance.</li>
+</ul>
+<h3 id='specialised-elements' class='heading'>Specialised elements</h3>
+<h4 id='open-amp-close-keyword' class='heading'>Open &amp; Close Keyword</h4>
+
+<p>Parentheses are quite common in expressions. They are often embedded in each other. Embedding is a nasty problem of interpreters, as <code>(a * (b + c))</code> would logically be evaluated with <code>(b + c)</code> first, and the rest afterwards. </p>
+
+<p>But, an algorithm, by default, would interpret things linearly, disregarding the semantics: <code>(a * (b + c))</code> would be the match for the first if statement, with a totally invalid <code>a * (b + c</code> data, until the first match.</p>
+
+<p>This, of course, needs to be solved, but it&rsquo;s not that easy as it first looks! Some edge cases would not work unless we somehow try to connect them together. For this reason, I added two special elements: <code><a href="Classes/OpenKeyword.html">OpenKeyword</a></code> and <code><a href="Classes/CloseKeyword.html">CloseKeyword</a></code>. These work exactly the same way as normal <code><a href="Classes/Keyword.html">Keyword</a></code>s do, but add a bit more semantics to the framework: these two should be connected together, and therefore embedding them should not be a problem as they come in pairs. </p>
+
+<p>The previous parentheses statement should - correctly - look like this:</p>
+<pre class="highlight swift"><code><span class="kt">Function</span><span class="p">(</span><span class="kt">OpenVariable</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"+"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">CloseVariable</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">))</span> <span class="p">{</span> <span class="n">arguments</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">lhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"lhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">String</span><span class="p">,</span> <span class="k">let</span> <span class="nv">rhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"rhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">String</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="n">lhs</span> <span class="o">+</span> <span class="n">rhs</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>By using the <code><a href="Classes/OpenKeyword.html">OpenKeyword</a></code> and <code><a href="Classes/CloseKeyword.html">CloseKeyword</a></code> types, these become connected, so embedding parentheses in an expression shouldn&rsquo;t be a problem. 
+After this match is defined, they can be embedded in each other as deeply as needed.</p>
+<h4 id='multiple-matchers-in-one-function' class='heading'>Multiple Matchers in one Function</h4>
+
+<p>This is a rarely used pattern, but <code><a href="Classes/Function.html">Function</a></code>s consists of an array of <code><a href="Classes/Matcher.html">Matcher</a></code> elements. 
+Usually, one <code><a href="Classes/Function.html">Function</a></code> does only one operation. Unless this is true, grouping multiple <code><a href="Classes/Matcher.html">Matcher</a></code>s into one <code><a href="Classes/Function.html">Function</a></code> allows semantical grouping of opeartors. </p>
+
+<p>For example a Boolean negation can be expressed in multiple ways: <code>not(true)</code> or <code>!true</code>. In this case, semantically both expressions do the same thing, therefore it might be a good practice to use one <code><a href="Classes/Function.html">Function</a></code> with two <code><a href="Classes/Matcher.html">Matcher</a></code>s for this. </p>
+<h2 id='context' class='heading'>Context</h2>
+
+<p>You can also pass contextual values, which - for now - equal to variables.</p>
+<pre class="highlight swift"><code><span class="n">expression</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"1 + var"</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"var"</span><span class="p">:</span> <span class="mi">2</span><span class="p">]))</span>
+</code></pre>
+
+<p>The reason that the variables are encapsulated in a context is that context is a class, while variables are mutable <code>var</code> struct properties on that object. With this construction the context reference can be passed around to multiple interpreter instances, but keeps the copy-on-write (🐮) behaviour of the modification.</p>
+
+<p>Context defined during the initialisation apply to every evaluation performed with the given interpreter, while the ones passed to the <code>evaluate</code> method only apply to that specific  expression instance.</p>
+
+<p>If some patterns modify the context, they have the option to modify the general context (for long term settings, such as <code>value++</code>), or the local one (for example, the interation variable of a <code>for</code> loop).</p>
+<h3 id='order-of-statements-define-precedence' class='heading'>Order of statements define precedence</h3>
+
+<p>The earlier a pattern is represent in the array of <code>functions</code>, the higher precedence it gets. 
+Practically, if there is an addition function and a multiplication one, the multiplication should be defined earlier (as it has higher precedence), because both are going to match the following expression:
+<code>1 * 2 + 3</code>, but if addition goes first, then the evaluation would process <code>1 * 2</code> on <code>lhs</code> and <code>3</code> on <code>rhs</code>, which - of course - is incorrect.  </p>
+
+<p>Typically, parentheses and higher precedence operators should go earlier in the array.</p>
 
           </div>
         </section>

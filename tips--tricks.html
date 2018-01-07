@@ -59,7 +59,10 @@
             <a class="nav-group-name-link" href="Guides.html">Guides</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="interpreter-details.html">Interpreter Details</a>
+                <a class="nav-group-task-link" href="example-projects.html">Example projects</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="interpreter-engine-details.html">Interpreter engine details</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="strongly-typed-evaluator.html">Strongly-typed evaluator</a>
@@ -176,7 +179,112 @@
         <section class="section">
           <div class="section-content">
             
-            <p>TBD</p>
+            <h1 id='tips-amp-tricks' class='heading'>Tips &amp; Tricks</h1>
+<h2 id='use-any-for-generics-code-variable-lt-any-gt-code' class='heading'>Use Any for generics: <code><a href="Classes.html#/s:4Eval8VariableC">Variable&lt;Any&gt;</a></code></h2>
+
+<p>If you are not sure about the allowed input type of your expressions, or you just want to defer that decision until your match is ran and your hit the block in the matcher, feel free to use <code>Variable&lt;Any&gt;(&quot;name&quot;)</code> in your patterns.</p>
+
+<p>It makes life a lot easier, than definig functions for each type.</p>
+<h2 id='use-map-on-variables' class='heading'>Use map on Variables</h2>
+
+<p>Before processing Variable values, there is an option to pre-filter or modify them before it hits the match block. </p>
+
+<p>Examples include data type conversion and other types of validation.</p>
+<h2 id='use-helper-functions-to-define-operators' class='heading'>Use helper functions to define operators</h2>
+
+<p>It&rsquo;s a lot readable to define operators in a one-liner expression, rather than using long patterns:</p>
+<pre class="highlight swift"><code><span class="nf">infixOperator</span><span class="p">(</span><span class="s">"+"</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">in</span> <span class="n">lhs</span> <span class="o">+</span> <span class="n">rhs</span> <span class="p">}</span>
+</code></pre>
+<pre class="highlight swift"><code><span class="nf">suffixOperator</span><span class="p">(</span><span class="s">"is odd"</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="kt">Double</span><span class="p">)</span> <span class="k">in</span> <span class="kt">Int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">}</span>
+</code></pre>
+<pre class="highlight swift"><code><span class="nf">prefixOperator</span><span class="p">(</span><span class="s">"!"</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="k">in</span> <span class="o">!</span><span class="n">value</span> <span class="p">}</span>
+</code></pre>
+
+<p>You can find a few helpers <a href="Examples/TemplateExample/Sources/TemplateExample/TemplateExample.swift#L328-L411">in the examples</a>. Feel free to use them!</p>
+<h2 id='use-open-keyword-and-close-keyword-for-embedding-parentheses' class='heading'>Use Open Keyword and Close Keyword for embedding parentheses</h2>
+
+<p>Embedding is a common issue with interpreters and compilers. In order to provide some extra semantics to the engine, please use the <code>OpenKeyword(&quot;[&quot;)</code> and <code>OpenKeyword(&quot;]&quot;)</code> options, when defining <code><a href="Classes/Keyword.html">Keyword</a></code>s that come in pairs.</p>
+<h2 id='be-mindful-about-precedence' class='heading'>Be mindful about precedence</h2>
+<h3 id='template-expressions' class='heading'>Template expressions</h3>
+
+<p>The earlier a pattern is represent in the array of <code>statements</code>, the higher precedence it gets. 
+Practically, if there is an <code>if</code> statement and an <code>if-else</code> one, the <code>if-else</code> should be defined earlier, because both are going to match the following expression:
+<code>{% if x &lt; 0 %}A{% else %}B{% endif %}</code>, but if <code>if</code> goes first, then the output - and the <code>body</code> of the <code>if</code> statement - is going to be processed as <code>A{% else %}B</code>. </p>
+
+<p>Typically, parentheses and richer type of expressions should go earlier in the array.</p>
+<h3 id='typed-expressions' class='heading'>Typed expressions</h3>
+
+<p>The earlier a pattern is represent in the array of <code>functions</code>, the higher precedence it gets. 
+Practically, if there is an addition function and a multiplication one, the multiplication should be defined earlier (as it has higher precedence), because both are going to match the following expression:
+<code>1 * 2 + 3</code>, but if addition goes first, then the evaluation would process <code>1 * 2</code> on <code>lhs</code> and <code>3</code> on <code>rhs</code>, which - of course - is incorrect.  </p>
+
+<p>Typically, parentheses and higher precedence operators should go earlier in the array.</p>
+<h2 id='debugging-tips' class='heading'>Debugging tips</h2>
+
+<ol>
+<li>If an expression haven&rsquo;t been matched
+
+<ul>
+<li>It&rsquo;s common, that some validation caught the value</li>
+<li>Print your expressions or put breakpoints into the affected match blocks or variable map blocks</li>
+</ul></li>
+<li>If you see weird output
+
+<ul>
+<li>Play with the order of the newly added opeartions.</li>
+<li>Incorrect precedence can turn expressions upside down</li>
+</ul></li>
+</ol>
+
+<p>The framework is still in an early stage, so debugging helpers will follow in upcoming releases. Please stay tuned!</p>
+<h2 id='share-context-between-template-and-typed-interpreters' class='heading'>Share context between template and typed interpreters</h2>
+
+<p>If you use template interpreters, they need a typed interpreter to hold. Both interpreters have <code>context</code> variables, so if you are not being careful enough, it can cause headaches. </p>
+
+<p>Since <code><a href="Classes/InterpreterContext.html">InterpreterContext</a></code> is a class, its reference can be passed around and used in multiple places. </p>
+
+<p>The reason that the variables are encapsulated in a context is that context is a class, while variables are mutable <code>var</code> struct properties on that object. With this construction the context reference can be passed around to multiple interpreter instances, but keeps the copy-on-write (🐮) behaviour of the modification.</p>
+
+<p>Context defined during the initialisation apply to every evaluation performed with the given interpreter, while the ones passed to the <code>evaluate</code> method only apply to that specific  expression instance.</p>
+<h2 id='experiment-with-your-expressions' class='heading'>Experiment with your expressions!</h2>
+
+<p>It&rsquo;s quite easy to add new operators, functions, and data types. I suggest not to think about them too long, just dare to experpiment with them, what&rsquo;s possible and what is not. </p>
+
+<p>You can always add new types or functions if you need extra functionality. The options are practically endless!</p>
+<h2 id='define-constants-in-literals' class='heading'>Define constants in literals</h2>
+
+<p>The frameworks allows multiple ways to express static strings and convert them. 
+I believe the best place to put constants are in the <code><a href="Classes/Literal.html">Literal</a></code>s of <code><a href="Classes/DataType.html">DataType</a></code>s.</p>
+
+<p>Use the <code>Literal(&quot;YES&quot;, convertsTo: true)</code> <code><a href="Classes/Literal.html">Literal</a></code> initialiser for easy definition.</p>
+
+<p>The <code>convertsTo</code> parameter of <code><a href="Classes/Literal.html">Literal</a></code>s are <code>autoclosure</code> parameters, which means, that they are going to be processed lazily.</p>
+<pre class="highlight swift"><code><span class="kt">Literal</span><span class="p">(</span><span class="s">"now"</span><span class="p">,</span> <span class="nv">convertsTo</span><span class="p">:</span> <span class="kt">Date</span><span class="p">())</span>
+</code></pre>
+
+<p>The <code>now</code> string is going to be expressed as the current timestamp at the time of the evaluation, not the time of the initialisation.</p>
+<h2 id='map-any-function-calls-from-swift' class='heading'>Map any function calls from Swift</h2>
+
+<p>The framework is really lightweight and not really restrictive in regards of how to parse your expressions. Free your mind, and do stuff dynamically.</p>
+<pre class="highlight swift"><code><span class="kt">Function</span><span class="p">(</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"."</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">,</span> <span class="nv">interpreted</span><span class="p">:</span> <span class="kc">false</span><span class="p">))</span> <span class="p">{</span> <span class="p">(</span><span class="n">arguments</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Double</span><span class="p">?</span> <span class="k">in</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">lhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"lhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">NSObjectProtocol</span><span class="p">,</span>
+            <span class="k">let</span> <span class="nv">rhs</span> <span class="o">=</span> <span class="n">arguments</span><span class="p">[</span><span class="s">"rhs"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">String</span><span class="p">,</span>
+            <span class="k">let</span> <span class="nv">result</span> <span class="o">=</span> <span class="n">lhs</span><span class="o">.</span><span class="nf">perform</span><span class="p">(</span><span class="kt">Selector</span><span class="p">(</span><span class="n">rhs</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kt">Double</span><span class="p">(</span><span class="kt">Int</span><span class="p">(</span><span class="nv">bitPattern</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="nf">toOpaque</span><span class="p">()))</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="kc">nil</span>
+    <span class="p">}</span>
+<span class="p">])</span>
+</code></pre>
+
+<p>Perform any method call of any type and maybe process their output as well. It&rsquo;s not the safest way to go with it, but this is just an example.</p>
+
+<p>This opens up the way of running almost any arbitrary code on Apple platforms, from any backend. But, this does it in a very controlled way, as you must define a set of data types and functions that apply, unless you call them dynamically at runtime.</p>
+<h2 id='validate-your-expressions-before-putting-them-out-in-production-code' class='heading'>Validate your expressions before putting them out in production code</h2>
+
+<p>Not every expression work out of the box as you might expect. Operators and functions depend on each other, especially in terms of precedence. If one pattern was recognised before the other one, your code might not run as you expected.</p>
+
+<p>Pro Tip: Write unit tests to validate expressions. Feel free to use <code>as!</code> operator to force-cast the result expressions in tests, but only in tests. It&rsquo;s not a problem is tests crash, you can fix it right away, but it&rsquo;s not okay in production.</p>
 
           </div>
         </section>

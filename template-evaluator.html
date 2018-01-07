@@ -59,7 +59,10 @@
             <a class="nav-group-name-link" href="Guides.html">Guides</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="interpreter-details.html">Interpreter Details</a>
+                <a class="nav-group-task-link" href="example-projects.html">Example projects</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="interpreter-engine-details.html">Interpreter engine details</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="strongly-typed-evaluator.html">Strongly-typed evaluator</a>
@@ -176,7 +179,134 @@
         <section class="section">
           <div class="section-content">
             
-            <p>TBD</p>
+            <h1 id='template-evaluator' class='heading'>Template evaluator</h1>
+
+<p>The logic of the interpreter is fairly easy: it goes over the input character by character and replaces any patterns it can find. </p>
+<h2 id='creation' class='heading'>Creation</h2>
+
+<p>The way to create template interpreters is the following:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">template</span> <span class="o">=</span> <span class="kt">TemplateInterpreter</span><span class="p">(</span><span class="nv">statements</span><span class="p">:</span> <span class="p">[</span><span class="n">ifStatement</span><span class="p">,</span> <span class="n">printStatement</span><span class="p">],</span> 
+                                   <span class="nv">interpreter</span><span class="p">:</span> <span class="n">interpreter</span><span class="p">,</span> 
+                                   <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"example"</span><span class="p">:</span> <span class="mi">1</span><span class="p">]))</span>
+</code></pre>
+
+<p>First, you&rsquo;ll need the statements that you aim to recognise.
+Then, you&rsquo;ll need a typed interpreter, so that you can evaluate strongly typed expressions. 
+And lastly, an optional context object, if you have any global variables.</p>
+
+<p>Variables in the context can be expression specific, or global that apply to every evaluation session. </p>
+
+<p>The template interpreter and the given typed interpreter don&rsquo;t share the same context. Apart from the containment dependency, they don&rsquo;t have any logical connection. The reason for this is that templates need a special context feeding the template content, but typed interpreters might work with totally different data types. It is totally up to the developer how they want their context to be managed. Since the context is a class, its reference can be passed around, so it&rsquo;s quite straightforward to have them share the same context object - if needed.</p>
+<h2 id='statement-examples' class='heading'>Statement examples</h2>
+<h3 id='keywords' class='heading'>Keywords</h3>
+
+<p><code><a href="Classes/Keyword.html">Keyword</a></code>s are the most basic elements of a pattern; they represent simple, static <code>String</code>s. You can chain them, for example <code>Keyword(&quot;{%&quot;) + Keyword(&quot;if&quot;) + Keyword(&quot;%}&quot;)</code>, or simply merge them <code>Keyword(&quot;{% if %}&quot;)</code>. Logically, these two are the same, but the former accepts any number of whitespaces between the tags, while the latter allows only one, as it is a strict match. </p>
+
+<p>Most of the time though, you are going to need to handle placeholders, varying number of elements. That&rsquo;s where <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code>s come into place.</p>
+<h3 id='variables' class='heading'>Variables</h3>
+
+<p>Let&rsquo;s check out the following, really straightforward pattern:</p>
+<pre class="highlight swift"><code><span class="kt">Matcher</span><span class="p">(</span><span class="kt">Keyword</span><span class="p">(</span><span class="s">"{{"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"body"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"}}"</span><span class="p">))</span> <span class="p">{</span> <span class="n">variables</span><span class="p">,</span> <span class="n">interpreter</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">body</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s">"body"</span><span class="p">]</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="n">interpreter</span><span class="o">.</span><span class="n">typedInterpreter</span><span class="o">.</span><span class="nf">print</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Something between two enclosing parentheses <code>{{</code>, <code>}}</code>. The middle tag is a <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code>, which means that its value is going to be passed through in the block, using its name. Let&rsquo;s imagine the following input: <code>The winner is: {{ 5 }}</code>. Here, the <code>variables</code> dictionary is going to have <code>5</code> under the key <code>body</code>.</p>
+<h4 id='generics' class='heading'>Generics</h4>
+
+<p>Since its value is going to be processed, there is a generic sign as well, signalling that this current <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code> accepts <code>Any</code> kind of data, no transfer is needed. Let&rsquo;s imagine if we wrote <code><a href="Classes.html#/s:4Eval8VariableC">Variable&lt;String&gt;</a></code> instead. In this case, <code>5</code> would not match to the template, it would be intact. But, for example, <code>{{ &#39;Hello&#39; }}</code> would do.</p>
+<h4 id='evaluation' class='heading'>Evaluation</h4>
+
+<p>Variables also have optional properties, such as <code>interpreted</code>, <code>shortest</code>, or <code>acceptsNilValue</code>. They might also have a <code>map</code> block, which by default is <code>nil</code>.</p>
+
+<ul>
+<li><code>interpreted</code> tells the framework, that its value should be evaluated. This is true, by default. But, the option exists to modify this to false. In that case, <code>{{ 2 + 3 }}</code> would not generate the number <code>5</code> under the <code>body</code> key, but <code>2 + 3</code> as a <code>String</code>.</li>
+<li><code>shortest</code> signals the <q>strength</q> of the matching operation. By default it&rsquo;s false, we need the most possible characters. The only scenario where this could get tricky is if the last element of a pattern is a <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code>. In that case, the preferred setting is <code>false</code>, so we need the largest possible match!
+Let&rsquo;s find out why! A general addition operator (which looks like this <code>Variable&lt;Double&gt;(&quot;lhs&quot;) + Keyword(&quot;+&quot;) + Variable&lt;Double&gt;(&quot;rhs&quot;)</code>) would recognise the pattern <code>12 + 34</code>, but it also matches to <code>12 + 3</code>. What&rsquo;s what shortest means, the shortest match, in this case, is <code>12 + 3</code>, which - semantically - is an incorrect match. 
+But don&rsquo;t worry, the framework already knows about this, so it sets the right value for your variables, even in the last place!</li>
+<li><code>acceptsNilValue</code> informs the framework if <code>nil</code> should be accepted by the pattern. For example, <code>1 + &#39;5&#39;</code> with the previous example (<code>Double + Double</code>) would not match. But, if the <code>acceptsNilValue</code> is defined, then the block would trigger, with <code>{&#39;lhs&#39;: 1, &#39;rhs&#39;: nil}</code>, so you can decide by your own logic what to do in this case.</li>
+<li>Finally, the <code>map</code> block can be used to further transform the value of your <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code> before calling the block on the <code><a href="Classes/Matcher.html">Matcher</a></code>. Since map is a trailing closure, it&rsquo;s quite easy to add. For example, <code>Variable&lt;Int&gt;(&quot;example&quot;) { Double($0) }</code> would recognise only <code>Int</code> values, but would transform them to <code>Double</code> instances when providing them in the <code>variables</code> dictionary. This map can also return <code>nil</code> values but depends on your logic if you want to accept them or not. Side note: the previous map generates a <code><a href="Classes.html#/s:4Eval8VariableC">Variable&lt;Double&gt;</a></code> kind of variable instance.</li>
+</ul>
+<h3 id='specialised-elements' class='heading'>Specialised elements</h3>
+<h4 id='template-variable' class='heading'>Template Variable</h4>
+
+<p>By default, <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code> instances use typed interpreters to evaluate their value. Sometimes though, they should be processed with the template interpreter. A good example is the <code>if</code> statement:</p>
+<pre class="highlight swift"><code><span class="kt">Matcher</span><span class="p">(</span><span class="kt">Keyword</span><span class="p">(</span><span class="s">"{%"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"if"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"condition"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"%}"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">TemplateVariable</span><span class="p">(</span><span class="s">"body"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"{% endif %}"</span><span class="p">))</span> <span class="p">{</span> <span class="n">variables</span><span class="p">,</span> <span class="n">interpreter</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">condition</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s">"condition"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Bool</span><span class="p">,</span> <span class="k">let</span> <span class="nv">body</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s">"body"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">String</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="n">condition</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">body</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">nil</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>This statement has two semantically different kinds of variable, but they both are just placeholders. The first (<code>condition</code>) is an interpreted variable, which at the end returns a <code>Boolean</code> value. </p>
+
+<p>The second one is a bit different; it should not be evaluated the same way as <code>condition</code>. We need to further evaluate the enclosed template, that&rsquo;s why this variable</p>
+
+<ol>
+<li>Should not be interpreted</li>
+<li>Should be evaluated using the template interpreter, not the typed interpreter</li>
+</ol>
+
+<p>That&rsquo;s why there&rsquo;s a subclass called <code><a href="Classes/TemplateVariable.html">TemplateVariable</a></code>, which forces these two options when initialised. It DOES evaluate its content but uses the template interpreter to do so.</p>
+
+<p>A quick example: <code>Header ... {% if x &gt; 0 %}Number of results: {{ x }} {% endif %} ... Footer</code></p>
+
+<p>Here, <code>x &gt; 0</code> is a <code>Boolean</code> expression, but the body between the <code>if</code>, and <code>endif</code> tags is a template, such as the whole expression.</p>
+<h4 id='open-amp-close-keyword' class='heading'>Open &amp; Close Keyword</h4>
+
+<p><code>if</code> statements are quite common in templates. They are often chained and embedded in each other. Embedding is a nasty problem of interpreters, as <code>{% if %}a{% if %}b{% endif %}c{% endif %}</code> would logically be evaluated with <code>{% if %}b{% endif %}</code> first, and the rest afterwards. </p>
+
+<p>But, an algorithm, by default, would interpret things linearly, disregarding the semantics: <code>{% if %}a{% if %}b{% endif %}</code> would be the match for the first if statement, with a totally invalid <code>a{% if %}b</code> data. </p>
+
+<p>This, of course, needs to be solved, but it&rsquo;s not that easy as it first looks! Some edge cases would not work unless we somehow try to connect them together. For this reason, I added two special elements: <code><a href="Classes/OpenKeyword.html">OpenKeyword</a></code> and <code><a href="Classes/CloseKeyword.html">CloseKeyword</a></code>. These work exactly the same way as normal <code><a href="Classes/Keyword.html">Keyword</a></code>s do, but add a bit more semantics to the framework: these two should be connected together, and therefore embedding them should not be a problem as they come in pairs. </p>
+
+<p>The previous <code>if</code> statement, now with an <code>else</code> block should - correctly - look like this:</p>
+<pre class="highlight swift"><code><span class="kt">Matcher</span><span class="p">(</span><span class="kt">OpenKeyword</span><span class="p">(</span><span class="s">"{% "</span><span class="k">if</span><span class="s">") + Variable&lt;Bool&gt;("</span><span class="n">condition</span><span class="s">") + Keyword("</span><span class="o">%</span><span class="p">}</span><span class="s">") + TemplateVariable("</span><span class="n">body</span><span class="s">") + Keyword("</span><span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="o">%</span><span class="p">}</span><span class="s">") + TemplateVariable("</span><span class="k">else</span><span class="s">") + CloseKeyword("</span><span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span><span class="s">")) { variables, interpreter, _ in
+    guard let condition = variables["</span><span class="n">condition</span><span class="s">"] as? Bool, let body = variables["</span><span class="n">body</span><span class="s">"] as? String else { return nil }
+    if condition {
+        return body
+    } else {
+        return variables["</span><span class="k">else</span><span class="s">"] as? String
+    }
+}
+</span></code></pre>
+
+<p>By using the <code><a href="Classes/OpenKeyword.html">OpenKeyword</a></code> and <code><a href="Classes/CloseKeyword.html">CloseKeyword</a></code> types, these become connected, so embedding <code>if</code> statements in a template shouldn&rsquo;t be a problem. </p>
+
+<p>Similarly, this works for the <code>print</code> statement from an earlier example:</p>
+<pre class="highlight swift"><code><span class="kt">Matcher</span><span class="p">(</span><span class="kt">OpenKeyword</span><span class="p">(</span><span class="s">"{{"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"body"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">CloseKeyword</span><span class="p">(</span><span class="s">"}}"</span><span class="p">))</span> <span class="p">{</span> <span class="n">variables</span><span class="p">,</span> <span class="n">interpreter</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">body</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s">"body"</span><span class="p">]</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="n">interpreter</span><span class="o">.</span><span class="n">typedInterpreter</span><span class="o">.</span><span class="nf">print</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+<h2 id='evaluation' class='heading'>Evaluation</h2>
+
+<p>The evaluation of the templates happens with the <code>evaluate</code> function on the interpreter:</p>
+<pre class="highlight swift"><code><span class="n">template</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"{{ 1 + 2 }}"</span><span class="p">)</span>
+</code></pre>
+
+<p>The result of the evaluation - in case of templates - is always a <code>String</code>. In the result you shouldn&rsquo;t see any template elements, because they were recognised, processed, and replaced during the evaluation by the interpreter.</p>
+<h3 id='context' class='heading'>Context</h3>
+
+<p>You can also pass contextual values, which - for now - equal to variables.</p>
+<pre class="highlight swift"><code><span class="n">template</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"{{ 1 + var }}"</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"var"</span><span class="p">:</span> <span class="mi">2</span><span class="p">]))</span>
+</code></pre>
+
+<p>The reason that the variables are encapsulated in a context is that context is a class, while variables are mutable <code>var</code> struct properties on that object. With this construction the context reference can be passed around to multiple interpreter instances, but keeps the copy-on-write (🐮) behaviour of the modification.</p>
+
+<p>Context defined during the initialisation apply to every evaluation performed with the given interpreter, while the ones passed to the <code>evaluate</code> method only apply to that specific  expression instance.</p>
+
+<p>If some patterns modify the context, they have the option to modify the general context (for long term settings), or the local one (for example, the interation variable of a <code>for</code> loop).</p>
+<h3 id='order-of-statements-define-precedence' class='heading'>Order of statements define precedence</h3>
+
+<p>The earlier a pattern is represent in the array of <code>statements</code>, the higher precedence it gets. 
+Practically, if there is an <code>if</code> statement and an <code>if-else</code> one, the <code>if-else</code> should be defined earlier, because both are going to match the following expression:
+<code>{% if x &lt; 0 %}A{% else %}B{% endif %}</code>, but if <code>if</code> goes first, then the output - and the <code>body</code> of the <code>if</code> statement - is going to be processed as <code>A{% else %}B</code>. </p>
+
+<p>Typically, parentheses and richer type of expressions should go earlier in the array.</p>
 
           </div>
         </section>

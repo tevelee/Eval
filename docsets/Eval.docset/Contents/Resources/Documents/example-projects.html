@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Guides  Reference</title>
+    <title>Example projects  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset="utf-8">
@@ -15,7 +15,7 @@
   <body>
 
 
-    <a title="Guides  Reference"></a>
+    <a title="Example projects  Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -49,7 +49,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="index.html">Eval Reference</a>
       <img class="carat" src="img/carat.png" />
-      Guides  Reference
+      Example projects  Reference
     </p>
 
     <div class="content-wrapper">
@@ -178,16 +178,32 @@
 
         <section class="section">
           <div class="section-content">
-            <h1>Guides</h1>
-            <p>The following guides are available globally.</p>
+            
+            <h1 id='example-projects' class='heading'>Example projects</h1>
+
+<p>I included a few use-cases, which bring significant improvements on how things are processed before - at least in my previous projects.
+​</p>
+<h3 id='a-href-examples-templateexample-template-language-a' class='heading'><a href="Examples/TemplateExample">Template language</a></h3>
+
+<p>I was able to create a full-blown template language, completely, using this framework and nothing else. It&rsquo;s almost like a competitor of the one I mentioned (<a href="https://github.com/twigphp/Twig">Twig</a>). This is the most advanced example of them all!</p>
+
+<p>I created a standard library with all the possible operators you can imagine. With helpers, each operator is a small, one-liner addition. Added the important data types, such as arrays, strings, numbers, booleans, dates, etc., and a few functions, to be more awesome. <a href="Examples/TemplateExample/Sources/TemplateExample/TemplateExample.swift">Take a look for inspiration!</a></p>
+
+<p>Together, it makes an excellent addition to my model-object generation project, and <strong>REALLY useful for server-side Swift development as well</strong>!</p>
+<h3 id='a-href-tbd-attributed-string-parser-a' class='heading'><a href="tbd">Attributed string parser</a></h3>
+
+<p>I created another small example, parsing attribtuted strings from simple expressions using XML style tags, such as bold, italic, underlined, colored, etc.</p>
+
+<p>With just a few operators, this solution can deliver attributed strings from basic APIs, which otherwise would be hard to manage.</p>
+
+<p>My connected project is an iOS application, using the Spotify <a href="https://github.com/spotify/HubFramework">HUB framework</a>, in which I can now provide rich strings with my view-models and parse them from the JSON string results.</p>
+<h3 id='a-href-tbd-color-parser-a' class='heading'><a href="tbd">Color parser</a></h3>
+
+<p>A color parser is also used by the BFF (Backend For Frontend, not 👭) project I mentioned before. It can parse Swift Color objects from many different styles of strings, such as <code>#ffddee</code>, or <code>red</code>, or <code>rgba(1,0.5,0.4,1)</code>. I included this basic example in the repository as well.</p>
 
           </div>
         </section>
 
-        <section class="section">
-          <div class="section-content">
-          </div>
-        </section>
 
       </article>
     </div>

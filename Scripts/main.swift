@@ -30,6 +30,7 @@ class Eval {
             try runLinter()
             try generateDocs()
             try publishDocs()
+            try runCocoaPodsLinter()
         }
     }
     
@@ -90,6 +91,7 @@ class Eval {
         "runLinter": runLinter,
         "generateDocs": generateDocs,
         "publishDocs": publishDocs,
+        "runCocoaPodsLinter": runCocoaPodsLinter,
     ]
 
     static func prepareForBuild() throws {
@@ -172,6 +174,12 @@ class Eval {
         } else {
             throw CIError.logicalError(message: "Repository URL not found")
         }
+    }
+    
+    static func runCocoaPodsLinter() throws {
+        print("🔮 Validating CocoaPods support")
+        let flags = TravisCI.isRunningLocally() ? " --verbose" : ""
+        try Shell.executeAndPrint("pod lib lint" + flags, timeout: 120)
     }
 
     // MARK: Helpers

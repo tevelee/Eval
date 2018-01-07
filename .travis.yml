@@ -6,3 +6,4 @@ script:
 - swift Scripts/main.swift --jobs runTests,runLinter
 - swift Scripts/main.swift --jobs generateDocs
 - swift Scripts/main.swift --jobs publishDocs
+- swift Scripts/main.swift --jobs runCocoaPodsLinter

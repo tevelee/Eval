@@ -294,7 +294,7 @@
 </code></pre>
 
 <p>And call it with a string expression, as follows.</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">result</span> <span class="o">=</span> <span class="n">interpreter</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"2*x + 1"</span><span class="p">)</span> <span class="k">as?</span> <span class="kt">Double</span>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">result</span> <span class="o">=</span> <span class="n">interpreter</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"2 * x + 1"</span><span class="p">)</span> <span class="k">as?</span> <span class="kt">Double</span>
 </code></pre>
 <h3 id='short-example' class='heading'>🤓 Short example</h3>
 
@@ -359,8 +359,6 @@
 <li><code>interpreter.evaluate(&quot;2 + 1.5 * 6&quot;) as Double</code> (since multiplication is defined earlier in the array, it has a higher precedence, as expected)</li>
 <li><code>interpreter.evaluate(&quot;true ? 1 : 2.5&quot;) as Double</code></li>
 </ul>
-
-<p>-</p>
 
 <p>As you have seen, it&rsquo;s really easy and intuitive to build custom languages, using simple building blocks. With just a few custom data types and functions, the possibilities are endless. Operators, functions, string, arrays, dates&hellip;</p>
 

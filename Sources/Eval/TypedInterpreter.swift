@@ -21,9 +21,9 @@
 
 import Foundation
 
-/// A type of interpreter implementation, that is capable of evaluating arbitrary string expressions to strongly typed variables
+/// A type of interpreter implementation that is capable of evaluating arbitrary string expressions to strongly typed variables
 public class TypedInterpreter: Interpreter {
-    /// The result is a strongly typed value or `nil` (if cannot be properly processed)
+    /// The result is a strongly typed value or `nil` (if it cannot be properly processed)
     public typealias EvaluatedType = Any?
 
     /// The global context used for every evaluation with this instance
@@ -35,7 +35,7 @@ public class TypedInterpreter: Interpreter {
     /// The data types that the expression is capable of recognise
     public let dataTypes: [DataTypeProtocol]
 
-    /// The list of functions, that are available during the evaluation to process the recognised data types
+    /// The list of functions that are available during the evaluation to process the recognised data types
     public let functions: [FunctionProtocol]
 
     /// Each item of the input list (data types, functions and the context) is optional, but strongly recommended to provide them. It's usual that for every data type, there are a few functions provided, so the list can occasionally be pretty long.
@@ -47,12 +47,12 @@ public class TypedInterpreter: Interpreter {
         self.context = context
     }
 
-    /// The evaluation method, that produces the strongly typed results. In this case only the globally avaliable context can be used
+    /// The evaluation method, that produces the strongly typed results. In this case, only the globally available context can be used
     public func evaluate(_ expression: String) -> Any? {
         return evaluate(expression, context: InterpreterContext())
     }
 
-    /// The evaluation method, that produces the strongly typed results. In this case only the context is a result of merging the global context and the one provided in the parameter
+    /// The evaluation method, that produces the strongly typed results. In this case, only the context is a result of merging the global context and the one provided in the parameter
     public func evaluate(_ expression: String, context: InterpreterContext) -> Any? {
         let context = self.context.merge(with: context)
         let expression = expression.trim()
@@ -73,7 +73,7 @@ public class TypedInterpreter: Interpreter {
         return nil
     }
 
-    /// A helper to be able to effectively print any result, coming out of the evaluation. The `print` method recognises the used data type, and uses its string conversion block
+    /// A helper to be able to effectively print any result, coming out of the evaluation. The `print` method recognises the used data type and uses its string conversion block
     public func print(_ input: Any) -> String {
         for dataType in dataTypes {
             if let value = dataType.print(value: input) {
@@ -86,8 +86,8 @@ public class TypedInterpreter: Interpreter {
 
 /// Data types tell the framework which kind of data can be parsed in the expressions
 public protocol DataTypeProtocol {
-    /// If the framework meets with some static value that hasn't been processed before, it tries to convert it with every registeres data types.
-    /// This method return nil if the conversion could not have been processed with any of the type's literals.
+    /// If the framework meets with some static value that hasn't been processed before, it tries to convert it with every registered data type.
+    /// This method returns nil if the conversion could not have been processed with any of the type's literals.
     func convert(input: String, interpreter: TypedInterpreter) -> Any?
 
     /// This is a convenience method, for debugging and value printing purposes, which can return a string from the current data type.
@@ -101,7 +101,7 @@ public class DataType<T> : DataTypeProtocol {
     let literals: [Literal<T>]
     let print: (T) -> String
 
-    /// In order to be able to effectively bridge the outside world, it needs to provide an already existing Swift or user-defined type. This can be class, struct, enum, or anything else, for example block or function (which is not recommended).
+    /// To be able to bridge the outside world effectively, it needs to provide an already existing Swift or user-defined type. This can be class, struct, enum, or anything else, for example, block or function (which is not recommended).
     /// The literals tell the framework which strings can be represented in the given data type
     /// The last print block is used to convert the value of any DataType to a string value. It does not need to be unique or always the same for the same input values.
     public init (type: T.Type,
@@ -112,7 +112,7 @@ public class DataType<T> : DataTypeProtocol {
         self.print = print
     }
 
-    /// For the conversion it uses the regitered literals, to be able to process the input and return an existing type
+    /// For the conversion it uses the registered literals, to be able to process the input and return an existing type
     public func convert(input: String, interpreter: TypedInterpreter) -> Any? {
         return literals.flatMap { $0.convert(input: input, interpreter: interpreter) }.first
     }
@@ -135,7 +135,7 @@ public class Literal<T> {
     }
 
     /// In case the literals are easily expressed, static keywords, then this initialiser is the best to use.
-    /// The first parameter is the used keyword, the second one is the statically typed associated value. As it is expressed as an autoclosure, the provided expression will be evaluated at recognision time, not initialisation time. For example, Date() is perfectly accepted to use here.
+    /// The first parameter is the used keyword; the second one is the statically typed associated value. As it is expressed as an autoclosure, the provided expression will be evaluated at recognition time, not initialisation time. For example, Date() is perfectly acceptable to use here.
     public init(_ check: String, convertsTo value: @autoclosure @escaping () -> T) {
         self.convert = { input, _ in check == input ? value() : nil }
     }
@@ -147,7 +147,7 @@ public class Literal<T> {
 
 /// `Function`s can process values in given `DataType`s, allowing the expressions to be feature-rich
 public protocol FunctionProtocol {
-    /// Functions use similar convesion methods as `DataType`s. If they return `nil`, the function does not apply to the given input. Otherwise the result is expressed as an instance of a given `DataType`
+    /// Functions use similar conversion methods as `DataType`s. If they return `nil`, the function does not apply to the given input. Otherwise, the result is expressed as an instance of a given `DataType`
     /// It uses the interpreter the and parsing context to be able to effectively process the content
     func convert(input: String, interpreter: TypedInterpreter, context: InterpreterContext) -> Any?
 }

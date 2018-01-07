@@ -25,7 +25,7 @@ import Foundation
 public enum MatchResult<T> {
     /// The input could not be matched
     case noMatch
-    /// The input can possibly match, if it were continuted. (It's the prefix of the matching expression)
+    /// The input can match, if it were continued. (It's the prefix of the matching expression)
     case possibleMatch
     /// The input matches the expression. It provides information about the `length` of the matched input, the `output` after the evaluation, and the `variables` that were processed during the process.
     case exactMatch(length: Int, output: T, variables: [String: Any])

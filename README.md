@@ -29,7 +29,7 @@ It evaluates expressions at runtime, with operators and data types you define.
 ------- | --------
 🐥 Lightweight - the whole engine is really just a few hundred lines of code | 🤓 Creating custom operators and data types, on the other hand, can take a few extra lines - depending on your needs
 ✅ Easy to use API - create new language elements in just a matter of seconds | ♻️ The evaluated result of the expressions must be strongly typed, so you can only accept what type you expect the result is going to be
-🎢 Fun - Since it's really easy to play with, it's joyful to add - even complex - language features | -
+🎢 Fun - Since it is really easy to play with, it's joyful to add - even complex - language features | -
 🚀 Fast execution - I'm trying to optimise as much as possible. Has its limitations though | 🌧 Since it is a really generic concept, some optimisations cannot be made, compared to native interpreters
 
 The framework currently supports two different types of execution modes:
@@ -39,7 +39,7 @@ The framework currently supports two different types of execution modes:
 
 *Let's see just a few examples:*
 
-It's extremely easy to formulate expressions (and evaluate them in runtime), like 
+It's extremely easy to formulate expressions (and evaluate them at runtime), like 
 
 - `5 in 1...3` evaluates to `false` Bool type
 - `'Eval' starts with 'E'` evaluates to `true` Bool type
@@ -54,7 +54,7 @@ And templates, such as
 - `{% if name != nil %}Hello{% else %}Bye{% endif %} {{ name|default('user') }}!`, whose output is `Hello Adam!` or `Bye User!`
 - `Sequence: {% for i in 1...5 %}{{ 2 * i }} {% endfor %}` which is `2 4 6 8 10 `
 
-and so on... The result of these expressions depend on the content, determined by the evaluation. It can be any type which is returned by the functions (String, [Double], Date, or even custom types of your own.)
+And so on... The result of these expressions depends on the content, determined by the evaluation. It can be any type which is returned by the functions (String, [Double], Date, or even custom types of your own.)
 
 You can find various ways of usage in the examples section below.
 
@@ -90,7 +90,7 @@ let result = interpreter.evaluate("2*x + 1") as? Double
 
 ### 🤓 Short example
 
-Let's check out a fairly complex example, and build it from scratch! Let's implement a language which is able to parse the following expression:
+Let's check out a fairly complex example, and build it from scratch! Let's implement a language which can parse the following expression:
 
 ```swift
 x != 0 ? 5 * x : pi + 1
@@ -172,7 +172,7 @@ The motto of the framework: Build your own (mini) language!
 ### ⁉️ How does it work?
 
 The interpreter itself does not define anything or any way to deal with the input string on its own. 
-All it does, is recognising patterns. 
+All it does is recognising patterns. 
 
 By creating data types, you provide literals to the framework, which it can interpret as an element or a result of the expression. 
 These types are transformed to real Swift types.
@@ -191,21 +191,21 @@ The addition function above, for example, consists of two variables on each side
 There's one interesting aspect of this solution: Unlike traditional - native - interpreters or compilers, this one recognises patterns from top to bottom. 
 Meaning, that it looks at the input string, your expression, and recognises patterns in priority order, and recursively go deeper and deeper until the most basic expressions are met.
 
-A traditional interpreter, however, parses expressions character by character, feeding the results to a lexer, the tokeniser, then builds up an abstract sytax tree (which is highly optimisable), and finally coverts it to a binary (compiler) or evaluates it at runtime (interpreter), in one word: bottom-up.
+A traditional interpreter, however, parses expressions character by character, feeding the results to a lexer, the tokeniser, then builds up an abstract syntax tree (which is highly optimisable), and finally converts it to a binary (compiler) or evaluates it at runtime (interpreter), in one word: bottom-up.
 
 The two solutions can be compared in various ways. The two main differences are in ease of use, and performance. 
-This version of an interpreter provides a really easy way to define patterns, types, etc., but has its cost! It cannot parse as optimally as a traditional compiler could, as it doesn't have an internal graph of expressions (AST), but still performs in a much more than acceptable way.
-Definition-wise, this framework provides an easily understandable way of language-elements, but the traditional one really lacks behind, because the lexer is usually an ugly, hardly understandable state machine, or regular expression, BAKED IN to the interpreter code itself.
+This version of an interpreter provides an effortless way to define patterns, types, etc., but has its cost! It cannot parse as optimally as a traditional compiler could, as it doesn't have an internal graph of expressions (AST), but still performs in a much more than acceptable way.
+Definition-wise, this framework provides an easily understandable way of language-elements, but the traditional one really lacks behind, because the lexer is usually an ugly, hardly understandable state machine, or regular expression, BAKED INTO the interpreter code itself.
 
 ## 💡 Motivation
 
-I have another project, in which I'm generating Objective-C and Swift model objects with loads of utils, based on really short templates. This project was not possible currently in Swift, as there is no template language - capable enough - to create my templates. (I ended up uing a third party PHP framework, called [Twig](https://github.com/twigphp/Twig)). So finally, I created one for Swift!
+I have another project, in which I'm generating Objective-C and Swift model objects with loads of utils, based on really short templates. This project was not possible currently in Swift, as there is no template language - capable enough - to create my templates. (I ended up using a third party PHP framework, called [Twig](https://github.com/twigphp/Twig)). So finally, I created one for Swift!
 
-It turned out, that making it a little more geneic - here and there - makes the whole thing really capable and flexible to use in different use-cases.
+It turned out, that making it a little more generic - here and there - makes the whole thing really capable and flexible of using in different use-cases.
 
-The pattern matching was there, but soon I realised, that I'm going to need expressions as well, for printing, evaluating in if/while statements and so on. First, I was looking at an excellent library, [Expression](https://github.com/nicklockwood/Expression), created by Nick Lockwood, which is capable of evaluating numeric expressions. Unfortunately, I wanted a bit more, definig strings, dates, array, and further types and expressions, so I used my existing pattern matching solution to bring this capability to life.
+The pattern matching was there, but soon I realised, that I'm going to need expressions as well, for printing, evaluating in if/while statements and so on. First, I was looking at an excellent library, [Expression](https://github.com/nicklockwood/Expression), created by Nick Lockwood, which is capable of evaluating numeric expressions. Unfortunately, I wanted a bit more, defining strings, dates, array, and further types and expressions, so I used my existing pattern matching solution to bring this capability to life.
 
-It ended up quite positively, after I discovered the capabilities of a generic solution like this. The whole thing just blew my mind, language features could have been defined in a matter of seconds, and I wanted to shared this discovery with the world, so here you are :)
+It ended up quite positively after I discovered the capabilities of a generic solution like this. The whole thing just blew my mind, language features could have been defined in a matter of seconds, and I wanted to share this discovery with the world, so here you are :)
 
 ## 📚 Examples
 ​
@@ -213,17 +213,17 @@ It ended up quite positively, after I discovered the capabilities of a generic s
 ​
 ### [Template language](Examples/TemplateExample)
 
-I was able to creae a full-blown template language, completely, using this framework and nothing else. It's almost like a competitor of the one I mentioned ([Twig](https://github.com/twigphp/Twig)). This is the most advanced example of them all!
+I was able to create a full-blown template language, completely, using this framework and nothing else. It's almost like a competitor of the one I mentioned ([Twig](https://github.com/twigphp/Twig)). This is the most advanced example of them all!
 
-I created a standard library with all the possible operators you can imagine. With helpers, each operator is a small, one-liner addition. Added the important data types, such as arrays, strings, numbers, booelans, dates, etc., and a few functions, to be more awesome.
+I created a standard library with all the possible operators you can imagine. With helpers, each operator is a small, one-liner addition. Added the important data types, such as arrays, strings, numbers, booleans, dates, etc., and a few functions, to be more awesome.
 
-Together, it makes a nice addition to my model-object generation project, and **REALLY useful for server-side Swift developement as well**!
+Together, it makes an excellent addition to my model-object generation project, and **REALLY useful for server-side Swift development as well**!
 
 ### [Attributed string parser](tbd)
 
-I created another small example, parsing attribtued strings from simple expressions using XML style tags, such as bold, italic, underlined, colored, etc.
+I created another small example, parsing attribtuted strings from simple expressions using XML style tags, such as bold, italic, underlined, colored, etc.
 
-With really just a few operators, this solution is able to deliver attributed strings from basic APIs, which otherwise would be hard to manage.
+With just a few operators, this solution can deliver attributed strings from basic APIs, which otherwise would be hard to manage.
 
 My connected project is an iOS application, using the Spotify [HUB framework](https://github.com/spotify/HubFramework), in which I can now provide rich strings with my view-models and parse them from the JSON string results.
 
@@ -233,15 +233,15 @@ A color parser is also used by the BFF project I mentioned before. It can parse 
 
 ## 🙋 Contribution
 
-Anyone is more than welcome to contribute to **Eval**! It can even be an addition to the docs or to the code directly, by [raising an issue](https://github.com/tevelee/Interpreter/issues/new) or in form of a pull request. Both are equally valuable to me! Happy to assist anyone!
+Anyone is more than welcome to contribute to **Eval**! It can even be an addition to the docs or to the code directly, by [raising an issue](https://github.com/tevelee/Interpreter/issues/new) or in the form of a pull request. Both are equally valuable to me! Happy to assist anyone!
 
-In case you need help or want to report a bug - please file an issue. Make sure to provide as much information as you can, sample code also makes it a lot easier for me to help you. Check out the [contribution guidelines](CONTRIBUTE.md) for further information. 
+In case you need help or want to report a bug - please file an issue. Make sure to provide as much information as you can; sample code also makes it a lot easier for me to help you. Check out the [contribution guidelines](CONTRIBUTE.md) for further information. 
 
-I collected some use cases, and great opportunities for beginner tasks if anybody is motivated to bring this project to a more awesome state!
+I collected some use cases, and great opportunities for beginner tasks if anybody is motivated to bring this project to a more impressive state!
 
 ## 👀 Details
 
-This is a really early state of the project, so I'm still deep in the process of all the open-sourcing tasks, such as firing up a CI, creating a nice documentation page, managing administrative tasks around stability.
+This is a really early stage of the project, so I'm still deep in the process of all the open-sourcing tasks, such as firing up a CI, creating a beautiful documentation page, managing administrative tasks around stability.
 
 The upcoming Documentation pages will provide a deep-dive into the subtleties of this framework. Please stay tuned! 
 
@@ -249,7 +249,7 @@ The upcoming Documentation pages will provide a deep-dive into the subtleties of
 
 I am Laszlo Teveli, software engineer, iOS evangelist.
 
-Feel free to reach out to me anytime via tevelee [at] gmail [dot] com, or @tevelee in Twitter.
+Feel free to reach out to me anytime via tevelee [at] gmail [dot] com, or @tevelee on Twitter.
 
 ## ⚖️ License
 

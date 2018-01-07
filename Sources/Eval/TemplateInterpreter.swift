@@ -27,17 +27,17 @@ public class TemplateInterpreter: Interpreter {
     /// The result of a template evaluation is a String
     public typealias EvaluatedType = String
 
-    /// The statements (patterns) registered to the interpreter. If found, these are going to be processed, and replaced with the evaluated value
+    /// The statements (patterns) registered to the interpreter. If found, these are going to be processed and replaced with the evaluated value
     public let statements: [Matcher<String, TemplateInterpreter>]
 
     /// The context used when evaluating the expressions. These context variables are global, used in every evaluation processed with this instance.
     public let context: InterpreterContext
 
     /// The `TemplateInterpreter` contains a `TypedInterpreter`, as it is quite common practice to evaluate strongly typed expression as s support for the template language.
-    /// Common exaples are: condition part of an if statement, or body of a print statement
+    /// Common examples are: condition part of an if statement, or body of a print statement
     public let typedInterpreter: TypedInterpreter
 
-    /// The evaluator type, that is being used to process variables. By default, the TypedInterpreter is being used
+    /// The evaluator type that is being used to process variables. By default, the TypedInterpreter is being used
     public typealias VariableEvaluator = TypedInterpreter
 
     /// The evaluator, that is being used to process variables
@@ -53,12 +53,12 @@ public class TemplateInterpreter: Interpreter {
         self.context = context
     }
 
-    /// The main part of the evaluation happens here. In this case only the global context variables are going to be used
+    /// The main part of the evaluation happens here. In this case, only the global context variables are going to be used
     public func evaluate(_ expression: String) -> String {
         return evaluate(expression, context: InterpreterContext())
     }
 
-    /// The main part of the evaluation happens here. In this case the global context variables merged together with the provided context are going to be used. 
+    /// The main part of the evaluation happens here. In this case, the global context variables merged with the provided context are going to be used. 
     public func evaluate(_ expression: String, context: InterpreterContext) -> String {
         let context = self.context.merge(with: context)
         var output = ""

@@ -21,7 +21,7 @@
 
 import Foundation
 
-/// A protocol which is capable of evaluating a string expressions to a strongly typed object
+/// A protocol which is capable of evaluating string expressions to a strongly typed object
 public protocol Evaluator {
     associatedtype EvaluatedType
 
@@ -42,7 +42,7 @@ public protocol ContextAware {
     var context: InterpreterContext { get }
 }
 
-/// The base protocol of interpreters, that are context aware, and capable of recursively evaluating variables. They use the evaluate method as their main input
+/// The base protocol of interpreters, that are context-aware, and capable of recursively evaluating variables. They use the evaluate method as their main input
 public protocol Interpreter: EvaluatorWithContext, ContextAware {
     associatedtype VariableEvaluator: EvaluatorWithContext
     /// Sometimes interpreters don't use themselves to evaluate variables by default, maybe a third party, or another contained interpreter. For example, the `TemplateInterpreter` class uses `TypedInterpreter` instance to evaluate its variables.

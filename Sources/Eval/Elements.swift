@@ -24,21 +24,21 @@ import Foundation
 /// `MatchElement`s are used by `Matcher` instances to be able to recognise patterns.
 /// Currently, the two main kind of `MatchElement` classes are `Keyword`s and `Variable`s
 public protocol MatchElement {
-    /// Using this method, an element returns how much the String provided in the `prefix` parameter matches ths current element
+    /// Using this method, an element returns how much the String provided in the `prefix` parameter matches the current element
     /// The `isLast` parameter provides extra information about the current element, whether it is the last item in the containing collection. Most of the cases it's false
     func matches(prefix: String, isLast: Bool) -> MatchResult<Any>
 }
 
-/// `Keyword` instances are used to provide static points in match sequences, so that they can be used as pillars of the expressions the developer tries to match
+/// `Keyword` instances are used to provide static points in match sequences so that they can be used as pillars of the expressions the developer tries to match
 public class Keyword: MatchElement {
     /// The type of the Keyword determines whether the item holds some special purpose, or it's just an ordinary static String
     public enum KeywordType {
-        /// By default, `Keyword` are created as a generic type, meaning, that there is no special requirement, that they need to fulfill
+        /// By default, `Keyword` is created as a generic type, meaning, that there is no special requirement, that they need to fulfil
         case generic
-        /// If a pattern contains two, semantically paired `Keyword`s, they often represent opening and closing parentheses or any kind of special enclosing characters.
+        /// If a pattern contains two, semantically paired `Keyword`s, they often represent opening and closing parentheses or any special enclosing characters.
         /// This case represents the first one of the pair, needs to be matched. Often these are expressed as opening parentheses, e.g. `(`
         case openingStatement
-        /// If a pattern contains two, semantically paired `Keyword`s, they often represent opening and closing parentheses or any kind of special enclosing characters.
+        /// If a pattern contains two, semantically paired `Keyword`s, they often represent opening and closing parentheses or any special enclosing characters.
         /// This case represents the second (and last) one of the pair, needs to be matched. Often these are expressed as closing parentheses, e.g. `)`
         case closingStatement
     }
@@ -146,7 +146,7 @@ public class GenericVariable<T, E: Interpreter> : VariableProtocol, MatchElement
 public class Variable<T> : GenericVariable<T, TypedInterpreter> {
 }
 
-/// A special kind of variable, that is used in case of `TemplateInterpreter`s. It does not convert its content using the `interpreterForEvaluatingVariables`, but always uses the `TemplateInterpreter` instance.
+/// A special kind of variable that is used in case of `TemplateInterpreter`s. It does not convert its content using the `interpreterForEvaluatingVariables` but always uses the `TemplateInterpreter` instance.
 /// It's perfect for expressions, that have a body, that needs to be further interpreted, such as an if or while statement.
 public class TemplateVariable: GenericVariable<String, TemplateInterpreter> {
     /// No changes compared to the initialiser of the superclass `Variable`, uses the same parameters

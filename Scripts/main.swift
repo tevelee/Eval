@@ -74,12 +74,11 @@ class Eval {
     
     static func runCommands(_ title: String, commands: () throws -> Void) {
         do {
-            print("ℹ️ \(title)")
-            
             if !TravisCI.isRunningLocally() {
                 print("travis_fold:start: \(title)")
             }
             
+            print("ℹ️ \(title)")
             try commands()
             
             if !TravisCI.isRunningLocally() {
@@ -122,6 +121,10 @@ class Eval {
     static func prepareForBuild() throws {
         if TravisCI.isRunningLocally() {
             print("🔦 Install dependencies")
+            try Shell.executeAndPrint("rm -f Package.resolved")
+            try Shell.executeAndPrint("rm -rf .build")
+            try Shell.executeAndPrint("rm -rf build")
+            try Shell.executeAndPrint("rm -rf Eval.xcodeproj")
             try Shell.executeAndPrint("bundle install")
         }
         
@@ -160,22 +163,13 @@ class Eval {
             print("📦 ✨ Cleaning up")
             try! Shell.executeAndPrint("rm -f \(file)")
             try! Shell.executeAndPrint("rm -rf \(dir)")
+            try! Shell.executeAndPrint("rm -rf Documentation/Output")
         }
         
         if TravisCI.isRunningLocally() {
             print("📦 ✨ Preparing")
             try! Shell.executeAndPrint("rm -rf \(dir)")
         }
-        
-//        if TravisCI.isCIJob() {
-//            print("📦 ⏳ Setting up git credentials")
-//            try Shell.executeAndPrint("openssl aes-256-cbc -K $encrypted_f50468713ad3_key -iv $encrypted_f50468713ad3_iv -in github_rsa.enc -out \(file) -d")
-//            try Shell.executeAndPrint("chmod 600 \(file)")
-//            try Shell.executeAndPrint("ssh-add \(file)")
-//            try Shell.executeAndPrint("sudo ssh -o StrictHostKeyChecking=no git@github.com || true")
-//            try Shell.executeAndPrint("git config --global user.email tevelee@gmail.com")
-//            try Shell.executeAndPrint("git config --global user.name 'Travis CI'")
-//        }
 
         if let repo = currentRepositoryUrl()?.replacingOccurrences(of: "https://github.com/", with: "git@github.com:") {
             let branch = "gh-pages"
@@ -206,6 +200,12 @@ class Eval {
     }
     
     static func testCoverage() throws {
+        defer {
+            print("📦 ✨ Cleaning up")
+            try! Shell.executeAndPrint("rm -f Eval.framework.coverage.txt")
+            try! Shell.executeAndPrint("rm -f EvalTests.xctest.coverage.txt")
+        }
+        
         print("☝🏻 Uploading code test coverage data")
         try Shell.executeAndPrint("bash <(curl -s https://codecov.io/bash) -J Eval", timeout: 120)
     }
@@ -222,8 +222,17 @@ class Eval {
     
     static func prepareExamplesForBuild() throws {
         print("🤖 Generating project file on Examples")
-        try onAllExamples { _ in
-            return "swift package generate-xcodeproj"
+        try onAllExamples { example in
+            let cleanup = [
+                "rm -f Package.resolved",
+                "rm -rf .build",
+                "rm -rf build",
+                "rm -rf \(example).xcodeproj"
+            ]
+            let generate = [
+                "swift package generate-xcodeproj"
+            ]
+            return (cleanup + generate).joined(separator: ";")
         }
     }
     
@@ -245,7 +254,12 @@ class Eval {
     
     static func onAllExamples(_ command: (String) throws -> String) throws {
         for (name, directory) in try examples() {
-            try Shell.executeAndPrint("pushd \(directory) && \(command(name)) && popd", timeout: 60)
+            let commands = [
+                "pushd \(directory)",
+                try command(name),
+                "popd"
+            ]
+            try Shell.executeAndPrint(commands.joined(separator: ";"), timeout: 60)
         }
     }
     
@@ -317,8 +331,10 @@ class TravisCI {
             return .travisAPI
         } else if let tag = Shell.env(name: "TRAVIS_TAG"), !tag.isEmpty {
             return .travisPushOnTag(name: tag)
+        } else if let branch = Shell.env(name: "TRAVIS_BRANCH"), !branch.isEmpty {
+            return .travisPushOnBranch(branch: branch)
         } else {
-            return .travisPushOnBranch(branch: "TRAVIS_BRANCH")
+            fatalError("Cannot identify job type")
         }
     }
 }

@@ -21,6 +21,7 @@ class Eval {
             try build()
             try runTests()
             try runLinter()
+            try runDanger()
         }
     }
 
@@ -94,6 +95,7 @@ class Eval {
         "publishDocs": publishDocs,
         "runCocoaPodsLinter": runCocoaPodsLinter,
         "testCoverage": testCoverage,
+        "runDanger": runDanger,
     ]
 
     static func prepareForBuild() throws {
@@ -185,6 +187,11 @@ class Eval {
     static func testCoverage() throws {
         print("☝🏻 Uploading code test coverage data")
         try Shell.executeAndPrint("bash <(curl -s https://codecov.io/bash) -J Eval", timeout: 120)
+    }
+    
+    static func runDanger() throws {
+        print("⚠️ Running Danger")
+        try Shell.executeAndPrint("bundle exec danger || true")
     }
 
     // MARK: Helpers

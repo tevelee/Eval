@@ -3,7 +3,6 @@
 build
 /Packages
 
-/*.xcodeproj
 xcuserdata
 .xcuserstate
 

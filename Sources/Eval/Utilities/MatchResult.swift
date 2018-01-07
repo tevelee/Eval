@@ -28,10 +28,16 @@ public enum MatchResult<T> {
     /// The input can match, if it were continued. (It's the prefix of the matching expression)
     case possibleMatch
     /// The input matches the expression. It provides information about the `length` of the matched input, the `output` after the evaluation, and the `variables` that were processed during the process.
+    /// - parameter length: The length of the match in the input string
+    /// - parameter output: The interpreted content
+    /// - parameter variables: The key-value pairs of the found `Variable` instances along the way
     case exactMatch(length: Int, output: T, variables: [String: Any])
     /// In case the matching sequence only consists of one variable, the result is going to be anyMatch
+    /// - parameter shortest: Whether looking for shortest match or an eager one
     case anyMatch(shortest: Bool)
 
+    /// Shorter syntax for pattern matching `MatchResult.exactMatch`
+    /// - returns: Whether the case of the current instance is `exactMatch`
     func isMatch() -> Bool {
         if case .exactMatch(_, _, _) = self {
             return true
@@ -39,6 +45,18 @@ public enum MatchResult<T> {
         return false
     }
 
+    /// Shorter syntax for pattern matching `MatchResult.anyMatch`
+    /// - parameter shortest: If the result is `anyMatch`, this one filter the content by its shortest parameter - if provided. Uses `false` otherwise
+    /// - returns: Whether the case of the current instance is `anyMatch`
+    func isAnyMatch(shortest: Bool = false) -> Bool {
+        if case .anyMatch(let short) = self {
+            return short == shortest
+        }
+        return false
+    }
+    
+    /// Shorter syntax for pattern matching `MatchResult.noMatch`
+    /// - returns: Whether the case of the current instance is `noMatch`
     func isNoMatch() -> Bool {
         if case .noMatch = self {
             return true
@@ -46,10 +64,32 @@ public enum MatchResult<T> {
         return false
     }
 
+    /// Shorter syntax for pattern matching `MatchResult.anypossibleMatch`
+    /// - returns: Whether the case of the current instance is `possibleMatch`
     func isPossibleMatch() -> Bool {
         if case .possibleMatch = self {
             return true
         }
         return false
+    }
+}
+
+/// `MatchResult` with Equatable objects are also Equatable
+public extension MatchResult where T: Equatable {
+    /// `MatchResult` with Equatable objects are also Equatable
+    /// - parameter lhs: Left hand side
+    /// - parameter rhs: Right hand side
+    /// - returns: Whether the `MatchResult` have the same values, including the contents of their associated objects
+    public static func ==(lhs: MatchResult<T>, rhs: MatchResult<T>) -> Bool {
+        switch (lhs, rhs) {
+        case (.noMatch, .noMatch), (.possibleMatch, .possibleMatch):
+            return true
+        case (.anyMatch(let lhsShortest), .anyMatch(let rhsShortest)):
+            return lhsShortest == rhsShortest
+        case (.exactMatch(let lhsLength, let lhsOutput, let lhsVariables), .exactMatch(let rhsLength, let rhsOutput, let rhsVariables)):
+            return lhsLength == rhsLength && lhsOutput == rhsOutput && (lhsVariables as NSDictionary).isEqual(to: rhsVariables)
+        default:
+            return false
+        }
     }
 }

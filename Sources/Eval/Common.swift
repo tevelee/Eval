@@ -26,6 +26,8 @@ public protocol Evaluator {
     associatedtype EvaluatedType
 
     /// The only method in `Evaluator` protocol which does the evaluation of a string expression, and returns a strongly typed object
+    /// - parameter expression: The input
+    /// - returns: The evaluated value
     func evaluate(_ expression: String) -> EvaluatedType
 }
 
@@ -33,6 +35,9 @@ public protocol Evaluator {
 /// The context contains variables which can be used during the evaluation
 public protocol EvaluatorWithContext: Evaluator {
     /// Evaluates the provided string expression with the help of the context parameter, and returns a strongly typed object
+    /// - parameter expression: The input
+    /// - parameter context: The local context if there is something expression specific needs to be provided
+    /// - returns: The evaluated value
     func evaluate(_ expression: String, context: InterpreterContext) -> EvaluatedType
 }
 
@@ -55,10 +60,14 @@ public class InterpreterContext {
     public var variables: [String: Any]
 
     /// Users of the context may optionally provide an initial set of variables
+    /// - parameter variables: Variable names and values
     public init(variables: [String: Any] = [:]) {
         self.variables = variables
     }
 
+    /// Creates a new context instance by merging their variable dictionaries. The one in the parameter overrides the duplicated of the existing one
+    /// - parameter with: The other context to merge with
+    /// - returns: A new `InterpreterContext` instance with the current and the parameter variables merged inside
     func merge(with other: InterpreterContext? = nil) -> InterpreterContext {
         if let other = other {
             return InterpreterContext(variables: self.variables.merging(other.variables) { (key, _) in key })
@@ -68,6 +77,14 @@ public class InterpreterContext {
     }
 }
 
+/// This is where the `Matcher` is able to determine the `MatchResult` for a given input inside the provided substring range
+/// - parameter amongst: All the `Matcher` instances to evaluate, in priority order
+/// - parameter in: The input
+/// - parameter from: The start of the checked range
+/// - parameter until: The end of the checked range
+/// - parameter interpreter: An interpreter instance - if variables need any further evaluation
+/// - parameter context: The context - if variables need any contextual information
+/// - returns: The result of the match operation
 func matchStatement<T, E>(amongst statements: [Matcher<T, E>], in input: String, from start: Int = 0, until length: Int = 1, interpreter: E, context: InterpreterContext) -> MatchResult<T> {
     let results = statements.map { statement -> (element: Matcher<T, E>, result: MatchResult<T>) in
         let result = statement.matches(string: input, from: start, until: length, interpreter: interpreter, context: context)

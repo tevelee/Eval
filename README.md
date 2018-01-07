@@ -11,6 +11,7 @@
 - [👨🏻‍💻 About](#-about)
 - [📈 Getting Started](#-getting-started)
 	- [🤓 Short Example](#-short-example)
+	- [⚡️ Installation](#%EF%B8%8F-installation)
 	- [⁉️ How does it work?](#%EF%B8%8F-how-does-it-work)
 - [🏃🏻 Status](#-status)
 - [💡 Motivation](#-motivation)
@@ -90,7 +91,7 @@ let interpreter = TypedInterpreter(dataTypes: [number, string, boolean, array, d
 And call it with a string expression, as follows.
 
 ```swift                                   
-let result = interpreter.evaluate("2*x + 1") as? Double
+let result = interpreter.evaluate("2 * x + 1") as? Double
 ```
 
 ### 🤓 Short example
@@ -168,11 +169,59 @@ Now, that we have operators and data types, we can also evaluate anything using 
 * `interpreter.evaluate("2 + 1.5 * 6") as Double` (since multiplication is defined earlier in the array, it has a higher precedence, as expected)
 * `interpreter.evaluate("true ? 1 : 2.5") as Double`
 
--
-
 As you have seen, it's really easy and intuitive to build custom languages, using simple building blocks. With just a few custom data types and functions, the possibilities are endless. Operators, functions, string, arrays, dates...
 
 The motto of the framework: Build your own (mini) language!
+
+### ⚡️ Installation
+
+You have a few options to include the library in your app. 
+
+- Swift Package Manager
+- CocoaPods
+- Manually
+
+#### Swift Package Manager
+
+Just add the following line to your dependencies:
+
+```swift
+.package(url: "https://github.com/tevelee/Eval.git", from: "1.0.0"),
+```
+
+And reference it by name in your targets:
+
+```swift
+targets: [
+    .target(name: "MyAwesomeApp", dependencies: ["Eval"]),
+]
+```
+
+And finally, run the integration command:
+
+```bash
+swift package resolve
+```
+
+#### CocoaPods
+
+Just add the following line to your `Podfile`:
+
+```ruby
+pod 'Eval', '~> 1.0'
+```
+And install the new dependency:
+
+```bash
+pod install
+```
+
+
+#### Manually
+
+(Not recommended! Please use a package manager instead to keep your dependencies up to date.)
+
+Clone the repository content and copy the files into a new target in your app.
 
 ### ⁉️ How does it work?
 

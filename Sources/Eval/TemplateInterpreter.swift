@@ -45,6 +45,9 @@ public class TemplateInterpreter: Interpreter {
 
     /// The statements, and context parameters are optional, but highly recommended to use with actual values.
     /// In order to properly initialise a `TemplateInterpreter`, you'll need a `TypedInterpreter` instance as well.
+    /// - parameter statements: The patterns that the interpreter should recognise
+    /// - parameter interpreter: A `TypedInterpreter` instance to evaluate typed expressions appearing in the template
+    /// - parameter context: Global context that is going to be used with every expression evaluated with the current instance. Defaults to empty context
     public init(statements: [Matcher<String, TemplateInterpreter>] = [],
                 interpreter: TypedInterpreter,
                 context: InterpreterContext = InterpreterContext()) {
@@ -54,11 +57,16 @@ public class TemplateInterpreter: Interpreter {
     }
 
     /// The main part of the evaluation happens here. In this case, only the global context variables are going to be used
+    /// - parameter expression: The input
+    /// - returns: The output of the evaluation
     public func evaluate(_ expression: String) -> String {
         return evaluate(expression, context: InterpreterContext())
     }
 
-    /// The main part of the evaluation happens here. In this case, the global context variables merged with the provided context are going to be used. 
+    /// The main part of the evaluation happens here. In this case, the global context variables merged with the provided context are going to be used.
+    /// - parameter expression: The input
+    /// - parameter context: Local context that is going to be used with this expression only
+    /// - returns: The output of the evaluation
     public func evaluate(_ expression: String, context: InterpreterContext) -> String {
         let context = self.context.merge(with: context)
         var output = ""

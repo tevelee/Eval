@@ -25,16 +25,24 @@ import Foundation
 /// The first parameter contains the values of every matched `Variable` instance.
 /// The second parameter is the evaluator. If there is a need to process the value of the variable further, creators of this block can use this evaluator, whose value is always the interpreter currently in use
 /// In its last parameter if provides information about the context, and therefore allows access to read or modify the context variables.
-public typealias MatcherBlock<T, E: Evaluator> = ([String: Any], E, InterpreterContext) -> T?
+/// - parameter variables: The key-value pairs of the `Variable` instances found along the way
+/// - parameter evaluator: The evaluator instance to help parsing the content
+/// - parameter context: The context if the matcher block needs any contextual information
+/// - returns: The converted value
+public typealias MatcherBlock<T, E: Evaluator> = (_ variables: [String: Any], _ evaluator: E, _ context: InterpreterContext) -> T?
 
 /// Matchers are the heart of the Eval framework, providing pattern matching capabilities to the library.
 public class Matcher<T, E: Interpreter> {
     /// `Matcher` instances are capable of recognising patterns described in the `elements` collection. It only remains effective, if the `Variable` instances are surrounded by `Keyword` instances, so no two `Variable`s should be next to each other. Otherwise, their matching result and value would be undefined.
     /// This collection should be provided during the initialisation, and cannot be modified once the `Matcher` instance has been created.
     public let elements: [MatchElement]
+    
+    /// The block to process the elements with
     let matcher: MatcherBlock<T, E>
 
     /// The first parameter is the pattern, that needs to be recognised. The `matcher` ending closure is called whenever the pattern has successfully been recognised and allows the users of this framework to provide custom computations using the matched `Variable` values.
+    /// - parameter elemenets: The pattern to recognise
+    /// - parameter matcher: The block to process the input with
     public init(_ elements: [MatchElement],
                 matcher: @escaping MatcherBlock<T, E>) {
         self.matcher = matcher
@@ -48,6 +56,12 @@ public class Matcher<T, E: Interpreter> {
     }
 
     /// This matcher provides the main logic of the `Eval` framework, performing the pattern matching, trying to identify, whether the input string is somehow related, or completely matches the pattern of the `Matcher` instance.
+    /// - parameter string: The input
+    /// - parameter from: The start of the range to analyse the result in
+    /// - parameter until: The end of the range to analyse the result in
+    /// - parameter interpreter: An interpreter instance - if the variables need any further evaluation
+    /// - parameter context: The context - if the block uses any contextual data
+    /// - returns: The result of the matching operation
     func matches(string: String, from start: Int = 0, until length: Int, interpreter: E, context: InterpreterContext) -> MatchResult<T> {
         let isLast = string.count == start + length
         let trimmed = String(string[start ..< start + length])
@@ -57,22 +71,34 @@ public class Matcher<T, E: Interpreter> {
 
         typealias VariableValue = (metadata: VariableProtocol, value: String)
         var currentlyActiveVariable: VariableValue? = nil
+        
+        /// Tries to append the next input character to the currently active variables - if we have any
+        /// - returns: Whether the append was successful
         func tryToAppendCurrentVariable() -> Bool {
             if let variable = currentlyActiveVariable {
                 appendNextCharacterToVariable(variable)
             }
             return currentlyActiveVariable != nil
         }
+        
+        /// Appends the next character to the provded variables
+        /// - parameter variable: The variable to append to
         func appendNextCharacterToVariable(_ variable: VariableValue) {
             if !remainder.isEmpty {
                 currentlyActiveVariable = (variable.metadata, variable.value + String(remainder.removeFirst()))
             }
         }
+        
+        /// An element to initialise the variable with
+        /// - parameter element: The variable element
         func initialiseVariable(_ element: MatchElement) {
             if currentlyActiveVariable == nil, let variable = element as? VariableProtocol {
                 appendNextCharacterToVariable((variable, ""))
             }
         }
+        
+        /// When the recognition of a variable arrives to the final stage, function finalises its value and appends the variables array
+        /// - returns: Whether the registration was successful (the finalisation resulted in a valid value)
         func registerAndValidateVariable() -> Bool {
             if let variable = currentlyActiveVariable {
                 variables[variable.metadata.name] = finaliseVariable(variable, interpreter: interpreter, context: context)
@@ -136,6 +162,13 @@ public class Matcher<T, E: Interpreter> {
         }
     }
 
+    /// Maps and evaluates variable content, based on its interpretation settings
+    /// - parameter variable: The variable to process
+    /// - parameter metadata: Property-bag with the name, interpretation details, and map function of the variable
+    /// - parameter value: The value of the variable
+    /// - parameter interpreter: An interpreter instance - if the value needs any further evaluation
+    /// - parameter context: The context - if the block uses any contextual data
+    /// - returns: The result of the matching operation
     func finaliseVariable(_ variable: (metadata: VariableProtocol, value: String), interpreter: E, context: InterpreterContext) -> Any? {
         let value = variable.value.trim()
         if variable.metadata.interpreted {
@@ -146,6 +179,11 @@ public class Matcher<T, E: Interpreter> {
         return variable.metadata.performMap(input: value, interpreter: interpreter)
     }
 
+    /// Determines whether the current character is an `OpenKeyword`, so there might be another embedded match later
+    /// - parameter element: The element to check whether it's an `OpenKeyword`
+    /// - parameter in: The input
+    /// - parameter at: The starting position to check from
+    /// - returns: Whether the element conditions apply and the position is before the last one
     func isEmbedded(element: MatchElement, in string: String, at currentPosition: Int) -> Bool {
         if let closingTag = element as? Keyword, closingTag.type == .closingStatement, let closingPosition = positionOfClosingTag(in: string),
             currentPosition < closingPosition {
@@ -154,6 +192,10 @@ public class Matcher<T, E: Interpreter> {
         return false
     }
 
+    /// Determines whether the current character is an `OpenKeyword` and fins the position of its appropriate `ClosingKeyword` pair
+    /// - parameter in: The input
+    /// - parameter from: The starting position of the checking range
+    /// - returns: `nil` if the `CloseKeyword` pair cannot be found. The position otherwise
     func positionOfClosingTag(in string: String, from start: Int = 0) -> Int? {
         if let opening = elements.first(where: { ($0 as? Keyword)?.type == .openingStatement }) as? Keyword,
             let closing = elements.first(where: { ($0 as? Keyword)?.type == .closingStatement }) as? Keyword {

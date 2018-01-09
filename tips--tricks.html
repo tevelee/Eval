@@ -180,16 +180,13 @@
           <div class="section-content">
             
             <h1 id='tips-amp-tricks' class='heading'>Tips &amp; Tricks</h1>
-<h2 id='use-any-for-generics-code-variable-lt-any-gt-code' class='heading'>Use Any for generics: <code><a href="Classes.html#/s:4Eval8VariableC">Variable&lt;Any&gt;</a></code></h2>
 
-<p>If you are not sure about the allowed input type of your expressions, or you just want to defer that decision until your match is ran and your hit the block in the matcher, feel free to use <code>Variable&lt;Any&gt;(&quot;name&quot;)</code> in your patterns.</p>
+<p>The following sections provide handy Tips and Tricks to help you effectively build up your own interpreter using custom operators and data types.</p>
+<h2 id='get-inspired-by-checking-out-the-examples' class='heading'>Get inspired by checking out the examples</h2>
 
-<p>It makes life a lot easier, than definig functions for each type.</p>
-<h2 id='use-map-on-variables' class='heading'>Use map on Variables</h2>
+<p>There are quite a few operators and data types available in the <a href="Examples/TemplateExample/Sources/TemplateExample/TemplateExample.swift">TemplateLanguage Example</a> project, under the StandardLibrary class</p>
 
-<p>Before processing Variable values, there is an option to pre-filter or modify them before it hits the match block. </p>
-
-<p>Examples include data type conversion and other types of validation.</p>
+<p>Also, there are quite a few expressions available <a href="Tests/EvalTests/InterpreterTests.swift#L110">in some of the unit tests</a> as well.</p>
 <h2 id='use-helper-functions-to-define-operators' class='heading'>Use helper functions to define operators</h2>
 
 <p>It&rsquo;s a lot readable to define operators in a one-liner expression, rather than using long patterns:</p>
@@ -201,43 +198,35 @@
 </code></pre>
 
 <p>You can find a few helpers <a href="Examples/TemplateExample/Sources/TemplateExample/TemplateExample.swift#L328-L411">in the examples</a>. Feel free to use them!</p>
-<h2 id='use-open-keyword-and-close-keyword-for-embedding-parentheses' class='heading'>Use Open Keyword and Close Keyword for embedding parentheses</h2>
-
-<p>Embedding is a common issue with interpreters and compilers. In order to provide some extra semantics to the engine, please use the <code>OpenKeyword(&quot;[&quot;)</code> and <code>OpenKeyword(&quot;]&quot;)</code> options, when defining <code><a href="Classes/Keyword.html">Keyword</a></code>s that come in pairs.</p>
 <h2 id='be-mindful-about-precedence' class='heading'>Be mindful about precedence</h2>
-<h3 id='template-expressions' class='heading'>Template expressions</h3>
+<h4 id='template-expressions' class='heading'>Template expressions</h4>
 
 <p>The earlier a pattern is represent in the array of <code>statements</code>, the higher precedence it gets. 
 Practically, if there is an <code>if</code> statement and an <code>if-else</code> one, the <code>if-else</code> should be defined earlier, because both are going to match the following expression:
 <code>{% if x &lt; 0 %}A{% else %}B{% endif %}</code>, but if <code>if</code> goes first, then the output - and the <code>body</code> of the <code>if</code> statement - is going to be processed as <code>A{% else %}B</code>. </p>
 
 <p>Typically, parentheses and richer type of expressions should go earlier in the array.</p>
-<h3 id='typed-expressions' class='heading'>Typed expressions</h3>
+<h4 id='typed-expressions' class='heading'>Typed expressions</h4>
 
 <p>The earlier a pattern is represent in the array of <code>functions</code>, the higher precedence it gets. 
 Practically, if there is an addition function and a multiplication one, the multiplication should be defined earlier (as it has higher precedence), because both are going to match the following expression:
 <code>1 * 2 + 3</code>, but if addition goes first, then the evaluation would process <code>1 * 2</code> on <code>lhs</code> and <code>3</code> on <code>rhs</code>, which - of course - is incorrect.  </p>
 
 <p>Typically, parentheses and higher precedence operators should go earlier in the array.</p>
-<h2 id='debugging-tips' class='heading'>Debugging tips</h2>
+<h2 id='use-any-for-generics-code-variable-lt-any-gt-code' class='heading'>Use Any for generics: <code><a href="Classes.html#/s:4Eval8VariableC">Variable&lt;Any&gt;</a></code></h2>
 
-<ol>
-<li>If an expression haven&rsquo;t been matched
+<p>If you are not sure about the allowed input type of your expressions, or you just want to defer that decision until your match is ran and your hit the block in the matcher, feel free to use <code>Variable&lt;Any&gt;(&quot;name&quot;)</code> in your patterns.</p>
 
-<ul>
-<li>It&rsquo;s common, that some validation caught the value</li>
-<li>Print your expressions or put breakpoints into the affected match blocks or variable map blocks</li>
-</ul></li>
-<li>If you see weird output
+<p>It makes life a lot easier, than definig functions for each type.</p>
+<h2 id='use-map-on-code-variable-code-s-for-pre-filtering' class='heading'>Use map on <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code>s for pre-filtering</h2>
 
-<ul>
-<li>Play with the order of the newly added opeartions.</li>
-<li>Incorrect precedence can turn expressions upside down</li>
-</ul></li>
-</ol>
+<p>Before processing Variable values, there is an option to pre-filter or modify them before it hits the match block. </p>
 
-<p>The framework is still in an early stage, so debugging helpers will follow in upcoming releases. Please stay tuned!</p>
-<h2 id='share-context-between-template-and-typed-interpreters' class='heading'>Share context between template and typed interpreters</h2>
+<p>Examples include data type conversion and other types of validation.</p>
+<h2 id='use-code-openkeyword-code-and-code-closekeyword-code-for-embedding-parentheses' class='heading'>Use <code><a href="Classes/OpenKeyword.html">OpenKeyword</a></code> and <code><a href="Classes/CloseKeyword.html">CloseKeyword</a></code> for embedding parentheses</h2>
+
+<p>Embedding is a common issue with interpreters and compilers. In order to provide some extra semantics to the engine, please use the <code>OpenKeyword(&quot;[&quot;)</code> and <code>OpenKeyword(&quot;]&quot;)</code> options, when defining <code><a href="Classes/Keyword.html">Keyword</a></code>s that come in pairs.</p>
+<h2 id='share-context-between-code-templateinterpreter-code-and-code-typedinterpreter-code' class='heading'>Share context between <code><a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a></code> and <code><a href="Classes/TypedInterpreter.html">TypedInterpreter</a></code></h2>
 
 <p>If you use template interpreters, they need a typed interpreter to hold. Both interpreters have <code>context</code> variables, so if you are not being careful enough, it can cause headaches. </p>
 
@@ -246,12 +235,7 @@ Practically, if there is an addition function and a multiplication one, the mult
 <p>The reason that the variables are encapsulated in a context is that context is a class, while variables are mutable <code>var</code> struct properties on that object. With this construction the context reference can be passed around to multiple interpreter instances, but keeps the copy-on-write (🐮) behaviour of the modification.</p>
 
 <p>Context defined during the initialisation apply to every evaluation performed with the given interpreter, while the ones passed to the <code>evaluate</code> method only apply to that specific  expression instance.</p>
-<h2 id='experiment-with-your-expressions' class='heading'>Experiment with your expressions!</h2>
-
-<p>It&rsquo;s quite easy to add new operators, functions, and data types. I suggest not to think about them too long, just dare to experpiment with them, what&rsquo;s possible and what is not. </p>
-
-<p>You can always add new types or functions if you need extra functionality. The options are practically endless!</p>
-<h2 id='define-constants-in-literals' class='heading'>Define constants in literals</h2>
+<h2 id='define-constants-in-code-literal-code-s' class='heading'>Define constants in <code><a href="Classes/Literal.html">Literal</a></code>s</h2>
 
 <p>The frameworks allows multiple ways to express static strings and convert them. 
 I believe the best place to put constants are in the <code><a href="Classes/Literal.html">Literal</a></code>s of <code><a href="Classes/DataType.html">DataType</a></code>s.</p>
@@ -263,7 +247,7 @@ I believe the best place to put constants are in the <code><a href="Classes/Lite
 </code></pre>
 
 <p>The <code>now</code> string is going to be expressed as the current timestamp at the time of the evaluation, not the time of the initialisation.</p>
-<h2 id='map-any-function-calls-from-swift' class='heading'>Map any function calls from Swift</h2>
+<h2 id='map-any-function-signatures-from-swift-dynamically' class='heading'>Map any function signatures from Swift, dynamically</h2>
 
 <p>The framework is really lightweight and not really restrictive in regards of how to parse your expressions. Free your mind, and do stuff dynamically.</p>
 <pre class="highlight swift"><code><span class="kt">Function</span><span class="p">(</span><span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"lhs"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"."</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"rhs"</span><span class="p">,</span> <span class="nv">interpreted</span><span class="p">:</span> <span class="kc">false</span><span class="p">))</span> <span class="p">{</span> <span class="p">(</span><span class="n">arguments</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Double</span><span class="p">?</span> <span class="k">in</span>
@@ -280,6 +264,26 @@ I believe the best place to put constants are in the <code><a href="Classes/Lite
 <p>Perform any method call of any type and maybe process their output as well. It&rsquo;s not the safest way to go with it, but this is just an example.</p>
 
 <p>This opens up the way of running almost any arbitrary code on Apple platforms, from any backend. But, this does it in a very controlled way, as you must define a set of data types and functions that apply, unless you call them dynamically at runtime.</p>
+<h2 id='experiment-with-your-expressions' class='heading'>Experiment with your expressions!</h2>
+
+<p>It&rsquo;s quite easy to add new operators, functions, and data types. I suggest not to think about them too long, just dare to experpiment with them, what&rsquo;s possible and what is not. </p>
+
+<p>You can always add new types or functions if you need extra functionality. The options are practically endless!</p>
+<h2 id='debugging-tips' class='heading'>Debugging tips</h2>
+<h4 id='if-an-expression-haven-39-t-been-matched' class='heading'>If an expression haven&rsquo;t been matched</h4>
+
+<ul>
+<li>It&rsquo;s common, that some validation caught the value</li>
+<li>Print your expressions or put breakpoints into the affected match blocks or variable map blocks</li>
+</ul>
+<h4 id='if-you-see-weird-output' class='heading'>If you see weird output</h4>
+
+<ul>
+<li>Play with the order of the newly added opeartions.</li>
+<li>Incorrect precedence can turn expressions upside down</li>
+</ul>
+
+<p>The framework is still in an early stage, so debugging helpers will follow in upcoming releases. Please stay tuned!</p>
 <h2 id='validate-your-expressions-before-putting-them-out-in-production-code' class='heading'>Validate your expressions before putting them out in production code</h2>
 
 <p>Not every expression work out of the box as you might expect. Operators and functions depend on each other, especially in terms of precedence. If one pattern was recognised before the other one, your code might not run as you expected.</p>
@@ -293,7 +297,7 @@ I believe the best place to put constants are in the <code><a href="Classes/Lite
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-08)</p>
+      <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-09)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

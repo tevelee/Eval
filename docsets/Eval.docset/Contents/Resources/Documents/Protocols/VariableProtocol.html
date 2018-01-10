@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>VariableProtocol Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/VariableProtocol" class="dashAnchor"></a>
+    <a title="VariableProtocol Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Eval Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/tevelee/Eval"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftevelee%2Egithub%2Eio%2Fdocsets%2FEval%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Eval Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        VariableProtocol Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../example-projects.html">Example projects</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../interpreter-engine-details.html">Interpreter engine details</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../strongly-typed-evaluator.html">Strongly-typed evaluator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../template-evaluator.html">Template evaluator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../tips--tricks.html">Tips &amp; Tricks</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/CloseKeyword.html">CloseKeyword</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DataType.html">DataType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Function.html">Function</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/GenericVariable.html">GenericVariable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/InterpreterContext.html">InterpreterContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Keyword.html">Keyword</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Keyword/KeywordType.html">– KeywordType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Literal.html">Literal</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Matcher.html">Matcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OpenKeyword.html">OpenKeyword</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TemplateInterpreter.html">TemplateInterpreter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TemplateVariable.html">TemplateVariable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TypedInterpreter.html">TypedInterpreter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:4Eval8VariableC">Variable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/MatchResult.html">MatchResult</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/CharacterSet.html">CharacterSet</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/String.html">String</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:4Eval1poiS2S_s9CharacterVtF">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions/+(_:_:).html">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:4Eval2peoiySSz_s9CharacterVtF">+=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions/+=(_:_:).html">+=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromSi5untilq_11interpreterAA18InterpreterContextC7contexttAA0L0R_r0_lF">matchStatement(amongst:in:from:until:interpreter:context:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/ContextAware.html">ContextAware</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DataTypeProtocol.html">DataTypeProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Evaluator.html">Evaluator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EvaluatorWithContext.html">EvaluatorWithContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/FunctionProtocol.html">FunctionProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Interpreter.html">Interpreter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/MatchElement.html">MatchElement</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/VariableProtocol.html">VariableProtocol</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>VariableProtocol</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">protocol</span> <span class="kt">VariableProtocol</span></code></pre>
+
+                </div>
+              </div>
+            <p>Protocol for all Variables</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16VariableProtocolP4nameSSv"></a>
+                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16VariableProtocolP4nameSSv">name</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Unique identifier of the variable that is used when matching and returning them in the matcher.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L109">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16VariableProtocolP8shortestSbv"></a>
+                    <a name="//apple_ref/swift/Property/shortest" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16VariableProtocolP8shortestSbv">shortest</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Provides information whether the match should be exhaustive or just use the shortest possible matching string (even zero characters in some edge cases). This depends on the surrounding <code><a href="../Classes/Keyword.html">Keyword</a></code> instances in the containing collection.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">shortest</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L111">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16VariableProtocolP11interpretedSbv"></a>
+                    <a name="//apple_ref/swift/Property/interpreted" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16VariableProtocolP11interpretedSbv">interpreted</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If false, the value of the recognised placeholder will not be processed. In case it&rsquo;s true, it will be evaluated, using the <code>interpreterForEvaluatingVariables</code> property of the interpreter instance</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">interpreted</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L113">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16VariableProtocolP15acceptsNilValueSbv"></a>
+                    <a name="//apple_ref/swift/Property/acceptsNilValue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16VariableProtocolP15acceptsNilValueSbv">acceptsNilValue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If <code><a href="../Protocols/VariableProtocol.html#/s:4Eval16VariableProtocolP11interpretedSbv">interpreted</a></code> is true, and the result of the evaluation is <code>nil</code>, then <code>acceptsNilValue</code> determines if the current match result should be instant noMatch, or <code>nil</code> is an accepted value, so the matching should be continued</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">acceptsNilValue</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L115">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16VariableProtocolP10performMapypSgyp5input_yp11interpretertF"></a>
+                    <a name="//apple_ref/swift/Method/performMap(input:interpreter:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16VariableProtocolP10performMapypSgyp5input_yp11interpretertF">performMap(input:interpreter:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The result of the evaluated variable will be ran through this map function, transforming its value. By default the map tries to convert the matched value to the expected type, using the <code>as?</code> operator.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">performMap</span><span class="p">(</span><span class="nv">input</span><span class="p">:</span> <span class="kt">Any</span><span class="p">,</span> <span class="nv">interpreter</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>input</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The first parameter is the value is going to be transformed</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>interpreter</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Helps the mapper function to parse and interpret the contents</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The transformed value or nil - if the value was validated with a negative result</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L120">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

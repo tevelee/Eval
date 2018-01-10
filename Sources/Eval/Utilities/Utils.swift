@@ -59,20 +59,6 @@ func += (string: inout String, character: Character) {
     string = string + character
 }
 
-/// Small helpers on `CharacterSet` to provide easier usage
-extension CharacterSet {
-    /// Syntactic sugar for character containment
-    /// - parameter character: The Character to check for existence in the CharacterSet
-    /// - returns: `true` if `CharacterSet` contains the `Character`. `false` otherwise.
-    func contains(_ character: Character) -> Bool {
-        if let string = String(character).unicodeScalars.first {
-            return self.contains(string)
-        } else {
-            return false
-        }
-    }
-}
-
 /// Helpers on `String` to provide `Int` based subscription features and easier usage
 extension String {
     /// Syntactic sugar for Int based string subsription

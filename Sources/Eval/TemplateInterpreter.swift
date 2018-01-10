@@ -89,3 +89,17 @@ public class TemplateInterpreter: Interpreter {
         return output
     }
 }
+
+/// A special kind of variable that is used in case of `TemplateInterpreter`s. It does not convert its content using the `interpreterForEvaluatingVariables` but always uses the `TemplateInterpreter` instance.
+/// It's perfect for expressions, that have a body, that needs to be further interpreted, such as an if or while statement.
+public class TemplateVariable: GenericVariable<String, TemplateInterpreter> {
+    /// No changes compared to the initialiser of the superclass `Variable`, uses the same parameters
+    /// - parameter name: `GenericVariable`s have a name (unique identifier), that is used when matching and returning them in the matcher.
+    /// - parameter shortest: provides information whether the match should be exhaustive or just use the shortest possible matching string (even zero characters in some edge cases). This depends on the surrounding `Keyword` instances in the containing collection. Defaults to `true`
+    public init(_ name: String, shortest: Bool = true) {
+        super.init(name, shortest: shortest, interpreted: false) { value, interpreter in
+            guard let stringValue = value as? String else { return "" }
+            return interpreter.evaluate(stringValue)
+        }
+    }
+}

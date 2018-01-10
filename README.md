@@ -2,11 +2,13 @@
 
 [![Travis CI status](https://travis-ci.org/tevelee/Eval.svg?branch=master)](https://travis-ci.org/tevelee/Eval)
 [![Framework version](https://img.shields.io/badge/Version-1.0.0-yellow.svg)]()
-[![Swift version](https://img.shields.io/badge/Swift-4.0-green.svg)]()
-[![Version](https://img.shields.io/cocoapods/v/Eval.svg?style=flat)](http://cocoapods.org/pods/Eval)
+[![Swift version](https://img.shields.io/badge/Swift-4.0-orange.svg)]()
 [![Code Documentation Coverage](https://tevelee.github.io/Eval/badge.svg)](https://tevelee.github.io/Eval)
 [![Code Test Coverage](https://codecov.io/gh/tevelee/Eval/branch/master/graph/badge.svg)](https://codecov.io/gh/tevelee/Eval)
-[![Lincese](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE.txt)
+[![Lincese](https://img.shields.io/badge/Platforms-iOS%20|%20macOS%20|%20Linux-blue.svg)]()
+[![Lincese](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://github.com/tevelee/Eval/tree/master/LICENSE.txt)
+
+<!--[![Version](https://img.shields.io/cocoapods/v/Eval.svg?style=flat)](http://cocoapods.org/pods/Eval)-->
 
 - [👨🏻‍💻 About](#-about)
 - [📈 Getting Started](#-getting-started)
@@ -265,11 +267,11 @@ It ended up quite positively after I discovered the capabilities of a generic so
 ​
 ​I included a few use-cases, which bring significant improvements on how things are processed before - at least in my previous projects.
 ​
-### [Template language](Examples/TemplateExample)
+### [Template language](https://github.com/tevelee/Eval/tree/master/Examples/TemplateExample)
 
 I was able to create a full-blown template language, completely, using this framework and nothing else. It's almost like a competitor of the one I mentioned ([Twig](https://github.com/twigphp/Twig)). This is the most advanced example of them all!
 
-I created a standard library with all the possible operators you can imagine. With helpers, each operator is a small, one-liner addition. Added the important data types, such as arrays, strings, numbers, booleans, dates, etc., and a few functions, to be more awesome. [Take a look for inspiration!](Examples/TemplateExample/Sources/TemplateExample/TemplateExample.swift)
+I created a standard library with all the possible operators you can imagine. With helpers, each operator is a small, one-liner addition. Added the important data types, such as arrays, strings, numbers, booleans, dates, etc., and a few functions, to be more awesome. [Take a look for inspiration!](https://github.com/tevelee/Eval/tree/master/Examples/TemplateExample/Sources/TemplateExample/TemplateExample.swift)
 
 Together, it makes an excellent addition to my model-object generation project, and **REALLY useful for server-side Swift development as well**!
 
@@ -289,7 +291,7 @@ A color parser is also used by the BFF (Backend For Frontend, not 👭) project 
 
 Anyone is more than welcome to contribute to **Eval**! It can even be an addition to the docs or to the code directly, by [raising an issue](https://github.com/tevelee/Interpreter/issues/new) or in the form of a pull request. Both are equally valuable to me! Happy to assist anyone!
 
-In case you need help or want to report a bug - please file an issue. Make sure to provide as much information as you can; sample code also makes it a lot easier for me to help you. Check out the [contribution guidelines](CONTRIBUTE.md) for further information. 
+In case you need help or want to report a bug - please file an issue. Make sure to provide as much information as you can; sample code also makes it a lot easier for me to help you. Check out the [contribution guidelines](https://github.com/tevelee/Eval/tree/master/CONTRIBUTING.md) for further information. 
 
 I collected some use cases, and great opportunities for beginner tasks if anybody is motivated to bring this project to a more impressive state!
 
@@ -305,4 +307,4 @@ Feel free to reach out to me anytime via `tevelee [at] gmail [dot] com`, or `@te
 
 ## ⚖️ License
 
-**Eval** is available under the Apache 2.0 licensing rules. See the [LICENSE](LICENSE.txt) file for more information.
+**Eval** is available under the Apache 2.0 licensing rules. See the [LICENSE](https://github.com/tevelee/Eval/tree/master/LICENSE.txt) file for more information.

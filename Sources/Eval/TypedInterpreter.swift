@@ -225,3 +225,7 @@ public class Function<T> : FunctionProtocol {
         return output
     }
 }
+
+/// `Variable` represents a named placeholder, so when the matcher recognises a pattern, the values of the variables are passed to them in a block.
+public class Variable<T> : GenericVariable<T, TypedInterpreter> {
+}

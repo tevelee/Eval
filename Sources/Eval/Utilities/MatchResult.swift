@@ -54,7 +54,7 @@ public enum MatchResult<T> {
         }
         return false
     }
-    
+
     /// Shorter syntax for pattern matching `MatchResult.noMatch`
     /// - returns: Whether the case of the current instance is `noMatch`
     func isNoMatch() -> Bool {
@@ -80,7 +80,7 @@ public extension MatchResult where T: Equatable {
     /// - parameter lhs: Left hand side
     /// - parameter rhs: Right hand side
     /// - returns: Whether the `MatchResult` have the same values, including the contents of their associated objects
-    public static func ==(lhs: MatchResult<T>, rhs: MatchResult<T>) -> Bool {
+    public static func == (lhs: MatchResult<T>, rhs: MatchResult<T>) -> Bool {
         switch (lhs, rhs) {
         case (.noMatch, .noMatch), (.possibleMatch, .possibleMatch):
             return true

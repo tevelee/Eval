@@ -68,9 +68,9 @@ public class InterpreterContext {
     /// Creates a new context instance by merging their variable dictionaries. The one in the parameter overrides the duplicated of the existing one
     /// - parameter with: The other context to merge with
     /// - returns: A new `InterpreterContext` instance with the current and the parameter variables merged inside
-    func merge(with other: InterpreterContext? = nil) -> InterpreterContext {
+    func merge(with other: InterpreterContext?) -> InterpreterContext {
         if let other = other {
-            return InterpreterContext(variables: self.variables.merging(other.variables) { (key, _) in key })
+            return InterpreterContext(variables: other.variables.merging(self.variables) { (key, _) in key })
         } else {
             return self
         }

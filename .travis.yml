@@ -4,5 +4,5 @@ sudo: true
 before_script:
 - sh Scripts/git_auth.sh
 script:
-- swift Scripts/main.swift
+- travis_retry swift Scripts/main.swift
 - sleep 3

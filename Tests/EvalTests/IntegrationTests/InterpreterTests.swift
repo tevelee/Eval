@@ -2,58 +2,18 @@ import XCTest
 @testable import Eval
 
 class InterpreterTests: XCTestCase {
-    func testGenericInterpreter() {
-        let number = DataType(type: Double.self, literals: [Literal { v,_ in Double(v) },
-                                                            Literal("pi", convertsTo: Double.pi) ]) { String(describing: $0) }
+    func test_whenAddingALotOfFunctions_thenInterpretationWorksCorrectly() {
+        let number = numberDataType()
+        let string = stringDataType()
+        let date = dateDataType()
+        let array = arrayDataType()
+        let boolean = booleanDataType()
         
-        let singleQuotesLiteral = Literal { (input, _) -> String? in
-            guard let first = input.first, let last = input.last, first == last, first == "'" else { return nil }
-            let trimmed = input.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
-            return trimmed.contains("'") ? nil : trimmed
-        }
-        let string = DataType(type: String.self, literals: [singleQuotesLiteral]) { $0 }
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = Calendar(identifier: .gregorian)
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        
-        let date = DataType(type: Date.self, literals: [Literal<Date>("now", convertsTo: Date())]) { dateFormatter.string(from: $0) }
-        
-        let arrayLiteral = Literal { (input, interpreter) -> [CustomStringConvertible]? in
-            guard let first = input.first, let last = input.last, first == "[", last == "]" else { return nil }
-            return input
-                .trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
-                .split(separator: ",")
-                .map{ $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-                .map{ interpreter.evaluate(String($0)) as? CustomStringConvertible ?? String($0) }
-        }
-        let array = DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { $0.map{ $0.description }.joined(separator: ",") }
-        
-        let boolean = DataType(type: Bool.self, literals: [Literal("false", convertsTo: false),
-                                                           Literal("true", convertsTo: true)]) { $0 ? "true" : "false" }
-        
-        let methodCall = Function(patterns: [
-            Matcher(Variable<Any>("lhs", shortest: true) + Keyword(".") + Variable<String>("rhs", shortest: false, interpreted: false)) { (arguments,_,_) -> Double? in
-                if let lhs = arguments["lhs"] as? NSObjectProtocol,
-                    let rhs = arguments["rhs"] as? String,
-                    let result = lhs.perform(Selector(rhs)) {
-                    return Double(Int(bitPattern: result.toOpaque()))
-                }
-                return nil
-            }
-        ])
-        
+        let methodCall = methodCallFunction()
         let max = objectFunction("max") { (object: [Double]) -> Double? in object.max() }
         let min = objectFunction("min") { (object: [Double]) -> Double? in object.min() }
-        
-        let format = objectFunctionWithParameters("format") { (object: Date, arguments: [Any]) -> String? in
-            guard let format = arguments.first as? String else { return nil }
-            let dateFormatter = DateFormatter()
-            dateFormatter.calendar = Calendar(identifier: .gregorian)
-            dateFormatter.dateFormat = format
-            return dateFormatter.string(from: object)
-        }
-        
+        let format = dateFomatFunction()
+        let dateFactory = dateFactoryFunction()
         let not = prefixOperator("!") { (value: Bool) in !value }
         let not2 = function("not") { (arguments: [Any]) -> Bool? in
             guard let boolArgument = arguments.first as? Bool else { return nil }
@@ -62,18 +22,6 @@ class InterpreterTests: XCTestCase {
         let add = function("add") { (arguments: [Any]) -> Double? in
             guard let arguments = arguments as? [Double] else { return nil }
             return arguments.reduce(0, +)
-        }
-        let dateFactory = function("Date") { (arguments: [Any]) -> Date? in
-            guard let arguments = arguments as? [Double], arguments.count >= 3 else { return nil }
-            var components = DateComponents()
-            components.calendar = Calendar(identifier: .gregorian)
-            components.year = Int(arguments[0])
-            components.month = Int(arguments[1])
-            components.day = Int(arguments[2])
-            components.hour = arguments.count > 3 ? Int(arguments[3]) : 0
-            components.minute = arguments.count > 4 ? Int(arguments[4]) : 0
-            components.second = arguments.count > 5 ? Int(arguments[5]) : 0
-            return components.date
         }
         let test = functionWithNamedParameters("test") { (arguments: [String: Any]) -> Double? in
             guard let foo = arguments["foo"] as? Double, let bar = arguments["bar"] as? Double else { return nil }
@@ -91,18 +39,7 @@ class InterpreterTests: XCTestCase {
         let isEven = suffixOperator("is even") { (value: Double) in Int(value) % 2 == 0 }
         let lessThan = infixOperator("<") { (lhs: Double, rhs: Double) in lhs < rhs }
         
-        let increment = Function([Variable<Any>("value", interpreted: false), Keyword("++")]) { (arguments, interpreter, _) -> Double? in
-            if let argument = arguments["value"] as? String {
-                if let variable = interpreter.context.variables.first(where: { argument == $0.key }), let value = variable.value as? Double {
-                    let incremented = value + 1
-                    interpreter.context.variables[variable.key] = incremented
-                    return incremented
-                } else if let argument = interpreter.evaluate(argument) as? Double {
-                    return argument + 1
-                }
-            }
-            return nil
-        }
+        let increment = incremenetFunction()
         
         let interpreter = TypedInterpreter(dataTypes: [number, string, boolean, array, date],
                                              functions: [concat, parenthesis, methodCall, dateFactory, format, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, isEven, range, add, max, min, not, not2, prefix, increment, lessThan, test],
@@ -168,6 +105,22 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(template.evaluate("asd {% if 10 < 21 %}{{ 'Hello ' + name }}{% endif %} asd"), "asd Hello Teve asd")
     }
     
+    func test_whenEmbeddingTags_thenInterpretationWorksCorrectly() {
+        let parenthesis = Function<Any>([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { variables,_,_ in variables["body"] }
+        let addition = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
+        let interpreter = TypedInterpreter(dataTypes: [numberDataType(), stringDataType()],
+                                           functions: [parenthesis, addition],
+                                           context: InterpreterContext())
+        
+        XCTAssertEqual(interpreter.evaluate("(1)") as! Double, 1)
+        XCTAssertEqual(interpreter.evaluate("(1) + (2)") as! Double, 3)
+        XCTAssertEqual(interpreter.evaluate("(1 + (2))") as! Double, 3)
+        XCTAssertEqual(interpreter.evaluate("((1) + 2)") as! Double, 3)
+        XCTAssertEqual(interpreter.evaluate("((1) + (2))") as! Double, 3)
+    }
+    
+    //MARK: Helpers - operators
+    
     func infixOperator<A,B,T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T?> {
         return Function([Variable<A>("lhs", shortest: true), Keyword(symbol), Variable<B>("rhs", shortest: false)]) { arguments,_,_ in
             guard let lhs = arguments["lhs"] as? A, let rhs = arguments["rhs"] as? B else { return nil }
@@ -231,63 +184,100 @@ class InterpreterTests: XCTestCase {
             return body(object, interpretedArguments)
         }
     }
-
-    func objectFunctionWithNamedParameters<O,T>(_ name: String, body: @escaping (O, [String: Any]) -> T?) -> Function<T> {
-        return Function([Variable<O>("lhs", shortest: true), Keyword("."), Variable<String>("rhs", interpreted: false) { value,_ in
-            guard let value = value as? String, value == name else { return nil }
-            return value
-        }, Keyword("("), Variable<String>("arguments", interpreted: false), Keyword(")")]) { variables, interpreter, _ in
-            guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
-            var interpretedArguments: [String: Any] = [:]
-            for argument in arguments.split(separator: ",") {
-                let parts = String(argument).trim().split(separator: "=")
-                if let key = parts.first, let value = parts.last {
-                    interpretedArguments[String(key)] = interpreter.evaluate(String(value))
-                }
-            }
-            return body(object, interpretedArguments)
-        }
+    
+    //MARK: Helpers - data types
+    
+    func numberDataType() -> DataType<Double> {
+        return DataType(type: Double.self, literals: [Literal { v,_ in Double(v) },
+                                                      Literal("pi", convertsTo: Double.pi) ]) { String(describing: $0) }
     }
     
-    func testEmbeddedTags() {
+    func stringDataType() -> DataType<String> {
         let singleQuotesLiteral = Literal { (input, _) -> String? in
             guard let first = input.first, let last = input.last, first == last, first == "'" else { return nil }
             let trimmed = input.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
             return trimmed.contains("'") ? nil : trimmed
         }
-        let string = DataType(type: String.self, literals: [singleQuotesLiteral]) { $0 }
-        let boolean = DataType(type: Bool.self, literals: [Literal("false", convertsTo: false), Literal("true", convertsTo: true)]) { $0 ? "true" : "false" }
-        let number = DataType(type: Double.self, literals: [Literal { v,_ in Double(v) }, Literal("pi", convertsTo: Double.pi) ]) { String(describing: $0) }
+        return DataType(type: String.self, literals: [singleQuotesLiteral]) { $0 }
+    }
+    
+    func dateDataType() -> DataType<Date> {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         
-        let parenthesis = Function<Any>([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { variables,_,_ in variables["body"] }
-        let lessThan = infixOperator("<") { (lhs: Double, rhs: Double) in lhs < rhs }
-        let addition = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
-        let interpreter = TypedInterpreter(dataTypes: [number, string, boolean],
-                                           functions: [parenthesis, lessThan, addition],
-                                           context: InterpreterContext())
-        
-        XCTAssertEqual(interpreter.evaluate("(1)") as! Double, 1)
-        XCTAssertEqual(interpreter.evaluate("(1) + (2)") as! Double, 3)
-        XCTAssertEqual(interpreter.evaluate("(1 + (2))") as! Double, 3)
-        XCTAssertEqual(interpreter.evaluate("((1) + 2)") as! Double, 3)
-        XCTAssertEqual(interpreter.evaluate("((1) + (2))") as! Double, 3)
-
-        let braces = Matcher([OpenKeyword("("), TemplateVariable("body"), CloseKeyword(")")]) { (variables, interpreter: TemplateInterpreter, _) -> String? in
-            return variables["body"] as? String
+        return DataType(type: Date.self, literals: [Literal<Date>("now", convertsTo: Date())]) { dateFormatter.string(from: $0) }
+    }
+    
+    func arrayDataType() -> DataType<[CustomStringConvertible]> {
+        let arrayLiteral = Literal { (input, interpreter) -> [CustomStringConvertible]? in
+            guard let first = input.first, let last = input.last, first == "[", last == "]" else { return nil }
+            return input
+                .trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
+                .split(separator: ",")
+                .map{ $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .map{ interpreter.evaluate(String($0)) as? CustomStringConvertible ?? String($0) }
         }
-        let ifStatement = Matcher([OpenKeyword("{% if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), CloseKeyword("{% endif %}")]) { (variables, interpreter: TemplateInterpreter, _) -> String? in
-            guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
-            if condition {
-                return body
+        return DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { $0.map{ $0.description }.joined(separator: ",") }
+    }
+    
+    func booleanDataType() -> DataType<Bool> {
+        return DataType(type: Bool.self, literals: [Literal("false", convertsTo: false),
+                                                    Literal("true", convertsTo: true)]) { $0 ? "true" : "false" }
+    }
+    
+    //MARK: Helpers - functions
+    
+    func methodCallFunction() -> Function<Double> {
+        return Function(patterns: [
+            Matcher(Variable<Any>("lhs", shortest: true) + Keyword(".") + Variable<String>("rhs", shortest: false, interpreted: false)) { (arguments,_,_) -> Double? in
+                if let lhs = arguments["lhs"] as? NSObjectProtocol,
+                    let rhs = arguments["rhs"] as? String,
+                    let result = lhs.perform(Selector(rhs)) {
+                    return Double(Int(bitPattern: result.toOpaque()))
+                }
+                return nil
+            }
+            ])
+    }
+    
+    func dateFomatFunction() -> Function<String> {
+        return objectFunctionWithParameters("format") { (object: Date, arguments: [Any]) -> String? in
+            guard let format = arguments.first as? String else { return nil }
+            let dateFormatter = DateFormatter()
+            dateFormatter.calendar = Calendar(identifier: .gregorian)
+            dateFormatter.dateFormat = format
+            return dateFormatter.string(from: object)
+        }
+    }
+    
+    func dateFactoryFunction() -> Function<Date> {
+        return function("Date") { (arguments: [Any]) -> Date? in
+            guard let arguments = arguments as? [Double], arguments.count >= 3 else { return nil }
+            var components = DateComponents()
+            components.calendar = Calendar(identifier: .gregorian)
+            components.year = Int(arguments[0])
+            components.month = Int(arguments[1])
+            components.day = Int(arguments[2])
+            components.hour = arguments.count > 3 ? Int(arguments[3]) : 0
+            components.minute = arguments.count > 4 ? Int(arguments[4]) : 0
+            components.second = arguments.count > 5 ? Int(arguments[5]) : 0
+            return components.date
+        }
+    }
+    
+    func incremenetFunction() -> Function<Double> {
+        return Function([Variable<Any>("value", interpreted: false), Keyword("++")]) { (arguments, interpreter, _) -> Double? in
+            if let argument = arguments["value"] as? String {
+                if let variable = interpreter.context.variables.first(where: { argument == $0.key }), let value = variable.value as? Double {
+                    let incremented = value + 1
+                    interpreter.context.variables[variable.key] = incremented
+                    return incremented
+                } else if let argument = interpreter.evaluate(argument) as? Double {
+                    return argument + 1
+                }
             }
             return nil
         }
-
-        let template = TemplateInterpreter(statements: [braces, ifStatement], interpreter: interpreter, context: InterpreterContext())
-        XCTAssertEqual(template.evaluate("(a)"), "a")
-        XCTAssertEqual(template.evaluate("(a(b))"), "ab")
-        XCTAssertEqual(template.evaluate("((a)b)"), "ab")
-        XCTAssertEqual(template.evaluate("(a(b)c)"), "abc")
-        XCTAssertEqual(template.evaluate("{% if 10 < 21 %}Hello {% if true %}you{% endif %}!{% endif %}"), "Hello you!")
     }
 }

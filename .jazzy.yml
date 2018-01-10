@@ -9,7 +9,7 @@ module: Eval
 xcodebuild_arguments: [-scheme,Eval-Package]
 
 output: Documentation/Output
-theme: fullwidth
+theme: apple
 
 github_url: https://github.com/tevelee/Eval
 github_file_prefix: https://github.com/tevelee/Eval/tree/master
@@ -17,7 +17,7 @@ github_file_prefix: https://github.com/tevelee/Eval/tree/master
 root_url: https://tevelee.github.io/Eval
 
 clean: true
-min_acl: public
+min_acl: internal
 
 framework_root: Sources
 source_directory: .

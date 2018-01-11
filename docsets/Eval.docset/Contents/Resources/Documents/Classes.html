@@ -107,9 +107,6 @@
             <a href="Extensions.html">Extensions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Extensions/CharacterSet.html">CharacterSet</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Extensions/String.html">String</a>
               </li>
             </ul>
@@ -348,68 +345,6 @@ as they use it when mapping their values</p>
                     </section>
                   </div>
                 </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval8VariableC"></a>
-                    <a name="//apple_ref/swift/Class/Variable" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval8VariableC">Variable</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p><code>Variable</code> represents a named placeholder, so when the matcher recognises a pattern, the values of the variables are passed to them in a block.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Classes/GenericVariable.html">GenericVariable</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt"><a href="Classes/TypedInterpreter.html">TypedInterpreter</a></span><span class="o">&gt;</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L185-L186">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval16TemplateVariableC"></a>
-                    <a name="//apple_ref/swift/Class/TemplateVariable" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval16TemplateVariableC">TemplateVariable</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>A special kind of variable that is used in case of <code><a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a></code>s. It does not convert its content using the <code>interpreterForEvaluatingVariables</code> but always uses the <code><a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a></code> instance.
-It&rsquo;s perfect for expressions, that have a body, that needs to be further interpreted, such as an if or while statement.</p>
-
-                        <a href="Classes/TemplateVariable.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TemplateVariable</span><span class="p">:</span> <span class="kt"><a href="Classes/GenericVariable.html">GenericVariable</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a></span><span class="o">&gt;</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L190-L200">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
               </ul>
             </div>
             <div class="task-group">
@@ -442,6 +377,38 @@ Typically used in web applications, where the rendering of an HTML page is provi
                       </div>
                       <div class="slightly-smaller">
                         <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L26-L91">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16TemplateVariableC"></a>
+                    <a name="//apple_ref/swift/Class/TemplateVariable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16TemplateVariableC">TemplateVariable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A special kind of variable that is used in case of <code><a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a></code>s. It does not convert its content using the <code>interpreterForEvaluatingVariables</code> but always uses the <code><a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a></code> instance.
+It&rsquo;s perfect for expressions, that have a body, that needs to be further interpreted, such as an if or while statement.</p>
+
+                        <a href="Classes/TemplateVariable.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TemplateVariable</span><span class="p">:</span> <span class="kt"><a href="Classes/GenericVariable.html">GenericVariable</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L95-L105">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -574,6 +541,36 @@ Typically used in web applications, where the rendering of an HTML page is provi
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval8VariableC"></a>
+                    <a name="//apple_ref/swift/Class/Variable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval8VariableC">Variable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Variable</code> represents a named placeholder, so when the matcher recognises a pattern, the values of the variables are passed to them in a block.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Classes/GenericVariable.html">GenericVariable</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt"><a href="Classes/TypedInterpreter.html">TypedInterpreter</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L230-L231">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
             <div class="task-group">
@@ -604,7 +601,7 @@ Typically used in web applications, where the rendering of an HTML page is provi
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L35-L228">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L35-L230">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -614,7 +611,7 @@ Typically used in web applications, where the rendering of an HTML page is provi
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-11)</p>
+          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-12)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

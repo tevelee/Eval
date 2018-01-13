@@ -58,6 +58,8 @@ public protocol Interpreter: EvaluatorWithContext, ContextAware {
 public class InterpreterContext {
     /// The stored variables
     public var variables: [String: Any]
+    
+    public var debugSteps: [(input: Any, output: Any, variables: [String: Any])] = []
 
     /// Users of the context may optionally provide an initial set of variables
     /// - parameter variables: Variable names and values

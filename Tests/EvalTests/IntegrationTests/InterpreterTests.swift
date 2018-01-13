@@ -85,7 +85,7 @@ class InterpreterTests: XCTestCase {
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))
         
-        let ifStatement = Matcher([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{%"), Keyword("endif"), Keyword("%}")]) { (variables, interpreter: TemplateInterpreter, _) -> String? in
+        let ifStatement = Matcher([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{%"), Keyword("endif"), Keyword("%}")]) { (variables, interpreter: TemplateInterpreter<String>, _) -> String? in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body
@@ -93,12 +93,12 @@ class InterpreterTests: XCTestCase {
             return nil
         }
         
-        let printStatement = Matcher([Keyword("{{"), Variable<Any>("body"), Keyword("}}")]) { (variables, interpreter: TemplateInterpreter, _) -> String? in
+        let printStatement = Matcher([Keyword("{{"), Variable<Any>("body"), Keyword("}}")]) { (variables, interpreter: TemplateInterpreter<String>, _) -> String? in
             guard let body = variables["body"] else { return nil }
             return interpreter.typedInterpreter.print(body)
         }
         
-        let template = TemplateInterpreter(statements: [ifStatement, printStatement], interpreter: interpreter, context: InterpreterContext())
+        let template = StringTemplateInterpreter(statements: [ifStatement, printStatement], interpreter: interpreter, context: InterpreterContext())
         XCTAssertEqual(template.evaluate("{{ 1 + 2 }}"), "3.0")
         XCTAssertEqual(template.evaluate("{{ 'Hello' + ' ' + 'World' + '!' }}"), "Hello World!")
         XCTAssertEqual(template.evaluate("asd {% if 10 < 21 %}Hello{% endif %} asd"), "asd Hello asd")

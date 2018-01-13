@@ -46,7 +46,13 @@ public class Matcher<T, E: Interpreter> {
     public init(_ elements: [MatchElement],
                 matcher: @escaping MatcherBlock<T, E>) {
         self.matcher = matcher
-
+        self.elements = Matcher.elementsByReplacingTheLastVariableNotToBeShortestMatch(in: elements)
+    }
+    
+    /// If the last element in the elements pattern is a variable, shortest match will not match until the end of the input string, but just until the first empty character.
+    /// - parameter in: The elements array where the last element should be replaced
+    /// - returns: A new collection of elements, where the last element is replaced, whether it's a variable with shortest flag on
+    static func elementsByReplacingTheLastVariableNotToBeShortestMatch(in elements: [MatchElement]) -> [MatchElement] {
         var elements = elements
         if let last = elements.last as? GenericVariable<E.EvaluatedType, E> {
             elements.removeLast()
@@ -55,7 +61,7 @@ public class Matcher<T, E: Interpreter> {
             elements.removeLast()
             elements.append(GenericVariable<Any, E>(last.name, shortest: false, interpreted: last.interpreted, acceptsNilValue: last.acceptsNilValue, map: last.performMap))
         }
-        self.elements = elements
+        return elements
     }
 
     // swiftlint:disable cyclomatic_complexity

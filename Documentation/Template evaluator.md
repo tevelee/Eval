@@ -7,7 +7,7 @@ The logic of the interpreter is fairly easy: it goes over the input character by
 The way to create template interpreters is the following:
 
 ```swift
-let template = TemplateInterpreter(statements: [ifStatement, printStatement], 
+let template = StringTemplateInterpreter(statements: [ifStatement, printStatement], 
 								   interpreter: interpreter, 
 								   context: InterpreterContext(variables: ["example": 1]))
 ```

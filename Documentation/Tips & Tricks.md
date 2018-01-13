@@ -58,7 +58,7 @@ Examples include data type conversion and other types of validation.
 
 Embedding is a common issue with interpreters and compilers. In order to provide some extra semantics to the engine, please use the `OpenKeyword("[")` and `OpenKeyword("]")` options, when defining `Keyword`s that come in pairs.
 
-## Share context between `TemplateInterpreter` and `TypedInterpreter`
+## Share context between `StringTemplateInterpreter` and `TypedInterpreter`
 
 If you use template interpreters, they need a typed interpreter to hold. Both interpreters have `context` variables, so if you are not being careful enough, it can cause headaches. 
 

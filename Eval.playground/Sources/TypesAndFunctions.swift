@@ -89,7 +89,7 @@ public let equals = infixOperator("==") { (lhs: Double, rhs: Double) in lhs == r
 
 //MARK: Template elements
 
-public let ifStatement = Matcher([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{%"), Keyword("endif"), Keyword("%}")]) { (variables, interpreter: TemplateInterpreter, _) -> String? in
+public let ifStatement = Matcher([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{%"), Keyword("endif"), Keyword("%}")]) { (variables, interpreter: StringTemplateInterpreter, _) -> String? in
     guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
     if condition {
         return body
@@ -97,7 +97,7 @@ public let ifStatement = Matcher([Keyword("{%"), Keyword("if"), Variable<Bool>("
     return nil
 }
 
-public let printStatement = Matcher([Keyword("{{"), Variable<Any>("body"), Keyword("}}")]) { (variables, interpreter: TemplateInterpreter, _) -> String? in
+public let printStatement = Matcher([Keyword("{{"), Variable<Any>("body"), Keyword("}}")]) { (variables, interpreter: StringTemplateInterpreter, _) -> String? in
     guard let body = variables["body"] else { return nil }
     return interpreter.typedInterpreter.print(body)
 }

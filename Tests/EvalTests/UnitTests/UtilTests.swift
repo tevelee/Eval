@@ -41,21 +41,6 @@ class UtilTests: XCTestCase {
         XCTAssertEqual(array, [1,2,3,4])
     }
     
-    //MARK: plus operator on String
-    
-    func test_whenApplyingPlusOperatorOnStringWithCharacter_thenItConcatenates() {
-        let result  = "Hell" + Character("o")
-        
-        XCTAssertEqual(result, "Hello")
-    }
-    
-    func test_whenApplyingPlusEqualsOperatorOnStringWithCharacter_thenItConcatenates() {
-        var string = "Hell"
-        string += Character("o")
-        
-        XCTAssertEqual(string, "Hello")
-    }
-    
     //MARK: String subscript
     
     func test_whenSubscriptingStringWithInt_thenReturnCharacter() {

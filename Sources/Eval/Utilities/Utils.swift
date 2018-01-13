@@ -44,21 +44,6 @@ func += <A> (array: inout [A], element: A) {
     array = array + element
 }
 
-/// Syntactic sugar for appended strings
-/// - parameter string: The string to append
-/// - parameter element: The appended character
-/// - returns: A new string by appending `string` with `character`
-func + (string: String, character: Character) -> String {
-    return string + String(character)
-}
-
-/// Syntactic sugar for appending mutable arrays
-/// - parameter string: The string to append
-/// - parameter element: The appended character
-func += (string: inout String, character: Character) {
-    string = string + character
-}
-
 /// Helpers on `String` to provide `Int` based subscription features and easier usage
 extension String {
     /// Syntactic sugar for Int based string subsription

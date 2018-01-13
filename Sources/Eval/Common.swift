@@ -50,7 +50,7 @@ public protocol ContextAware {
 /// The base protocol of interpreters, that are context-aware, and capable of recursively evaluating variables. They use the evaluate method as their main input
 public protocol Interpreter: EvaluatorWithContext, ContextAware {
     associatedtype VariableEvaluator: EvaluatorWithContext
-    /// Sometimes interpreters don't use themselves to evaluate variables by default, maybe a third party, or another contained interpreter. For example, the `TemplateInterpreter` class uses `TypedInterpreter` instance to evaluate its variables.
+    /// Sometimes interpreters don't use themselves to evaluate variables by default, maybe a third party, or another contained interpreter. For example, the `StringTemplateInterpreter` class uses `TypedInterpreter` instance to evaluate its variables.
     var interpreterForEvaluatingVariables: VariableEvaluator { get }
 }
 

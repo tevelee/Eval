@@ -4,9 +4,9 @@ The following sections provide handy Tips and Tricks to help you effectively bui
 
 ## Get inspired by checking out the examples
 
-There are quite a few operators and data types available in the [TemplateLanguage Example](https://github.com/tevelee/Eval/tree/master/Examples/TemplateExample/Sources/TemplateExample/TemplateExample.swift) project, under the StandardLibrary class
+There are quite a few operators and data types available in the [TemplateLanguage Example](https://github.com/tevelee/Eval/blob/master/Examples/TemplateExample/Sources/TemplateExample/TemplateExample.swift#L114-L150) project, under the StandardLibrary class
 
-Also, there are quite a few expressions available [in some of the unit tests](https://github.com/tevelee/Eval/tree/master/Tests/EvalTests/IntegrationTests/InterpreterTests.swift#L110) as well.
+Also, there are quite a few expressions available [in some of the unit tests](https://github.com/tevelee/Eval/blob/master/Tests/EvalTests/IntegrationTests/InterpreterTests.swift#L47-L86) as well.
 
 ## Use helper functions to define operators
 
@@ -22,7 +22,7 @@ suffixOperator("is odd") { (value: Double) in Int(value) % 2 == 1 }
 prefixOperator("!") { (value: Bool) in !value }
 ```
 
-You can find a few helpers [in the examples](https://github.com/tevelee/Eval/tree/master/Examples/TemplateExample/Sources/TemplateExample/TemplateExample.swift#L328-L411). Feel free to use them!
+You can find a few helpers [in the examples](https://github.com/tevelee/Eval/tree/master/Examples/TemplateExample/Sources/TemplateExample/TemplateExample.swift#L331-L412). Feel free to use them!
 
 ## Be mindful about precedence
 

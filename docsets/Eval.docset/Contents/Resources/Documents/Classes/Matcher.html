@@ -83,6 +83,9 @@
                 <a href="../Classes/OpenKeyword.html">OpenKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/TemplateInterpreter.html">TemplateInterpreter</a>
               </li>
               <li class="nav-group-task">
@@ -116,16 +119,10 @@
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval1poiS2S_s9CharacterVtF">+(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Functions.html#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Functions/+(_:_:).html">+(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval2peoiySSz_s9CharacterVtF">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Functions/+=(_:_:).html">+=(_:_:)</a>
@@ -308,7 +305,60 @@ This collection should be provided during the initialisation, and cannot be modi
                         </table>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L46-L59">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L46-L50">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval7MatcherC54elementsByReplacingTheLastVariableNotToBeShortestMatchSayAA0M7Element_pGAF2in_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/elementsByReplacingTheLastVariableNotToBeShortestMatch(in:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval7MatcherC54elementsByReplacingTheLastVariableNotToBeShortestMatchSayAA0M7Element_pGAF2in_tFZ">elementsByReplacingTheLastVariableNotToBeShortestMatch(in:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If the last element in the elements pattern is a variable, shortest match will not match until the end of the input string, but just until the first empty character.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">elementsByReplacingTheLastVariableNotToBeShortestMatch</span><span class="p">(</span><span class="k">in</span> <span class="nv">elements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/MatchElement.html">MatchElement</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Protocols/MatchElement.html">MatchElement</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>in</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The elements array where the last element should be replaced</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new collection of elements, where the last element is replaced, whether it&rsquo;s a variable with shortest flag on</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L55-L65">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -409,7 +459,7 @@ This collection should be provided during the initialisation, and cannot be modi
                         <p>The result of the matching operation</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L70-L172">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L76-L178">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -510,7 +560,7 @@ This collection should be provided during the initialisation, and cannot be modi
                         <p>The result of the matching operation</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L181-L189">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L187-L195">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -587,7 +637,7 @@ This collection should be provided during the initialisation, and cannot be modi
                         <p>Whether the element conditions apply and the position is before the last one</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L196-L202">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L202-L208">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -652,7 +702,7 @@ This collection should be provided during the initialisation, and cannot be modi
                         <p><code>nil</code> if the <code><a href="../Classes/CloseKeyword.html">CloseKeyword</a></code> pair cannot be found. The position otherwise</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L208-L236">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L214-L242">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

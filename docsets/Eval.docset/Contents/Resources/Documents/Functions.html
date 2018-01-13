@@ -82,6 +82,9 @@
                 <a href="Classes/OpenKeyword.html">OpenKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a>
               </li>
               <li class="nav-group-task">
@@ -115,16 +118,10 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval1poiS2S_s9CharacterVtF">+(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Functions.html#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="Functions/+(_:_:).html">+(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval2peoiySSz_s9CharacterVtF">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="Functions/+=(_:_:).html">+=(_:_:)</a>
@@ -489,132 +486,6 @@
                       </div>
                       <div class="slightly-smaller">
                         <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Utils.swift#L43-L45">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval1poiS2S_s9CharacterVtF"></a>
-                    <a name="//apple_ref/swift/Function/+(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval1poiS2S_s9CharacterVtF">+(_:_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Syntactic sugar for appended strings</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="o">+</span> <span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">character</span><span class="p">:</span> <span class="kt">Character</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>string</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The string to append</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>element</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The appended character</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>A new string by appending <code>string</code> with <code>character</code></p>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Utils.swift#L51-L53">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval2peoiySSz_s9CharacterVtF"></a>
-                    <a name="//apple_ref/swift/Function/+=(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval2peoiySSz_s9CharacterVtF">+=(_:_:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Syntactic sugar for appending mutable arrays</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="o">+=</span> <span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="k">inout</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">character</span><span class="p">:</span> <span class="kt">Character</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>string</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The string to append</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>element</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The appended character</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Utils.swift#L58-L60">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

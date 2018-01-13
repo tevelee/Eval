@@ -82,6 +82,9 @@
                 <a href="Classes/OpenKeyword.html">OpenKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a>
               </li>
               <li class="nav-group-task">
@@ -115,16 +118,10 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval1poiS2S_s9CharacterVtF">+(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Functions.html#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="Functions/+(_:_:).html">+(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval2peoiySSz_s9CharacterVtF">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="Functions/+=(_:_:).html">+=(_:_:)</a>
@@ -183,7 +180,7 @@
 <h2 id='creation' class='heading'>Creation</h2>
 
 <p>The way to create template interpreters is the following:</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">template</span> <span class="o">=</span> <span class="kt">TemplateInterpreter</span><span class="p">(</span><span class="nv">statements</span><span class="p">:</span> <span class="p">[</span><span class="n">ifStatement</span><span class="p">,</span> <span class="n">printStatement</span><span class="p">],</span> 
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">template</span> <span class="o">=</span> <span class="kt">StringTemplateInterpreter</span><span class="p">(</span><span class="nv">statements</span><span class="p">:</span> <span class="p">[</span><span class="n">ifStatement</span><span class="p">,</span> <span class="n">printStatement</span><span class="p">],</span> 
                                    <span class="nv">interpreter</span><span class="p">:</span> <span class="n">interpreter</span><span class="p">,</span> 
                                    <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"example"</span><span class="p">:</span> <span class="mi">1</span><span class="p">]))</span>
 </code></pre>

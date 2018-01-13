@@ -83,6 +83,9 @@
                 <a href="../Classes/OpenKeyword.html">OpenKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/TemplateInterpreter.html">TemplateInterpreter</a>
               </li>
               <li class="nav-group-task">
@@ -116,16 +119,10 @@
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval1poiS2S_s9CharacterVtF">+(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Functions.html#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Functions/+(_:_:).html">+(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval2peoiySSz_s9CharacterVtF">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Functions/+=(_:_:).html">+=(_:_:)</a>
@@ -180,7 +177,7 @@
             <h1>TemplateInterpreter</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TemplateInterpreter</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Interpreter.html">Interpreter</a></span></code></pre>
+                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">TemplateInterpreter</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Interpreter.html">Interpreter</a></span></code></pre>
 
                 </div>
               </div>
@@ -194,39 +191,9 @@ Typically used in web applications, where the rendering of an HTML page is provi
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval19TemplateInterpreterC13EvaluatedTypea"></a>
-                    <a name="//apple_ref/swift/Alias/EvaluatedType" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval19TemplateInterpreterC13EvaluatedTypea">EvaluatedType</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The result of a template evaluation is a String</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">EvaluatedType</span> <span class="o">=</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L28">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval19TemplateInterpreterC10statementsSayAA7MatcherCySSACGGv"></a>
+                    <a name="/s:4Eval19TemplateInterpreterC10statementsSayAA7MatcherCyxACyxGGGv"></a>
                     <a name="//apple_ref/swift/Property/statements" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval19TemplateInterpreterC10statementsSayAA7MatcherCySSACGGv">statements</a>
+                    <a class="token" href="#/s:4Eval19TemplateInterpreterC10statementsSayAA7MatcherCyxACyxGGGv">statements</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -241,12 +208,12 @@ Typically used in web applications, where the rendering of an HTML page is provi
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">statements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Matcher.html">Matcher</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">TemplateInterpreter</span><span class="o">&gt;</span><span class="p">]</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">statements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Matcher.html">Matcher</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">TemplateInterpreter</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;&gt;</span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L31">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L28">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -276,7 +243,7 @@ Typically used in web applications, where the rendering of an HTML page is provi
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L34">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L31">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -294,7 +261,7 @@ Typically used in web applications, where the rendering of an HTML page is provi
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <code>TemplateInterpreter</code> contains a <code><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></code>, as it is quite common practice to evaluate strongly typed expression as s support for the template language.
+                        <p>The <code><a href="../Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a></code> contains a <code><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></code>, as it is quite common practice to evaluate strongly typed expression as s support for the template language.
 Common examples are: condition part of an if statement, or body of a print statement</p>
 
                       </div>
@@ -307,7 +274,7 @@ Common examples are: condition part of an if statement, or body of a print state
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L38">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L35">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -333,6 +300,36 @@ Common examples are: condition part of an if statement, or body of a print state
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">VariableEvaluator</span> <span class="o">=</span> <span class="kt"><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L38">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval19TemplateInterpreterC13EvaluatedTypea"></a>
+                    <a name="//apple_ref/swift/Alias/EvaluatedType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval19TemplateInterpreterC13EvaluatedTypea">EvaluatedType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The result type of a template evaluation</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">EvaluatedType</span> <span class="o">=</span> <span class="kt">T</span></code></pre>
 
                         </div>
                       </div>
@@ -375,9 +372,9 @@ Common examples are: condition part of an if statement, or body of a print state
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval19TemplateInterpreterCACSayAA7MatcherCySSACGG10statements_AA05TypedC0C11interpreterAA0C7ContextC7contexttcfc"></a>
+                    <a name="/s:4Eval19TemplateInterpreterCACyxGSayAA7MatcherCyxADGG10statements_AA05TypedC0C11interpreterAA0C7ContextC7contexttcfc"></a>
                     <a name="//apple_ref/swift/Method/init(statements:interpreter:context:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval19TemplateInterpreterCACSayAA7MatcherCySSACGG10statements_AA05TypedC0C11interpreterAA0C7ContextC7contexttcfc">init(statements:interpreter:context:)</a>
+                    <a class="token" href="#/s:4Eval19TemplateInterpreterCACyxGSayAA7MatcherCyxADGG10statements_AA05TypedC0C11interpreterAA0C7ContextC7contexttcfc">init(statements:interpreter:context:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -386,14 +383,14 @@ Common examples are: condition part of an if statement, or body of a print state
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The statements, and context parameters are optional, but highly recommended to use with actual values.
-In order to properly initialise a <code>TemplateInterpreter</code>, you&rsquo;ll need a <code><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></code> instance as well.</p>
+In order to properly initialise a <code><a href="../Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a></code>, you&rsquo;ll need a <code><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></code> instance as well.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">statements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Matcher.html">Matcher</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">TemplateInterpreter</span><span class="o">&gt;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">statements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Matcher.html">Matcher</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">TemplateInterpreter</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;&gt;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
             <span class="nv">interpreter</span><span class="p">:</span> <span class="kt"><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></span><span class="p">,</span>
             <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="../Classes/InterpreterContext.html">InterpreterContext</a></span> <span class="o">=</span> <span class="kt"><a href="../Classes/InterpreterContext.html">InterpreterContext</a></span><span class="p">())</span></code></pre>
 
@@ -451,9 +448,9 @@ In order to properly initialise a <code>TemplateInterpreter</code>, you&rsquo;ll
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval19TemplateInterpreterC8evaluateS2SF"></a>
+                    <a name="/s:4Eval19TemplateInterpreterC8evaluatexSSF"></a>
                     <a name="//apple_ref/swift/Method/evaluate(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval19TemplateInterpreterC8evaluateS2SF">evaluate(_:)</a>
+                    <a class="token" href="#/s:4Eval19TemplateInterpreterC8evaluatexSSF">evaluate(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -468,7 +465,7 @@ In order to properly initialise a <code>TemplateInterpreter</code>, you&rsquo;ll
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">_</span> <span class="nv">expression</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">_</span> <span class="nv">expression</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span></code></pre>
 
                         </div>
                       </div>
@@ -504,9 +501,9 @@ In order to properly initialise a <code>TemplateInterpreter</code>, you&rsquo;ll
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval19TemplateInterpreterC8evaluateS2S_AA0C7ContextC7contexttF"></a>
+                    <a name="/s:4Eval19TemplateInterpreterC8evaluatexSS_AA0C7ContextC7contexttF"></a>
                     <a name="//apple_ref/swift/Method/evaluate(_:context:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval19TemplateInterpreterC8evaluateS2S_AA0C7ContextC7contexttF">evaluate(_:context:)</a>
+                    <a class="token" href="#/s:4Eval19TemplateInterpreterC8evaluatexSS_AA0C7ContextC7contexttF">evaluate(_:context:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -521,7 +518,7 @@ In order to properly initialise a <code>TemplateInterpreter</code>, you&rsquo;ll
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">_</span> <span class="nv">expression</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="../Classes/InterpreterContext.html">InterpreterContext</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">_</span> <span class="nv">expression</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="../Classes/InterpreterContext.html">InterpreterContext</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span></code></pre>
 
                         </div>
                       </div>
@@ -561,7 +558,222 @@ In order to properly initialise a <code>TemplateInterpreter</code>, you&rsquo;ll
                         <p>The output of the evaluation</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L70-L90">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L70-L72">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval19TemplateInterpreterC7Reducera"></a>
+                    <a name="//apple_ref/swift/Alias/Reducer" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval19TemplateInterpreterC7Reducera">Reducer</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Reduce block can convet a stream of values into one, by calling this block for every element, returning a single value at the end. The concept is usually used in functional environments</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Reducer</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">K</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">(</span><span class="n">_</span> <span class="nv">existing</span><span class="p">:</span> <span class="kt">T</span><span class="p">,</span> <span class="n">_</span> <span class="nv">next</span><span class="p">:</span> <span class="kt">K</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>existing</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The previously computed value. In case the current iteration is the first, it&rsquo;s the inital value.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>next</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The value of the current element in the iteration</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The a combined value based on the previous and the new value</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L78">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval19TemplateInterpreterC0B7Reducera"></a>
+                    <a name="//apple_ref/swift/Alias/TemplateReducer" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval19TemplateInterpreterC0B7Reducera">TemplateReducer</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>In order to support generic types, not just plain String objects, a reducer helps to convert the output to the dedicated output type</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">TemplateReducer</span> <span class="o">=</span> <span class="p">(</span><span class="nv">initialValue</span><span class="p">:</span> <span class="kt">T</span><span class="p">,</span> <span class="nv">reduceValue</span><span class="p">:</span> <span class="kt"><a href="../Classes/TemplateInterpreter.html#/s:4Eval19TemplateInterpreterC7Reducera">Reducer</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">reduceCharacter</span><span class="p">:</span> <span class="kt"><a href="../Classes/TemplateInterpreter.html#/s:4Eval19TemplateInterpreterC7Reducera">Reducer</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">Character</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>initialValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>based on the type, an initial value must to be provided which can serve as a base of the output</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reduceValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>during template execution, if there is some template to replace, the output value can be used to append to the previously existing output</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reduceCharacter</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>during template execution, if there is nothing to replace, the value is computed by the character-by-character iteration, appending to the previously existing output</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L84">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval19TemplateInterpreterC8evaluatexSS_AA0C7ContextC7contextx12initialValue_xx_xtc06reduceH0xx_s9CharacterVtc0iJ0t7reducertF"></a>
+                    <a name="//apple_ref/swift/Method/evaluate(_:context:reducer:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval19TemplateInterpreterC8evaluatexSS_AA0C7ContextC7contextx12initialValue_xx_xtc06reduceH0xx_s9CharacterVtc0iJ0t7reducertF">evaluate(_:context:reducer:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The main part of the evaluation happens here. In this case, the global context variables merged with the provided context are going to be used.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">_</span> <span class="nv">expression</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="../Classes/InterpreterContext.html">InterpreterContext</a></span> <span class="o">=</span> <span class="kt"><a href="../Classes/InterpreterContext.html">InterpreterContext</a></span><span class="p">(),</span> <span class="nv">reducer</span><span class="p">:</span> <span class="kt"><a href="../Classes/TemplateInterpreter.html#/s:4Eval19TemplateInterpreterC0B7Reducera">TemplateReducer</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>expression</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The input</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Local context that is going to be used with this expression only</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reducer</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>In order to support generic types, not just plain String objects, a reducer helps to convert the output to the dedicated output type</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The output of the evaluation</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L91-L111">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

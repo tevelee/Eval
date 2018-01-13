@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Interpreter Protocol Reference</title>
+    <title>StringTemplateInterpreter Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Protocol/Interpreter" class="dashAnchor"></a>
-    <a title="Interpreter Protocol Reference"></a>
+    <a name="//apple_ref/swift/Class/StringTemplateInterpreter" class="dashAnchor"></a>
+    <a title="StringTemplateInterpreter Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">Eval Docs</a> (100% documented)</p>
@@ -23,7 +23,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">Eval Reference</a>
         <img id="carat" src="../img/carat.png" />
-        Interpreter Protocol Reference
+        StringTemplateInterpreter Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -174,14 +174,15 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Interpreter</h1>
+            <h1>StringTemplateInterpreter</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">Interpreter</span><span class="p">:</span> <span class="kt"><a href="../Protocols/EvaluatorWithContext.html">EvaluatorWithContext</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/ContextAware.html">ContextAware</a></span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">StringTemplateInterpreter</span><span class="p">:</span> <span class="kt"><a href="../Classes/TemplateInterpreter.html">TemplateInterpreter</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span></code></pre>
 
                 </div>
               </div>
-            <p>The base protocol of interpreters, that are context-aware, and capable of recursively evaluating variables. They use the evaluate method as their main input</p>
+            <p>This interpreter is used to evaluate string expressions and return a transformed string, replacing the content where it matches certain patterns.
+Typically used in web applications, where the rendering of an HTML page is provided as a template, and the application replaces certain statements, based on input parameters.</p>
 
           </section>
           <section class="section task-group-section">
@@ -190,9 +191,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval11InterpreterP33interpreterForEvaluatingVariables17VariableEvaluatorQzv"></a>
-                    <a name="//apple_ref/swift/Property/interpreterForEvaluatingVariables" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval11InterpreterP33interpreterForEvaluatingVariables17VariableEvaluatorQzv">interpreterForEvaluatingVariables</a>
+                    <a name="/s:4Eval25StringTemplateInterpreterC13EvaluatedTypea"></a>
+                    <a name="//apple_ref/swift/Alias/EvaluatedType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval25StringTemplateInterpreterC13EvaluatedTypea">EvaluatedType</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -200,19 +201,84 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Sometimes interpreters don&rsquo;t use themselves to evaluate variables by default, maybe a third party, or another contained interpreter. For example, the <code><a href="../Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a></code> class uses <code><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></code> instance to evaluate its variables.</p>
+                        <p>The result of a template evaluation is a String</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">interpreterForEvaluatingVariables</span><span class="p">:</span> <span class="kt">VariableEvaluator</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">EvaluatedType</span> <span class="o">=</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L54">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L118">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval25StringTemplateInterpreterC8evaluateS2S_AA0D7ContextC7contexttF"></a>
+                    <a name="//apple_ref/swift/Method/evaluate(_:context:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval25StringTemplateInterpreterC8evaluateS2S_AA0D7ContextC7contexttF">evaluate(_:context:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The main part of the evaluation happens here. In this case, the global context variables merged with the provided context are going to be used.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">override</span> <span class="kd">func</span> <span class="nf">evaluate</span><span class="p">(</span><span class="n">_</span> <span class="nv">expression</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="../Classes/InterpreterContext.html">InterpreterContext</a></span> <span class="o">=</span> <span class="kt"><a href="../Classes/InterpreterContext.html">InterpreterContext</a></span><span class="p">())</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>expression</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The input</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Local context that is going to be used with this expression only</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The output of the evaluation</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L124-L126">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

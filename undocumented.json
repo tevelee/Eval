@@ -1,6 +1,12 @@
 {
   "warnings": [
-
+    {
+      "file": "/Users/laszloteveli/Documents/Interpreter/Sources/Eval/Common.swift",
+      "line": 62,
+      "symbol": "InterpreterContext.debugSteps",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    }
   ],
-  "source_directory": "/Users/travis/build/tevelee/Eval"
+  "source_directory": "/Users/laszloteveli/Documents/Interpreter"
 }

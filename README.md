@@ -5,10 +5,16 @@
 [![Swift version](https://img.shields.io/badge/Swift-4.0-orange.svg)]()
 [![Code Documentation Coverage](https://tevelee.github.io/Eval/badge.svg)](https://tevelee.github.io/Eval)
 [![Code Test Coverage](https://codecov.io/gh/tevelee/Eval/branch/master/graph/badge.svg)](https://codecov.io/gh/tevelee/Eval)
-[![Lincese](https://img.shields.io/badge/Platforms-iOS%20|%20macOS%20|%20Linux-blue.svg)]()
+[![Platforms](https://img.shields.io/badge/Platforms-iOS%20|%20macOS%20|%20Linux-blue.svg)]()
 [![Lincese](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://github.com/tevelee/Eval/tree/master/LICENSE.txt)
 
-<!--[![Version](https://img.shields.io/cocoapods/v/Eval.svg?style=flat)](http://cocoapods.org/pods/Eval)-->
+##### Dependency Managers
+
+[![CocoaPods compatible](https://img.shields.io/badge/CococaPods-Compatible-blue.svg)](http://cocoapods.org/pods/Eval)
+[![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-Compatible-red.svg)](https://github.com/apple/swift-package-manager)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-Compatible-brightgreen.svg?style=flat)](https://github.com/Carthage/Carthage)
+
+---
 
 - [👨🏻‍💻 About](#-about)
 - [📈 Getting Started](#-getting-started)
@@ -184,6 +190,7 @@ You have a few options to include the library in your app.
 
 - Swift Package Manager
 - CocoaPods
+- Carthage
 - Manually
 
 #### Swift Package Manager
@@ -221,6 +228,18 @@ And install the new dependency:
 pod install
 ```
 
+#### Carthage
+
+Just add the following line to your `Cartfile`:
+
+```ruby
+github "tevelee/Eval" >= 1.0.0
+```
+And install the new dependency:
+
+```bash
+carthage update
+```
 
 #### Manually
 

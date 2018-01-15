@@ -89,7 +89,7 @@ open class TemplateInterpreter<T> : Interpreter {
     /// - parameter reducer: In order to support generic types, not just plain String objects, a reducer helps to convert the output to the dedicated output type
     /// - returns: The output of the evaluation
     public func evaluate(_ expression: String, context: InterpreterContext = InterpreterContext(), reducer: TemplateReducer) -> T {
-        let context = self.context.merge(with: context)
+        context.merge(with: self.context) { existing, _ in existing }
         var output = reducer.initialValue
 
         var position = 0
@@ -121,7 +121,7 @@ public class StringTemplateInterpreter: TemplateInterpreter<String> {
     /// - parameter expression: The input
     /// - parameter context: Local context that is going to be used with this expression only
     /// - returns: The output of the evaluation
-    public override func evaluate(_ expression: String, context: InterpreterContext = InterpreterContext()) -> String {
+    public override func evaluate(_ expression: String, context: InterpreterContext) -> String {
         return evaluate(expression, context: context, reducer: (initialValue: "", reduceValue: { existing, next in existing + next }, reduceCharacter: { existing, next in existing + String(next) }))
     }
 }

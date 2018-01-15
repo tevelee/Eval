@@ -54,12 +54,25 @@ public protocol Interpreter: EvaluatorWithContext, ContextAware {
     var interpreterForEvaluatingVariables: VariableEvaluator { get }
 }
 
+/// Detailed information about recognised expressions
+public struct ExpressionInfo {
+    /// The raw String input of the expression
+    var input: String
+    /// The generated output of the expression
+    var output: Any
+    /// A stringified version of the elements of the `Matcher` object
+    var pattern: String
+    /// All the variables computed during the evaluation
+    var variables: [String: Any]
+}
+
 /// The only responsibility of the `InterpreterContext` class is to store variables, and keep them during the execution, where multiple expressions might use the same set of variables.
 public class InterpreterContext {
     /// The stored variables
     public var variables: [String: Any]
     
-    public var debugSteps: [(input: Any, output: Any, variables: [String: Any])] = []
+    /// Debug information for recognised patterns
+    public var debugInfo: [String: ExpressionInfo] = [:]
 
     /// Users of the context may optionally provide an initial set of variables
     /// - parameter variables: Variable names and values
@@ -67,14 +80,25 @@ public class InterpreterContext {
         self.variables = variables
     }
 
-    /// Creates a new context instance by merging their variable dictionaries. The one in the parameter overrides the duplicated of the existing one
+    /// Creates a new context instance by merging their variable dictionaries. The one in the parameter overrides the duplicated items of the existing one
     /// - parameter with: The other context to merge with
     /// - returns: A new `InterpreterContext` instance with the current and the parameter variables merged inside
-    func merge(with other: InterpreterContext?) -> InterpreterContext {
+    func merging(with other: InterpreterContext?) -> InterpreterContext {
         if let other = other {
-            return InterpreterContext(variables: other.variables.merging(self.variables) { (key, _) in key })
+            return InterpreterContext(variables: other.variables.merging(self.variables) { (eixstingValue, _) in eixstingValue })
         } else {
             return self
+        }
+    }
+    
+    /// Modifies the current context instance by merging its variable dictionary with the parameter. The one in the parameter overrides the duplicated items of the existing one
+    /// - parameter with: The other context to merge with
+    /// - parameter existing: During the merge the parameter on the existing dictionary (same terminolody with Dictionary.merge)
+    /// - parameter new: During the merge the parameter on the merged dictionary (same terminolody with Dictionary.merge)
+    /// - returns: The same `InterpreterContext` instance after merging the variables dictionary with the variables in the context given as parameter
+    func merge(with other: InterpreterContext?, merge: (_ existing: Any, _ new: Any) throws -> Any) {
+        if let other = other {
+            try? variables.merge(other.variables, uniquingKeysWith: merge)
         }
     }
 }

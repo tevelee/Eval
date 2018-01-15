@@ -12,12 +12,17 @@ class InterpreterTests: XCTestCase {
         let methodCall = methodCallFunction()
         let max = objectFunction("max") { (object: [Double]) -> Double? in object.max() }
         let min = objectFunction("min") { (object: [Double]) -> Double? in object.min() }
+        let sum = objectFunction("sum") { (object: [Double]) -> Double? in object.reduce(0, +) }
         let format = dateFomatFunction()
         let dateFactory = dateFactoryFunction()
         let not = prefixOperator("!") { (value: Bool) in !value }
         let not2 = function("not") { (arguments: [Any]) -> Bool? in
             guard let boolArgument = arguments.first as? Bool else { return nil }
             return !boolArgument
+        }
+        let sqrtFunction = function("sqrt") { (arguments: [Any]) -> Double? in
+            guard let argument = arguments.first as? Double else { return nil }
+            return sqrt(argument)
         }
         let add = function("add") { (arguments: [Any]) -> Double? in
             guard let arguments = arguments as? [Double] else { return nil }
@@ -42,7 +47,7 @@ class InterpreterTests: XCTestCase {
         let increment = incremenetFunction()
         
         let interpreter = TypedInterpreter(dataTypes: [number, string, boolean, array, date],
-                                             functions: [concat, parenthesis, methodCall, dateFactory, format, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, isEven, range, add, max, min, not, not2, prefix, increment, lessThan, test],
+                                             functions: [concat, parenthesis, methodCall, sum, range, sqrtFunction, dateFactory, format, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, isEven, add, max, min, not, not2, prefix, increment, lessThan, test],
                                              context: InterpreterContext(variables: ["test": 2.0, "name": "Teve"]))
         XCTAssertEqual(interpreter.evaluate("123") as! Double, 123)
         XCTAssertEqual(interpreter.evaluate("1 + 2 + 3") as! Double, 6)
@@ -79,11 +84,19 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("(test + 2)++") as! Double, 5)
         XCTAssertEqual(interpreter.evaluate("test++") as! Double, 3)
         XCTAssertEqual(interpreter.evaluate("test") as! Double, 3)
+        XCTAssertEqual(interpreter.evaluate("sqrt(4)") as! Double, 2)
         XCTAssertNotNil(interpreter.evaluate("now.format('yyyy-MM-dd')"))
         XCTAssertEqual(interpreter.evaluate("Date(2018, 12, 13).format('yyyy-MM-dd')") as! String, "2018-12-13")
         XCTAssertEqual(interpreter.evaluate("test(foo=1, bar=2)") as! Double, 3)
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))
+        
+        let c = InterpreterContext()
+        _ = interpreter.evaluate("Date(1009 * 2, sqrt(144), 10 + 3).format('yyyy-MM-dd')", context: c)
+        
+        c.debugInfo.forEach {
+            print("DEBUG STEP: '\($0.value.pattern)', where \($0.value.variables), rendered to \($0.value.output) from input \($0.key)");
+        }
         
         let ifStatement = Matcher([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{%"), Keyword("endif"), Keyword("%}")]) { (variables, interpreter: TemplateInterpreter<String>, _) -> String? in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
@@ -92,12 +105,12 @@ class InterpreterTests: XCTestCase {
             }
             return nil
         }
-        
+
         let printStatement = Matcher([Keyword("{{"), Variable<Any>("body"), Keyword("}}")]) { (variables, interpreter: TemplateInterpreter<String>, _) -> String? in
             guard let body = variables["body"] else { return nil }
             return interpreter.typedInterpreter.print(body)
         }
-        
+
         let template = StringTemplateInterpreter(statements: [ifStatement, printStatement], interpreter: interpreter, context: InterpreterContext())
         XCTAssertEqual(template.evaluate("{{ 1 + 2 }}"), "3.0")
         XCTAssertEqual(template.evaluate("{{ 'Hello' + ' ' + 'World' + '!' }}"), "Hello World!")
@@ -143,9 +156,9 @@ class InterpreterTests: XCTestCase {
     }
     
     func function<T>(_ name: String, body: @escaping ([Any]) -> T?) -> Function<T> {
-        return Function([Keyword(name), Keyword("("), Variable<String>("arguments", shortest: true, interpreted: false), Keyword(")")]) { variables, interpreter, _ in
+        return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", shortest: true, interpreted: false), CloseKeyword(")")]) { variables, interpreter, context in
             guard let arguments = variables["arguments"] as? String else { return nil }
-            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trim()) }
+            let interpretedArguments : [Any] = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trim(), context: context) }
             return body(interpretedArguments)
         }
     }

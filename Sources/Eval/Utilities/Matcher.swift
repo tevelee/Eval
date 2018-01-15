@@ -171,10 +171,24 @@ public class Matcher<T, E: Interpreter> {
         } while elementIndex < elements.count
 
         if let renderedOutput = matcher(variables, interpreter, context) {
+            context.debugInfo[trimmed] = ExpressionInfo(input: trimmed, output: renderedOutput, pattern: pattern(), variables: variables)
             return .exactMatch(length: length - remainder.count, output: renderedOutput, variables: variables)
         } else {
             return .noMatch
         }
+    }
+    
+    /// A textual representation of the elements array
+    /// - returns: A stringified version of the input elements
+    func pattern() -> String {
+        return elements.map {
+            if let keyword = $0 as? Keyword {
+                return keyword.name
+            } else if let variable = $0 as? VariableProtocol {
+                return "{\(variable.name)}"
+            }
+            return ""
+        }.joined(separator: " ")
     }
 
     /// Maps and evaluates variable content, based on its interpretation settings

@@ -13,13 +13,13 @@ class EvaluatorContextTests: XCTestCase {
         XCTAssertEqual(variables, context.variables as! [String: Int])
     }
     
-    //MARK: merge
+    //MARK: merging
     
     func test_whenMergingTwo_thenCreatesANewContext() {
         let one = InterpreterContext(variables: ["a": 1])
         let two = InterpreterContext(variables: ["b": 2])
         
-        let result = one.merge(with: two)
+        let result = one.merging(with: two)
         
         XCTAssertEqual(result.variables as! [String: Int], ["a": 1, "b": 2])
         XCTAssertFalse(one === result)
@@ -30,7 +30,7 @@ class EvaluatorContextTests: XCTestCase {
         let one = InterpreterContext(variables: ["a": 1])
         let two = InterpreterContext(variables: ["a": 2, "x": 3])
         
-        let result = one.merge(with: two)
+        let result = one.merging(with: two)
         
         XCTAssertEqual(result.variables as! [String: Int], ["a": 2, "x": 3])
     }
@@ -38,8 +38,45 @@ class EvaluatorContextTests: XCTestCase {
     func test_whenMergingWithNil_thenReturnsSelf() {
         let context = InterpreterContext(variables: ["a": 1])
         
-        let result = context.merge(with: nil)
+        let result = context.merging(with: nil)
         
         XCTAssertTrue(result === context)
+    }
+
+    //MARK: merge
+    
+    func test_whenMergingTwoInAMutableWay_thenMergesVariables() {
+        let one = InterpreterContext(variables: ["a": 1])
+        let two = InterpreterContext(variables: ["b": 2])
+        
+        one.merge(with: two) { existing, _ in existing }
+        
+        XCTAssertEqual(one.variables as! [String: Int], ["a": 1, "b": 2])
+    }
+    
+    func test_whenMergingTwoInAMutableWay_thenParameterOverridesVariablesInSelf() {
+        let one = InterpreterContext(variables: ["a": 1])
+        let two = InterpreterContext(variables: ["a": 2, "x": 3])
+        
+        one.merge(with: two) { existing, _ in existing }
+        
+        XCTAssertEqual(one.variables as! [String: Int], ["a": 1, "x": 3])
+    }
+    
+    func test_whenMergingTwoInAMutableWayReversed_thenParameterOverridesVariablesInSelf() {
+        let one = InterpreterContext(variables: ["a": 1])
+        let two = InterpreterContext(variables: ["a": 2, "x": 3])
+        
+        two.merge(with: one) { _, new in new }
+        
+        XCTAssertEqual(two.variables as! [String: Int], ["a": 1, "x": 3])
+    }
+    
+    func test_whenMergingWithNilInAMutableWay_thenReturnsSelf() {
+        let context = InterpreterContext(variables: ["a": 1])
+        
+        context.merge(with: nil) { existing, _ in existing }
+        
+        XCTAssertTrue(context.variables as! [String: Int] == ["a": 1])
     }
 }

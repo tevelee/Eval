@@ -62,7 +62,7 @@ public class TypedInterpreter: Interpreter {
     /// - parameter context: Local context that is going to be used with this expression only
     /// - returns: The output of the evaluation
     public func evaluate(_ expression: String, context: InterpreterContext) -> Any? {
-        let context = self.context.merge(with: context)
+        context.merge(with: self.context) { existing, _ in existing}
         let expression = expression.trim()
 
         for dataType in dataTypes.reversed() {

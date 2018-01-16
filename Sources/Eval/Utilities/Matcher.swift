@@ -48,7 +48,7 @@ public class Matcher<T, E: Interpreter> {
         self.matcher = matcher
         self.elements = Matcher.elementsByReplacingTheLastVariableNotToBeShortestMatch(in: elements)
     }
-    
+
     /// If the last element in the elements pattern is a variable, shortest match will not match until the end of the input string, but just until the first empty character.
     /// - parameter in: The elements array where the last element should be replaced
     /// - returns: A new collection of elements, where the last element is replaced, whether it's a variable with shortest flag on
@@ -177,7 +177,7 @@ public class Matcher<T, E: Interpreter> {
             return .noMatch
         }
     }
-    
+
     /// A textual representation of the elements array
     /// - returns: A stringified version of the input elements
     func pattern() -> String {

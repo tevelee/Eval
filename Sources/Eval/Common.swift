@@ -70,7 +70,7 @@ public struct ExpressionInfo {
 public class InterpreterContext {
     /// The stored variables
     public var variables: [String: Any]
-    
+
     /// Debug information for recognised patterns
     public var debugInfo: [String: ExpressionInfo] = [:]
 
@@ -90,7 +90,7 @@ public class InterpreterContext {
             return self
         }
     }
-    
+
     /// Modifies the current context instance by merging its variable dictionary with the parameter. The one in the parameter overrides the duplicated items of the existing one
     /// - parameter with: The other context to merge with
     /// - parameter existing: During the merge the parameter on the existing dictionary (same terminolody with Dictionary.merge)

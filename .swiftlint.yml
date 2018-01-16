@@ -17,7 +17,7 @@ file_length:
 type_name:
   min_length: 4
   max_length: 
-    warning: 20
+    warning: 25
     error: 30
 identifier_name:
   min_length: 

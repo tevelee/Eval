@@ -36,7 +36,7 @@ open class TemplateInterpreter<T> : Interpreter {
 
     /// The evaluator type that is being used to process variables. By default, the TypedInterpreter is being used
     public typealias VariableEvaluator = TypedInterpreter
-    
+
     /// The result type of a template evaluation
     public typealias EvaluatedType = T
 
@@ -62,7 +62,7 @@ open class TemplateInterpreter<T> : Interpreter {
     public func evaluate(_ expression: String) -> T {
         return evaluate(expression, context: InterpreterContext())
     }
-    
+
     /// The main part of the evaluation happens here. In this case, the global context variables merged with the provided context are going to be used.
     /// - parameter expression: The input
     /// - parameter context: Local context that is going to be used with this expression only
@@ -70,19 +70,19 @@ open class TemplateInterpreter<T> : Interpreter {
     open func evaluate(_ expression: String, context: InterpreterContext) -> T {
         fatalError("Shouldn't instantiate `TemplateInterpreter` directly. Please subclass with a dedicated type instead")
     }
-    
+
     /// Reduce block can convet a stream of values into one, by calling this block for every element, returning a single value at the end. The concept is usually used in functional environments
     /// - parameter existing: The previously computed value. In case the current iteration is the first, it's the inital value.
     /// - parameter next: The value of the current element in the iteration
     /// - returns: The a combined value based on the previous and the new value
     public typealias Reducer<T, K> = (_ existing: T, _ next: K) -> T
-    
+
     /// In order to support generic types, not just plain String objects, a reducer helps to convert the output to the dedicated output type
     /// - parameter initialValue: based on the type, an initial value must to be provided which can serve as a base of the output
     /// - parameter reduceValue: during template execution, if there is some template to replace, the output value can be used to append to the previously existing output
     /// - parameter reduceCharacter: during template execution, if there is nothing to replace, the value is computed by the character-by-character iteration, appending to the previously existing output
     public typealias TemplateReducer = (initialValue: T, reduceValue: Reducer<T, T>, reduceCharacter: Reducer<T, Character>)
-    
+
     /// The main part of the evaluation happens here. In this case, the global context variables merged with the provided context are going to be used.
     /// - parameter expression: The input
     /// - parameter context: Local context that is going to be used with this expression only
@@ -116,7 +116,7 @@ open class TemplateInterpreter<T> : Interpreter {
 public class StringTemplateInterpreter: TemplateInterpreter<String> {
     /// The result of a template evaluation is a String
     public typealias EvaluatedType = String
-    
+
     /// The main part of the evaluation happens here. In this case, the global context variables merged with the provided context are going to be used.
     /// - parameter expression: The input
     /// - parameter context: Local context that is going to be used with this expression only

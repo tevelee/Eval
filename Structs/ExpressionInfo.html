@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>DataTypeProtocol Protocol Reference</title>
+    <title>ExpressionInfo Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Protocol/DataTypeProtocol" class="dashAnchor"></a>
-    <a title="DataTypeProtocol Protocol Reference"></a>
+    <a name="//apple_ref/swift/Struct/ExpressionInfo" class="dashAnchor"></a>
+    <a title="ExpressionInfo Structure Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">Eval Docs</a> (100% documented)</p>
@@ -23,7 +23,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">Eval Reference</a>
         <img id="carat" src="../img/carat.png" />
-        DataTypeProtocol Protocol Reference
+        ExpressionInfo Structure Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -182,14 +182,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>DataTypeProtocol</h1>
+            <h1>ExpressionInfo</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DataTypeProtocol</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ExpressionInfo</span></code></pre>
 
                 </div>
               </div>
-            <p>Data types tell the framework which kind of data can be parsed in the expressions</p>
+            <p>Detailed information about recognised expressions</p>
 
           </section>
           <section class="section task-group-section">
@@ -198,9 +198,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval16DataTypeProtocolP7convertypSgSS5input_AA16TypedInterpreterC11interpretertF"></a>
-                    <a name="//apple_ref/swift/Method/convert(input:interpreter:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval16DataTypeProtocolP7convertypSgSS5input_AA16TypedInterpreterC11interpretertF">convert(input:interpreter:)</a>
+                    <a name="/s:4Eval14ExpressionInfoV5inputSSv"></a>
+                    <a name="//apple_ref/swift/Property/input" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval14ExpressionInfoV5inputSSv">input</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -208,55 +208,19 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>If the framework meets with some static value that hasn&rsquo;t been processed before, it tries to convert it with every registered data type.
-This method returns nil if the conversion could not have been processed with any of the type&rsquo;s literals.</p>
+                        <p>The raw String input of the expression</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">convert</span><span class="p">(</span><span class="nv">input</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">interpreter</span><span class="p">:</span> <span class="kt"><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">input</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>input</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The input to convert as a <code><a href="../Classes/DataType.html">DataType</a></code> value</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>interpreter</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>An interpreter instance if the content needs any further evaluation</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>The value of the <code><a href="../Classes/DataType.html">DataType</a></code> or <code>nil</code> if it cannot be processed</p>
-                      </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L107">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L60">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -264,9 +228,9 @@ This method returns nil if the conversion could not have been processed with any
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval16DataTypeProtocolP5printSSSgyp5value_tF"></a>
-                    <a name="//apple_ref/swift/Method/print(value:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval16DataTypeProtocolP5printSSSgyp5value_tF">print(value:)</a>
+                    <a name="/s:4Eval14ExpressionInfoV6outputypv"></a>
+                    <a name="//apple_ref/swift/Property/output" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval14ExpressionInfoV6outputypv">output</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -274,43 +238,79 @@ This method returns nil if the conversion could not have been processed with any
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>This is a convenience method, for debugging and value printing purposes, which can return a string from the current data type.
-It does not need to be unique or always the same for the same input values.</p>
+                        <p>The generated output of the expression</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">print</span><span class="p">(</span><span class="n">value</span> <span class="nv">input</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">output</span><span class="p">:</span> <span class="kt">Any</span></code></pre>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>input</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Any value that is a valid <code><a href="../Classes/DataType.html">DataType</a></code></p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L62">Show on GitHub</a>
                       </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>The string representation of the value or <code>nil</code> if it cannot be processed</p>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval14ExpressionInfoV7patternSSv"></a>
+                    <a name="//apple_ref/swift/Property/pattern" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval14ExpressionInfoV7patternSSv">pattern</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A stringified version of the elements of the <code><a href="../Classes/Matcher.html">Matcher</a></code> object</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">pattern</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L113">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L64">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval14ExpressionInfoV9variabless10DictionaryVySSypGv"></a>
+                    <a name="//apple_ref/swift/Property/variables" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval14ExpressionInfoV9variabless10DictionaryVySSypGv">variables</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>All the variables computed during the evaluation</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L66">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Example projects  Reference</title>
+    <title>Structures  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,7 +10,7 @@
     
   </head>
   <body>
-    <a title="Example projects  Reference"></a>
+    <a title="Structures  Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="index.html">Eval Docs</a> (100% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="index.html">Eval Reference</a>
         <img id="carat" src="img/carat.png" />
-        Example projects  Reference
+        Structures  Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -181,29 +181,46 @@
       <article class="main-content">
         <section>
           <section class="section">
-            
-            <h1 id='example-projects' class='heading'>Example projects</h1>
+            <h1>Structures</h1>
+            <p>The following structures are available globally.</p>
 
-<p>I included a few use-cases, which bring significant improvements on how things are processed before - at least in my previous projects.
-​</p>
-<h3 id='a-href-https-github-com-tevelee-eval-blob-master-examples-templateexample-tests-templateexampletests-templateexampletests-swift-template-language-a' class='heading'><a href="https://github.com/tevelee/Eval/blob/master/Examples/TemplateExample/Tests/TemplateExampleTests/TemplateExampleTests.swift">Template language</a></h3>
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval14ExpressionInfoV"></a>
+                    <a name="//apple_ref/swift/Struct/ExpressionInfo" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval14ExpressionInfoV">ExpressionInfo</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Detailed information about recognised expressions</p>
 
-<p>I was able to create a full-blown template language, completely, using this framework and nothing else. It&rsquo;s almost like a competitor of the one I mentioned (<a href="https://github.com/twigphp/Twig">Twig</a>). This is the most advanced example of them all!</p>
+                        <a href="Structs/ExpressionInfo.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">ExpressionInfo</span></code></pre>
 
-<p>I created a standard library with all the possible operators you can imagine. With helpers, each operator is a small, one-liner addition. Added the important data types, such as arrays, strings, numbers, booleans, dates, etc., and a few functions, to be more awesome. <a href="https://github.com/tevelee/Eval/blob/master/Examples/TemplateExample/Sources/TemplateExample/TemplateExample.swift">Take a look for inspiration!</a></p>
-
-<p>Together, it makes an excellent addition to my model-object generation project, and <strong>REALLY useful for server-side Swift development as well</strong>!</p>
-<h3 id='a-href-https-github-com-tevelee-eval-blob-master-examples-attributedstringexample-tests-attributedstringexampletests-attributedstringexampletests-swift-attributed-string-parser-a' class='heading'><a href="https://github.com/tevelee/Eval/blob/master/Examples/AttributedStringExample/Tests/AttributedStringExampleTests/AttributedStringExampleTests.swift">Attributed string parser</a></h3>
-
-<p>I created another small example, parsing attribtuted strings from simple expressions using XML style tags, such as bold, italic, underlined, colored, etc.</p>
-
-<p>With just a few operators, this solution can deliver attributed strings from basic APIs, which otherwise would be hard to manage.</p>
-
-<p>My connected project is an iOS application, using the Spotify <a href="https://github.com/spotify/HubFramework">HUB framework</a>, in which I can now provide rich strings with my view-models and parse them from the JSON string results.</p>
-<h3 id='a-href-https-github-com-tevelee-eval-blob-master-examples-colorparserexample-tests-colorparserexampletests-colorparserexampletests-swift-color-parser-a' class='heading'><a href="https://github.com/tevelee/Eval/blob/master/Examples/ColorParserExample/Tests/ColorParserExampleTests/ColorParserExampleTests.swift">Color parser</a></h3>
-
-<p>A color parser is also used by the BFF (Backend For Frontend, not 👭) project I mentioned before. It can parse Swift Color objects from many different styles of strings, such as <code>#ffddee</code>, or <code>red</code>, or <code>rgba(1,0.5,0.4,1)</code>. I included this basic example in the repository as well.</p>
-
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L58-L67">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </section>
         </section>
         <section id="footer">

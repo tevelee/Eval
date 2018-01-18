@@ -105,8 +105,10 @@ public class StandardLibrary {
             StandardLibrary.stringType,
             StandardLibrary.booleanType,
             StandardLibrary.arrayType,
+            StandardLibrary.dictionaryType,
             StandardLibrary.dateType,
-            StandardLibrary.numberType,
+            StandardLibrary.integerType,
+            StandardLibrary.doubleType,
         ]
     }
     public static var functions: [FunctionProtocol] {
@@ -114,6 +116,7 @@ public class StandardLibrary {
             StandardLibrary.parentheses,
 
             StandardLibrary.rangeFunction,
+            StandardLibrary.rangeBySteps,
 
             StandardLibrary.startsWithOperator,
             StandardLibrary.endsWithOperator,
@@ -132,7 +135,8 @@ public class StandardLibrary {
             StandardLibrary.moreThanOrEqualsOperator,
             StandardLibrary.equalsOperator,
 
-            StandardLibrary.inNumberArrayOperator,
+            StandardLibrary.inIntegerArrayOperator,
+            StandardLibrary.inDoubleArrayOperator,
             StandardLibrary.inStringArrayOperator,
 
             StandardLibrary.incrementOperator,
@@ -145,6 +149,12 @@ public class StandardLibrary {
 
             StandardLibrary.minFunction,
             StandardLibrary.maxFunction,
+            StandardLibrary.sqrtFunction,
+
+            StandardLibrary.arraySubscript,
+            StandardLibrary.dictionarySubscript,
+            StandardLibrary.dictionaryKeys,
+            StandardLibrary.dictionaryValues,
 
             StandardLibrary.dateFactory,
             StandardLibrary.dateFormat,
@@ -153,18 +163,19 @@ public class StandardLibrary {
     
     //MARK: Types
     
-    public static var numberType: DataType<Double> {
+    public static var doubleType: DataType<Double> {
         let numberLiteral = Literal { v,_ in Double(v) }
         let pi = Literal("pi", convertsTo: Double.pi)
         return DataType(type: Double.self, literals: [numberLiteral, pi]) { String(describing: $0) }
     }
     
+    public static var integerType: DataType<Int> {
+        let numberLiteral = Literal { v,_ in Int(v) }
+        return DataType(type: Int.self, literals: [numberLiteral]) { String(describing: $0) }
+    }
+    
     public static var stringType: DataType<String> {
-        let singleQuotesLiteral = Literal { (input, _) -> String? in
-            guard let first = input.first, let last = input.last, first == last, first == "'" else { return nil }
-            let trimmed = input.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
-            return trimmed.contains("'") ? nil : trimmed
-        }
+        let singleQuotesLiteral = literal(opening: "'", closing: "'") { (input, _) in input }
         return DataType(type: String.self, literals: [singleQuotesLiteral]) { $0 }
     }
     
@@ -175,15 +186,31 @@ public class StandardLibrary {
     }
     
     public static var arrayType: DataType<[CustomStringConvertible]> {
-        let arrayLiteral = Literal { (input, interpreter) -> [CustomStringConvertible]? in
-            guard let first = input.first, let last = input.last, first == "[", last == "]" else { return nil }
+        let arrayLiteral = literal(opening: "[", closing: "]") { (input, interpreter) -> [CustomStringConvertible]? in
             return input
-                .trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
                 .split(separator: ",")
                 .map{ $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                 .map{ interpreter.evaluate(String($0)) as? CustomStringConvertible ?? String($0) }
         }
         return DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { $0.map{ $0.description }.joined(separator: ",") }
+    }
+    
+    public static var dictionaryType: DataType<[String: CustomStringConvertible?]> {
+        let dictionaryLiteral = literal(opening: "{", closing: "}") { (input, interpreter) -> [String: CustomStringConvertible?]? in
+            let values = input
+                .split(separator: ",")
+                .map{ $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            let parsedValues : [(key: String, value: CustomStringConvertible?)] = values
+                .map{ $0.split(separator: ":").map { interpreter.evaluate(String($0)) } }
+                .flatMap{
+                    guard let first = $0.first, let key = first as? String, let value = $0.last else { return nil }
+                    return (key: key, value: value as? CustomStringConvertible)
+                }
+            return Dictionary(grouping: parsedValues) { $0.key }.mapValues { $0.first?.value }
+        }
+        return DataType(type: [String: CustomStringConvertible?].self, literals: [dictionaryLiteral]) {
+            return "[\($0.map{ "\($0.key): \($0.value ?? "nil")" }.sorted().joined(separator: ", "))]"
+        }
     }
     
     public static var booleanType: DataType<Bool> {
@@ -260,7 +287,11 @@ public class StandardLibrary {
         return infixOperator("in") { (lhs: String, rhs: [String]) in rhs.contains(lhs) }
     }
     
-    public static var inNumberArrayOperator: Function<Bool?> {
+    public static var inIntegerArrayOperator: Function<Bool?> {
+        return infixOperator("in") { (lhs: Int, rhs: [Int]) in rhs.contains(lhs) }
+    }
+    
+    public static var inDoubleArrayOperator: Function<Bool?> {
         return infixOperator("in") { (lhs: Double, rhs: [Double]) in rhs.contains(lhs) }
     }
     
@@ -292,6 +323,13 @@ public class StandardLibrary {
         return objectFunction("max") { (object: [Double]) -> Double? in object.max() }
     }
     
+    public static var sqrtFunction: Function<Double> {
+        return function("sqrt") { (arguments: [Any]) -> Double? in
+            guard let value = arguments.first as? Double else { return nil }
+            return sqrt(value)
+        }
+    }
+    
     public static var dateFactory: Function<Date?> {
         return function("Date") { (arguments: [Any]) -> Date? in
             guard let arguments = arguments as? [Double], arguments.count >= 3 else { return nil }
@@ -307,11 +345,50 @@ public class StandardLibrary {
         }
     }
     
+    public static var rangeBySteps: Function<[Int]> {
+        return functionWithNamedParameters("range") { (arguments: [String: Any]) -> [Int]? in
+            guard let start = arguments["start"] as? Int, let end = arguments["end"] as? Int, let step = arguments["step"] as? Int else { return nil }
+            var result = [start]
+            var value = start
+            while value <= end - step {
+                value += step
+                result.append(value)
+            }
+            return result
+        }
+    }
+    
     public static var dateFormat: Function<String> {
         return objectFunctionWithParameters("format") { (object: Date, arguments: [Any]) -> String? in
             guard let format = arguments.first as? String else { return nil }
             let dateFormatter = DateFormatter(with: format)
             return dateFormatter.string(from: object)
+        }
+    }
+
+    public static var arraySubscript: Function<Any?> {
+        return Function([Variable<[Any]>("array"), Keyword("."), Variable<Int>("index", shortest: false)]) { variables, _, _ in
+            guard let array = variables["array"] as? [Any], let index = variables["index"] as? Int, index > 0, index < array.count else { return nil }
+            return array[index]
+        }
+    }
+    
+    public static var dictionarySubscript: Function<Any?> {
+        return Function([Variable<[String: Any]>("dictionary"), Keyword("."), Variable<String>("key", shortest: false, interpreted: false)]) { variables, _, _ in
+            guard let dictionary = variables["dictionary"] as? [String: Any], let key = variables["key"] as? String else { return nil }
+            return dictionary[key]
+        }
+    }
+    
+    public static var dictionaryKeys: Function<[String]> {
+        return objectFunction("keys") { (object: [String: Any?]) -> [String] in
+            return Array(object.keys)
+        }
+    }
+    
+    public static var dictionaryValues: Function<[Any?]> {
+        return objectFunction("values") { (object: [String: Any?]) -> [Any?] in
+            return Array(object.values)
         }
     }
     
@@ -323,6 +400,18 @@ public class StandardLibrary {
                 return Double(Int(bitPattern: result.toOpaque()))
             }
             return nil
+        }
+    }
+    
+    //MARK: Literal helpers
+    
+    public static func literal<T>(opening: String, closing: String, convert: @escaping (_ input: String, _ interpreter: TypedInterpreter) -> T?) -> Literal<T> {
+        return Literal { (input, interpreter) -> T? in
+            guard input.hasPrefix(opening), input.hasSuffix(closing) else { return nil }
+            let inputWithoutOpening = String(input.suffix(from: input.index(input.startIndex, offsetBy: opening.count)))
+            let inputWithoutSides = String(inputWithoutOpening.prefix(upTo: inputWithoutOpening.index(inputWithoutOpening.endIndex, offsetBy: -closing.count)))
+            guard !inputWithoutSides.contains(opening) && !inputWithoutSides.contains(closing) else { return nil }
+            return convert(inputWithoutSides, interpreter)
         }
     }
 

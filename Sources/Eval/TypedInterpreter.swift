@@ -65,7 +65,7 @@ public class TypedInterpreter: Interpreter {
         context.merge(with: self.context) { existing, _ in existing}
         let expression = expression.trim()
 
-        for dataType in dataTypes.reversed() {
+        for dataType in dataTypes {
             if let value = dataType.convert(input: expression, interpreter: self) {
                 return value
             }

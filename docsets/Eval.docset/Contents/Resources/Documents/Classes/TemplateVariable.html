@@ -157,6 +157,9 @@
                 <a href="../Protocols/MatchElement.html">MatchElement</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/Printer.html">Printer</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/VariableProtocol.html">VariableProtocol</a>
               </li>
             </ul>
@@ -199,9 +202,9 @@ It&rsquo;s perfect for expressions, that have a body, that needs to be further i
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval16TemplateVariableCACSS_Sb8shortesttcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(_:shortest:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval16TemplateVariableCACSS_Sb8shortesttcfc">init(_:shortest:)</a>
+                    <a name="/s:4Eval16TemplateVariableCACSS_Sb8shortestSb11interpretedSb7trimmedtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(_:shortest:interpreted:trimmed:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16TemplateVariableCACSS_Sb8shortestSb11interpretedSb7trimmedtcfc">init(_:shortest:interpreted:trimmed:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -216,7 +219,7 @@ It&rsquo;s perfect for expressions, that have a body, that needs to be further i
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">shortest</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">shortest</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">interpreted</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">trimmed</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -248,11 +251,24 @@ It&rsquo;s perfect for expressions, that have a body, that needs to be further i
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>interpreted</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>whether the value of the expression should be evaluated. Defaults to <code>true</code>
+Whether the processed variable sould be trimmed (removing whitespaces from both sides). Defaults to <code>true</code></p>
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L135-L140">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TemplateInterpreter.swift#L137-L142">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

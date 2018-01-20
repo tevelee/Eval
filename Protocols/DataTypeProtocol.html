@@ -157,6 +157,9 @@
                 <a href="../Protocols/MatchElement.html">MatchElement</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/Printer.html">Printer</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/VariableProtocol.html">VariableProtocol</a>
               </li>
             </ul>
@@ -264,9 +267,9 @@ This method returns nil if the conversion could not have been processed with any
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval16DataTypeProtocolP5printSSSgyp5value_tF"></a>
-                    <a name="//apple_ref/swift/Method/print(value:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval16DataTypeProtocolP5printSSSgyp5value_tF">print(value:)</a>
+                    <a name="/s:4Eval16DataTypeProtocolP5printSSSgyp5value_AA7Printer_p7printertF"></a>
+                    <a name="//apple_ref/swift/Method/print(value:printer:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16DataTypeProtocolP5printSSSgyp5value_AA7Printer_p7printertF">print(value:printer:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -282,7 +285,7 @@ It does not need to be unique or always the same for the same input values.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">print</span><span class="p">(</span><span class="n">value</span> <span class="nv">input</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">print</span><span class="p">(</span><span class="n">value</span> <span class="nv">input</span><span class="p">:</span> <span class="kt">Any</span><span class="p">,</span> <span class="nv">printer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Printer.html">Printer</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -302,6 +305,18 @@ It does not need to be unique or always the same for the same input values.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>printer</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An interpreter instance if the content recursively contains further data types to print</p>
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -310,7 +325,7 @@ It does not need to be unique or always the same for the same input values.</p>
                         <p>The string representation of the value or <code>nil</code> if it cannot be processed</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L113">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L114">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

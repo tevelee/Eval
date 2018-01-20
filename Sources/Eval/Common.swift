@@ -159,8 +159,9 @@ func matchStatement<T, E>(amongst statements: [Matcher<T, E>], in input: String,
         if input.count == start + length {
             return .possibleMatch
         } else {
-            return matchStatement(amongst: statements, in: input, from: start, until: length + 1, interpreter: interpreter, context: context)
+            return matchStatement(amongst: elements.map{ $0.element }, in: input, from: start, until: length + 1, interpreter: interpreter, context: context)
         }
     }
     return .noMatch
 }
+

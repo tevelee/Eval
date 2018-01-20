@@ -6,14 +6,14 @@ import Eval
 public let numberDataType = DataType(type: Double.self, literals:[
         Literal { v,_ in Double(v) },
         Literal("pi", convertsTo: Double.pi)
-]) { String(describing: $0) }
+]) { value, _ in String(describing: value) }
 
 //MARK: Bool
 
 public let booleanDataType = DataType(type: Bool.self, literals: [
     Literal("false", convertsTo: false),
     Literal("true", convertsTo: true)
-]) { $0 ? "true" : "false" }
+]) { value, _ in value ? "true" : "false" }
 
 //MARK: String
 
@@ -22,7 +22,7 @@ let singleQuotesLiteral = Literal { (input, _) -> String? in
     let trimmed = input.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
     return trimmed.contains("'") ? nil : trimmed
 }
-public let stringDataType = DataType(type: String.self, literals: [singleQuotesLiteral]) { $0 }
+public let stringDataType = DataType(type: String.self, literals: [singleQuotesLiteral]) { value, _ in value }
 
 //MARK: Date
 
@@ -43,7 +43,7 @@ let arrayLiteral = Literal { (input, interpreter) -> [CustomStringConvertible]? 
         .map{ $0.trimmingCharacters(in: .whitespacesAndNewlines) }
         .map{ interpreter.evaluate(String($0)) as? CustomStringConvertible ?? String($0) }
 }
-public let arrayDataType = DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { $0.map{ $0.description }.joined(separator: ",") }
+public let arrayDataType = DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { value, _ in value.map{ $0.description }.joined(separator: ",") }
 
 //MARK: Operators
 

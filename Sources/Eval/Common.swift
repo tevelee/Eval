@@ -54,6 +54,14 @@ public protocol Interpreter: EvaluatorWithContext, ContextAware {
     var interpreterForEvaluatingVariables: VariableEvaluator { get }
 }
 
+/// A protocol which is able to express custom values as Strings
+public protocol Printer {
+    /// Converts its input parameter to a String value
+    /// - parameter input: The value to print
+    /// - returns: The converted String instance
+    func print(_ input: Any) -> String
+}
+
 /// Detailed information about recognised expressions
 public struct ExpressionInfo {
     /// The raw String input of the expression

@@ -60,7 +60,7 @@ class TemplateTests: XCTestCase {
 
     func numberDataType() -> DataType<Double> {
         return DataType(type: Double.self, literals: [Literal { v,_ in Double(v) },
-                                                      Literal("pi", convertsTo: Double.pi) ]) { String(describing: $0) }
+                                                      Literal("pi", convertsTo: Double.pi) ]) { value, _ in String(describing: value) }
     }
     
     func stringDataType() -> DataType<String> {
@@ -69,12 +69,12 @@ class TemplateTests: XCTestCase {
             let trimmed = input.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
             return trimmed.contains("'") ? nil : trimmed
         }
-        return DataType(type: String.self, literals: [singleQuotesLiteral]) { $0 }
+        return DataType(type: String.self, literals: [singleQuotesLiteral]) { value, _ in value }
     }
     
     func booleanDataType() -> DataType<Bool> {
         return DataType(type: Bool.self, literals: [Literal("false", convertsTo: false),
-                                                    Literal("true", convertsTo: true)]) { $0 ? "true" : "false" }
+                                                    Literal("true", convertsTo: true)]) { value, _ in value ? "true" : "false" }
     }
     
     //MARK: Helpers - operators

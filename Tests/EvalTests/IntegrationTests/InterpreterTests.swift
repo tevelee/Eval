@@ -201,8 +201,8 @@ class InterpreterTests: XCTestCase {
     //MARK: Helpers - data types
     
     func numberDataType() -> DataType<Double> {
-        return DataType(type: Double.self, literals: [Literal { v,_ in Double(v) },
-                                                      Literal("pi", convertsTo: Double.pi) ]) { String(describing: $0) }
+        return DataType(type: Double.self, literals: [Literal { vvalue,_ in Double(vvalue) },
+                                                      Literal("pi", convertsTo: Double.pi) ]) { value, _ in String(describing: value) }
     }
     
     func stringDataType() -> DataType<String> {
@@ -211,7 +211,7 @@ class InterpreterTests: XCTestCase {
             let trimmed = input.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
             return trimmed.contains("'") ? nil : trimmed
         }
-        return DataType(type: String.self, literals: [singleQuotesLiteral]) { $0 }
+        return DataType(type: String.self, literals: [singleQuotesLiteral]) { value, _ in value }
     }
     
     func dateDataType() -> DataType<Date> {
@@ -219,7 +219,7 @@ class InterpreterTests: XCTestCase {
         dateFormatter.calendar = Calendar(identifier: .gregorian)
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         
-        return DataType(type: Date.self, literals: [Literal<Date>("now", convertsTo: Date())]) { dateFormatter.string(from: $0) }
+        return DataType(type: Date.self, literals: [Literal<Date>("now", convertsTo: Date())]) { value, _ in dateFormatter.string(from: value) }
     }
     
     func arrayDataType() -> DataType<[CustomStringConvertible]> {
@@ -231,12 +231,12 @@ class InterpreterTests: XCTestCase {
                 .map{ $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                 .map{ interpreter.evaluate(String($0)) as? CustomStringConvertible ?? String($0) }
         }
-        return DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { $0.map{ $0.description }.joined(separator: ",") }
+        return DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { value, _ in value.map{ $0.description }.joined(separator: ",") }
     }
     
     func booleanDataType() -> DataType<Bool> {
         return DataType(type: Bool.self, literals: [Literal("false", convertsTo: false),
-                                                    Literal("true", convertsTo: true)]) { $0 ? "true" : "false" }
+                                                    Literal("true", convertsTo: true)]) { value, _ in value ? "true" : "false" }
     }
     
     //MARK: Helpers - functions

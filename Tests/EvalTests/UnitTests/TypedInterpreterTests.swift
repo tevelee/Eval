@@ -6,7 +6,7 @@ class TypedInterpreterTests: XCTestCase {
     //MARK: init
     
     func test_whenInitialised_thenPropertiesAreSaved() {
-        let dataTypes = [DataType(type: String.self, literals: []) { $0 }]
+        let dataTypes = [DataType(type: String.self, literals: []) { value, _ in value }]
         let functions = [Function([Keyword("a")]) { _,_,_ in "a" } ]
         let context = InterpreterContext()
         
@@ -26,7 +26,7 @@ class TypedInterpreterTests: XCTestCase {
     //MARK: evaluate
     
     func test_whenEvaluates_thenTransformationHappens() {
-        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { String($0) }],
+        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { value, _ in String(value) }],
                                            functions: [Function([Variable<Int>("lhs"), Keyword("plus"), Variable<Int>("rhs")]) { v,_,_ in (v["lhs"] as! Int) + (v["rhs"] as! Int) } ],
                                            context: InterpreterContext())
         
@@ -36,7 +36,7 @@ class TypedInterpreterTests: XCTestCase {
     }
     
     func test_whenEvaluates_thenUsesGlobalContext() {
-        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { String($0) }],
+        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { value, _ in String(value) }],
                                            functions: [Function([Variable<Int>("lhs"), Keyword("plus"), Variable<Int>("rhs")]) { v,_,_ in (v["lhs"] as! Int) + (v["rhs"] as! Int) } ],
                                            context: InterpreterContext(variables: ["a": 2]))
         
@@ -48,7 +48,7 @@ class TypedInterpreterTests: XCTestCase {
     //MARK: evaluate with context
     
     func test_whenEvaluatesWithContext_thenUsesLocalContext() {
-        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { String($0) }],
+        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { value, _ in String(value) }],
                                            functions: [Function([Variable<Int>("lhs"), Keyword("plus"), Variable<Int>("rhs")]) { v,_,_ in (v["lhs"] as! Int) + (v["rhs"] as! Int) } ],
                                            context: InterpreterContext())
         
@@ -58,7 +58,7 @@ class TypedInterpreterTests: XCTestCase {
     }
     
     func test_whenEvaluatesWithContext_thenLocalOverridesGlobalContext() {
-        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { String($0) }],
+        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { value, _ in String(value) }],
                                            functions: [Function([Variable<Int>("lhs"), Keyword("plus"), Variable<Int>("rhs")]) { v,_,_ in (v["lhs"] as! Int) + (v["rhs"] as! Int) } ],
                                            context: InterpreterContext(variables: ["a": 1]))
         
@@ -70,7 +70,7 @@ class TypedInterpreterTests: XCTestCase {
     //MARK: print
     
     func test_whenPrintingDataType_thenReturnsItsBlock() {
-        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { String($0) }],
+        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { value, _ in String(value) }],
                                            functions: [],
                                            context: InterpreterContext())
         
@@ -80,7 +80,7 @@ class TypedInterpreterTests: XCTestCase {
     }
     
     func test_whenPrintingUnknownDataType_thenReturnsDescription() {
-        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { String($0) }],
+        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { value, _ in String(value) }],
                                            functions: [],
                                            context: InterpreterContext())
         

@@ -132,10 +132,12 @@ public class TemplateVariable: GenericVariable<String, StringTemplateInterpreter
     /// No changes compared to the initialiser of the superclass `Variable`, uses the same parameters
     /// - parameter name: `GenericVariable`s have a name (unique identifier), that is used when matching and returning them in the matcher.
     /// - parameter shortest: provides information whether the match should be exhaustive or just use the shortest possible matching string (even zero characters in some edge cases). This depends on the surrounding `Keyword` instances in the containing collection. Defaults to `true`
-    public init(_ name: String, shortest: Bool = true) {
-        super.init(name, shortest: shortest, interpreted: false) { value, interpreter in
+    /// - parameter interpreted: whether the value of the expression should be evaluated. Defaults to `true`
+    /// Whether the processed variable sould be trimmed (removing whitespaces from both sides). Defaults to `true`
+    public init(_ name: String, shortest: Bool = true, interpreted: Bool = true, trimmed: Bool = true) {
+        super.init(name, shortest: shortest, interpreted: false, trimmed: trimmed) { value, interpreter in
             guard let stringValue = value as? String else { return "" }
-            return interpreter.evaluate(stringValue)
+            return interpreted ? interpreter.evaluate(stringValue) : stringValue
         }
     }
 }

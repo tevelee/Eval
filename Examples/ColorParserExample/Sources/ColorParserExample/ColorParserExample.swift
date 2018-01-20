@@ -20,7 +20,7 @@ public class ColorParser: EvaluatorWithContext {
         
         let red = Literal("red", convertsTo: NSColor.red)
         
-        return DataType(type: NSColor.self, literals: [hex, red]) { $0.description }
+        return DataType(type: NSColor.self, literals: [hex, red]) { value, _ in value.description }
     }
     
     static func mixFunction() -> Function<NSColor> {

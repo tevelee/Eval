@@ -116,8 +116,9 @@ public class Matcher<T, E: Interpreter> {
         /// - returns: Whether the registration was successful (the finalisation resulted in a valid value)
         func registerAndValidateVariable() -> Bool {
             if let variable = currentlyActiveVariable {
-                variables[variable.metadata.name] = finaliseVariable(variable, interpreter: interpreter, context: context)
-                return !variable.metadata.acceptsNilValue && variables[variable.metadata.name] != nil
+                let result = finaliseVariable(variable, interpreter: interpreter, context: context)
+                variables[variable.metadata.name] = result
+                return !variable.metadata.acceptsNilValue && result != nil
             }
             return false
         }
@@ -199,7 +200,7 @@ public class Matcher<T, E: Interpreter> {
     /// - parameter context: The context - if the block uses any contextual data
     /// - returns: The result of the matching operation
     func finaliseVariable(_ variable: (metadata: VariableProtocol, value: String), interpreter: E, context: InterpreterContext) -> Any? {
-        let value = variable.value.trim()
+        let value = variable.metadata.trimmed ? variable.value.trim() : variable.value
         if variable.metadata.interpreted {
             let variableInterpreter = interpreter.interpreterForEvaluatingVariables
             let output = variableInterpreter.evaluate(value, context: context)

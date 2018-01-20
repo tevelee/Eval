@@ -22,7 +22,7 @@
 import Foundation
 
 /// A type of interpreter implementation that is capable of evaluating arbitrary string expressions to strongly typed variables
-public class TypedInterpreter: Interpreter {
+public class TypedInterpreter: Interpreter, Printer {
     /// The result is a strongly typed value or `nil` (if it cannot be properly processed)
     public typealias EvaluatedType = Any?
 
@@ -86,7 +86,7 @@ public class TypedInterpreter: Interpreter {
     /// - returns: The string representation of the value or empty string if it cannot be processed
     public func print(_ input: Any) -> String {
         for dataType in dataTypes {
-            if let value = dataType.print(value: input) {
+            if let value = dataType.print(value: input, printer: self) {
                 return value
             }
         }
@@ -109,8 +109,9 @@ public protocol DataTypeProtocol {
     /// This is a convenience method, for debugging and value printing purposes, which can return a string from the current data type.
     /// It does not need to be unique or always the same for the same input values.
     /// - parameter input: Any value that is a valid `DataType`
+    /// - parameter printer: An interpreter instance if the content recursively contains further data types to print
     /// - returns: The string representation of the value or `nil` if it cannot be processed
-    func print(value input: Any) -> String?
+    func print(value input: Any, printer: Printer) -> String?
 }
 
 /// The implementation of a `DataType` uses the `DataTypeProtocol` to convert input to a strongly typed data and print it if needed
@@ -120,7 +121,9 @@ public class DataType<T> : DataTypeProtocol {
     /// Array of literals that tell the framework how to transform certain types to an internal `DataType` representation
     let literals: [Literal<T>]
     /// A method to convert an internal representation to strings - for debugging and output representation purposes
-    let print: (T) -> String
+    /// - parameter value: The value to print
+    /// - parameter printer: An interpreter instance if the content recursively contains further data types to print
+    let print: (_ value: T, _ printer: Printer) -> String
 
     /// To be able to bridge the outside world effectively, it needs to provide an already existing Swift or user-defined type. This can be class, struct, enum, or anything else, for example, block or function (which is not recommended).
     /// The literals tell the framework which strings can be represented in the given data type
@@ -128,9 +131,11 @@ public class DataType<T> : DataTypeProtocol {
     /// - parameter type: The existing type to map to an internal one
     /// - parameter literals: Array of literals that tell the framework how to transform certain types to an internal `DataType` representation
     /// - parameter print: A method to convert an internal representation to strings - for debugging and output representation purposes
+    /// - parameter value: The value to print
+    /// - parameter printer: An interpreter instance if the content recursively contains further data types to print
     public init (type: T.Type,
                  literals: [Literal<T>],
-                 print: @escaping (T) -> String) {
+                 print: @escaping (_ value: T, _ printer: Printer) -> String) {
         self.type = type
         self.literals = literals
         self.print = print
@@ -146,11 +151,12 @@ public class DataType<T> : DataTypeProtocol {
 
     /// This is a convenience method, for debugging and value printing purposes, which can return a string from the current data type.
     /// It does not need to be unique or always the same for the same input values.
-    /// - parameter input: Any value that is a valid `DataType`
+    /// - parameter value: Any value that is a valid `DataType`
+    /// - parameter printer: An interpreter instance if the content recursively contains further data types to print
     /// - returns: The string representation of the value or `nil` if it cannot be processed
-    public func print(value input: Any) -> String? {
+    public func print(value input: Any, printer: Printer) -> String? {
         guard let input = input as? T else { return nil }
-        return self.print(input)
+        return self.print(input, printer)
     }
 }
 

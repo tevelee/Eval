@@ -113,6 +113,8 @@ protocol VariableProtocol {
     var interpreted: Bool { get }
     /// If `interpreted` is true, and the result of the evaluation is `nil`, then `acceptsNilValue` determines if the current match result should be instant noMatch, or `nil` is an accepted value, so the matching should be continued
     var acceptsNilValue: Bool { get }
+    /// Whether the processed variable sould be trimmed (removing whitespaces from both sides)
+    var trimmed: Bool { get }
     /// The result of the evaluated variable will be ran through this map function, transforming its value. By default the map tries to convert the matched value to the expected type, using the `as?` operator.
     /// - parameter input: The first parameter is the value is going to be transformed
     /// - parameter interpreter: Helps the mapper function to parse and interpret the contents
@@ -131,6 +133,8 @@ public class GenericVariable<T, E: Interpreter> : VariableProtocol, MatchElement
     let interpreted: Bool
     /// If `interpreted` is true, and the result of the evaluation is `nil`, then `acceptsNilValue` determines if the current match result should be instant noMatch, or `nil` is an accepted value, so the matching should be continued
     let acceptsNilValue: Bool
+    /// Whether the processed variable sould be trimmed (removing whitespaces from both sides)
+    let trimmed: Bool
     /// The result of the evaluated variable will be running through this map function, transforming its value. By default the map tries to convert the matched value to the expected type, using the `as?` operator.
     /// - parameter input: The first parameter is the value is going to be transformed
     /// - parameter interpreter: Helps the mapper function to parse and interpret the contents
@@ -142,14 +146,21 @@ public class GenericVariable<T, E: Interpreter> : VariableProtocol, MatchElement
     /// - parameter shortest: provides information whether the match should be exhaustive or just use the shortest possible matching string (even zero characters in some edge cases). This depends on the surrounding `Keyword` instances in the containing collection. Defaults to `true`
     /// - parameter interpreted: If false, the value of the recognised placeholder will not be processed. In case of true, it will be evaluated, using the `interpreterForEvaluatingVariables` property of the interpreter instance. Defaults to `true`
     /// - parameter acceptsNilValue: If `interpreted` is true, and the result of the evaluation is `nil`, then `acceptsNilValue` determines if the current match result should be instant noMatch, or `nil` is an accepted value, so the matching should be continued. Defaults to `false`
+    /// - parameter trimmed: Whether the processed variable sould be trimmed (removing whitespaces from both sides). Detauls to `true`
     /// - parameter map: If provided, then the result of the evaluated variable will be running through this map function. By default the map tries to convert the matched value to the expected type, using the `as?` operator. Defaults to identical map, using the `as?` operator for value transformation
     /// - parameter input: The first parameter is the value is going to be transformed
     /// - parameter interpreter: Helps the mapper function to parse and interpret the contents
-    public init(_ name: String, shortest: Bool = true, interpreted: Bool = true, acceptsNilValue: Bool = false, map: @escaping (_ input: Any, _ interpreter: E) -> T? = { (value, _) in value as? T }) {
+    public init(_ name: String,
+                shortest: Bool = true,
+                interpreted: Bool = true,
+                acceptsNilValue: Bool = false,
+                trimmed: Bool = true,
+                map: @escaping (_ input: Any, _ interpreter: E) -> T? = { (value, _) in value as? T }) {
         self.name = name
         self.shortest = shortest
         self.interpreted = interpreted
         self.acceptsNilValue = acceptsNilValue
+        self.trimmed = trimmed
         self.map = map
     }
 

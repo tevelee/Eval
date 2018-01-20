@@ -9,11 +9,11 @@
 /* Begin PBXAggregateTarget section */
 		"Eval::EvalPackageTests::ProductTarget" /* EvalPackageTests */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = OBJ_72 /* Build configuration list for PBXAggregateTarget "EvalPackageTests" */;
+			buildConfigurationList = OBJ_86 /* Build configuration list for PBXAggregateTarget "EvalPackageTests" */;
 			buildPhases = (
 			);
 			dependencies = (
-				OBJ_75 /* PBXTargetDependency */,
+				OBJ_89 /* PBXTargetDependency */,
 			);
 			name = EvalPackageTests;
 			productName = EvalPackageTests;
@@ -21,41 +21,41 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		3A839B59200A39A700F50E44 /* EvaluatorContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A839B58200A39A700F50E44 /* EvaluatorContextTests.swift */; };
-		3A839B5B200A3C1900F50E44 /* MatchStatementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A839B5A200A3C1900F50E44 /* MatchStatementTests.swift */; };
-		3A839B5D200A421100F50E44 /* TemplateInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A839B5C200A421100F50E44 /* TemplateInterpreterTests.swift */; };
-		3A839B5F200A47E200F50E44 /* TypedInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A839B5E200A47E200F50E44 /* TypedInterpreterTests.swift */; };
-		3A839B61200A63C000F50E44 /* LiteralTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A839B60200A63C000F50E44 /* LiteralTests.swift */; };
-		3A839B63200A65CF00F50E44 /* FunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A839B62200A65CF00F50E44 /* FunctionTests.swift */; };
-		3A839B65200A65E700F50E44 /* DataTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A839B64200A65E700F50E44 /* DataTypeTests.swift */; };
-		OBJ_41 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
-		OBJ_47 /* InterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* InterpreterTests.swift */; };
-		OBJ_48 /* TemplateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* TemplateTests.swift */; };
-		OBJ_49 /* KeywordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* KeywordTests.swift */; };
-		OBJ_50 /* MatchResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* MatchResultTests.swift */; };
-		OBJ_51 /* MatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* MatcherTests.swift */; };
-		OBJ_52 /* UtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* UtilTests.swift */; };
-		OBJ_53 /* VariableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* VariableTests.swift */; };
-		OBJ_54 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* Utils.swift */; };
-		OBJ_56 /* Eval.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Eval::Eval::Product" /* Eval.framework */; };
-		OBJ_63 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Common.swift */; };
-		OBJ_64 /* Elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Elements.swift */; };
-		OBJ_65 /* TemplateInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* TemplateInterpreter.swift */; };
-		OBJ_66 /* TypedInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* TypedInterpreter.swift */; };
-		OBJ_67 /* MatchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* MatchResult.swift */; };
-		OBJ_68 /* Matcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* Matcher.swift */; };
-		OBJ_69 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* Utils.swift */; };
+		OBJ_48 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
+		OBJ_54 /* InterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* InterpreterTests.swift */; };
+		OBJ_55 /* TemplateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* TemplateTests.swift */; };
+		OBJ_56 /* DataTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* DataTypeTests.swift */; };
+		OBJ_57 /* EvaluatorContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* EvaluatorContextTests.swift */; };
+		OBJ_58 /* FunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* FunctionTests.swift */; };
+		OBJ_59 /* KeywordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* KeywordTests.swift */; };
+		OBJ_60 /* LiteralTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* LiteralTests.swift */; };
+		OBJ_61 /* MatchResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* MatchResultTests.swift */; };
+		OBJ_62 /* MatchStatementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* MatchStatementTests.swift */; };
+		OBJ_63 /* MatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_30 /* MatcherTests.swift */; };
+		OBJ_64 /* TemplateInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* TemplateInterpreterTests.swift */; };
+		OBJ_65 /* TypedInterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_32 /* TypedInterpreterTests.swift */; };
+		OBJ_66 /* UtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_33 /* UtilTests.swift */; };
+		OBJ_67 /* VariableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_34 /* VariableTests.swift */; };
+		OBJ_68 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* Utils.swift */; };
+		OBJ_70 /* Eval.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Eval::Eval::Product" /* Eval.framework */; };
+		OBJ_77 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Common.swift */; };
+		OBJ_78 /* Elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Elements.swift */; };
+		OBJ_79 /* TemplateInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* TemplateInterpreter.swift */; };
+		OBJ_80 /* TypedInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* TypedInterpreter.swift */; };
+		OBJ_81 /* MatchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* MatchResult.swift */; };
+		OBJ_82 /* Matcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* Matcher.swift */; };
+		OBJ_83 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* Utils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3A839B5620082A3C00F50E44 /* PBXContainerItemProxy */ = {
+		3AA519B22013DEBC008F3CE6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "Eval::Eval";
 			remoteInfo = Eval;
 		};
-		3A839B5720082A3E00F50E44 /* PBXContainerItemProxy */ = {
+		3AA519B32013DEBE008F3CE6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
@@ -65,13 +65,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3A839B58200A39A700F50E44 /* EvaluatorContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvaluatorContextTests.swift; sourceTree = "<group>"; };
-		3A839B5A200A3C1900F50E44 /* MatchStatementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchStatementTests.swift; sourceTree = "<group>"; };
-		3A839B5C200A421100F50E44 /* TemplateInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateInterpreterTests.swift; sourceTree = "<group>"; };
-		3A839B5E200A47E200F50E44 /* TypedInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedInterpreterTests.swift; sourceTree = "<group>"; };
-		3A839B60200A63C000F50E44 /* LiteralTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteralTests.swift; sourceTree = "<group>"; };
-		3A839B62200A65CF00F50E44 /* FunctionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionTests.swift; sourceTree = "<group>"; };
-		3A839B64200A65E700F50E44 /* DataTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTypeTests.swift; sourceTree = "<group>"; };
 		"Eval::Eval::Product" /* Eval.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Eval.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Eval::EvalTests::Product" /* EvalTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_10 /* Elements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Elements.swift; sourceTree = "<group>"; };
@@ -82,30 +75,37 @@
 		OBJ_16 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		OBJ_20 /* InterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpreterTests.swift; sourceTree = "<group>"; };
 		OBJ_21 /* TemplateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateTests.swift; sourceTree = "<group>"; };
-		OBJ_23 /* KeywordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordTests.swift; sourceTree = "<group>"; };
-		OBJ_24 /* MatchResultTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchResultTests.swift; sourceTree = "<group>"; };
-		OBJ_25 /* MatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatcherTests.swift; sourceTree = "<group>"; };
-		OBJ_26 /* UtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilTests.swift; sourceTree = "<group>"; };
-		OBJ_27 /* VariableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableTests.swift; sourceTree = "<group>"; };
-		OBJ_28 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		OBJ_29 /* Documentation */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Documentation; sourceTree = SOURCE_ROOT; };
-		OBJ_30 /* Eval.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = Eval.xcworkspace; sourceTree = SOURCE_ROOT; };
-		OBJ_31 /* Examples */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Examples; sourceTree = SOURCE_ROOT; };
-		OBJ_32 /* Scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Scripts; sourceTree = SOURCE_ROOT; };
+		OBJ_23 /* DataTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTypeTests.swift; sourceTree = "<group>"; };
+		OBJ_24 /* EvaluatorContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvaluatorContextTests.swift; sourceTree = "<group>"; };
+		OBJ_25 /* FunctionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionTests.swift; sourceTree = "<group>"; };
+		OBJ_26 /* KeywordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordTests.swift; sourceTree = "<group>"; };
+		OBJ_27 /* LiteralTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteralTests.swift; sourceTree = "<group>"; };
+		OBJ_28 /* MatchResultTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchResultTests.swift; sourceTree = "<group>"; };
+		OBJ_29 /* MatchStatementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchStatementTests.swift; sourceTree = "<group>"; };
+		OBJ_30 /* MatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatcherTests.swift; sourceTree = "<group>"; };
+		OBJ_31 /* TemplateInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateInterpreterTests.swift; sourceTree = "<group>"; };
+		OBJ_32 /* TypedInterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedInterpreterTests.swift; sourceTree = "<group>"; };
+		OBJ_33 /* UtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilTests.swift; sourceTree = "<group>"; };
+		OBJ_34 /* VariableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariableTests.swift; sourceTree = "<group>"; };
+		OBJ_35 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		OBJ_36 /* Documentation */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Documentation; sourceTree = SOURCE_ROOT; };
+		OBJ_37 /* Eval.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = Eval.xcworkspace; sourceTree = SOURCE_ROOT; };
+		OBJ_38 /* Examples */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Examples; sourceTree = SOURCE_ROOT; };
+		OBJ_39 /* Scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Scripts; sourceTree = SOURCE_ROOT; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		OBJ_9 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		OBJ_55 /* Frameworks */ = {
+		OBJ_69 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_56 /* Eval.framework in Frameworks */,
+				OBJ_70 /* Eval.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_70 /* Frameworks */ = {
+		OBJ_84 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
@@ -138,7 +138,7 @@
 			children = (
 				OBJ_19 /* IntegrationTests */,
 				OBJ_22 /* UnitTests */,
-				OBJ_28 /* Utils.swift */,
+				OBJ_35 /* Utils.swift */,
 			);
 			name = EvalTests;
 			path = Tests/EvalTests;
@@ -156,23 +156,23 @@
 		OBJ_22 /* UnitTests */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_23 /* KeywordTests.swift */,
-				OBJ_24 /* MatchResultTests.swift */,
-				OBJ_25 /* MatcherTests.swift */,
-				OBJ_26 /* UtilTests.swift */,
-				OBJ_27 /* VariableTests.swift */,
-				3A839B58200A39A700F50E44 /* EvaluatorContextTests.swift */,
-				3A839B5A200A3C1900F50E44 /* MatchStatementTests.swift */,
-				3A839B5C200A421100F50E44 /* TemplateInterpreterTests.swift */,
-				3A839B5E200A47E200F50E44 /* TypedInterpreterTests.swift */,
-				3A839B60200A63C000F50E44 /* LiteralTests.swift */,
-				3A839B62200A65CF00F50E44 /* FunctionTests.swift */,
-				3A839B64200A65E700F50E44 /* DataTypeTests.swift */,
+				OBJ_23 /* DataTypeTests.swift */,
+				OBJ_24 /* EvaluatorContextTests.swift */,
+				OBJ_25 /* FunctionTests.swift */,
+				OBJ_26 /* KeywordTests.swift */,
+				OBJ_27 /* LiteralTests.swift */,
+				OBJ_28 /* MatchResultTests.swift */,
+				OBJ_29 /* MatchStatementTests.swift */,
+				OBJ_30 /* MatcherTests.swift */,
+				OBJ_31 /* TemplateInterpreterTests.swift */,
+				OBJ_32 /* TypedInterpreterTests.swift */,
+				OBJ_33 /* UtilTests.swift */,
+				OBJ_34 /* VariableTests.swift */,
 			);
 			path = UnitTests;
 			sourceTree = "<group>";
 		};
-		OBJ_33 /* Products */ = {
+		OBJ_40 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				"Eval::EvalTests::Product" /* EvalTests.xctest */,
@@ -187,11 +187,11 @@
 				OBJ_6 /* Package.swift */,
 				OBJ_7 /* Sources */,
 				OBJ_17 /* Tests */,
-				OBJ_29 /* Documentation */,
-				OBJ_30 /* Eval.xcworkspace */,
-				OBJ_31 /* Examples */,
-				OBJ_32 /* Scripts */,
-				OBJ_33 /* Products */,
+				OBJ_36 /* Documentation */,
+				OBJ_37 /* Eval.xcworkspace */,
+				OBJ_38 /* Examples */,
+				OBJ_39 /* Scripts */,
+				OBJ_40 /* Products */,
 			);
 			name = "";
 			sourceTree = "<group>";
@@ -222,10 +222,10 @@
 /* Begin PBXNativeTarget section */
 		"Eval::Eval" /* Eval */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_59 /* Build configuration list for PBXNativeTarget "Eval" */;
+			buildConfigurationList = OBJ_73 /* Build configuration list for PBXNativeTarget "Eval" */;
 			buildPhases = (
-				OBJ_62 /* Sources */,
-				OBJ_70 /* Frameworks */,
+				OBJ_76 /* Sources */,
+				OBJ_84 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -238,15 +238,15 @@
 		};
 		"Eval::EvalTests" /* EvalTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_43 /* Build configuration list for PBXNativeTarget "EvalTests" */;
+			buildConfigurationList = OBJ_50 /* Build configuration list for PBXNativeTarget "EvalTests" */;
 			buildPhases = (
-				OBJ_46 /* Sources */,
-				OBJ_55 /* Frameworks */,
+				OBJ_53 /* Sources */,
+				OBJ_69 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				OBJ_57 /* PBXTargetDependency */,
+				OBJ_71 /* PBXTargetDependency */,
 			);
 			name = EvalTests;
 			productName = EvalTests;
@@ -255,9 +255,9 @@
 		};
 		"Eval::SwiftPMPackageDescription" /* EvalPackageDescription */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_37 /* Build configuration list for PBXNativeTarget "EvalPackageDescription" */;
+			buildConfigurationList = OBJ_44 /* Build configuration list for PBXNativeTarget "EvalPackageDescription" */;
 			buildPhases = (
-				OBJ_40 /* Sources */,
+				OBJ_47 /* Sources */,
 			);
 			buildRules = (
 			);
@@ -283,7 +283,7 @@
 				en,
 			);
 			mainGroup = OBJ_5 /*  */;
-			productRefGroup = OBJ_33 /* Products */;
+			productRefGroup = OBJ_40 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -296,62 +296,62 @@
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		OBJ_40 /* Sources */ = {
+		OBJ_47 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_41 /* Package.swift in Sources */,
+				OBJ_48 /* Package.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_46 /* Sources */ = {
+		OBJ_53 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				3A839B59200A39A700F50E44 /* EvaluatorContextTests.swift in Sources */,
-				OBJ_47 /* InterpreterTests.swift in Sources */,
-				OBJ_48 /* TemplateTests.swift in Sources */,
-				3A839B5F200A47E200F50E44 /* TypedInterpreterTests.swift in Sources */,
-				3A839B65200A65E700F50E44 /* DataTypeTests.swift in Sources */,
-				OBJ_49 /* KeywordTests.swift in Sources */,
-				OBJ_50 /* MatchResultTests.swift in Sources */,
-				3A839B5B200A3C1900F50E44 /* MatchStatementTests.swift in Sources */,
-				3A839B63200A65CF00F50E44 /* FunctionTests.swift in Sources */,
-				OBJ_51 /* MatcherTests.swift in Sources */,
-				OBJ_52 /* UtilTests.swift in Sources */,
-				3A839B61200A63C000F50E44 /* LiteralTests.swift in Sources */,
-				3A839B5D200A421100F50E44 /* TemplateInterpreterTests.swift in Sources */,
-				OBJ_53 /* VariableTests.swift in Sources */,
-				OBJ_54 /* Utils.swift in Sources */,
+				OBJ_54 /* InterpreterTests.swift in Sources */,
+				OBJ_55 /* TemplateTests.swift in Sources */,
+				OBJ_56 /* DataTypeTests.swift in Sources */,
+				OBJ_57 /* EvaluatorContextTests.swift in Sources */,
+				OBJ_58 /* FunctionTests.swift in Sources */,
+				OBJ_59 /* KeywordTests.swift in Sources */,
+				OBJ_60 /* LiteralTests.swift in Sources */,
+				OBJ_61 /* MatchResultTests.swift in Sources */,
+				OBJ_62 /* MatchStatementTests.swift in Sources */,
+				OBJ_63 /* MatcherTests.swift in Sources */,
+				OBJ_64 /* TemplateInterpreterTests.swift in Sources */,
+				OBJ_65 /* TypedInterpreterTests.swift in Sources */,
+				OBJ_66 /* UtilTests.swift in Sources */,
+				OBJ_67 /* VariableTests.swift in Sources */,
+				OBJ_68 /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_62 /* Sources */ = {
+		OBJ_76 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_63 /* Common.swift in Sources */,
-				OBJ_64 /* Elements.swift in Sources */,
-				OBJ_65 /* TemplateInterpreter.swift in Sources */,
-				OBJ_66 /* TypedInterpreter.swift in Sources */,
-				OBJ_67 /* MatchResult.swift in Sources */,
-				OBJ_68 /* Matcher.swift in Sources */,
-				OBJ_69 /* Utils.swift in Sources */,
+				OBJ_77 /* Common.swift in Sources */,
+				OBJ_78 /* Elements.swift in Sources */,
+				OBJ_79 /* TemplateInterpreter.swift in Sources */,
+				OBJ_80 /* TypedInterpreter.swift in Sources */,
+				OBJ_81 /* MatchResult.swift in Sources */,
+				OBJ_82 /* Matcher.swift in Sources */,
+				OBJ_83 /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		OBJ_57 /* PBXTargetDependency */ = {
+		OBJ_71 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Eval::Eval" /* Eval */;
-			targetProxy = 3A839B5620082A3C00F50E44 /* PBXContainerItemProxy */;
+			targetProxy = 3AA519B22013DEBC008F3CE6 /* PBXContainerItemProxy */;
 		};
-		OBJ_75 /* PBXTargetDependency */ = {
+		OBJ_89 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Eval::EvalTests" /* EvalTests */;
-			targetProxy = 3A839B5720082A3E00F50E44 /* PBXContainerItemProxy */;
+			targetProxy = 3AA519B32013DEBE008F3CE6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -378,24 +378,6 @@
 			};
 			name = Debug;
 		};
-		OBJ_38 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				LD = /usr/bin/true;
-				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
-				SWIFT_VERSION = 4.0;
-			};
-			name = Debug;
-		};
-		OBJ_39 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				LD = /usr/bin/true;
-				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
-				SWIFT_VERSION = 4.0;
-			};
-			name = Release;
-		};
 		OBJ_4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -416,7 +398,25 @@
 			};
 			name = Release;
 		};
-		OBJ_44 /* Debug */ = {
+		OBJ_45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		OBJ_46 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		OBJ_51 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
@@ -434,7 +434,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_45 /* Release */ = {
+		OBJ_52 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
@@ -452,7 +452,7 @@
 			};
 			name = Release;
 		};
-		OBJ_60 /* Debug */ = {
+		OBJ_74 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -474,7 +474,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_61 /* Release */ = {
+		OBJ_75 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -496,13 +496,13 @@
 			};
 			name = Release;
 		};
-		OBJ_73 /* Debug */ = {
+		OBJ_87 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Debug;
 		};
-		OBJ_74 /* Release */ = {
+		OBJ_88 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
@@ -520,38 +520,38 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_37 /* Build configuration list for PBXNativeTarget "EvalPackageDescription" */ = {
+		OBJ_44 /* Build configuration list for PBXNativeTarget "EvalPackageDescription" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_38 /* Debug */,
-				OBJ_39 /* Release */,
+				OBJ_45 /* Debug */,
+				OBJ_46 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_43 /* Build configuration list for PBXNativeTarget "EvalTests" */ = {
+		OBJ_50 /* Build configuration list for PBXNativeTarget "EvalTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_44 /* Debug */,
-				OBJ_45 /* Release */,
+				OBJ_51 /* Debug */,
+				OBJ_52 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_59 /* Build configuration list for PBXNativeTarget "Eval" */ = {
+		OBJ_73 /* Build configuration list for PBXNativeTarget "Eval" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_60 /* Debug */,
-				OBJ_61 /* Release */,
+				OBJ_74 /* Debug */,
+				OBJ_75 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_72 /* Build configuration list for PBXAggregateTarget "EvalPackageTests" */ = {
+		OBJ_86 /* Build configuration list for PBXAggregateTarget "EvalPackageTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_73 /* Debug */,
-				OBJ_74 /* Release */,
+				OBJ_87 /* Debug */,
+				OBJ_88 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

@@ -8,8 +8,9 @@ public class TemplateLanguage: EvaluatorWithContext {
     
     init(dataTypes: [DataTypeProtocol] = StandardLibrary.dataTypes,
          functions: [FunctionProtocol] = StandardLibrary.functions,
-         templates: [Matcher<String, TemplateInterpreter<String>>] = TemplateLibrary.templates) {
-        let context = InterpreterContext()
+         templates: [Matcher<String, TemplateInterpreter<String>>] = TemplateLibrary.templates,
+         context: InterpreterContext = InterpreterContext()) {
+        TemplateLanguage.preprocess(context)
         let interpreter = TypedInterpreter(dataTypes: dataTypes, functions: functions, context: context)
         language = StringTemplateInterpreter(statements: templates, interpreter: interpreter, context: context)
     }
@@ -19,7 +20,29 @@ public class TemplateLanguage: EvaluatorWithContext {
     }
     
     public func evaluate(_ expression: String, context: InterpreterContext) -> String {
+        TemplateLanguage.preprocess(context)
         return language.evaluate(expression, context: context)
+    }
+    
+    static func preprocess(_ context: InterpreterContext) {
+        context.variables = context.variables.mapValues { value in
+            convert(value) {
+                if let integerValue = $0 as? Int {
+                    return Double(integerValue)
+                }
+                return $0
+            }
+        }
+    }
+    
+    static func convert(_ value: Any, recursively: Bool = true, convert: @escaping (Any) -> Any) -> Any {
+        if recursively, let array = value as? [Any] {
+            return array.map { convert($0) }
+        }
+        if recursively, let dictionary = value as? [String: Any] {
+            return dictionary.mapValues {convert($0) }
+        }
+        return convert(value)
     }
 }
 
@@ -27,12 +50,12 @@ public class TemplateLibrary {
     public static var standardLibrary = StandardLibrary()
     public static var templates: [Matcher<String, TemplateInterpreter<String>>] {
         return [
-            TemplateLibrary.ifElseStatement,
-            TemplateLibrary.ifStatement,
-            TemplateLibrary.printStatement,
-            TemplateLibrary.forInStatement,
-            TemplateLibrary.setUsingBodyStatement,
-            TemplateLibrary.setStatement,
+            ifElseStatement,
+            ifStatement,
+            printStatement,
+            forInStatement,
+            setUsingBodyStatement,
+            setStatement,
         ]
     }
     
@@ -40,17 +63,17 @@ public class TemplateLibrary {
     public static var tagSuffix = "%}"
     
     public static var ifStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body"), CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, interpreter, _ in
+        return Matcher([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", trimmed: false), CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, interpreter, _ in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body
             }
-            return nil
+            return ""
         }
     }
     
     public static var ifElseStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body"), Keyword(tagPrefix + " else " + tagSuffix), TemplateVariable("else"), CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, interpreter, _ in
+        return Matcher([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", trimmed: false), Keyword(tagPrefix + " else " + tagSuffix), TemplateVariable("else", trimmed: false), CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, interpreter, _ in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body
@@ -68,14 +91,14 @@ public class TemplateLibrary {
     }
     
     public static var forInStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([OpenKeyword(tagPrefix + " for"), Variable<String>("variable", interpreted: false), Keyword("in"), Variable<[Any]>("items"), Keyword(tagSuffix), Variable<String>("body", interpreted: false), CloseKeyword(tagPrefix + " endfor " + tagSuffix)]) { variables, interpreter, context in
+        return Matcher([OpenKeyword(tagPrefix + " for"), GenericVariable<String, StringTemplateInterpreter>("variable", interpreted: false), Keyword("in"), Variable<[Any]>("items"), Keyword(tagSuffix), GenericVariable<String, StringTemplateInterpreter>("body", interpreted: false, trimmed: false), CloseKeyword(tagPrefix + " endfor " + tagSuffix)]) { variables, interpreter, context in
             guard let variableName = variables["variable"] as? String,
                 let items = variables["items"] as? [Any],
                 let body = variables["body"] as? String else { return nil }
             var result = ""
             for item in items {
                 context.variables[variableName] = item
-                result += interpreter.evaluate(body)
+                result += interpreter.evaluate(body, context: context)
             }
             context.variables[variableName] = nil
             return result
@@ -83,18 +106,18 @@ public class TemplateLibrary {
     }
     
     public static var setStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([Keyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword(tagSuffix), TemplateVariable("body"), Keyword(tagPrefix + " endset " + tagSuffix)]) { variables, interpreter, context in
+        return Matcher([OpenKeyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword(tagSuffix), TemplateVariable("body"), CloseKeyword(tagPrefix + " endset " + tagSuffix)]) { variables, interpreter, context in
             guard let variableName = variables["variable"] as? String, let body = variables["body"] as? String else { return nil }
             interpreter.context.variables[variableName] = body
-            return nil
+            return ""
         }
     }
     
     public static var setUsingBodyStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([Keyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword("="), Variable<Any>("value"), Keyword(tagSuffix)]) { variables, interpreter, context in
+        return Matcher([OpenKeyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword("="), Variable<Any>("value"), CloseKeyword(tagSuffix)]) { variables, interpreter, context in
             guard let variableName = variables["variable"] as? String else { return nil }
             interpreter.context.variables[variableName] = variables["value"]
-            return nil
+            return ""
         }
     }
 }
@@ -102,87 +125,89 @@ public class TemplateLibrary {
 public class StandardLibrary {
     public static var dataTypes: [DataTypeProtocol] {
         return [
-            StandardLibrary.stringType,
-            StandardLibrary.booleanType,
-            StandardLibrary.arrayType,
-            StandardLibrary.dictionaryType,
-            StandardLibrary.dateType,
-            StandardLibrary.integerType,
-            StandardLibrary.doubleType,
+            stringType,
+            booleanType,
+            arrayType,
+            dictionaryType,
+            dateType,
+            numericType,
         ]
     }
     public static var functions: [FunctionProtocol] {
         return [
-            StandardLibrary.parentheses,
+           parentheses,
+           ternaryOperator,
+           
+           rangeFunction,
+           rangeOfStringFunction,
+           rangeBySteps,
 
-            StandardLibrary.rangeFunction,
-            StandardLibrary.rangeBySteps,
+           startsWithOperator,
+           endsWithOperator,
+           containsOperator,
+           matchesOperator,
 
-            StandardLibrary.startsWithOperator,
-            StandardLibrary.endsWithOperator,
+           stringConcatenationOperator,
 
-            StandardLibrary.stringConcatenationOperator,
+           multiplicationOperator,
+           divisionOperator,
+           additionOperator,
+           substractionOperator,
+           moduloOperator,
+           
+           lessThanOperator,
+           lessThanOrEqualsOperator,
+           moreThanOperator,
+           moreThanOrEqualsOperator,
+           equalsOperator,
+           notEqualsOperator,
 
-            StandardLibrary.additionOperator,
-            StandardLibrary.substractionOperator,
-            StandardLibrary.multiplicationOperator,
-            StandardLibrary.divisionOperator,
-            StandardLibrary.moduloOperator,
+           inNumericArrayOperator,
+           inStringArrayOperator,
 
-            StandardLibrary.lessThanOperator,
-            StandardLibrary.lessThanOrEqualsOperator,
-            StandardLibrary.moreThanOperator,
-            StandardLibrary.moreThanOrEqualsOperator,
-            StandardLibrary.equalsOperator,
+           incrementOperator,
+           decrementOperator,
 
-            StandardLibrary.inIntegerArrayOperator,
-            StandardLibrary.inDoubleArrayOperator,
-            StandardLibrary.inStringArrayOperator,
+           negationOperator,
+           notOperator,
 
-            StandardLibrary.incrementOperator,
-            StandardLibrary.decrementOperator,
+           isEvenOperator,
+           isOddOperator,
 
-            StandardLibrary.negationOperator,
+           minFunction,
+           maxFunction,
+           sumFunction,
+           averageFunction,
+           countFunction,
+           sqrtFunction,
 
-            StandardLibrary.isEvenOperator,
-            StandardLibrary.isOddOperator,
+           arraySubscript,
+           dictionarySubscript,
+           dictionaryKeys,
+           dictionaryValues,
 
-            StandardLibrary.minFunction,
-            StandardLibrary.maxFunction,
-            StandardLibrary.sqrtFunction,
-
-            StandardLibrary.arraySubscript,
-            StandardLibrary.dictionarySubscript,
-            StandardLibrary.dictionaryKeys,
-            StandardLibrary.dictionaryValues,
-
-            StandardLibrary.dateFactory,
-            StandardLibrary.dateFormat,
+           dateFactory,
+           dateFormat,
         ]
     }
     
     //MARK: Types
     
-    public static var doubleType: DataType<Double> {
+    public static var numericType: DataType<Double> {
         let numberLiteral = Literal { v,_ in Double(v) }
         let pi = Literal("pi", convertsTo: Double.pi)
-        return DataType(type: Double.self, literals: [numberLiteral, pi]) { String(describing: $0) }
-    }
-    
-    public static var integerType: DataType<Int> {
-        let numberLiteral = Literal { v,_ in Int(v) }
-        return DataType(type: Int.self, literals: [numberLiteral]) { String(describing: $0) }
+        return DataType(type: Double.self, literals: [numberLiteral, pi]) { value, _ in String(format: "%g", value) }
     }
     
     public static var stringType: DataType<String> {
         let singleQuotesLiteral = literal(opening: "'", closing: "'") { (input, _) in input }
-        return DataType(type: String.self, literals: [singleQuotesLiteral]) { $0 }
+        return DataType(type: String.self, literals: [singleQuotesLiteral]) { value, _ in value }
     }
     
     public static var dateType: DataType<Date> {
         let dateFormatter = DateFormatter(with: "yyyy-MM-dd HH:mm:ss")
         let now = Literal<Date>("now", convertsTo: Date())
-        return DataType(type: Date.self, literals: [now]) { dateFormatter.string(from: $0) }
+        return DataType(type: Date.self, literals: [now]) { value, _ in dateFormatter.string(from: value) }
     }
     
     public static var arrayType: DataType<[CustomStringConvertible]> {
@@ -192,7 +217,7 @@ public class StandardLibrary {
                 .map{ $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                 .map{ interpreter.evaluate(String($0)) as? CustomStringConvertible ?? String($0) }
         }
-        return DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { $0.map{ $0.description }.joined(separator: ",") }
+        return DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { value, printer in value.map{ printer.print($0) }.joined(separator: ",") }
     }
     
     public static var dictionaryType: DataType<[String: CustomStringConvertible?]> {
@@ -208,15 +233,22 @@ public class StandardLibrary {
                 }
             return Dictionary(grouping: parsedValues) { $0.key }.mapValues { $0.first?.value }
         }
-        return DataType(type: [String: CustomStringConvertible?].self, literals: [dictionaryLiteral]) {
-            return "[\($0.map{ "\($0.key): \($0.value ?? "nil")" }.sorted().joined(separator: ", "))]"
+        return DataType(type: [String: CustomStringConvertible?].self, literals: [dictionaryLiteral]) { value, printer in
+            let items = value.map{ key, value in
+                if let value = value {
+                    return "\(printer.print(key)): \(printer.print(value))"
+                } else {
+                    return "\(printer.print(key)): nil"
+                }
+            }.sorted().joined(separator: ", ")
+            return "[\(items)]"
         }
     }
     
     public static var booleanType: DataType<Bool> {
         let trueLiteral = Literal("true", convertsTo: true)
         let falseLiteral = Literal("false", convertsTo: false)
-        return DataType(type: Bool.self, literals: [trueLiteral, falseLiteral]) { $0 ? "true" : "false" }
+        return DataType(type: Bool.self, literals: [trueLiteral, falseLiteral]) { value, _ in value ? "true" : "false" }
     }
     
     //MARK: Functions
@@ -225,18 +257,45 @@ public class StandardLibrary {
         return Function([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { arguments,_,_ in arguments["body"] }
     }
     
+    public static var ternaryOperator: Function<Any> {
+        return Function([Variable<Bool>("condition"), Keyword("?"), Variable<Any>("body"), Keyword(":"), Variable<Any>("else")]) { arguments,_,_ in
+            guard let condition = arguments["condition"] as? Bool else { return nil }
+            return condition ? arguments["body"] : arguments["else"]
+        }
+    }
+    
     public static var rangeFunction: Function<[Double]?> {
         return infixOperator("...") { (lhs: Double, rhs: Double) in
             CountableClosedRange(uncheckedBounds: (lower: Int(lhs), upper: Int(rhs))).map { Double($0) }
         }
     }
     
+    public static var rangeOfStringFunction: Function<[String]?> {
+        return infixOperator("...") { (lhs: String, rhs: String) in
+            CountableClosedRange(uncheckedBounds: (lower: Character(lhs), upper: Character(rhs))).map { String($0) }
+        }
+    }
+    
     public static var startsWithOperator: Function<Bool?> {
-        return infixOperator("starts with") { (lhs: String, rhs: String) in lhs.hasPrefix(lhs) }
+        return infixOperator("starts with") { (lhs: String, rhs: String) in lhs.hasPrefix(rhs) }
     }
     
     public static var endsWithOperator: Function<Bool?> {
-        return infixOperator("ends with") { (lhs: String, rhs: String) in lhs.hasSuffix(lhs) }
+        return infixOperator("ends with") { (lhs: String, rhs: String) in lhs.hasSuffix(rhs) }
+    }
+    
+    public static var containsOperator: Function<Bool?> {
+        return infixOperator("contains") { (lhs: String, rhs: String) in lhs.contains(rhs) }
+    }
+    
+    public static var matchesOperator: Function<Bool?> {
+        return infixOperator("matches") { (lhs: String, rhs: String) in
+            if let regex = try? NSRegularExpression(pattern: rhs) {
+                let matches = regex.numberOfMatches(in: lhs, range: NSRange(lhs.startIndex..., in: lhs))
+                return matches > 0
+            }
+            return false
+        }
     }
     
     public static var stringConcatenationOperator: Function<String?> {
@@ -283,20 +342,24 @@ public class StandardLibrary {
         return infixOperator("==") { (lhs: Double, rhs: Double) in lhs == rhs}
     }
     
+    public static var notEqualsOperator: Function<Bool?> {
+        return infixOperator("!=") { (lhs: Double, rhs: Double) in lhs != rhs}
+    }
+    
     public static var inStringArrayOperator: Function<Bool?> {
         return infixOperator("in") { (lhs: String, rhs: [String]) in rhs.contains(lhs) }
     }
     
-    public static var inIntegerArrayOperator: Function<Bool?> {
-        return infixOperator("in") { (lhs: Int, rhs: [Int]) in rhs.contains(lhs) }
-    }
-    
-    public static var inDoubleArrayOperator: Function<Bool?> {
+    public static var inNumericArrayOperator: Function<Bool?> {
         return infixOperator("in") { (lhs: Double, rhs: [Double]) in rhs.contains(lhs) }
     }
     
     public static var negationOperator: Function<Bool?> {
         return prefixOperator("!") { (expression: Bool) in !expression}
+    }
+    
+    public static var notOperator: Function<Bool?> {
+        return prefixOperator("not") { (expression: Bool) in !expression}
     }
     
     public static var incrementOperator: Function<Double?> {
@@ -312,7 +375,7 @@ public class StandardLibrary {
     }
     
     public static var isOddOperator: Function<Bool?> {
-        return suffixOperator("is odd") { (expression: Double) in Int(expression) % 2 == 1}
+        return suffixOperator("is odd") { (expression: Double) in abs(Int(expression) % 2) == 1}
     }
     
     public static var minFunction: Function<Double> {
@@ -321,6 +384,18 @@ public class StandardLibrary {
     
     public static var maxFunction: Function<Double> {
         return objectFunction("max") { (object: [Double]) -> Double? in object.max() }
+    }
+    
+    public static var sumFunction: Function<Double> {
+        return objectFunction("sum") { (object: [Double]) -> Double? in object.reduce(0, +) }
+    }
+    
+    public static var averageFunction: Function<Double> {
+        return objectFunction("avg") { (object: [Double]) -> Double? in object.reduce(0, +) / Double(object.count) }
+    }
+    
+    public static var countFunction: Function<Double> {
+        return objectFunction("count") { (object: [Double]) -> Double? in Double(object.count) }
     }
     
     public static var sqrtFunction: Function<Double> {
@@ -345,9 +420,9 @@ public class StandardLibrary {
         }
     }
     
-    public static var rangeBySteps: Function<[Int]> {
-        return functionWithNamedParameters("range") { (arguments: [String: Any]) -> [Int]? in
-            guard let start = arguments["start"] as? Int, let end = arguments["end"] as? Int, let step = arguments["step"] as? Int else { return nil }
+    public static var rangeBySteps: Function<[Double]> {
+        return functionWithNamedParameters("range") { (arguments: [String: Any]) -> [Double]? in
+            guard let start = arguments["start"] as? Double, let end = arguments["end"] as? Double, let step = arguments["step"] as? Double else { return nil }
             var result = [start]
             var value = start
             while value <= end - step {
@@ -367,9 +442,9 @@ public class StandardLibrary {
     }
 
     public static var arraySubscript: Function<Any?> {
-        return Function([Variable<[Any]>("array"), Keyword("."), Variable<Int>("index", shortest: false)]) { variables, _, _ in
-            guard let array = variables["array"] as? [Any], let index = variables["index"] as? Int, index > 0, index < array.count else { return nil }
-            return array[index]
+        return Function([Variable<[Any]>("array"), Keyword("."), Variable<Double>("index", shortest: false)]) { variables, _, _ in
+            guard let array = variables["array"] as? [Any], let index = variables["index"] as? Double, index > 0, Int(index) < array.count else { return nil }
+            return array[Int(index)]
         }
     }
     
@@ -382,12 +457,18 @@ public class StandardLibrary {
     
     public static var dictionaryKeys: Function<[String]> {
         return objectFunction("keys") { (object: [String: Any?]) -> [String] in
-            return Array(object.keys)
+            return object.keys.sorted()
         }
     }
     
     public static var dictionaryValues: Function<[Any?]> {
         return objectFunction("values") { (object: [String: Any?]) -> [Any?] in
+            if let values = object as? [String: Double] {
+                return values.values.sorted()
+            }
+            if let values = object as? [String: String] {
+                return values.values.sorted()
+            }
             return Array(object.values)
         }
     }
@@ -506,5 +587,25 @@ public extension DateFormatter {
         self.init()
         self.calendar = Calendar(identifier: .gregorian)
         self.dateFormat = format
+    }
+}
+
+extension Character : Strideable {
+    public typealias Stride = Int
+    
+    var value: UInt32 {
+        return unicodeScalars.first?.value ?? 0
+    }
+    
+    public func distance(to other: Character) -> Int {
+        return Int(other.value) - Int(self.value)
+    }
+
+    public func advanced(by n: Int) -> Character {
+        let advancedValue = n + Int(self.value)
+        guard let advancedScalar = UnicodeScalar(advancedValue) else {
+            fatalError("\(String(advancedValue, radix: 16)) does not represent a valid unicode scalar value.")
+        }
+        return Character(advancedScalar)
     }
 }

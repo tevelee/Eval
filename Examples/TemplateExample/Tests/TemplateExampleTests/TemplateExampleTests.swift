@@ -40,6 +40,14 @@ class TemplateExampleTests: XCTestCase {
         XCTAssertEqual(eval("{% for i in [1,2,3] %}{{i * 2}} {% endfor %}"), "2 4 6 ")
     }
     
+    func testCommentStatement() {
+        XCTAssertEqual(eval("Personal {# random comment #}Computer"), "Personal Computer")
+    }
+    
+    func testMacroStatement() {
+        XCTAssertEqual(eval("{% macro double(value) %}value * 2{% endmacro %}{{ double(4) }}"), "8")
+    }
+    
     //MARK: Data types
     
     func testString() {

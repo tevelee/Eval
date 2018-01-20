@@ -46,6 +46,20 @@ public class TemplateLanguage: EvaluatorWithContext {
     }
 }
 
+typealias Macro = (arguments: [String], body: String)
+
+extension InterpreterContext {
+    static let macrosKey = "__macros"
+    var macros: [String: Macro] {
+        get {
+            return variables[InterpreterContext.macrosKey] as? [String : Macro] ?? [:]
+        }
+        set {
+            variables[InterpreterContext.macrosKey] = macros.merging(newValue) { _, new in new }
+        }
+    }
+}
+
 public class TemplateLibrary {
     public static var standardLibrary = StandardLibrary()
     public static var templates: [Matcher<String, TemplateInterpreter<String>>] {
@@ -56,6 +70,8 @@ public class TemplateLibrary {
             forInStatement,
             setUsingBodyStatement,
             setStatement,
+            macroStatement,
+            commentStatement,
         ]
     }
     
@@ -96,11 +112,12 @@ public class TemplateLibrary {
                 let items = variables["items"] as? [Any],
                 let body = variables["body"] as? String else { return nil }
             var result = ""
+            context.push()
             for item in items {
                 context.variables[variableName] = item
                 result += interpreter.evaluate(body, context: context)
             }
-            context.variables[variableName] = nil
+            context.pop()
             return result
         }
     }
@@ -120,6 +137,23 @@ public class TemplateLibrary {
             return ""
         }
     }
+    
+    public static var macroStatement: Matcher<String, TemplateInterpreter<String>> {
+        return Matcher([OpenKeyword(tagPrefix + " macro"), GenericVariable<String, StringTemplateInterpreter>("name", interpreted: false), Keyword("("), GenericVariable<[String], StringTemplateInterpreter>("arguments", interpreted: false) { arguments, _ in
+                guard let arguments = arguments as? String else { return nil }
+                return arguments.split(separator: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            }, Keyword(")"), Keyword(tagSuffix), GenericVariable<String, StringTemplateInterpreter>("body", interpreted: false), CloseKeyword(tagPrefix + " endmacro " + tagSuffix)]) { variables, interpreter, context in
+            guard let name = variables["name"] as? String,
+                let arguments = variables["arguments"] as? [String],
+                let body = variables["body"] as? String else { return nil }
+            interpreter.context.macros[name] = (arguments: arguments, body: body)
+            return ""
+        }
+    }
+    
+    public static var commentStatement: Matcher<String, TemplateInterpreter<String>> {
+        return Matcher([OpenKeyword("{#"), GenericVariable<String, StringTemplateInterpreter>("body", interpreted: false), CloseKeyword("#}")]) { _, _, _ in "" }
+    }
 }
 
 public class StandardLibrary {
@@ -136,6 +170,7 @@ public class StandardLibrary {
     public static var functions: [FunctionProtocol] {
         return [
            parentheses,
+           macro,
            ternaryOperator,
            
            rangeFunction,
@@ -255,6 +290,25 @@ public class StandardLibrary {
     
     public static var parentheses: Function<Any> {
         return Function([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { arguments,_,_ in arguments["body"] }
+    }
+    
+    public static var macro: Function<Any> {
+        return Function([Variable<String>("name", interpreted: false) { value, interpreter in
+            guard let value = value as? String else { return nil }
+            return interpreter.context.macros.keys.contains(value) ? value : nil
+        }, OpenKeyword("("), Variable<String>("arguments", interpreted: false), CloseKeyword(")")]) { variables, interpreter, context in
+            guard let arguments = variables["arguments"] as? String,
+                let name = variables["name"] as? String,
+                let macro = interpreter.context.macros[name.trimmingCharacters(in: .whitespacesAndNewlines)] else { return nil }
+            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
+            context.push()
+            for (key, value) in zip(macro.arguments, interpretedArguments) {
+                context.variables[key] = value
+            }
+            let result =  interpreter.evaluate(macro.body, context: context)
+            context.pop()
+            return result
+        }
     }
     
     public static var ternaryOperator: Function<Any> {

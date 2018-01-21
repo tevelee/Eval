@@ -38,6 +38,9 @@ class TemplateExampleTests: XCTestCase {
         XCTAssertEqual(eval("{% for i in [1,2,3] %}a{% endfor %}"), "aaa")
         XCTAssertEqual(eval("{% for i in x %}{{i*2}} {% endfor %}", ["x": [1, 2, 3]]), "2 4 6 ")
         XCTAssertEqual(eval("{% for i in [1,2,3] %}{{i * 2}} {% endfor %}"), "2 4 6 ")
+        XCTAssertEqual(eval("{% for i in [1,2,3] %}{% if i is not first %}, {% endif %}{{i * 2}}{% endfor %}"), "2, 4, 6")
+        XCTAssertEqual(eval("{% for i in [1,2,3] %}{{i * 2}}{% if i is not last %}, {% endif %}{% endfor %}"), "2, 4, 6")
+        XCTAssertEqual(eval("{% for i in [1,2,3] %}{% if i is first %}^{% endif %}{{i}}{% if i is last %}${% endif %}{% endfor %}"), "^123$")
     }
     
     func testCommentStatement() {

@@ -136,7 +136,10 @@ public class TemplateLibrary {
                 let body = variables["body"] as? String else { return nil }
             var result = ""
             context.push()
-            for item in items {
+            context.variables["__loop"] = items
+            for (index, item) in items.enumerated() {
+                context.variables["__first"] = index == 0
+                context.variables["__last"] = index == items.count - 1
                 context.variables[variableName] = item
                 result += interpreter.evaluate(body, context: context)
             }
@@ -224,6 +227,11 @@ public class StandardLibrary {
            rangeFunction,
            rangeOfStringFunction,
            rangeBySteps,
+           
+           loopIsFirst,
+           loopIsLast,
+           loopIsNotFirst,
+           loopIsNotLast,
 
            startsWithOperator,
            endsWithOperator,
@@ -551,6 +559,32 @@ public class StandardLibrary {
                 result.append(value)
             }
             return result
+        }
+    }
+    
+    public static var loopIsFirst: Function<Bool?> {
+        return Function([Variable<Any>("value"), Keyword("is first")]) { _, _, context in
+            return context.variables["__first"] as? Bool
+        }
+    }
+    
+    public static var loopIsLast: Function<Bool?> {
+        return Function([Variable<Any>("value"), Keyword("is last")]) { arguments, _, context in
+            return context.variables["__last"] as? Bool
+        }
+    }
+    
+    public static var loopIsNotFirst: Function<Bool?> {
+        return Function([Variable<Any>("value"), Keyword("is not first")]) { arguments, _, context in
+            guard let isFirst = context.variables["__first"] as? Bool else { return nil }
+            return !isFirst
+        }
+    }
+    
+    public static var loopIsNotLast: Function<Bool?> {
+        return Function([Variable<Any>("value"), Keyword("is not last")]) { arguments, _, context in
+            guard let isLast = context.variables["__last"] as? Bool else { return nil }
+            return !isLast
         }
     }
     

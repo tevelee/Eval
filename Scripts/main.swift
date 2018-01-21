@@ -18,16 +18,14 @@ class Eval {
     static func runPullRequestLane() {
         runCommands("Building Pull Request") {
             try prepareForBuild()
-            try prepareExamplesForBuild()
-            
             try build()
-            try buildExamples()
-            
             try runTests()
+            
+            try prepareExamplesForBuild()
+            try buildExamples()
             try runTestsOnExamples()
             
             try runLinter()
-            
             try runDanger()
         }
     }
@@ -35,19 +33,17 @@ class Eval {
     static func runContinousIntegrationLane() {
         runCommands("Building CI") {
             try prepareForBuild()
-            try prepareExamplesForBuild()
-            
             try build()
-            try buildExamples()
-            
             try runTests()
-            try runTestsOnExamples()
             
-            try runLinter()
+            try prepareExamplesForBuild()
+            try buildExamples()
+            try runTestsOnExamples()
             
             try generateDocs()
             try publishDocs()
             
+            try runLinter()
             try runCocoaPodsLinter()
             
             try testCoverage()
@@ -134,24 +130,24 @@ class Eval {
 
     static func build() throws {
         print("♻️ Building")
-        try Shell.executeAndPrint("swift build", timeout: 60)
-        try Shell.executeAndPrint("xcodebuild clean build -configuration Release -scheme Eval-Package | bundle exec xcpretty --color", timeout: 60)
+        try Shell.executeAndPrint("swift build", timeout: 120)
+        try Shell.executeAndPrint("xcodebuild clean build -configuration Release -scheme Eval-Package | bundle exec xcpretty --color", timeout: 120)
     }
 
     static func runTests() throws {
         print("👀 Running automated tests")
-        try Shell.executeAndPrint("swift test", timeout: 60)
-        try Shell.executeAndPrint("xcodebuild test -configuration Release -scheme Eval-Package -enableCodeCoverage YES | bundle exec xcpretty --color", timeout: 60)
+        try Shell.executeAndPrint("swift test", timeout: 120)
+        try Shell.executeAndPrint("xcodebuild test -configuration Release -scheme Eval-Package -enableCodeCoverage YES | bundle exec xcpretty --color", timeout: 120)
     }
     
     static func runLinter() throws {
         print("👀 Running linter")
-        try Shell.executeAndPrint("swiftlint lint", timeout: 10)
+        try Shell.executeAndPrint("swiftlint lint", timeout: 60)
     }
 
     static func generateDocs() throws {
         print("📚 Generating documentation")
-        try Shell.executeAndPrint("bundle exec jazzy --config .jazzy.yml", timeout: 60)
+        try Shell.executeAndPrint("bundle exec jazzy --config .jazzy.yml", timeout: 120)
     }
 
     static func publishDocs() throws {
@@ -221,18 +217,17 @@ class Eval {
     }
     
     static func prepareExamplesForBuild() throws {
-        print("🤖 Generating project file on Examples")
+        print("🤖 Generating project files for Examples")
         try onAllExamples { example in
             let cleanup = [
                 "rm -f Package.resolved",
                 "rm -rf .build",
-                "rm -rf build",
-                "rm -rf \(example).xcodeproj"
+                "rm -rf build"
             ]
-            let generate = [
-                "swift package generate-xcodeproj"
+            let build = [
+                "swift package update"
             ]
-            return (cleanup + generate).joined(separator: ";")
+            return (cleanup + build).joined(separator: ";")
         }
     }
     
@@ -259,7 +254,7 @@ class Eval {
                 try command(name),
                 "popd"
             ]
-            try Shell.executeAndPrint(commands.joined(separator: ";"), timeout: 60)
+            try Shell.executeAndPrint(commands.joined(separator: ";"), timeout: 120)
         }
     }
     

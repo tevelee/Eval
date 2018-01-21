@@ -81,25 +81,25 @@ public class InterpreterContext {
 
     /// Debug information for recognised patterns
     public var debugInfo: [String: ExpressionInfo] = [:]
-    
+
     /// Context can behave as a stack. If `push` is called, it saves a snapshot of the current state of variables to a stack and lets you modify the content, while the previous values are stored, safely.
     /// When `pop` is called, it restores the last snapshot, destorying all the changes that happened after the last snapshot.
     /// Useful for temporal variables!
     var stack : [(variables: [String: Any], debugInfo: [String: ExpressionInfo])] = []
-    
+
     /// Users of the context may optionally provide an initial set of variables
     /// - parameter variables: Variable names and values
     public init(variables: [String: Any] = [:]) {
         self.variables = variables
     }
-    
+
     /// Context can behave as a stack. If `push` is called, it saves a snapshot of the current state of variables to a stack and lets you modify the content, while the previous values are stored, safely.
     /// When `pop` is called, it restores the last snapshot, destorying all the changes that happened after the last snapshot.
     /// Useful for temporal variables! It should be called before setting the temporal variables
     public func push() {
         stack.append((variables: variables, debugInfo: debugInfo))
     }
-    
+
     /// Context can behave as a stack. If `push` is called, it saves a snapshot of the current state of variables to a stack and lets you modify the content, while the previous values are stored, safely.
     /// When `pop` is called, it restores the last snapshot, destorying all the changes that happened after the last snapshot.
     /// Useful for temporal variables! It should be called when the temporal variables are not needed anymore
@@ -109,11 +109,11 @@ public class InterpreterContext {
             debugInfo = last.debugInfo
         }
     }
-    
+
     /// Creates a new context instance by merging their variable dictionaries. The one in the parameter overrides the duplicated items of the existing one
     /// - parameter with: The other context to merge with
     /// - returns: A new `InterpreterContext` instance with the current and the parameter variables merged inside
-    func merging(with other: InterpreterContext?) -> InterpreterContext {
+    public func merging(with other: InterpreterContext?) -> InterpreterContext {
         if let other = other {
             return InterpreterContext(variables: other.variables.merging(self.variables) { (eixstingValue, _) in eixstingValue })
         } else {
@@ -126,7 +126,7 @@ public class InterpreterContext {
     /// - parameter existing: During the merge the parameter on the existing dictionary (same terminolody with Dictionary.merge)
     /// - parameter new: During the merge the parameter on the merged dictionary (same terminolody with Dictionary.merge)
     /// - returns: The same `InterpreterContext` instance after merging the variables dictionary with the variables in the context given as parameter
-    func merge(with other: InterpreterContext?, merge: (_ existing: Any, _ new: Any) throws -> Any) {
+    public func merge(with other: InterpreterContext?, merge: (_ existing: Any, _ new: Any) throws -> Any) {
         if let other = other {
             try? variables.merge(other.variables, uniquingKeysWith: merge)
         }
@@ -159,9 +159,8 @@ func matchStatement<T, E>(amongst statements: [Matcher<T, E>], in input: String,
         if input.count == start + length {
             return .possibleMatch
         } else {
-            return matchStatement(amongst: elements.map{ $0.element }, in: input, from: start, until: length + 1, interpreter: interpreter, context: context)
+            return matchStatement(amongst: elements.map { $0.element }, in: input, from: start, until: length + 1, interpreter: interpreter, context: context)
         }
     }
     return .noMatch
 }
-

@@ -283,6 +283,18 @@ class TemplateExampleTests: XCTestCase {
         XCTAssertEqual(eval("{{ {'a': 1, 'b': 2}.values }}"), "1,2")
     }
     
+    //MARK: Template file
+    
+    func testTemplateFile() {
+        let result = try! interpreter.evaluate(template: Bundle(for: type(of: self)).url(forResource: "template", withExtension: "txt")!, context: InterpreterContext(variables: ["name": "Laszlo"]))
+        XCTAssertEqual(result, "Hello Laszlo!")
+    }
+    
+    func testTemplateWithImportFile() {
+        let result = try! interpreter.evaluate(template: Bundle(for: type(of: self)).url(forResource: "import", withExtension: "txt")!, context: InterpreterContext(variables: ["name": "Laszlo"]))
+        XCTAssertEqual(result, "Hello Laszlo!\nBye!")
+    }
+    
     //MARK: Helpers
     
     func eval(_ template: String, _ variables: [String: Any] = [:]) -> String {

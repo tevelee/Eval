@@ -49,7 +49,7 @@ open class TemplateInterpreter<T> : Interpreter {
     /// - parameter interpreter: A `TypedInterpreter` instance to evaluate typed expressions appearing in the template
     /// - parameter context: Global context that is going to be used with every expression evaluated with the current instance. Defaults to empty context
     public init(statements: [Matcher<T, TemplateInterpreter<T>>] = [],
-                interpreter: TypedInterpreter,
+                interpreter: TypedInterpreter = TypedInterpreter(),
                 context: InterpreterContext = InterpreterContext()) {
         self.statements = statements
         self.typedInterpreter = interpreter
@@ -122,6 +122,7 @@ public class StringTemplateInterpreter: TemplateInterpreter<String> {
     /// - parameter context: Local context that is going to be used with this expression only
     /// - returns: The output of the evaluation
     public override func evaluate(_ expression: String, context: InterpreterContext) -> String {
+        guard !expression.isEmpty else { return "" }
         return evaluate(expression, context: context, reducer: (initialValue: "", reduceValue: { existing, next in existing + next }, reduceCharacter: { existing, next in existing + String(next) }))
     }
 }

@@ -35,6 +35,16 @@ public class TemplateLanguage: EvaluatorWithContext {
         return macroReplacer.evaluate(result)
     }
     
+    public func evaluate(template from: URL) throws -> String {
+        let expression = try String(contentsOf: from)
+        return evaluate(expression)
+    }
+    
+    public func evaluate(template from: URL, context: InterpreterContext) throws -> String {
+        let expression = try String(contentsOf: from)
+        return evaluate(expression, context: context)
+    }
+    
     static func preprocess(_ context: InterpreterContext) {
         context.variables = context.variables.mapValues { value in
             convert(value) {
@@ -95,6 +105,7 @@ public class TemplateLibrary {
             blockStatement,
             macroStatement,
             commentStatement,
+            importStatement,
         ]
     }
     
@@ -203,6 +214,15 @@ public class TemplateLibrary {
     
     public static var commentStatement: Matcher<String, TemplateInterpreter<String>> {
         return Matcher([OpenKeyword("{#"), GenericVariable<String, StringTemplateInterpreter>("body", interpreted: false), CloseKeyword("#}")]) { _, _, _ in "" }
+    }
+    
+    public static var importStatement: Matcher<String, TemplateInterpreter<String>> {
+        return Matcher([OpenKeyword(tagPrefix + " import"), Variable<String>("file"), CloseKeyword(tagSuffix)]) { variables, interpreter, context in
+            guard let file = variables["file"] as? String,
+                let url = Bundle.allBundles.first?.url(forResource: file, withExtension: nil),
+                let expression = try? String(contentsOf: url) else { return nil }
+            return interpreter.evaluate(expression, context: context)
+        }
     }
 }
 

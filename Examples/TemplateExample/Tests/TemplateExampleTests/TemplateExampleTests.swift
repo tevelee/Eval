@@ -48,6 +48,15 @@ class TemplateExampleTests: XCTestCase {
         XCTAssertEqual(eval("{% macro double(value) %}value * 2{% endmacro %}{{ double(4) }}"), "8")
     }
     
+    func testBlockStatement() {
+        XCTAssertEqual(eval("Title: {% block title1 %}Original{% endblock %}."), "Title: Original.")
+        XCTAssertEqual(eval("Title: {% block title2 %}Original{% endblock %}.{% block title2 %}Other{% endblock %}"), "Title: Other.")
+        XCTAssertEqual(eval("Title: {% block title3 %}Original{% endblock %}.{% block title3 %}{{ parent() }} 2{% endblock %}"), "Title: Original 2.")
+        XCTAssertEqual(eval("Title: {% block title4 %}Original{% endblock %}.{% block title4 %}{{ parent() }} 2{% endblock %}{% block title4 %}{{ parent() }}.1{% endblock %}"), "Title: Original 2.1.")
+        XCTAssertEqual(eval("{% block title5 %}Hello {{name}}{% endblock %}{% block title5 %}{{ parent() }}!{% endblock %}", ["name": "George"]), "Hello George!")
+        XCTAssertEqual(eval("{% block title6 %}Hello {{name}}{% endblock %}{% block title6 %}{{ parent(name='Laszlo') }}!{% endblock %}", ["name": "Geroge"]), "Hello Laszlo!")
+    }
+    
     //MARK: Data types
     
     func testString() {

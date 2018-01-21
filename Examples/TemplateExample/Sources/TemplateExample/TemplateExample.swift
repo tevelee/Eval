@@ -5,23 +5,34 @@ public class TemplateLanguage: EvaluatorWithContext {
     public typealias EvaluatedType = String
     
     let language: StringTemplateInterpreter
+    let macroReplacer: StringTemplateInterpreter
     
     init(dataTypes: [DataTypeProtocol] = StandardLibrary.dataTypes,
          functions: [FunctionProtocol] = StandardLibrary.functions,
          templates: [Matcher<String, TemplateInterpreter<String>>] = TemplateLibrary.templates,
          context: InterpreterContext = InterpreterContext()) {
         TemplateLanguage.preprocess(context)
+        
         let interpreter = TypedInterpreter(dataTypes: dataTypes, functions: functions, context: context)
-        language = StringTemplateInterpreter(statements: templates, interpreter: interpreter, context: context)
+        let language = StringTemplateInterpreter(statements: templates, interpreter: interpreter, context: context)
+        self.language = language
+        
+        let block = Matcher<String, TemplateInterpreter<String>>([OpenKeyword("{{{"), TemplateVariable("name", interpreted: false), CloseKeyword("}}}")]) { variables, interpreter, _ in
+            guard let name = variables["name"] as? String else { return nil }
+            return language.context.blocks[name]?.last?(language.context)
+        }
+        macroReplacer = StringTemplateInterpreter(statements: [block])
     }
     
     public func evaluate(_ expression: String) -> String {
-        return language.evaluate(expression)
+        let result = language.evaluate(expression)
+        return macroReplacer.evaluate(result)
     }
     
     public func evaluate(_ expression: String, context: InterpreterContext) -> String {
         TemplateLanguage.preprocess(context)
-        return language.evaluate(expression, context: context)
+        let result = language.evaluate(expression, context: context)
+        return macroReplacer.evaluate(result)
     }
     
     static func preprocess(_ context: InterpreterContext) {
@@ -47,6 +58,7 @@ public class TemplateLanguage: EvaluatorWithContext {
 }
 
 typealias Macro = (arguments: [String], body: String)
+typealias BlockRenderer = (_ context: InterpreterContext) -> String
 
 extension InterpreterContext {
     static let macrosKey = "__macros"
@@ -56,6 +68,16 @@ extension InterpreterContext {
         }
         set {
             variables[InterpreterContext.macrosKey] = macros.merging(newValue) { _, new in new }
+        }
+    }
+    
+    static let blocksKey = "__blocks"
+    var blocks: [String: [BlockRenderer]] {
+        get {
+            return variables[InterpreterContext.blocksKey] as? [String : [BlockRenderer]] ?? [:]
+        }
+        set {
+            variables[InterpreterContext.blocksKey] = blocks.merging(newValue) { _, new in new }
         }
     }
 }
@@ -70,6 +92,7 @@ public class TemplateLibrary {
             forInStatement,
             setUsingBodyStatement,
             setStatement,
+            blockStatement,
             macroStatement,
             commentStatement,
         ]
@@ -138,6 +161,30 @@ public class TemplateLibrary {
         }
     }
     
+    public static var blockStatement: Matcher<String, TemplateInterpreter<String>> {
+        return Matcher([OpenKeyword(tagPrefix + " block"), GenericVariable<String, StringTemplateInterpreter>("name", interpreted: false), Keyword(tagSuffix), GenericVariable<String, StringTemplateInterpreter>("body", interpreted: false), CloseKeyword(tagPrefix + " endblock " + tagSuffix)]) { variables, interpreter, localContext in
+            guard let name = variables["name"] as? String, let body = variables["body"] as? String else { return nil }
+            let block : BlockRenderer = { context in
+                context.push()
+                context.merge(with: localContext) { existing, _ in existing }
+                context.variables["__block"] = name
+                if let last = context.blocks[name] {
+                    context.blocks[name] = Array(last.dropLast())
+                }
+                let result = interpreter.evaluate(body, context: context)
+                context.pop()
+                return result
+            }
+            if let last = interpreter.context.blocks[name] {
+                interpreter.context.blocks[name] = last + [block]
+                return ""
+            } else {
+                interpreter.context.blocks[name] = [block]
+                return "{{{\(name)}}}"
+            }
+        }
+    }
+    
     public static var macroStatement: Matcher<String, TemplateInterpreter<String>> {
         return Matcher([OpenKeyword(tagPrefix + " macro"), GenericVariable<String, StringTemplateInterpreter>("name", interpreted: false), Keyword("("), GenericVariable<[String], StringTemplateInterpreter>("arguments", interpreted: false) { arguments, _ in
                 guard let arguments = arguments as? String else { return nil }
@@ -171,6 +218,7 @@ public class StandardLibrary {
         return [
            parentheses,
            macro,
+           blockParent,
            ternaryOperator,
            
            rangeFunction,
@@ -306,6 +354,25 @@ public class StandardLibrary {
                 context.variables[key] = value
             }
             let result =  interpreter.evaluate(macro.body, context: context)
+            context.pop()
+            return result
+        }
+    }
+    
+    public static var blockParent: Function<Any> {
+        return Function([Keyword("parent"), OpenKeyword("("), Variable<String>("arguments", interpreted: false), CloseKeyword(")")]) { variables, interpreter, context in
+            guard let arguments = variables["arguments"] as? String else { return nil }
+            var interpretedArguments: [String: Any] = [:]
+            for argument in arguments.split(separator: ",") {
+                let parts = String(argument).trimmingCharacters(in: .whitespacesAndNewlines).split(separator: "=")
+                if let key = parts.first, let value = parts.last {
+                    interpretedArguments[String(key)] = interpreter.evaluate(String(value))
+                }
+            }
+            guard let name = context.variables["__block"] as? String, let block = context.blocks[name]?.last else { return nil }
+            context.push()
+            context.variables.merge(interpretedArguments) { _, new in new }
+            let result = block(context)
             context.pop()
             return result
         }

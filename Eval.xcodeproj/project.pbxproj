@@ -25,7 +25,7 @@
 		OBJ_54 /* InterpreterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* InterpreterTests.swift */; };
 		OBJ_55 /* TemplateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* TemplateTests.swift */; };
 		OBJ_56 /* DataTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* DataTypeTests.swift */; };
-		OBJ_57 /* EvaluatorContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* EvaluatorContextTests.swift */; };
+		OBJ_57 /* InterpreterContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* InterpreterContextTests.swift */; };
 		OBJ_58 /* FunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* FunctionTests.swift */; };
 		OBJ_59 /* KeywordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* KeywordTests.swift */; };
 		OBJ_60 /* LiteralTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* LiteralTests.swift */; };
@@ -76,7 +76,7 @@
 		OBJ_20 /* InterpreterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpreterTests.swift; sourceTree = "<group>"; };
 		OBJ_21 /* TemplateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateTests.swift; sourceTree = "<group>"; };
 		OBJ_23 /* DataTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTypeTests.swift; sourceTree = "<group>"; };
-		OBJ_24 /* EvaluatorContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvaluatorContextTests.swift; sourceTree = "<group>"; };
+		OBJ_24 /* InterpreterContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterpreterContextTests.swift; sourceTree = "<group>"; };
 		OBJ_25 /* FunctionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionTests.swift; sourceTree = "<group>"; };
 		OBJ_26 /* KeywordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordTests.swift; sourceTree = "<group>"; };
 		OBJ_27 /* LiteralTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiteralTests.swift; sourceTree = "<group>"; };
@@ -157,7 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_23 /* DataTypeTests.swift */,
-				OBJ_24 /* EvaluatorContextTests.swift */,
+				OBJ_24 /* InterpreterContextTests.swift */,
 				OBJ_25 /* FunctionTests.swift */,
 				OBJ_26 /* KeywordTests.swift */,
 				OBJ_27 /* LiteralTests.swift */,
@@ -181,7 +181,7 @@
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -193,7 +193,6 @@
 				OBJ_39 /* Scripts */,
 				OBJ_40 /* Products */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_7 /* Sources */ = {
@@ -282,7 +281,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_40 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -311,7 +310,7 @@
 				OBJ_54 /* InterpreterTests.swift in Sources */,
 				OBJ_55 /* TemplateTests.swift in Sources */,
 				OBJ_56 /* DataTypeTests.swift in Sources */,
-				OBJ_57 /* EvaluatorContextTests.swift in Sources */,
+				OBJ_57 /* InterpreterContextTests.swift in Sources */,
 				OBJ_58 /* FunctionTests.swift in Sources */,
 				OBJ_59 /* KeywordTests.swift in Sources */,
 				OBJ_60 /* LiteralTests.swift in Sources */,

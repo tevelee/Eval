@@ -1,7 +1,7 @@
 import XCTest
 @testable import Eval
 
-class EvaluatorContextTests: XCTestCase {
+class InterpreterContextTests: XCTestCase {
     
     //MARK: init
     
@@ -9,6 +9,47 @@ class EvaluatorContextTests: XCTestCase {
         let variables = ["test": 2]
         
         let context = InterpreterContext(variables: variables)
+        
+        XCTAssertEqual(variables, context.variables as! [String: Int])
+    }
+    
+    //MARK: push/pop
+    
+    func test_whenPushing_thenRemainsTheSame() {
+        let variables = ["test": 2]
+        let context = InterpreterContext(variables: variables)
+        
+        context.push()
+        
+        XCTAssertEqual(variables, context.variables as! [String: Int])
+    }
+    
+    func test_whenPushingAndModifying_thenContextChanges() {
+        let variables = ["test": 2]
+        let context = InterpreterContext(variables: variables)
+        
+        context.push()
+        context.variables["a"] = 3
+        
+        XCTAssertNotEqual(variables, context.variables as! [String: Int])
+    }
+    
+    func test_whenPushingModifyingAndPopping_thenRestores() {
+        let variables = ["test": 2]
+        let context = InterpreterContext(variables: variables)
+        
+        context.push()
+        context.variables["a"] = 3
+        context.pop()
+        
+        XCTAssertEqual(variables, context.variables as! [String: Int])
+    }
+    
+    func test_whenJustPopping_thenNothingHappens() {
+        let variables = ["test": 2]
+        let context = InterpreterContext(variables: variables)
+        
+        context.pop()
         
         XCTAssertEqual(variables, context.variables as! [String: Int])
     }

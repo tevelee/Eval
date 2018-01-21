@@ -261,6 +261,38 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:4Eval18InterpreterContextC5stackSays10DictionaryVySSypG9variables_AFySSAA14ExpressionInfoVG05debugH0tGv"></a>
+                    <a name="//apple_ref/swift/Property/stack" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval18InterpreterContextC5stackSays10DictionaryVySSypG9variables_AFySSAA14ExpressionInfoVG05debugH0tGv">stack</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Context can behave as a stack. If <code>push</code> is called, it saves a snapshot of the current state of variables to a stack and lets you modify the content, while the previous values are stored, safely.
+When <code>pop</code> is called, it restores the last snapshot, destorying all the changes that happened after the last snapshot.
+Useful for temporal variables!</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">stack</span> <span class="p">:</span> <span class="p">[(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">],</span> <span class="nv">debugInfo</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Structs/ExpressionInfo.html">ExpressionInfo</a></span><span class="p">])]</span> <span class="o">=</span> <span class="p">[]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L88">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:4Eval18InterpreterContextCACs10DictionaryVySSypG9variables_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(variables:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:4Eval18InterpreterContextCACs10DictionaryVySSypG9variables_tcfc">init(variables:)</a>
@@ -302,7 +334,71 @@
                         </table>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L87-L89">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L92-L94">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval18InterpreterContextC4pushyyF"></a>
+                    <a name="//apple_ref/swift/Method/push()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval18InterpreterContextC4pushyyF">push()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Context can behave as a stack. If <code>push</code> is called, it saves a snapshot of the current state of variables to a stack and lets you modify the content, while the previous values are stored, safely.
+When <code>pop</code> is called, it restores the last snapshot, destorying all the changes that happened after the last snapshot.
+Useful for temporal variables! It should be called before setting the temporal variables</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">push</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L99-L101">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval18InterpreterContextC3popyyF"></a>
+                    <a name="//apple_ref/swift/Method/pop()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval18InterpreterContextC3popyyF">pop()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Context can behave as a stack. If <code>push</code> is called, it saves a snapshot of the current state of variables to a stack and lets you modify the content, while the previous values are stored, safely.
+When <code>pop</code> is called, it restores the last snapshot, destorying all the changes that happened after the last snapshot.
+Useful for temporal variables! It should be called when the temporal variables are not needed anymore</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">pop</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L106-L111">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -355,7 +451,7 @@
                         <p>A new <code>InterpreterContext</code> instance with the current and the parameter variables merged inside</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L94-L100">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L116-L122">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -432,7 +528,7 @@
                         <p>The same <code>InterpreterContext</code> instance after merging the variables dictionary with the variables in the context given as parameter</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L107-L111">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L129-L133">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -442,7 +538,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-20)</p>
+          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-21)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

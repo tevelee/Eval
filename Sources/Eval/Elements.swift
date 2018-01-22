@@ -26,9 +26,8 @@ import Foundation
 public protocol MatchElement {
     /// Using this method, an element returns how much the String provided in the `prefix` parameter matches the current element
     /// - parameter prefix: The input
-    /// - parameter isLast: Provides extra information about the current element, whether it is the last item in the containing collection. Most of the cases its value is `false`
     /// - returns: The result of the match operation
-    func matches(prefix: String, isLast: Bool) -> MatchResult<Any>
+    func matches(prefix: String) -> MatchResult<Any>
 }
 
 /// `Keyword` instances are used to provide static points in match sequences so that they can be used as pillars of the expressions the developer tries to match
@@ -62,9 +61,8 @@ public class Keyword: MatchElement, Equatable {
     /// `Keyword` instances are returning exactMatch, when they are equal to the `prefix` input.
     /// If the input is really just a prefix of the keyword, possible metch is returned. noMatch otherwise.
     /// - parameter prefix: The input
-    /// - parameter isLast: Provides extra information about the current element, whether it is the last item in the containing collection. Most of the cases its value is `false`
     /// - returns: The result of the match operation
-    public func matches(prefix: String, isLast: Bool = false) -> MatchResult<Any> {
+    public func matches(prefix: String) -> MatchResult<Any> {
         if name == prefix || prefix.hasPrefix(name) {
             return .exactMatch(length: name.count, output: name, variables: [:])
         } else if name.hasPrefix(prefix) {
@@ -166,9 +164,8 @@ public class GenericVariable<T, E: Interpreter> : VariableProtocol, MatchElement
 
     /// `GenericVariables` always return anyMatch MatchResult, forwarding the shortest argument, provided during initialisation
     /// - parameter prefix: The input
-    /// - parameter isLast: Provides extra information about the current element, whether it is the last item in the containing collection. Most of the cases its value is `false`
     /// - returns: The result of the match operation. Always `anyMatch` with the shortest argument, provided during initialisation
-    public func matches(prefix: String, isLast: Bool = false) -> MatchResult<Any> {
+    public func matches(prefix: String) -> MatchResult<Any> {
         return .anyMatch(shortest: shortest)
     }
 

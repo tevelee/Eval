@@ -69,15 +69,13 @@ public class Matcher<T, E: Interpreter> {
     /// This matcher provides the main logic of the `Eval` framework, performing the pattern matching, trying to identify, whether the input string is somehow related, or completely matches the pattern of the `Matcher` instance.
     /// - parameter string: The input
     /// - parameter from: The start of the range to analyse the result in
-    /// - parameter until: The end of the range to analyse the result in
     /// - parameter interpreter: An interpreter instance - if the variables need any further evaluation
     /// - parameter context: The context - if the block uses any contextual data
     /// - returns: The result of the matching operation
-    func matches(string: String, from start: Int = 0, until length: Int, interpreter: E, context: InterpreterContext) -> MatchResult<T> {
+    func matches(string: String, from start: Int = 0, interpreter: E, context: InterpreterContext) -> MatchResult<T> {
     // swiftlint:enable cyclomatic_complexity
     // swiftlint:enable function_body_length
-        let isLast = string.count == start + length
-        let trimmed = String(string[start ..< start + length])
+        let trimmed = String(string[start...])
         var elementIndex = 0
         var remainder = trimmed
         var variables: [String: Any] = [:]
@@ -125,7 +123,7 @@ public class Matcher<T, E: Interpreter> {
 
         repeat {
             let element = elements[elementIndex]
-            let result = element.matches(prefix: remainder, isLast: isLast)
+            let result = element.matches(prefix: remainder)
 
             switch result {
             case .noMatch:
@@ -139,16 +137,12 @@ public class Matcher<T, E: Interpreter> {
                 if shortest {
                     elementIndex += 1
                 } else {
-                    if isLast {
-                        _ = tryToAppendCurrentVariable()
-                        if remainder.isEmpty {
-                            if !registerAndValidateVariable() {
-                                return .possibleMatch
-                            }
-                            elementIndex += 1
+                    _ = tryToAppendCurrentVariable()
+                    if remainder.isEmpty {
+                        if !registerAndValidateVariable() {
+                            return .possibleMatch
                         }
-                    } else {
-                        return .possibleMatch
+                        elementIndex += 1
                     }
                 }
             case .exactMatch(let length, _, let embeddedVariables):
@@ -164,16 +158,18 @@ public class Matcher<T, E: Interpreter> {
                         }
                         currentlyActiveVariable = nil
                     }
-                    remainder.removeFirst(length)
-                    remainder = remainder.trim()
                     elementIndex += 1
+                    remainder.removeFirst(length)
+                    if elementIndex < elements.count {
+                        remainder = remainder.trim()
+                    }
                 }
             }
         } while elementIndex < elements.count
 
         if let renderedOutput = matcher(variables, interpreter, context) {
             context.debugInfo[trimmed] = ExpressionInfo(input: trimmed, output: renderedOutput, pattern: pattern(), variables: variables)
-            return .exactMatch(length: length - remainder.count, output: renderedOutput, variables: variables)
+            return .exactMatch(length: string.count - start - remainder.count, output: renderedOutput, variables: variables)
         } else {
             return .noMatch
         }

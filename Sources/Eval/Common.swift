@@ -137,30 +137,18 @@ public class InterpreterContext {
 /// - parameter amongst: All the `Matcher` instances to evaluate, in priority order
 /// - parameter in: The input
 /// - parameter from: The start of the checked range
-/// - parameter until: The end of the checked range
 /// - parameter interpreter: An interpreter instance - if variables need any further evaluation
 /// - parameter context: The context - if variables need any contextual information
 /// - returns: The result of the match operation
-func matchStatement<T, E>(amongst statements: [Matcher<T, E>], in input: String, from start: Int = 0, until length: Int = 1, interpreter: E, context: InterpreterContext) -> MatchResult<T> {
-    let results = statements.map { statement -> (element: Matcher<T, E>, result: MatchResult<T>) in
-        let result = statement.matches(string: input, from: start, until: length, interpreter: interpreter, context: context)
+func matchStatement<T, E>(amongst statements: [Matcher<T, E>], in input: String, from start: Int = 0, interpreter: E, context: InterpreterContext) -> MatchResult<T> {
+    let results = statements.lazy.map { statement -> (element: Matcher<T, E>, result: MatchResult<T>) in
+        let result = statement.matches(string: input, from: start, interpreter: interpreter, context: context)
         return (element: statement, result: result)
     }
-    let elements = results.filter { !$0.result.isNoMatch() }
-
-    if elements.isEmpty {
-        return .noMatch
-    }
-    if let matchingElement = elements.first(where: { $0.result.isMatch() }),
-        case .exactMatch(let length, let output, let variables) = matchingElement.result {
-        return .exactMatch(length: length, output: output, variables: variables)
-    }
-    if elements.contains(where: { $0.result.isPossibleMatch() }) {
-        if input.count == start + length {
-            return .possibleMatch
-        } else {
-            return matchStatement(amongst: elements.map { $0.element }, in: input, from: start, until: length + 1, interpreter: interpreter, context: context)
-        }
+    if let matchingElement = results.first(where: { $0.result.isMatch() }) {
+        return matchingElement.result
+    } else if results.contains(where: { $0.result.isPossibleMatch() }) {
+        return .possibleMatch
     }
     return .noMatch
 }

@@ -37,6 +37,12 @@ public class TypedInterpreter: Interpreter, Printer {
 
     /// The list of functions that are available during the evaluation to process the recognised data types
     public let functions: [FunctionProtocol]
+    
+    /// A cache of functions where expressions have matched before. This improves the performance a lot, when computing already established functions
+    var functionCache: [String: FunctionProtocol] = [:]
+    
+    /// A cache of data types where expressions have matched before. This improves the performance a lot, when computing already established data types
+    var dataTypeCache: [String: DataTypeProtocol] = [:]
 
     /// Each item of the input list (data types, functions and the context) is optional, but strongly recommended to provide them. It's usual that for every data type, there are a few functions provided, so the list can occasionally be pretty long.
     /// - parameter dataTypes: The types the interpreter should recognise the work with
@@ -64,19 +70,68 @@ public class TypedInterpreter: Interpreter, Printer {
     public func evaluate(_ expression: String, context: InterpreterContext) -> Any? {
         context.merge(with: self.context) { existing, _ in existing}
         let expression = expression.trim()
-
-        for dataType in dataTypes {
-            if let value = dataType.convert(input: expression, interpreter: self) {
-                return value
-            }
-        }
-        for variable in context.variables where expression == variable.key {
-            return variable.value
-        }
+        
+        return functionFromCache(for: expression, using: context)
+            ?? dataTypeFromCache(for: expression)
+            ?? dataType(for: expression)
+            ?? variable(for: expression, using: context)
+            ?? function(for: expression, using: context)
+    }
+    
+    /// If the expression belongs to a cached function, it uses the function converter to evaluate it
+    /// - parameter expression: The expression to evaluate
+    /// - parameter context: The context to be using when the evaluation happens
+    /// - returns: The value - if the expression is interpreted. `nil` otherwise
+    func functionFromCache(for expression: String, using context: InterpreterContext) -> Any? {
+        guard let cachedFunction = functionCache[expression],
+            let value = cachedFunction.convert(input: expression, interpreter: self, context: context) else { return nil }
+        return value
+    }
+    
+    /// If the expression belongs to a cached data type, it uses the data type converter to evaluate it
+    /// - parameter expression: The expression to evaluate
+    /// - returns: The value - if the expression is interpreted. `nil` otherwise
+    func dataTypeFromCache(for expression: String) -> Any? {
+        guard let cachedDataType = dataTypeCache[expression],
+            let value = cachedDataType.convert(input: expression, interpreter: self) else { return nil }
+        return value
+    }
+    
+    /// If the expression is recognised as a function, it uses that function to evaluate the value
+    /// - parameter expression: The expression to evaluate
+    /// - parameter context: The context to be using when the evaluation happens
+    /// - returns: The value - if the expression is interpreted. `nil` otherwise
+    func function(for expression: String, using context: InterpreterContext) -> Any? {
         for function in functions.reversed() {
             if let value = function.convert(input: expression, interpreter: self, context: context) {
+                functionCache[expression] = function
                 return value
             }
+        }
+        return nil
+    }
+    
+    /// If the expression is recognised as a data type, it uses that data type to convert its value
+    /// - parameter expression: The expression to evaluate
+    /// - parameter context: The context to be using when the evaluation happens
+    /// - returns: The value - if the expression is interpreted. `nil` otherwise
+    func dataType(for expression: String) -> Any? {
+        for dataType in dataTypes {
+            if let value = dataType.convert(input: expression, interpreter: self) {
+                dataTypeCache[expression] = dataType
+                return value
+            }
+        }
+        return nil
+    }
+    
+    /// If the expression is recognised as a variable, it uses that variable to replace its value
+    /// - parameter expression: The expression to evaluate
+    /// - parameter context: The context where the variables are stored
+    /// - returns: The value - if the expression is interpreted. `nil` otherwise
+    func variable(for expression: String, using context: InterpreterContext) -> Any? {
+        for variable in context.variables where expression == variable.key {
+            return variable.value
         }
         return nil
     }
@@ -227,7 +282,7 @@ public class Function<T> : FunctionProtocol {
     /// - parameter context: The context - if vaiables need any contextual information
     /// - returns: A valid value of any `DataType` or `nil` if it cannot be processed
     public func convert(input: String, interpreter: TypedInterpreter, context: InterpreterContext) -> Any? {
-        guard case let .exactMatch(_, output, _) = matchStatement(amongst: patterns, in: input, until: input.count, interpreter: interpreter, context: context) else { return nil }
+        guard case let .exactMatch(_, output, _) = matchStatement(amongst: patterns, in: input, interpreter: interpreter, context: context) else { return nil }
         return output
     }
 }

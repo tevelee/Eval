@@ -6,7 +6,7 @@ class MatcherTests: XCTestCase {
     //MARK: init
     
     class DummyElement : MatchElement {
-        func matches(prefix: String, isLast: Bool) -> MatchResult<Any> {
+        func matches(prefix: String) -> MatchResult<Any> {
             return .noMatch
         }
     }
@@ -56,7 +56,7 @@ class MatcherTests: XCTestCase {
             ([variable, keyword], "invalid o", .possibleMatch),
             ([variable, keyword], "invalid ok", .exactMatch(length: 10, output: 1, variables: ["name": "invalid"])),
             ([variable, keyword], "invalidxok", .exactMatch(length: 10, output: 1, variables: ["name": "invalidx"])),
-            ([variable, keyword], "invalidxok extra", .exactMatch(length: 11, output: 1, variables: ["name": "invalidx"])),
+            ([variable, keyword], "invalidxok extra", .exactMatch(length: 10, output: 1, variables: ["name": "invalidx"])),
 
             ([keyword, variable], "xokthen", .noMatch),
             ([keyword, variable], "o", .possibleMatch),
@@ -88,7 +88,7 @@ class MatcherTests: XCTestCase {
         
         for testCase in testCases {
             let matcher = Matcher<Int, DummyInterpreter>(testCase.elements) { _,_,_ in 1 }
-            let result = matcher.matches(string: testCase.input, until: testCase.input.count, interpreter: DummyInterpreter(), context: InterpreterContext())
+            let result = matcher.matches(string: testCase.input, interpreter: DummyInterpreter(), context: InterpreterContext())
             XCTAssertTrue(result == testCase.expectedResult, "\(testCase.input) should have resulted in \(testCase.expectedResult) but got \(result) instead")
         }
     }

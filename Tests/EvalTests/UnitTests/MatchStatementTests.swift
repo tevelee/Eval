@@ -7,7 +7,7 @@ class MatchStatementTests: XCTestCase {
         let input = "input"
         let matcher = Matcher<Int, DummyInterpreter>([Keyword("in")]) { _,_,_ in 1 }
         
-        let result1 = matcher.matches(string: input, until: input.count, interpreter: DummyInterpreter(), context: InterpreterContext())
+        let result1 = matcher.matches(string: input, interpreter: DummyInterpreter(), context: InterpreterContext())
         let result2 = matchStatement(amongst: [matcher], in: input, interpreter: DummyInterpreter(), context: InterpreterContext())
         
         XCTAssertTrue(result1 == result2)

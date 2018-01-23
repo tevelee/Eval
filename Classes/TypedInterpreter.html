@@ -128,7 +128,7 @@
                 <a href="../Functions/+=(_:_:).html">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromSi5untilq_11interpreterAA18InterpreterContextC7contexttAA0L0R_r0_lF">matchStatement(amongst:in:from:until:interpreter:context:)</a>
+                <a href="../Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA18InterpreterContextC7contexttAA0K0R_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
               </li>
             </ul>
           </li>
@@ -351,6 +351,66 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:4Eval16TypedInterpreterC13functionCaches10DictionaryVySSAA16FunctionProtocol_pGv"></a>
+                    <a name="//apple_ref/swift/Property/functionCache" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16TypedInterpreterC13functionCaches10DictionaryVySSAA16FunctionProtocol_pGv">functionCache</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A cache of functions where expressions have matched before. This improves the performance a lot, when computing already established functions</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">functionCache</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Protocols/FunctionProtocol.html">FunctionProtocol</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[:]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L42">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16TypedInterpreterC13dataTypeCaches10DictionaryVySSAA04DataE8Protocol_pGv"></a>
+                    <a name="//apple_ref/swift/Property/dataTypeCache" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16TypedInterpreterC13dataTypeCaches10DictionaryVySSAA04DataE8Protocol_pGv">dataTypeCache</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A cache of data types where expressions have matched before. This improves the performance a lot, when computing already established data types</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">dataTypeCache</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt"><a href="../Protocols/DataTypeProtocol.html">DataTypeProtocol</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">[:]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L45">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:4Eval16TypedInterpreterCACSayAA16DataTypeProtocol_pG9dataTypes_SayAA08FunctionF0_pG9functionsAA0C7ContextC7contexttcfc"></a>
                     <a name="//apple_ref/swift/Method/init(dataTypes:functions:context:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:4Eval16TypedInterpreterCACSayAA16DataTypeProtocol_pG9dataTypes_SayAA08FunctionF0_pG9functionsAA0C7ContextC7contexttcfc">init(dataTypes:functions:context:)</a>
@@ -410,7 +470,7 @@
                         </table>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L45-L51">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L51-L57">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -463,7 +523,7 @@
                         <p>The output of the evaluation</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L56-L58">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L62-L64">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -528,7 +588,320 @@
                         <p>The output of the evaluation</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L64-L82">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L70-L79">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16TypedInterpreterC17functionFromCacheypSgSS3for_AA0C7ContextC5usingtF"></a>
+                    <a name="//apple_ref/swift/Method/functionFromCache(for:using:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16TypedInterpreterC17functionFromCacheypSgSS3for_AA0C7ContextC5usingtF">functionFromCache(for:using:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If the expression belongs to a cached function, it uses the function converter to evaluate it</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">functionFromCache</span><span class="p">(</span><span class="k">for</span> <span class="nv">expression</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">using</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="../Classes/InterpreterContext.html">InterpreterContext</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>expression</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The expression to evaluate</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The context to be using when the evaluation happens</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value - if the expression is interpreted. <code>nil</code> otherwise</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L85-L89">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16TypedInterpreterC17dataTypeFromCacheypSgSS3for_tF"></a>
+                    <a name="//apple_ref/swift/Method/dataTypeFromCache(for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16TypedInterpreterC17dataTypeFromCacheypSgSS3for_tF">dataTypeFromCache(for:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If the expression belongs to a cached data type, it uses the data type converter to evaluate it</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">dataTypeFromCache</span><span class="p">(</span><span class="k">for</span> <span class="nv">expression</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>expression</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The expression to evaluate</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value - if the expression is interpreted. <code>nil</code> otherwise</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L94-L98">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16TypedInterpreterC8functionypSgSS3for_AA0C7ContextC5usingtF"></a>
+                    <a name="//apple_ref/swift/Method/function(for:using:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16TypedInterpreterC8functionypSgSS3for_AA0C7ContextC5usingtF">function(for:using:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If the expression is recognised as a function, it uses that function to evaluate the value</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">function</span><span class="p">(</span><span class="k">for</span> <span class="nv">expression</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">using</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="../Classes/InterpreterContext.html">InterpreterContext</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>expression</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The expression to evaluate</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The context to be using when the evaluation happens</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value - if the expression is interpreted. <code>nil</code> otherwise</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L104-L112">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16TypedInterpreterC8dataTypeypSgSS3for_tF"></a>
+                    <a name="//apple_ref/swift/Method/dataType(for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16TypedInterpreterC8dataTypeypSgSS3for_tF">dataType(for:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If the expression is recognised as a data type, it uses that data type to convert its value</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">dataType</span><span class="p">(</span><span class="k">for</span> <span class="nv">expression</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>expression</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The expression to evaluate</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The context to be using when the evaluation happens</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value - if the expression is interpreted. <code>nil</code> otherwise</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L118-L126">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval16TypedInterpreterC8variableypSgSS3for_AA0C7ContextC5usingtF"></a>
+                    <a name="//apple_ref/swift/Method/variable(for:using:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval16TypedInterpreterC8variableypSgSS3for_AA0C7ContextC5usingtF">variable(for:using:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If the expression is recognised as a variable, it uses that variable to replace its value</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">variable</span><span class="p">(</span><span class="k">for</span> <span class="nv">expression</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">using</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="../Classes/InterpreterContext.html">InterpreterContext</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>expression</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The expression to evaluate</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The context where the variables are stored</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value - if the expression is interpreted. <code>nil</code> otherwise</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L132-L137">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -581,7 +954,7 @@
                         <p>The string representation of the value or empty string if it cannot be processed</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L87-L97">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L142-L152">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -591,7 +964,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-22)</p>
+          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-23)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

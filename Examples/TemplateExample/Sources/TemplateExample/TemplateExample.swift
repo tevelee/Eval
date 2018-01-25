@@ -257,6 +257,13 @@ public class StandardLibrary {
            endsWithOperator,
            containsOperator,
            matchesOperator,
+           capitalise,
+           lowercase,
+           uppercase,
+           lowercaseFirst,
+           uppercaseFirst,
+           trim,
+           escape,
 
            stringConcatenationOperator,
 
@@ -281,6 +288,8 @@ public class StandardLibrary {
 
            negationOperator,
            notOperator,
+           
+           absoluteValue,
 
            isEvenOperator,
            isOddOperator,
@@ -288,9 +297,22 @@ public class StandardLibrary {
            minFunction,
            maxFunction,
            sumFunction,
-           averageFunction,
-           countFunction,
            sqrtFunction,
+           roundFunction,
+           averageFunction,
+           arraySortFunction,
+           arrayReverseFunction,
+           arrayMinFunction,
+           arrayMaxFunction,
+           arrayFirstFunction,
+           arrayLastFunction,
+           arrayJoinFunction,
+           arraySplitFunction,
+           arrayMergeFunction,
+           arraySumFunction,
+           arrayAverageFunction,
+           arrayCountFunction,
+           dictionaryCountFunction,
 
            arraySubscript,
            dictionarySubscript,
@@ -447,6 +469,40 @@ public class StandardLibrary {
         }
     }
     
+    public static var capitalise: Function<String> {
+        return objectFunction("capitalise") { (value: String) -> String? in value.capitalized }
+    }
+    
+    public static var lowercase: Function<String> {
+        return objectFunction("lower") { (value: String) -> String? in value.lowercased() }
+    }
+    
+    public static var uppercase: Function<String> {
+        return objectFunction("upper") { (value: String) -> String? in value.uppercased() }
+    }
+    
+    public static var lowercaseFirst: Function<String> {
+        return objectFunction("lowerFirst") { (value: String) -> String? in
+            guard let first = value.first else { return nil }
+            return String(first).lowercased() + value[value.index(value.startIndex, offsetBy: 1)...]
+        }
+    }
+    
+    public static var uppercaseFirst: Function<String> {
+        return objectFunction("upperFirst") { (value: String) -> String? in
+            guard let first = value.first else { return nil }
+            return String(first).uppercased() + value[value.index(value.startIndex, offsetBy: 1)...]
+        }
+    }
+    
+    public static var trim: Function<String> {
+        return objectFunction("trim") { (value: String) -> String? in value.trimmingCharacters(in: .whitespacesAndNewlines) }
+    }
+    
+    public static var escape: Function<String> {
+        return objectFunction("escape") { (value: String) -> String? in value.addingPercentEncoding(withAllowedCharacters: .alphanumerics) }
+    }
+    
     public static var stringConcatenationOperator: Function<String?> {
         return infixOperator("+") { (lhs: String, rhs: String) in lhs + rhs}
     }
@@ -511,6 +567,10 @@ public class StandardLibrary {
         return prefixOperator("not") { (expression: Bool) in !expression}
     }
     
+    public static var absoluteValue: Function<Double> {
+        return objectFunction("abs") { (value: Double) -> Double? in abs(value) }
+    }
+    
     public static var incrementOperator: Function<Double?> {
         return suffixOperator("++") { (expression: Double) in expression + 1}
     }
@@ -528,29 +588,105 @@ public class StandardLibrary {
     }
     
     public static var minFunction: Function<Double> {
-        return objectFunction("min") { (object: [Double]) -> Double? in object.min() }
+        return function("min") { (arguments: [Any]) -> Double? in
+            guard let arguments = arguments as? [Double] else { return nil }
+            return arguments.min()
+        }
     }
     
     public static var maxFunction: Function<Double> {
+        return function("max") { (arguments: [Any]) -> Double? in
+            guard let arguments = arguments as? [Double] else { return nil }
+            return arguments.max()
+        }
+    }
+    
+    public static var arraySortFunction: Function<[Double]> {
+        return objectFunction("sort") { (object: [Double]) -> [Double]? in object.sorted() }
+    }
+    
+    public static var arrayReverseFunction: Function<[Double]> {
+        return objectFunction("reverse") { (object: [Double]) -> [Double]? in object.reversed() }
+    }
+    
+    public static var arrayMinFunction: Function<Double> {
+        return objectFunction("min") { (object: [Double]) -> Double? in object.min() }
+    }
+    
+    public static var arrayMaxFunction: Function<Double> {
         return objectFunction("max") { (object: [Double]) -> Double? in object.max() }
     }
     
-    public static var sumFunction: Function<Double> {
+    public static var arrayFirstFunction: Function<Double> {
+        return objectFunction("first") { (object: [Double]) -> Double? in object.first }
+    }
+    
+    public static var arrayLastFunction: Function<Double> {
+        return objectFunction("last") { (object: [Double]) -> Double? in object.last }
+    }
+    
+    public static var arrayJoinFunction: Function<String> {
+        return objectFunctionWithParameters("join") { (object: [String], arguments: [Any]) -> String? in
+            guard let separator = arguments.first as? String else { return nil }
+            return object.joined(separator: separator)
+        }
+    }
+    
+    public static var arraySplitFunction: Function<[String]> {
+        return objectFunctionWithParameters("join") { (object: String, arguments: [Any]) -> [String]? in
+            guard let separator = arguments.first as? String else { return nil }
+            return object.split(separator: Character(separator)).map { String($0) }
+        }
+    }
+    
+    public static var arrayMergeFunction: Function<[Any]> {
+        return objectFunctionWithParameters("merge") { (object: [Any], arguments: [Any]) -> [Any]? in
+            guard let other = arguments.first as? [Any] else { return nil }
+            return object + other
+        }
+    }
+    
+    public static var arraySumFunction: Function<Double> {
         return objectFunction("sum") { (object: [Double]) -> Double? in object.reduce(0, +) }
     }
     
-    public static var averageFunction: Function<Double> {
+    public static var arrayAverageFunction: Function<Double> {
         return objectFunction("avg") { (object: [Double]) -> Double? in object.reduce(0, +) / Double(object.count) }
     }
     
-    public static var countFunction: Function<Double> {
+    public static var arrayCountFunction: Function<Double> {
         return objectFunction("count") { (object: [Double]) -> Double? in Double(object.count) }
+    }
+    
+    public static var dictionaryCountFunction: Function<Double> {
+        return objectFunction("count") { (object: [String: Any]) -> Double? in Double(object.count) }
+    }
+    
+    public static var sumFunction: Function<Double> {
+        return function("sum") { (arguments: [Any]) -> Double? in
+            guard let arguments = arguments as? [Double] else { return nil }
+            return arguments.reduce(0, +)
+        }
+    }
+    
+    public static var averageFunction: Function<Double> {
+        return function("avg") { (arguments: [Any]) -> Double? in
+            guard let arguments = arguments as? [Double] else { return nil }
+            return arguments.reduce(0, +) / Double(arguments.count)
+        }
     }
     
     public static var sqrtFunction: Function<Double> {
         return function("sqrt") { (arguments: [Any]) -> Double? in
             guard let value = arguments.first as? Double else { return nil }
             return sqrt(value)
+        }
+    }
+    
+    public static var roundFunction: Function<Double> {
+        return function("round") { (arguments: [Any]) -> Double? in
+            guard let value = arguments.first as? Double else { return nil }
+            return round(value)
         }
     }
     

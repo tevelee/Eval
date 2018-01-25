@@ -93,82 +93,82 @@ class MatcherTests: XCTestCase {
         }
     }
     
-    //MARK: finaliseVariable
-    
-    func test_whenFinalisingValue_thenItCorrectlyReturnsValue() {
-        let matcher = Matcher<Int, DummyInterpreter>([]) { _,_,_ in 1 }
-        let variable = GenericVariable<String, DummyInterpreter>("name", interpreted: false)
-        
-        let result = matcher.finaliseVariable((metadata: variable, value: "value"), interpreter: DummyInterpreter(), context: InterpreterContext())
-        
-        XCTAssertEqual(result as! String, "value")
-    }
-    
-    func test_whenFinalisingInterpretedValue_thenItReturnsInterpretation() {
-        let matcher = Matcher<Int, DummyInterpreter>([]) { _,_,_ in 1 }
-        let variable = GenericVariable<String, DummyInterpreter>("name", interpreted: true)
-        
-        let result = matcher.finaliseVariable((metadata: variable, value: "value"), interpreter: DummyInterpreter(), context: InterpreterContext())
-        
-        XCTAssertEqual(result as! String, "a")
-    }
-    
-    //MARK: isEmbedded
-    
-    func test_whenEmbedding_thenIsEmbeddedReturnsTrue() {
-        let opening = Keyword("(", type: .openingStatement)
-        let closing = Keyword(")", type: .closingStatement)
-        let matcher = Matcher<Int, DummyInterpreter>([opening, closing]) { _,_,_ in 1 }
-        
-        let result = matcher.isEmbedded(element: closing, in: "(input(random))", at: 0)
-        
-        XCTAssertTrue(result)
-    }
-    
-    func test_whenNotEmbedding_thenIsEmbeddedReturnsFalse() {
-        let opening = Keyword("(", type: .openingStatement)
-        let closing = Keyword(")", type: .closingStatement)
-        let matcher = Matcher<Int, DummyInterpreter>([opening, closing]) { _,_,_ in 1 }
-        
-        let result = matcher.isEmbedded(element: opening, in: "input", at: 0)
-        
-        XCTAssertFalse(result)
-    }
-    
-    func test_whenEmbeddingButLate_thenIsEmbeddedReturnsFalse() {
-        let opening = Keyword("(", type: .openingStatement)
-        let closing = Keyword(")", type: .closingStatement)
-        let matcher = Matcher<Int, DummyInterpreter>([opening, closing]) { _,_,_ in 1 }
-        
-        let result = matcher.isEmbedded(element: closing, in: "input(random)", at: 25)
-        
-        XCTAssertFalse(result)
-    }
-    
-    //MARK: positionOfClosingTag
-    
-    func test_whenEmbedding_thenClosingPositionIsValid() {
-        let opening = Keyword("(", type: .openingStatement)
-        let closing = Keyword(")", type: .closingStatement)
-        let matcher = Matcher<Int, DummyInterpreter>([opening, closing]) { _,_,_ in 1 }
-        
-        XCTAssertEqual(matcher.positionOfClosingTag(in: "(input(random))", from: 0), 14)
-        XCTAssertEqual(matcher.positionOfClosingTag(in: "(input(random))", from: 1), 13)
-    }
-    
-    func test_whenNotEmbedding_thenClosingPositionIsNil() {
-        let opening = Keyword("(", type: .openingStatement)
-        let closing = Keyword(")", type: .closingStatement)
-        let matcher = Matcher<Int, DummyInterpreter>([opening, closing]) { _,_,_ in 1 }
-        
-        XCTAssertNil(matcher.positionOfClosingTag(in: "input", from: 0))
-    }
-    
-    func test_whenEmbeddingButLate_thenClosingPositionIsNil() {
-        let opening = Keyword("(", type: .openingStatement)
-        let closing = Keyword(")", type: .closingStatement)
-        let matcher = Matcher<Int, DummyInterpreter>([opening, closing]) { _,_,_ in 1 }
-        
-        XCTAssertNil(matcher.positionOfClosingTag(in: "(input(random))", from: 8))
-    }
+//    //MARK: finaliseVariable
+//
+//    func test_whenFinalisingValue_thenItCorrectlyReturnsValue() {
+//        let matcher = Matcher<Int, DummyInterpreter>([]) { _,_,_ in 1 }
+//        let variable = GenericVariable<String, DummyInterpreter>("name", interpreted: false)
+//
+//        let result = matcher.finaliseVariable((metadata: variable, value: "value"), interpreter: DummyInterpreter(), context: InterpreterContext())
+//
+//        XCTAssertEqual(result as! String, "value")
+//    }
+//
+//    func test_whenFinalisingInterpretedValue_thenItReturnsInterpretation() {
+//        let matcher = Matcher<Int, DummyInterpreter>([]) { _,_,_ in 1 }
+//        let variable = GenericVariable<String, DummyInterpreter>("name", interpreted: true)
+//
+//        let result = matcher.finaliseVariable((metadata: variable, value: "value"), interpreter: DummyInterpreter(), context: InterpreterContext())
+//
+//        XCTAssertEqual(result as! String, "a")
+//    }
+//
+//    //MARK: isEmbedded
+//
+//    func test_whenEmbedding_thenIsEmbeddedReturnsTrue() {
+//        let opening = Keyword("(", type: .openingStatement)
+//        let closing = Keyword(")", type: .closingStatement)
+//        let matcher = Matcher<Int, DummyInterpreter>([opening, closing]) { _,_,_ in 1 }
+//
+//        let result = matcher.isEmbedded(element: closing, in: "(input(random))", at: 0)
+//
+//        XCTAssertTrue(result)
+//    }
+//
+//    func test_whenNotEmbedding_thenIsEmbeddedReturnsFalse() {
+//        let opening = Keyword("(", type: .openingStatement)
+//        let closing = Keyword(")", type: .closingStatement)
+//        let matcher = Matcher<Int, DummyInterpreter>([opening, closing]) { _,_,_ in 1 }
+//
+//        let result = matcher.isEmbedded(element: opening, in: "input", at: 0)
+//
+//        XCTAssertFalse(result)
+//    }
+//
+//    func test_whenEmbeddingButLate_thenIsEmbeddedReturnsFalse() {
+//        let opening = Keyword("(", type: .openingStatement)
+//        let closing = Keyword(")", type: .closingStatement)
+//        let matcher = Matcher<Int, DummyInterpreter>([opening, closing]) { _,_,_ in 1 }
+//
+//        let result = matcher.isEmbedded(element: closing, in: "input(random)", at: 25)
+//
+//        XCTAssertFalse(result)
+//    }
+//
+//    //MARK: positionOfClosingTag
+//
+//    func test_whenEmbedding_thenClosingPositionIsValid() {
+//        let opening = Keyword("(", type: .openingStatement)
+//        let closing = Keyword(")", type: .closingStatement)
+//        let matcher = Matcher<Int, DummyInterpreter>([opening, closing]) { _,_,_ in 1 }
+//
+//        XCTAssertEqual(matcher.positionOfClosingTag(in: "(input(random))", from: 0), 14)
+//        XCTAssertEqual(matcher.positionOfClosingTag(in: "(input(random))", from: 1), 13)
+//    }
+//
+//    func test_whenNotEmbedding_thenClosingPositionIsNil() {
+//        let opening = Keyword("(", type: .openingStatement)
+//        let closing = Keyword(")", type: .closingStatement)
+//        let matcher = Matcher<Int, DummyInterpreter>([opening, closing]) { _,_,_ in 1 }
+//
+//        XCTAssertNil(matcher.positionOfClosingTag(in: "input", from: 0))
+//    }
+//
+//    func test_whenEmbeddingButLate_thenClosingPositionIsNil() {
+//        let opening = Keyword("(", type: .openingStatement)
+//        let closing = Keyword(")", type: .closingStatement)
+//        let matcher = Matcher<Int, DummyInterpreter>([opening, closing]) { _,_,_ in 1 }
+//
+//        XCTAssertNil(matcher.positionOfClosingTag(in: "(input(random))", from: 8))
+//    }
 }

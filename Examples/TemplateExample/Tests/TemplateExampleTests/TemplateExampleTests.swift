@@ -241,27 +241,65 @@ class TemplateExampleTests: XCTestCase {
     
     func testMax() {
         XCTAssertEqual(eval("{{ [5,3,7,1].max }}"), "7")
+        XCTAssertEqual(eval("{{ max(5,3,7,1) }}"), "7")
         XCTAssertEqual(eval("{{ [-5,-3,-7,-1].max }}"), "-1")
+        XCTAssertEqual(eval("{{ max(-5,-3,-7,-1) }}"), "-1")
     }
     
     func testMin() {
         XCTAssertEqual(eval("{{ [5,3,7,1].min }}"), "1")
+        XCTAssertEqual(eval("{{ min(5,3,7,1) }}"), "1")
         XCTAssertEqual(eval("{{ [-5,-3,-7,-1].min }}"), "-7")
+        XCTAssertEqual(eval("{{ min(-5,-3,-7,-1) }}"), "-7")
     }
     
     func testCount() {
         XCTAssertEqual(eval("{{ [5,3,7,1].count }}"), "4")
         XCTAssertEqual(eval("{{ [].count }}"), "0")
+        XCTAssertEqual(eval("{{ {'a': 5, 'b': 2}.count }}"), "2")
+        XCTAssertEqual(eval("{{ {}.count }}"), "0")
     }
     
     func testAverage() {
         XCTAssertEqual(eval("{{ [1,2,3,4].avg }}"), "2.5")
         XCTAssertEqual(eval("{{ [2,2].avg }}"), "2")
+        XCTAssertEqual(eval("{{ avg(1,2,3,4) }}"), "2.5")
+        XCTAssertEqual(eval("{{ avg(2,2) }}"), "2")
+    }
+    
+    func testSum() {
+        XCTAssertEqual(eval("{{ [1,2,3,4].sum }}"), "10")
+        XCTAssertEqual(eval("{{ sum(1,2,3,4) }}"), "10")
     }
     
     func testSqrt() {
         XCTAssertEqual(eval("{{ sqrt(225) }}"), "15")
         XCTAssertEqual(eval("{{ sqrt(4) }}"), "2")
+    }
+    
+    func testFirst() {
+        XCTAssertEqual(eval("{{ [1,2,3].first }}"), "1")
+        XCTAssertEqual(eval("{{ [].first }}"), "")
+    }
+    
+    func testLast() {
+        XCTAssertEqual(eval("{{ [1,2,3].last }}"), "3")
+        XCTAssertEqual(eval("{{ [].last }}"), "")
+    }
+    
+    func testJoin() {
+        XCTAssertEqual(eval("{{ [1,2,3].join('-') }}"), "1-2-3")
+        XCTAssertEqual(eval("{{ [].join('-') }}"), "")
+    }
+    
+    func testSplit() {
+        XCTAssertEqual(eval("{{ 'a,b,c'.split(',') }}"), "a,b,c")
+        XCTAssertEqual(eval("{{ 'a'.split('-') }}"), "a")
+    }
+    
+    func testMerge() {
+        XCTAssertEqual(eval("{{ [1,2,3].merge([4,5]) }}"), "1,2,3,4,5")
+        XCTAssertEqual(eval("{{ [].merge([1]) }}"), "1")
     }
     
     func testArraySubscript() {
@@ -281,6 +319,52 @@ class TemplateExampleTests: XCTestCase {
 
     func testDictionaryValues() {
         XCTAssertEqual(eval("{{ {'a': 1, 'b': 2}.values }}"), "1,2")
+    }
+    
+    func testAbsolute() {
+        XCTAssertEqual(eval("{{ 1.abs }}"), "1")
+        XCTAssertEqual(eval("{{ -1.abs }}"), "1")
+    }
+    
+    func testRound() {
+        XCTAssertEqual(eval("{{ 2.5.round }}"), "3")
+        XCTAssertEqual(eval("{{ 1.2.round }}"), "1")
+    }
+    
+    func testTrim() {
+        XCTAssertEqual(eval("{{ '  a  '.trim }}"), "a")
+    }
+    
+    func testEscape() {
+        XCTAssertEqual(eval("{{ ' '.escape }}"), "%20")
+    }
+    
+    func testCapitalise() {
+        XCTAssertEqual(eval("{{ 'hello there'.capitalise }}"), "Hello There")
+    }
+    
+    func testUpper() {
+        XCTAssertEqual(eval("{{ 'hello there'.upper }}"), "HELLO THERE")
+    }
+    
+    func testLower() {
+        XCTAssertEqual(eval("{{ 'HELLO THERE'.lower }}"), "hello there")
+    }
+    
+    func testUpperFirst() {
+        XCTAssertEqual(eval("{{ 'hello there'.upperFirst }}"), "Hello there")
+    }
+    
+    func testLowerFirst() {
+        XCTAssertEqual(eval("{{ 'HELLO THERE'.lowerFirst }}"), "hELLO THERE")
+    }
+    
+    func testUpperCapitalise() {
+        XCTAssertEqual(eval("{{ ('hello there'.capitalise).upperFirst }}"), "Hello There")
+    }
+    
+    func testLowerCapitalise() {
+        XCTAssertEqual(eval("{{ ('HELLO THERE'.capitalise).lowerFirst }}"), "hello There")
     }
     
     //MARK: Template file

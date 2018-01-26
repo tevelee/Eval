@@ -17,10 +17,6 @@ class VariableProcessor<E: Interpreter> : Processor {
     
     /// Maps and evaluates variable content, based on its interpretation settings
     /// - parameter variable: The variable to process
-    /// - parameter metadata: Property-bag with the name, interpretation details, and map function of the variable
-    /// - parameter value: The value of the variable
-    /// - parameter interpreter: An interpreter instance - if the value needs any further evaluation
-    /// - parameter context: The context - if the block uses any contextual data
     /// - returns: The result of the matching operation
     func process(_ variable: VariableValue) -> Any? {
         let value = variable.metadata.trimmed ? variable.value.trim() : variable.value
@@ -36,10 +32,12 @@ class VariableProcessor<E: Interpreter> : Processor {
 class MatchExecutor {
     let elements: [MatchElement]
     let processor: Processor
+    let isBackward: Bool
     
-    init(elements: [MatchElement] = [], processor: Processor) {
+    init(elements: [MatchElement] = [], processor: Processor, isBackward: Bool = false) {
         self.elements = elements
         self.processor = processor
+        self.isBackward = isBackward
     }
     
     var currentlyActiveVariable: VariableValue? = nil
@@ -59,7 +57,11 @@ class MatchExecutor {
         if remainder.isEmpty {
             currentlyActiveVariable = (variable.metadata, variable.value)
         } else {
-            currentlyActiveVariable = (variable.metadata, variable.value + String(remainder.removeFirst()))
+            if isBackward {
+                currentlyActiveVariable = (variable.metadata, String(describing: remainder.removeLast()) + variable.value)
+            } else {
+                currentlyActiveVariable = (variable.metadata, variable.value + String(describing: remainder.removeFirst()))
+            }
         }
     }
     
@@ -82,15 +84,43 @@ class MatchExecutor {
         return false
     }
     
+    fileprivate func nextElement(_ elementIndex: inout Int) {
+        elementIndex += isBackward ? -1 : 1
+    }
+    
+    fileprivate func notFinished(_ elementIndex: Int) -> Bool {
+        if isBackward {
+            return elementIndex >= elements.startIndex
+        } else {
+            return elementIndex < elements.endIndex
+        }
+    }
+    
+    fileprivate func initialIndex() -> Int {
+        if isBackward {
+            return elements.index(before: elements.endIndex)
+        } else {
+            return elements.startIndex
+        }
+    }
+    
+    fileprivate func drop(_ remainder: String, length: Int) -> String {
+        if isBackward {
+            return String(remainder.dropLast(length))
+        } else {
+            return String(remainder.dropFirst(length))
+        }
+    }
+    
     func match<T>(string: String, from start: Int = 0, renderer: @escaping (_ variables: [String: Any]) -> T?) -> MatchResult<T> {
         let trimmed = String(string[start...])
-        var elementIndex = 0
+        var elementIndex = initialIndex()
         var remainder = trimmed
         var variables: [String: Any] = [:]
         
         repeat {
             let element = elements[elementIndex]
-            let result = element.matches(prefix: remainder)
+            let result = element.matches(prefix: remainder, isBackward: isBackward)
             
             switch result {
             case .noMatch:
@@ -102,20 +132,20 @@ class MatchExecutor {
             case .anyMatch(let shortest):
                 initialiseVariable(element)
                 if shortest {
-                    elementIndex += 1
+                    nextElement(&elementIndex)
                 } else {
                     _ = tryToAppendCurrentVariable(remainder: &remainder)
                     if remainder.isEmpty {
                         if !registerAndValidateVariable(variables: &variables) {
                             return .possibleMatch
                         }
-                        elementIndex += 1
+                        nextElement(&elementIndex)
                     }
                 }
             case .exactMatch(let length, _, let embeddedVariables):
                 if isEmbedded(element: element, in: String(string[start...]), at: trimmed.count - remainder.count) {
                     if !tryToAppendCurrentVariable(remainder: &remainder) {
-                        elementIndex += 1
+                        nextElement(&elementIndex)
                     }
                 } else {
                     variables.merge(embeddedVariables) { (key, _) in key }
@@ -125,17 +155,16 @@ class MatchExecutor {
                         }
                         currentlyActiveVariable = nil
                     }
-                    elementIndex += 1
-                    remainder.removeFirst(length)
-                    if elementIndex < elements.count {
+                    nextElement(&elementIndex)
+                    remainder = drop(remainder, length: length)
+                    if notFinished(elementIndex) {
                         remainder = remainder.trim()
                     }
                 }
             }
-        } while elementIndex < elements.count
+        } while notFinished(elementIndex)
         
         if let renderedOutput = renderer(variables) {
-//            context.debugInfo[trimmed] = ExpressionInfo(input: trimmed, output: renderedOutput, pattern: pattern(), variables: variables)
             return .exactMatch(length: string.count - start - remainder.count, output: renderedOutput, variables: variables)
         } else {
             return .noMatch

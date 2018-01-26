@@ -6,7 +6,7 @@ class MatcherTests: XCTestCase {
     //MARK: init
     
     class DummyElement : MatchElement {
-        func matches(prefix: String) -> MatchResult<Any> {
+        func matches(prefix: String, isBackward: Bool) -> MatchResult<Any> {
             return .noMatch
         }
     }
@@ -91,6 +91,26 @@ class MatcherTests: XCTestCase {
             let result = matcher.matches(string: testCase.input, interpreter: DummyInterpreter(), context: InterpreterContext())
             XCTAssertTrue(result == testCase.expectedResult, "\(testCase.input) should have resulted in \(testCase.expectedResult) but got \(result) instead")
         }
+    }
+    
+    func test_whenMatchingForwards_thenExpectingAppropriateResults() {
+        let matcher = Matcher<Int, TypedInterpreter>([Variable<Int>("lhs"), Keyword("-"), Variable<Int>("rhs")]) { variables,_ ,_ in
+            guard let lhs = variables["lhs"] as? Int, let rhs = variables["rhs"] as? Int else { return nil }
+            return lhs - rhs
+        }
+        let function = Function(patterns: [matcher])
+        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v)}]) { v,_ in String(v) }], functions: [function])
+        XCTAssertEqual(interpreter.evaluate("3 - 2 - 1") as! Int, 2)
+    }
+    
+    func test_whenMatchingBackwards_thenExpectingAppropriateResults() {
+        let matcher = Matcher<Int, TypedInterpreter>([Variable<Int>("lhs"), Keyword("-"), Variable<Int>("rhs")], isBackward: true) { variables,_ ,_ in
+            guard let lhs = variables["lhs"] as? Int, let rhs = variables["rhs"] as? Int else { return nil }
+            return lhs - rhs
+        }
+        let function = Function(patterns: [matcher])
+        let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v)}]) { v,_ in String(v) }], functions: [function])
+        XCTAssertEqual(interpreter.evaluate("3 - 2 - 1") as! Int, 0)
     }
     
 //    //MARK: finaliseVariable

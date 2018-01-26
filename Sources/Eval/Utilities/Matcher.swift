@@ -39,27 +39,35 @@ public class Matcher<T, E: Interpreter> {
 
     /// The block to process the elements with
     let matcher: MatcherBlock<T, E>
+    
+    let isBackward: Bool
 
     /// The first parameter is the pattern, that needs to be recognised. The `matcher` ending closure is called whenever the pattern has successfully been recognised and allows the users of this framework to provide custom computations using the matched `Variable` values.
     /// - parameter elemenets: The pattern to recognise
     /// - parameter matcher: The block to process the input with
     public init(_ elements: [MatchElement],
+                isBackward: Bool = false,
                 matcher: @escaping MatcherBlock<T, E>) {
         self.matcher = matcher
-        self.elements = Matcher.elementsByReplacingTheLastVariableNotToBeShortestMatch(in: elements)
+        self.isBackward = isBackward
+        self.elements = Matcher.elementsByReplacingTheLastVariableNotToBeShortestMatch(in: elements, isBackward: isBackward)
     }
 
     /// If the last element in the elements pattern is a variable, shortest match will not match until the end of the input string, but just until the first empty character.
     /// - parameter in: The elements array where the last element should be replaced
     /// - returns: A new collection of elements, where the last element is replaced, whether it's a variable with shortest flag on
-    static func elementsByReplacingTheLastVariableNotToBeShortestMatch(in elements: [MatchElement]) -> [MatchElement] {
+    static func elementsByReplacingTheLastVariableNotToBeShortestMatch(in elements: [MatchElement], isBackward: Bool) -> [MatchElement] {
         var elements = elements
-        if let last = elements.last as? GenericVariable<E.EvaluatedType, E> {
-            elements.removeLast()
-            elements.append(GenericVariable(last.name, shortest: false, interpreted: last.interpreted, acceptsNilValue: last.acceptsNilValue, map: last.map))
-        } else if let last = elements.last as? VariableProtocol { //in case it cannot be converted, let's use Any, losing type information
-            elements.removeLast()
-            elements.append(GenericVariable<Any, E>(last.name, shortest: false, interpreted: last.interpreted, acceptsNilValue: last.acceptsNilValue, map: last.performMap))
+        let index = isBackward ? elements.startIndex : elements.index(before: elements.endIndex)
+        
+        if let last = elements[index] as? GenericVariable<E.EvaluatedType, E> {
+            let longest = GenericVariable(last.name, shortest: false, interpreted: last.interpreted, acceptsNilValue: last.acceptsNilValue, map: last.map)
+            elements.remove(at: index)
+            elements.insert(longest, at: index)
+        } else if let last = elements[index] as? VariableProtocol { //in case it cannot be converted, let's use Any. Losing type information
+            let longest = GenericVariable<Any, E>(last.name, shortest: false, interpreted: last.interpreted, acceptsNilValue: last.acceptsNilValue, map: last.performMap)
+            elements.remove(at: index)
+            elements.insert(longest, at: index)
         }
         return elements
     }
@@ -73,10 +81,15 @@ public class Matcher<T, E: Interpreter> {
     func matches(string: String, from start: Int = 0, interpreter: E, context: InterpreterContext) -> MatchResult<T> {
         let processor = VariableProcessor(interpreter: interpreter, context: context)
         
-        let exec = MatchExecutor(elements: elements, processor: processor)
+        let exec = MatchExecutor(elements: elements, processor: processor, isBackward: isBackward)
             
         let result = exec.match(string: string, from: start) { variables in
             return self.matcher(variables, interpreter, context)
+        }
+        
+        if case let .exactMatch(_, output, variables) = result {
+            let input = String(string[start...])
+            context.debugInfo[input] = ExpressionInfo(input: input, output: output, pattern: pattern(), variables: variables)
         }
         
         return result

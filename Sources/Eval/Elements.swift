@@ -27,7 +27,7 @@ public protocol MatchElement {
     /// Using this method, an element returns how much the String provided in the `prefix` parameter matches the current element
     /// - parameter prefix: The input
     /// - returns: The result of the match operation
-    func matches(prefix: String) -> MatchResult<Any>
+    func matches(prefix: String, isBackward: Bool) -> MatchResult<Any>
 }
 
 /// `Keyword` instances are used to provide static points in match sequences so that they can be used as pillars of the expressions the developer tries to match
@@ -62,14 +62,14 @@ public class Keyword: MatchElement, Equatable {
     /// If the input is really just a prefix of the keyword, possible metch is returned. noMatch otherwise.
     /// - parameter prefix: The input
     /// - returns: The result of the match operation
-    public func matches(prefix: String) -> MatchResult<Any> {
-        if name == prefix || prefix.hasPrefix(name) {
+    public func matches(prefix: String, isBackward: Bool) -> MatchResult<Any> {
+        let checker = isBackward ? String.hasSuffix : String.hasPrefix
+        if name == prefix || checker(prefix)(name) {
             return .exactMatch(length: name.count, output: name, variables: [:])
-        } else if name.hasPrefix(prefix) {
+        } else if checker(name)(prefix) {
             return .possibleMatch
-        } else {
-            return .noMatch
         }
+        return .noMatch
     }
 
     /// `Keyword` instances are `Equatable`s
@@ -165,7 +165,7 @@ public class GenericVariable<T, E: Interpreter> : VariableProtocol, MatchElement
     /// `GenericVariables` always return anyMatch MatchResult, forwarding the shortest argument, provided during initialisation
     /// - parameter prefix: The input
     /// - returns: The result of the match operation. Always `anyMatch` with the shortest argument, provided during initialisation
-    public func matches(prefix: String) -> MatchResult<Any> {
+    public func matches(prefix: String, isBackward: Bool) -> MatchResult<Any> {
         return .anyMatch(shortest: shortest)
     }
 

@@ -44,7 +44,7 @@ class InterpreterTests: XCTestCase {
         let isEven = suffixOperator("is even") { (value: Double) in Int(value) % 2 == 0 }
         let lessThan = infixOperator("<") { (lhs: Double, rhs: Double) in lhs < rhs }
         
-        let increment = incremenetFunction()
+        let increment = incrementFunction()
         
         let interpreter = TypedInterpreter(dataTypes: [number, string, boolean, array, date],
                                              functions: [concat, parenthesis, methodCall, sum, range, sqrtFunction, dateFactory, format, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, isEven, add, max, min, not, not2, prefix, increment, lessThan, test],
@@ -135,28 +135,28 @@ class InterpreterTests: XCTestCase {
     //MARK: Helpers - operators
     
     func infixOperator<A,B,T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T?> {
-        return Function([Variable<A>("lhs", shortest: true), Keyword(symbol), Variable<B>("rhs", shortest: false)]) { arguments,_,_ in
+        return Function([Variable<A>("lhs"), Keyword(symbol), Variable<B>("rhs")]) { arguments,_,_ in
             guard let lhs = arguments["lhs"] as? A, let rhs = arguments["rhs"] as? B else { return nil }
             return body(lhs, rhs)
         }
     }
     
     func prefixOperator<A,T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T?> {
-        return Function([Keyword(symbol), Variable<A>("value", shortest: false)]) { arguments,_,_ in
+        return Function([Keyword(symbol), Variable<A>("value")]) { arguments,_,_ in
             guard let value = arguments["value"] as? A else { return nil }
             return body(value)
         }
     }
     
     func suffixOperator<A,T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T?> {
-        return Function([Variable<A>("value", shortest: true), Keyword(symbol)]) { arguments,_,_ in
+        return Function([Variable<A>("value"), Keyword(symbol)]) { arguments,_,_ in
             guard let value = arguments["value"] as? A else { return nil }
             return body(value)
         }
     }
     
     func function<T>(_ name: String, body: @escaping ([Any]) -> T?) -> Function<T> {
-        return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", shortest: true, interpreted: false), CloseKeyword(")")]) { variables, interpreter, context in
+        return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, context in
             guard let arguments = variables["arguments"] as? String else { return nil }
             let interpretedArguments : [Any] = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trim(), context: context) }
             return body(interpretedArguments)
@@ -164,7 +164,7 @@ class InterpreterTests: XCTestCase {
     }
     
     func functionWithNamedParameters<T>(_ name: String, body: @escaping ([String: Any]) -> T?) -> Function<T> {
-        return Function([Keyword(name), Keyword("("), Variable<String>("arguments", shortest: true, interpreted: false), Keyword(")")]) { variables, interpreter, _ in
+        return Function([Keyword(name), Keyword("("), Variable<String>("arguments", options: .notInterpreted), Keyword(")")]) { variables, interpreter, _ in
             guard let arguments = variables["arguments"] as? String else { return nil }
             var interpretedArguments: [String: Any] = [:]
             for argument in arguments.split(separator: ",") {
@@ -178,7 +178,7 @@ class InterpreterTests: XCTestCase {
     }
     
     func objectFunction<O,T>(_ name: String, body: @escaping (O) -> T?) -> Function<T> {
-        return Function([Variable<O>("lhs", shortest: true), Keyword("."), Variable<String>("rhs", shortest: false, interpreted: false) { value,_ in
+        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value,_ in
             guard let value = value as? String, value == name else { return nil }
             return value
         }]) { variables, interpreter, _ in
@@ -188,10 +188,10 @@ class InterpreterTests: XCTestCase {
     }
     
     func objectFunctionWithParameters<O,T>(_ name: String, body: @escaping (O, [Any]) -> T?) -> Function<T> {
-        return Function([Variable<O>("lhs", shortest: true), Keyword("."), Variable<String>("rhs", interpreted: false) { value,_ in
+        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value,_ in
             guard let value = value as? String, value == name else { return nil }
             return value
-        }, Keyword("("), Variable<String>("arguments", interpreted: false), Keyword(")")]) { variables, interpreter, _ in
+        }, Keyword("("), Variable<String>("arguments", options: .notInterpreted), Keyword(")")]) { variables, interpreter, _ in
             guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
             let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trim()) }
             return body(object, interpretedArguments)
@@ -201,7 +201,7 @@ class InterpreterTests: XCTestCase {
     //MARK: Helpers - data types
     
     func numberDataType() -> DataType<Double> {
-        return DataType(type: Double.self, literals: [Literal { vvalue,_ in Double(vvalue) },
+        return DataType(type: Double.self, literals: [Literal { value,_ in Double(value) },
                                                       Literal("pi", convertsTo: Double.pi) ]) { value, _ in String(describing: value) }
     }
     
@@ -243,7 +243,7 @@ class InterpreterTests: XCTestCase {
     
     func methodCallFunction() -> Function<Double> {
         return Function(patterns: [
-            Pattern(Variable<Any>("lhs", shortest: true) + Keyword(".") + Variable<String>("rhs", shortest: false, interpreted: false)) { (arguments,_,_) -> Double? in
+            Pattern(Variable<Any>("lhs") + Keyword(".") + Variable<String>("rhs", options: .notInterpreted)) { (arguments,_,_) -> Double? in
                 if let lhs = arguments["lhs"] as? NSObjectProtocol,
                     let rhs = arguments["rhs"] as? String,
                     let result = lhs.perform(Selector(rhs)) {
@@ -251,7 +251,7 @@ class InterpreterTests: XCTestCase {
                 }
                 return nil
             }
-            ])
+        ])
     }
     
     func dateFomatFunction() -> Function<String> {
@@ -279,8 +279,8 @@ class InterpreterTests: XCTestCase {
         }
     }
     
-    func incremenetFunction() -> Function<Double> {
-        return Function([Variable<Any>("value", interpreted: false), Keyword("++")]) { (arguments, interpreter, _) -> Double? in
+    func incrementFunction() -> Function<Double> {
+        return Function([Variable<Any>("value", options: .notInterpreted), Keyword("++")]) { (arguments, interpreter, _) -> Double? in
             if let argument = arguments["value"] as? String {
                 if let variable = interpreter.context.variables.first(where: { argument == $0.key }), let value = variable.value as? Double {
                     let incremented = value + 1

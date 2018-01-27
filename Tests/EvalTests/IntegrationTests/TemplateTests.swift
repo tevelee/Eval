@@ -80,7 +80,7 @@ class TemplateTests: XCTestCase {
     //MARK: Helpers - operators
     
     func infixOperator<A,B,T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T?> {
-        return Function([Variable<A>("lhs", shortest: true), Keyword(symbol), Variable<B>("rhs", shortest: false)]) { arguments,_,_ in
+        return Function([Variable<A>("lhs"), Keyword(symbol), Variable<B>("rhs")]) { arguments,_,_ in
             guard let lhs = arguments["lhs"] as? A, let rhs = arguments["rhs"] as? B else { return nil }
             return body(lhs, rhs)
         }

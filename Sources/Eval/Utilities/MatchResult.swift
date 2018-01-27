@@ -33,8 +33,8 @@ public enum MatchResult<T> {
     /// - parameter variables: The key-value pairs of the found `Variable` instances along the way
     case exactMatch(length: Int, output: T, variables: [String: Any])
     /// In case the matching sequence only consists of one variable, the result is going to be anyMatch
-    /// - parameter shortest: Whether looking for shortest match or an eager one
-    case anyMatch(shortest: Bool)
+    /// - parameter exhaustive: Whether the matching should be exaustive or just return the shortest matching result
+    case anyMatch(exhaustive: Bool)
 
     /// Shorter syntax for pattern matching `MatchResult.exactMatch`
     /// - returns: Whether the case of the current instance is `exactMatch`
@@ -46,11 +46,11 @@ public enum MatchResult<T> {
     }
 
     /// Shorter syntax for pattern matching `MatchResult.anyMatch`
-    /// - parameter shortest: If the result is `anyMatch`, this one filter the content by its shortest parameter - if provided. Uses `false` otherwise
+    /// - parameter exhaustive: If the result is `anyMatch`, this one filter the content by its exhaustive parameter - if provided. Uses `false` otherwise
     /// - returns: Whether the case of the current instance is `anyMatch`
-    func isAnyMatch(shortest: Bool = false) -> Bool {
-        if case .anyMatch(let short) = self {
-            return short == shortest
+    func isAnyMatch(exhaustive: Bool = false) -> Bool {
+        if case .anyMatch(let parameter) = self {
+            return exhaustive == parameter
         }
         return false
     }

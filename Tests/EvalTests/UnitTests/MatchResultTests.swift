@@ -12,7 +12,7 @@ class MatchResultTests: XCTestCase {
     }
     
     func test_whenMatchIsNotExactMatch_thenIsMatchReturnsFalse() {
-        let matchResult = MatchResult<String>.anyMatch(shortest: false)
+        let matchResult = MatchResult<String>.anyMatch(exhaustive: true)
         
         XCTAssertFalse(matchResult.isMatch())
     }
@@ -40,7 +40,7 @@ class MatchResultTests: XCTestCase {
     }
     
     func test_whenMatchIsNotNoMatch_thenIsNoMatchReturnsFalse() {
-        let matchResult = MatchResult<Int>.anyMatch(shortest: true)
+        let matchResult = MatchResult<Int>.anyMatch(exhaustive: false)
         
         XCTAssertFalse(matchResult.isNoMatch())
     }
@@ -48,15 +48,15 @@ class MatchResultTests: XCTestCase {
     //MARK: isAnyMatch
     
     func test_whenMatchIsAnyMatch_thenIsAnyMatchReturnsTrue() {
-        let matchResult = MatchResult<Int>.anyMatch(shortest: false)
+        let matchResult = MatchResult<Int>.anyMatch(exhaustive: true)
         
-        XCTAssertTrue(matchResult.isAnyMatch())
+        XCTAssertTrue(matchResult.isAnyMatch(exhaustive: true))
     }
     
     func test_whenMatchIsAnyMatch_thenIsAnyMatchWithParameterReturnsTrue() {
-        let matchResult = MatchResult<Int>.anyMatch(shortest: true)
+        let matchResult = MatchResult<Int>.anyMatch(exhaustive: false)
         
-        XCTAssertTrue(matchResult.isAnyMatch(shortest: true))
+        XCTAssertTrue(matchResult.isAnyMatch(exhaustive: false))
     }
     
     func test_whenMatchIsNotAnyMatch_thenIsAnyMatchReturnsFalse() {
@@ -68,15 +68,15 @@ class MatchResultTests: XCTestCase {
     //MARK: Equality
     
     func test_whenTwoAnyMatchesAreCompared_thenResultIsEqual() {
-        let one = MatchResult<Int>.anyMatch(shortest: true)
-        let two = MatchResult<Int>.anyMatch(shortest: true)
+        let one = MatchResult<Int>.anyMatch(exhaustive: false)
+        let two = MatchResult<Int>.anyMatch(exhaustive: false)
         
         XCTAssertTrue(one == two)
     }
     
     func test_whenTwoAnyMatchesWithDifferentPropertiesAreCompared_thenResultIsNotEqual() {
-        let one = MatchResult<Int>.anyMatch(shortest: true)
-        let two = MatchResult<Int>.anyMatch(shortest: false)
+        let one = MatchResult<Int>.anyMatch(exhaustive: false)
+        let two = MatchResult<Int>.anyMatch(exhaustive: true)
         
         XCTAssertFalse(one == two)
     }
@@ -111,7 +111,7 @@ class MatchResultTests: XCTestCase {
     
     func test_whenTwoDifferentMatchesAreCompared_thenResultIsNotEqual() {
         let one = MatchResult<String>.exactMatch(length: 1, output: "a", variables: [:])
-        let two = MatchResult<String>.anyMatch(shortest: false)
+        let two = MatchResult<String>.anyMatch(exhaustive: true)
         
         XCTAssertFalse(one == two)
     }

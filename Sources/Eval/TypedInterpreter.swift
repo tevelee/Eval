@@ -37,10 +37,10 @@ public class TypedInterpreter: Interpreter, Printer {
 
     /// The list of functions that are available during the evaluation to process the recognised data types
     public let functions: [FunctionProtocol]
-    
+
     /// A cache of functions where expressions have matched before. This improves the performance a lot, when computing already established functions
     var functionCache: [String: FunctionProtocol] = [:]
-    
+
     /// A cache of data types where expressions have matched before. This improves the performance a lot, when computing already established data types
     var dataTypeCache: [String: DataTypeProtocol] = [:]
 
@@ -70,14 +70,14 @@ public class TypedInterpreter: Interpreter, Printer {
     public func evaluate(_ expression: String, context: Context) -> Any? {
         context.merge(with: self.context) { existing, _ in existing}
         let expression = expression.trim()
-        
+
         return functionFromCache(for: expression, using: context)
             ?? dataTypeFromCache(for: expression)
             ?? dataType(for: expression)
             ?? variable(for: expression, using: context)
             ?? function(for: expression, using: context)
     }
-    
+
     /// If the expression belongs to a cached function, it uses the function converter to evaluate it
     /// - parameter expression: The expression to evaluate
     /// - parameter context: The context to be using when the evaluation happens
@@ -87,7 +87,7 @@ public class TypedInterpreter: Interpreter, Printer {
             let value = cachedFunction.convert(input: expression, interpreter: self, context: context) else { return nil }
         return value
     }
-    
+
     /// If the expression belongs to a cached data type, it uses the data type converter to evaluate it
     /// - parameter expression: The expression to evaluate
     /// - returns: The value - if the expression is interpreted. `nil` otherwise
@@ -96,7 +96,7 @@ public class TypedInterpreter: Interpreter, Printer {
             let value = cachedDataType.convert(input: expression, interpreter: self) else { return nil }
         return value
     }
-    
+
     /// If the expression is recognised as a function, it uses that function to evaluate the value
     /// - parameter expression: The expression to evaluate
     /// - parameter context: The context to be using when the evaluation happens
@@ -110,7 +110,7 @@ public class TypedInterpreter: Interpreter, Printer {
         }
         return nil
     }
-    
+
     /// If the expression is recognised as a data type, it uses that data type to convert its value
     /// - parameter expression: The expression to evaluate
     /// - parameter context: The context to be using when the evaluation happens
@@ -124,7 +124,7 @@ public class TypedInterpreter: Interpreter, Printer {
         }
         return nil
     }
-    
+
     /// If the expression is recognised as a variable, it uses that variable to replace its value
     /// - parameter expression: The expression to evaluate
     /// - parameter context: The context where the variables are stored

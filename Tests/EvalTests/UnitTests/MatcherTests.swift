@@ -6,7 +6,7 @@ class MatcherTests: XCTestCase {
     //MARK: init
     
     class DummyElement : PatternElement {
-        func matches(prefix: String, isBackward: Bool) -> MatchResult<Any> {
+        func matches(prefix: String, options: PatternOptions) -> MatchResult<Any> {
             return .noMatch
         }
     }
@@ -23,14 +23,14 @@ class MatcherTests: XCTestCase {
     
     func test_whenInitialisedWithVariableOnTheLastPlace_thenLastVariableBecomesNotShortest() {
         let element = DummyElement()
-        let variable = GenericVariable<String, DummyInterpreter>("name", shortest: true)
+        let variable = GenericVariable<String, DummyInterpreter>("name")
         
         let matcher = Pattern<String, DummyInterpreter>([element, variable]) { _,_,_ in "x" }
         
         let result = matcher.elements[1] as! GenericVariable<String, DummyInterpreter>
         XCTAssertTrue(element === matcher.elements[0] as! DummyElement)
         XCTAssertFalse(variable === result)
-        XCTAssertTrue(result.shortest == false)
+        XCTAssertTrue(result.options.contains(.exhaustiveMatch))
     }
     
     //MARK: matches
@@ -39,9 +39,9 @@ class MatcherTests: XCTestCase {
         typealias TestCase = (elements: [PatternElement], input: String, expectedResult: MatchResult<Int>)
         
         let keyword = Keyword("ok")
-        let variable = GenericVariable<String, DummyInterpreter>("name", shortest: true, interpreted: false)
-        let variableLongest = GenericVariable<String, DummyInterpreter>("name", shortest: false, interpreted: false)
-        let variable2 = GenericVariable<String, DummyInterpreter>("last", shortest: true, interpreted: false)
+        let variable = GenericVariable<String, DummyInterpreter>("name", options: .notInterpreted)
+        let variableLongest = GenericVariable<String, DummyInterpreter>("name", options: [.notInterpreted, .exhaustiveMatch])
+        let variable2 = GenericVariable<String, DummyInterpreter>("last", options: .notInterpreted)
         
         let testCases : [TestCase] = [
             ([keyword], "invalid", .noMatch),
@@ -75,7 +75,7 @@ class MatcherTests: XCTestCase {
             ([keyword, variableLongest, keyword], "okx", .possibleMatch),
             ([keyword, variableLongest, keyword], "oko", .possibleMatch),
 
-//FIXME: Don't know why. Need to evaluate
+//FIXME: Don't know why. Need to investigate
 //            ([keyword, variableLongest, keyword], "okok", .exactMatch(length: 4, output: 1, variables: ["name": ""])),
 //            ([keyword, variableLongest, keyword], "okxok", .exactMatch(length: 5, output: 1, variables: ["name": "x"])),
             
@@ -104,7 +104,7 @@ class MatcherTests: XCTestCase {
     }
     
     func test_whenMatchingBackwards_thenExpectingAppropriateResults() {
-        let matcher = Pattern<Int, TypedInterpreter>([Variable<Int>("lhs"), Keyword("-"), Variable<Int>("rhs")], isBackward: true) { variables,_ ,_ in
+        let matcher = Pattern<Int, TypedInterpreter>([Variable<Int>("lhs"), Keyword("-"), Variable<Int>("rhs")], options: .backwardMatch) { variables,_ ,_ in
             guard let lhs = variables["lhs"] as? Int, let rhs = variables["rhs"] as? Int else { return nil }
             return lhs - rhs
         }

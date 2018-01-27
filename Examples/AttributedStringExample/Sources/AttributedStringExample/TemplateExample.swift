@@ -1,11 +1,12 @@
 import Foundation
 import AppKit
-import Eval
+@_exported import Eval
+@_exported import class Eval.Pattern
 
 class AttributedStringTemplateInterpreter: TemplateInterpreter<NSAttributedString> {
     typealias EvaluatedType = NSAttributedString
     
-    override func evaluate(_ expression: String, context: InterpreterContext = InterpreterContext()) -> NSAttributedString {
+    override func evaluate(_ expression: String, context: Context = Context()) -> NSAttributedString {
         return evaluate(expression, context: context, reducer: (initialValue: NSAttributedString(), reduceValue: { existing, next in
             return existing.appending(next)
         }, reduceCharacter: { existing, next in
@@ -14,13 +15,13 @@ class AttributedStringTemplateInterpreter: TemplateInterpreter<NSAttributedStrin
     }
 }
 
-public class AttributedStringInterpreter: EvaluatorWithContext {
+public class AttributedStringInterpreter: EvaluatorWithLocalContext {
     public typealias EvaluatedType = NSAttributedString
     
     let interpreter : AttributedStringTemplateInterpreter
     
     init() {
-        let context = InterpreterContext()
+        let context = Context()
         
         let center = NSMutableParagraphStyle()
         center.alignment = .center
@@ -36,12 +37,12 @@ public class AttributedStringInterpreter: EvaluatorWithContext {
         return interpreter.evaluate(expression)
     }
     
-    public func evaluate(_ expression: String, context: InterpreterContext) -> AttributedStringInterpreter.EvaluatedType {
+    public func evaluate(_ expression: String, context: Context) -> AttributedStringInterpreter.EvaluatedType {
         return interpreter.evaluate(expression, context: context)
     }
     
-    static func attributeMatcher(name: String, attributes: [NSAttributedStringKey: Any]) -> Matcher<NSAttributedString, TemplateInterpreter<NSAttributedString>> {
-        return Matcher([OpenKeyword("<\(name)>"), GenericVariable<String, AttributedStringTemplateInterpreter>("body", interpreted: false), CloseKeyword("</\(name)>")]) { variables, _, _ in
+    static func attributeMatcher(name: String, attributes: [NSAttributedStringKey: Any]) -> Pattern<NSAttributedString, TemplateInterpreter<NSAttributedString>> {
+        return Pattern([OpenKeyword("<\(name)>"), GenericVariable<String, AttributedStringTemplateInterpreter>("body", options: .notInterpreted), CloseKeyword("</\(name)>")]) { variables, _, _ in
             guard let body = variables["body"] as? String else { return nil }
             return NSAttributedString(string: body, attributes: attributes)
         }

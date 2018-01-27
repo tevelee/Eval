@@ -135,7 +135,7 @@ public class TemplateVariable: GenericVariable<String, StringTemplateInterpreter
     /// - parameter options: Options that modify the behaviour of the variable matching, and the output that the framework provides
     /// Whether the processed variable sould be trimmed (removing whitespaces from both sides). Defaults to `true`
     public init(_ name: String, options: VariableOptions = []) {
-        super.init(name, options: .notInterpreted) { value, interpreter in
+        super.init(name, options: options.union(.notInterpreted)) { value, interpreter in
             guard let stringValue = value as? String else { return "" }
             return options.interpreted ? interpreter.evaluate(stringValue) : stringValue
         }

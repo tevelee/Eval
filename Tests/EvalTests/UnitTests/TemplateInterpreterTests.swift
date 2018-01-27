@@ -1,5 +1,6 @@
 import XCTest
 @testable import Eval
+import class Eval.Pattern
 
 class StringTemplateInterpreterTests: XCTestCase {
     

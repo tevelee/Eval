@@ -44,7 +44,7 @@ Typically, parentheses and higher precedence operators should go earlier in the 
 
 ## Use Any for generics: `Variable<Any>`
 
-If you are not sure about the allowed input type of your expressions, or you just want to defer that decision until your match is ran and your hit the block in the matcher, feel free to use `Variable<Any>("name")` in your patterns.
+If you are not sure about the allowed input type of your expressions, or you just want to defer that decision until your match is ran and your hit the block in the pattern, feel free to use `Variable<Any>("name")` in your patterns.
 
 It makes life a lot easier, than definig functions for each type.
 
@@ -62,7 +62,7 @@ Embedding is a common issue with interpreters and compilers. In order to provide
 
 If you use template interpreters, they need a typed interpreter to hold. Both interpreters have `context` variables, so if you are not being careful enough, it can cause headaches. 
 
-Since `InterpreterContext` is a class, its reference can be passed around and used in multiple places. 
+Since `Context` is a class, its reference can be passed around and used in multiple places. 
 
 The reason that the variables are encapsulated in a context is that context is a class, while variables are mutable `var` struct properties on that object. With this construction the context reference can be passed around to multiple interpreter instances, but keeps the copy-on-write (🐮) behaviour of the modification.
 

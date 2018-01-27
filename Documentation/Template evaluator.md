@@ -9,7 +9,7 @@ The way to create template interpreters is the following:
 ```swift
 let template = StringTemplateInterpreter(statements: [ifStatement, printStatement], 
 								   interpreter: interpreter, 
-								   context: InterpreterContext(variables: ["example": 1]))
+								   context: Context(variables: ["example": 1]))
 ```
 
 First, you'll need the statements that you aim to recognise.
@@ -33,7 +33,7 @@ Most of the time though, you are going to need to handle placeholders, varying n
 Let's check out the following, really straightforward pattern:
 
 ```swift
-Matcher(Keyword("{{") + Variable<Any>("body") + Keyword("}}")) { variables, interpreter, _ in
+Pattern(Keyword("{{") + Variable<Any>("body") + Keyword("}}")) { variables, interpreter, _ in
     guard let body = variables["body"] else { return nil }
     return interpreter.typedInterpreter.print(body)
 }
@@ -54,7 +54,7 @@ Variables also have optional properties, such as `interpreted`, `shortest`, or `
 Let's find out why! A general addition operator (which looks like this `Variable<Double>("lhs") + Keyword("+") + Variable<Double>("rhs")`) would recognise the pattern `12 + 34`, but it also matches to `12 + 3`. What's what shortest means, the shortest match, in this case, is `12 + 3`, which - semantically - is an incorrect match. 
 But don't worry, the framework already knows about this, so it sets the right value for your variables, even in the last place!
 * `acceptsNilValue` informs the framework if `nil` should be accepted by the pattern. For example, `1 + '5'` with the previous example (`Double + Double`) would not match. But, if the `acceptsNilValue` is defined, then the block would trigger, with `{'lhs': 1, 'rhs': nil}`, so you can decide by your own logic what to do in this case.
-* Finally, the `map` block can be used to further transform the value of your `Variable` before calling the block on the `Matcher`. Since map is a trailing closure, it's quite easy to add. For example, `Variable<Int>("example") { Double($0) }` would recognise only `Int` values, but would transform them to `Double` instances when providing them in the `variables` dictionary. This map can also return `nil` values but depends on your logic if you want to accept them or not. Side note: the previous map generates a `Variable<Double>` kind of variable instance.
+* Finally, the `map` block can be used to further transform the value of your `Variable` before calling the block on the `Pattern`. Since map is a trailing closure, it's quite easy to add. For example, `Variable<Int>("example") { Double($0) }` would recognise only `Int` values, but would transform them to `Double` instances when providing them in the `variables` dictionary. This map can also return `nil` values but depends on your logic if you want to accept them or not. Side note: the previous map generates a `Variable<Double>` kind of variable instance.
 
 ### Specialised elements
 
@@ -64,7 +64,7 @@ By default, `Variable` instances use typed interpreters to evaluate their value.
 
 
 ```swift
-Matcher(Keyword("{%") + Keyword("if") + Variable<Bool>("condition") + Keyword("%}") + TemplateVariable("body") + Keyword("{% endif %}")) { variables, interpreter, _ in
+Pattern(Keyword("{%") + Keyword("if") + Variable<Bool>("condition") + Keyword("%}") + TemplateVariable("body") + Keyword("{% endif %}")) { variables, interpreter, _ in
     guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
     if condition {
         return body
@@ -97,7 +97,7 @@ This, of course, needs to be solved, but it's not that easy as it first looks! S
 The previous `if` statement, now with an `else` block should - correctly - look like this:
 
 ```swift
-Matcher(OpenKeyword("{% "if") + Variable<Bool>("condition") + Keyword("%}") + TemplateVariable("body") + Keyword("{% else %}") + TemplateVariable("else") + CloseKeyword("{% endif %}")) { variables, interpreter, _ in
+Pattern(OpenKeyword("{% "if") + Variable<Bool>("condition") + Keyword("%}") + TemplateVariable("body") + Keyword("{% else %}") + TemplateVariable("else") + CloseKeyword("{% endif %}")) { variables, interpreter, _ in
     guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
     if condition {
         return body
@@ -112,7 +112,7 @@ By using the `OpenKeyword` and `CloseKeyword` types, these become connected, so 
 Similarly, this works for the `print` statement from an earlier example:
 
 ```swift
-Matcher(OpenKeyword("{{") + Variable<Any>("body") + CloseKeyword("}}")) { variables, interpreter, _ in
+Pattern(OpenKeyword("{{") + Variable<Any>("body") + CloseKeyword("}}")) { variables, interpreter, _ in
     guard let body = variables["body"] else { return nil }
     return interpreter.typedInterpreter.print(body)
 }
@@ -133,7 +133,7 @@ The result of the evaluation - in case of templates - is always a `String`. In t
 You can also pass contextual values, which - for now - equal to variables.
 
 ```swift
-template.evaluate("{{ 1 + var }}", context: InterpreterContext(variables: ["var": 2]))
+template.evaluate("{{ 1 + var }}", context: Context(variables: ["var": 2]))
 ```
 
 The reason that the variables are encapsulated in a context is that context is a class, while variables are mutable `var` struct properties on that object. With this construction the context reference can be passed around to multiple interpreter instances, but keeps the copy-on-write (🐮) behaviour of the modification.

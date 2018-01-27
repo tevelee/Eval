@@ -1,8 +1,9 @@
 import Foundation
 import AppKit
-import Eval
+@_exported import Eval
+@_exported import class Eval.Pattern
 
-public class ColorParser: EvaluatorWithContext {
+public class ColorParser: EvaluatorWithLocalContext {
     let interpreter: TypedInterpreter
     
     init() {
@@ -34,7 +35,7 @@ public class ColorParser: EvaluatorWithContext {
         return interpreter.evaluate(expression)
     }
     
-    public func evaluate(_ expression: String, context: InterpreterContext) -> Any? {
+    public func evaluate(_ expression: String, context: Context) -> Any? {
         return interpreter.evaluate(expression, context: context)
     }
 }

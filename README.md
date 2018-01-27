@@ -96,7 +96,7 @@ For the expressions to work, you'll need to create an interpreter instance, prov
 ```swift
 let interpreter = TypedInterpreter(dataTypes: [number, string, boolean, array, date],
                                    functions: [multipication, addition, ternary],
-                                   context: InterpreterContext(variables: ["x": 2.0]))
+                                   context: Context(variables: ["x": 2.0]))
 ```
 
 And call it with a string expression, as follows.
@@ -170,7 +170,7 @@ Looks like, we're all set. Let's evaluate our expression!
 let interpreter = TypedInterpreter(dataTypes: [number, boolean],
                                    functions: [multipication, addition, notEquals, ternary])
                                    
-let result : Double = interpreter.evaluate("x != 0 ? 5 * x : pi + 1", context: InterpreterContext(variables: ["x": 3.0]))
+let result : Double = interpreter.evaluate("x != 0 ? 5 * x : pi + 1", context: Context(variables: ["x": 3.0]))
 XCTAssertEqual(result, 15.0) //Pass!
 ```
 

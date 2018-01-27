@@ -271,9 +271,10 @@ public class Function<T> : FunctionProtocol {
 
     /// In case there is only one pattern, this initialiser is the preferred one to use
     /// - parameter elements: Contains the pattern that needs to be recognised
+    /// - parameter options: Options that modify the pattern matching algorithm
     /// - parameter matcher: Ending closure that transforms and processes the recognised value
-    public init(_ elements: [PatternElement], matcher: @escaping MatcherBlock<T, TypedInterpreter>) {
-        self.patterns = [Pattern(elements, matcher: matcher)]
+    public init(_ elements: [PatternElement], options: PatternOptions = [], matcher: @escaping MatcherBlock<T, TypedInterpreter>) {
+        self.patterns = [Pattern(elements, options: options, matcher: matcher)]
     }
 
     /// The matching of the input expression of a given `Function` happens in this method. It only accepts matches from the matcher, that are exact matches.

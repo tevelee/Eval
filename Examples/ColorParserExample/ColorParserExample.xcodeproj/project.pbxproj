@@ -9,11 +9,11 @@
 /* Begin PBXAggregateTarget section */
 		"ColorParserExample::ColorParserExamplePackageTests::ProductTarget" /* ColorParserExamplePackageTests */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = OBJ_75 /* Build configuration list for PBXAggregateTarget "ColorParserExamplePackageTests" */;
+			buildConfigurationList = OBJ_77 /* Build configuration list for PBXAggregateTarget "ColorParserExamplePackageTests" */;
 			buildPhases = (
 			);
 			dependencies = (
-				OBJ_78 /* PBXTargetDependency */,
+				OBJ_80 /* PBXTargetDependency */,
 			);
 			name = ColorParserExamplePackageTests;
 			productName = ColorParserExamplePackageTests;
@@ -21,45 +21,46 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		OBJ_34 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
-		OBJ_40 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* Package.swift */; };
-		OBJ_46 /* ColorParserExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* ColorParserExampleTests.swift */; };
-		OBJ_48 /* ColorParserExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "ColorParserExample::ColorParserExample::Product" /* ColorParserExample.framework */; };
-		OBJ_49 /* Eval.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Eval::Eval::Product" /* Eval.framework */; };
-		OBJ_58 /* ColorParserExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* ColorParserExample.swift */; };
-		OBJ_60 /* Eval.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Eval::Eval::Product" /* Eval.framework */; };
-		OBJ_66 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* Common.swift */; };
-		OBJ_67 /* Elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* Elements.swift */; };
-		OBJ_68 /* TemplateInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* TemplateInterpreter.swift */; };
-		OBJ_69 /* TypedInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* TypedInterpreter.swift */; };
-		OBJ_70 /* MatchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* MatchResult.swift */; };
-		OBJ_71 /* Matcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* Matcher.swift */; };
-		OBJ_72 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* Utils.swift */; };
+		OBJ_35 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
+		OBJ_41 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* Package.swift */; };
+		OBJ_47 /* ColorParserExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* ColorParserExampleTests.swift */; };
+		OBJ_49 /* ColorParserExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "ColorParserExample::ColorParserExample::Product" /* ColorParserExample.framework */; };
+		OBJ_50 /* Eval.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Eval::Eval::Product" /* Eval.framework */; };
+		OBJ_59 /* ColorParserExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* ColorParserExample.swift */; };
+		OBJ_61 /* Eval.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Eval::Eval::Product" /* Eval.framework */; };
+		OBJ_67 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* Common.swift */; };
+		OBJ_68 /* Elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* Elements.swift */; };
+		OBJ_69 /* TemplateInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* TemplateInterpreter.swift */; };
+		OBJ_70 /* TypedInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* TypedInterpreter.swift */; };
+		OBJ_71 /* MatchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* MatchResult.swift */; };
+		OBJ_72 /* Matcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* Matcher.swift */; };
+		OBJ_73 /* Pattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* Pattern.swift */; };
+		OBJ_74 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* Utils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3AA519DF2016A627008F3CE6 /* PBXContainerItemProxy */ = {
+		3AA9E303201D63BA00D59C68 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "Eval::Eval";
 			remoteInfo = Eval;
 		};
-		3AA519E02016A627008F3CE6 /* PBXContainerItemProxy */ = {
+		3AA9E304201D63BA00D59C68 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "ColorParserExample::ColorParserExample";
 			remoteInfo = ColorParserExample;
 		};
-		3AA519E12016A627008F3CE6 /* PBXContainerItemProxy */ = {
+		3AA9E305201D63BA00D59C68 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "Eval::Eval";
 			remoteInfo = Eval;
 		};
-		3AA519E22016A628008F3CE6 /* PBXContainerItemProxy */ = {
+		3AA9E306201D63BB00D59C68 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
@@ -79,31 +80,32 @@
 		OBJ_19 /* TypedInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedInterpreter.swift; sourceTree = "<group>"; };
 		OBJ_21 /* MatchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchResult.swift; sourceTree = "<group>"; };
 		OBJ_22 /* Matcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matcher.swift; sourceTree = "<group>"; };
-		OBJ_23 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		OBJ_24 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = "/Users/laszloteveli/Documents/Interpreter/Examples/ColorParserExample/.build/checkouts/Interpreter-5597044658201779578/Package.swift"; sourceTree = "<group>"; };
+		OBJ_23 /* Pattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pattern.swift; sourceTree = "<group>"; };
+		OBJ_24 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		OBJ_25 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = "/Users/laszloteveli/Documents/Interpreter/Examples/ColorParserExample/.build/checkouts/Interpreter-5597044658201779578/Package.swift"; sourceTree = "<group>"; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		OBJ_9 /* ColorParserExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorParserExample.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		OBJ_47 /* Frameworks */ = {
+		OBJ_48 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_48 /* ColorParserExample.framework in Frameworks */,
-				OBJ_49 /* Eval.framework in Frameworks */,
+				OBJ_49 /* ColorParserExample.framework in Frameworks */,
+				OBJ_50 /* Eval.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_59 /* Frameworks */ = {
+		OBJ_60 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_60 /* Eval.framework in Frameworks */,
+				OBJ_61 /* Eval.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_73 /* Frameworks */ = {
+		OBJ_75 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
@@ -142,7 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_15 /* Eval */,
-				OBJ_24 /* Package.swift */,
+				OBJ_25 /* Package.swift */,
 			);
 			name = "Eval 1.2.0";
 			sourceTree = SOURCE_ROOT;
@@ -165,12 +167,13 @@
 			children = (
 				OBJ_21 /* MatchResult.swift */,
 				OBJ_22 /* Matcher.swift */,
-				OBJ_23 /* Utils.swift */,
+				OBJ_23 /* Pattern.swift */,
+				OBJ_24 /* Utils.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		OBJ_25 /* Products */ = {
+		OBJ_26 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				"ColorParserExample::ColorParserExampleTests::Product" /* ColorParserExampleTests.xctest */,
@@ -187,7 +190,7 @@
 				OBJ_7 /* Sources */,
 				OBJ_10 /* Tests */,
 				OBJ_13 /* Dependencies */,
-				OBJ_25 /* Products */,
+				OBJ_26 /* Products */,
 			);
 			name = "";
 			sourceTree = "<group>";
@@ -214,15 +217,15 @@
 /* Begin PBXNativeTarget section */
 		"ColorParserExample::ColorParserExample" /* ColorParserExample */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_54 /* Build configuration list for PBXNativeTarget "ColorParserExample" */;
+			buildConfigurationList = OBJ_55 /* Build configuration list for PBXNativeTarget "ColorParserExample" */;
 			buildPhases = (
-				OBJ_57 /* Sources */,
-				OBJ_59 /* Frameworks */,
+				OBJ_58 /* Sources */,
+				OBJ_60 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				OBJ_61 /* PBXTargetDependency */,
+				OBJ_62 /* PBXTargetDependency */,
 			);
 			name = ColorParserExample;
 			productName = ColorParserExample;
@@ -231,16 +234,16 @@
 		};
 		"ColorParserExample::ColorParserExampleTests" /* ColorParserExampleTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_42 /* Build configuration list for PBXNativeTarget "ColorParserExampleTests" */;
+			buildConfigurationList = OBJ_43 /* Build configuration list for PBXNativeTarget "ColorParserExampleTests" */;
 			buildPhases = (
-				OBJ_45 /* Sources */,
-				OBJ_47 /* Frameworks */,
+				OBJ_46 /* Sources */,
+				OBJ_48 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				OBJ_50 /* PBXTargetDependency */,
-				OBJ_52 /* PBXTargetDependency */,
+				OBJ_51 /* PBXTargetDependency */,
+				OBJ_53 /* PBXTargetDependency */,
 			);
 			name = ColorParserExampleTests;
 			productName = ColorParserExampleTests;
@@ -249,9 +252,9 @@
 		};
 		"ColorParserExample::SwiftPMPackageDescription" /* ColorParserExamplePackageDescription */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_30 /* Build configuration list for PBXNativeTarget "ColorParserExamplePackageDescription" */;
+			buildConfigurationList = OBJ_31 /* Build configuration list for PBXNativeTarget "ColorParserExamplePackageDescription" */;
 			buildPhases = (
-				OBJ_33 /* Sources */,
+				OBJ_34 /* Sources */,
 			);
 			buildRules = (
 			);
@@ -263,10 +266,10 @@
 		};
 		"Eval::Eval" /* Eval */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_62 /* Build configuration list for PBXNativeTarget "Eval" */;
+			buildConfigurationList = OBJ_63 /* Build configuration list for PBXNativeTarget "Eval" */;
 			buildPhases = (
-				OBJ_65 /* Sources */,
-				OBJ_73 /* Frameworks */,
+				OBJ_66 /* Sources */,
+				OBJ_75 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -279,9 +282,9 @@
 		};
 		"Eval::SwiftPMPackageDescription" /* EvalPackageDescription */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_36 /* Build configuration list for PBXNativeTarget "EvalPackageDescription" */;
+			buildConfigurationList = OBJ_37 /* Build configuration list for PBXNativeTarget "EvalPackageDescription" */;
 			buildPhases = (
-				OBJ_39 /* Sources */,
+				OBJ_40 /* Sources */,
 			);
 			buildRules = (
 			);
@@ -307,7 +310,7 @@
 				en,
 			);
 			mainGroup = OBJ_5 /*  */;
-			productRefGroup = OBJ_25 /* Products */;
+			productRefGroup = OBJ_26 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -322,74 +325,75 @@
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		OBJ_33 /* Sources */ = {
+		OBJ_34 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_34 /* Package.swift in Sources */,
+				OBJ_35 /* Package.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_39 /* Sources */ = {
+		OBJ_40 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_40 /* Package.swift in Sources */,
+				OBJ_41 /* Package.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_45 /* Sources */ = {
+		OBJ_46 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_46 /* ColorParserExampleTests.swift in Sources */,
+				OBJ_47 /* ColorParserExampleTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_57 /* Sources */ = {
+		OBJ_58 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_58 /* ColorParserExample.swift in Sources */,
+				OBJ_59 /* ColorParserExample.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_65 /* Sources */ = {
+		OBJ_66 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_66 /* Common.swift in Sources */,
-				OBJ_67 /* Elements.swift in Sources */,
-				OBJ_68 /* TemplateInterpreter.swift in Sources */,
-				OBJ_69 /* TypedInterpreter.swift in Sources */,
-				OBJ_70 /* MatchResult.swift in Sources */,
-				OBJ_71 /* Matcher.swift in Sources */,
-				OBJ_72 /* Utils.swift in Sources */,
+				OBJ_67 /* Common.swift in Sources */,
+				OBJ_68 /* Elements.swift in Sources */,
+				OBJ_69 /* TemplateInterpreter.swift in Sources */,
+				OBJ_70 /* TypedInterpreter.swift in Sources */,
+				OBJ_71 /* MatchResult.swift in Sources */,
+				OBJ_72 /* Matcher.swift in Sources */,
+				OBJ_73 /* Pattern.swift in Sources */,
+				OBJ_74 /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		OBJ_50 /* PBXTargetDependency */ = {
+		OBJ_51 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "ColorParserExample::ColorParserExample" /* ColorParserExample */;
-			targetProxy = 3AA519E02016A627008F3CE6 /* PBXContainerItemProxy */;
+			targetProxy = 3AA9E304201D63BA00D59C68 /* PBXContainerItemProxy */;
 		};
-		OBJ_52 /* PBXTargetDependency */ = {
+		OBJ_53 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Eval::Eval" /* Eval */;
-			targetProxy = 3AA519E12016A627008F3CE6 /* PBXContainerItemProxy */;
+			targetProxy = 3AA9E305201D63BA00D59C68 /* PBXContainerItemProxy */;
 		};
-		OBJ_61 /* PBXTargetDependency */ = {
+		OBJ_62 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Eval::Eval" /* Eval */;
-			targetProxy = 3AA519DF2016A627008F3CE6 /* PBXContainerItemProxy */;
+			targetProxy = 3AA9E303201D63BA00D59C68 /* PBXContainerItemProxy */;
 		};
-		OBJ_78 /* PBXTargetDependency */ = {
+		OBJ_80 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "ColorParserExample::ColorParserExampleTests" /* ColorParserExampleTests */;
-			targetProxy = 3AA519E22016A628008F3CE6 /* PBXContainerItemProxy */;
+			targetProxy = 3AA9E306201D63BB00D59C68 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -416,7 +420,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_31 /* Debug */ = {
+		OBJ_32 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LD = /usr/bin/true;
@@ -425,7 +429,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_32 /* Release */ = {
+		OBJ_33 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LD = /usr/bin/true;
@@ -434,7 +438,7 @@
 			};
 			name = Release;
 		};
-		OBJ_37 /* Debug */ = {
+		OBJ_38 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LD = /usr/bin/true;
@@ -443,7 +447,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_38 /* Release */ = {
+		OBJ_39 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LD = /usr/bin/true;
@@ -472,7 +476,7 @@
 			};
 			name = Release;
 		};
-		OBJ_43 /* Debug */ = {
+		OBJ_44 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
@@ -490,7 +494,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_44 /* Release */ = {
+		OBJ_45 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
@@ -508,7 +512,7 @@
 			};
 			name = Release;
 		};
-		OBJ_55 /* Debug */ = {
+		OBJ_56 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -530,7 +534,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_56 /* Release */ = {
+		OBJ_57 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -552,7 +556,7 @@
 			};
 			name = Release;
 		};
-		OBJ_63 /* Debug */ = {
+		OBJ_64 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -574,7 +578,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_64 /* Release */ = {
+		OBJ_65 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -596,13 +600,13 @@
 			};
 			name = Release;
 		};
-		OBJ_76 /* Debug */ = {
+		OBJ_78 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Debug;
 		};
-		OBJ_77 /* Release */ = {
+		OBJ_79 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
@@ -620,56 +624,56 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_30 /* Build configuration list for PBXNativeTarget "ColorParserExamplePackageDescription" */ = {
+		OBJ_31 /* Build configuration list for PBXNativeTarget "ColorParserExamplePackageDescription" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_31 /* Debug */,
-				OBJ_32 /* Release */,
+				OBJ_32 /* Debug */,
+				OBJ_33 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_36 /* Build configuration list for PBXNativeTarget "EvalPackageDescription" */ = {
+		OBJ_37 /* Build configuration list for PBXNativeTarget "EvalPackageDescription" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_37 /* Debug */,
-				OBJ_38 /* Release */,
+				OBJ_38 /* Debug */,
+				OBJ_39 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_42 /* Build configuration list for PBXNativeTarget "ColorParserExampleTests" */ = {
+		OBJ_43 /* Build configuration list for PBXNativeTarget "ColorParserExampleTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_43 /* Debug */,
-				OBJ_44 /* Release */,
+				OBJ_44 /* Debug */,
+				OBJ_45 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_54 /* Build configuration list for PBXNativeTarget "ColorParserExample" */ = {
+		OBJ_55 /* Build configuration list for PBXNativeTarget "ColorParserExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_55 /* Debug */,
-				OBJ_56 /* Release */,
+				OBJ_56 /* Debug */,
+				OBJ_57 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_62 /* Build configuration list for PBXNativeTarget "Eval" */ = {
+		OBJ_63 /* Build configuration list for PBXNativeTarget "Eval" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_63 /* Debug */,
-				OBJ_64 /* Release */,
+				OBJ_64 /* Debug */,
+				OBJ_65 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_75 /* Build configuration list for PBXAggregateTarget "ColorParserExamplePackageTests" */ = {
+		OBJ_77 /* Build configuration list for PBXAggregateTarget "ColorParserExamplePackageTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_76 /* Debug */,
-				OBJ_77 /* Release */,
+				OBJ_78 /* Debug */,
+				OBJ_79 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

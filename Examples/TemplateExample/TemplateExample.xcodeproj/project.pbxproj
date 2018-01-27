@@ -9,11 +9,11 @@
 /* Begin PBXAggregateTarget section */
 		"TemplateExample::TemplateExamplePackageTests::ProductTarget" /* TemplateExamplePackageTests */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = OBJ_77 /* Build configuration list for PBXAggregateTarget "TemplateExamplePackageTests" */;
+			buildConfigurationList = OBJ_79 /* Build configuration list for PBXAggregateTarget "TemplateExamplePackageTests" */;
 			buildPhases = (
 			);
 			dependencies = (
-				OBJ_80 /* PBXTargetDependency */,
+				OBJ_82 /* PBXTargetDependency */,
 			);
 			name = TemplateExamplePackageTests;
 			productName = TemplateExamplePackageTests;
@@ -21,48 +21,49 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		3AA519C520155259008F3CE6 /* template.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3AA519C420155259008F3CE6 /* template.txt */; };
-		3AA519C7201552B7008F3CE6 /* import.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3AA519C6201552B7008F3CE6 /* import.txt */; };
-		OBJ_35 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
-		OBJ_41 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* Package.swift */; };
-		OBJ_47 /* TemplateExampleComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* TemplateExampleComponentTests.swift */; };
-		OBJ_48 /* TemplateExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* TemplateExampleTests.swift */; };
-		OBJ_50 /* TemplateExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "TemplateExample::TemplateExample::Product" /* TemplateExample.framework */; };
-		OBJ_51 /* Eval.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Eval::Eval::Product" /* Eval.framework */; };
-		OBJ_60 /* TemplateExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* TemplateExample.swift */; };
-		OBJ_62 /* Eval.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Eval::Eval::Product" /* Eval.framework */; };
-		OBJ_68 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* Common.swift */; };
-		OBJ_69 /* Elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* Elements.swift */; };
-		OBJ_70 /* TemplateInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* TemplateInterpreter.swift */; };
-		OBJ_71 /* TypedInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* TypedInterpreter.swift */; };
-		OBJ_72 /* MatchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* MatchResult.swift */; };
-		OBJ_73 /* Matcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* Matcher.swift */; };
-		OBJ_74 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* Utils.swift */; };
+		3AA9E2FD201D336100D59C68 /* import.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3AA9E2F7201D330C00D59C68 /* import.txt */; };
+		3AA9E2FE201D336400D59C68 /* template.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3AA9E2F8201D330C00D59C68 /* template.txt */; };
+		OBJ_36 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
+		OBJ_42 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* Package.swift */; };
+		OBJ_48 /* TemplateExampleComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* TemplateExampleComponentTests.swift */; };
+		OBJ_49 /* TemplateExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* TemplateExampleTests.swift */; };
+		OBJ_51 /* TemplateExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "TemplateExample::TemplateExample::Product" /* TemplateExample.framework */; };
+		OBJ_52 /* Eval.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Eval::Eval::Product" /* Eval.framework */; };
+		OBJ_61 /* TemplateExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* TemplateExample.swift */; };
+		OBJ_63 /* Eval.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Eval::Eval::Product" /* Eval.framework */; };
+		OBJ_69 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* Common.swift */; };
+		OBJ_70 /* Elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* Elements.swift */; };
+		OBJ_71 /* TemplateInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* TemplateInterpreter.swift */; };
+		OBJ_72 /* TypedInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* TypedInterpreter.swift */; };
+		OBJ_73 /* MatchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* MatchResult.swift */; };
+		OBJ_74 /* Matcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* Matcher.swift */; };
+		OBJ_75 /* Pattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* Pattern.swift */; };
+		OBJ_76 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* Utils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3AA519BF201551FC008F3CE6 /* PBXContainerItemProxy */ = {
+		3AA9E2F3201D301B00D59C68 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "Eval::Eval";
 			remoteInfo = Eval;
 		};
-		3AA519C0201551FC008F3CE6 /* PBXContainerItemProxy */ = {
+		3AA9E2F4201D301B00D59C68 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "TemplateExample::TemplateExample";
 			remoteInfo = TemplateExample;
 		};
-		3AA519C1201551FC008F3CE6 /* PBXContainerItemProxy */ = {
+		3AA9E2F5201D301B00D59C68 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = "Eval::Eval";
 			remoteInfo = Eval;
 		};
-		3AA519C2201551FC008F3CE6 /* PBXContainerItemProxy */ = {
+		3AA9E2F6201D301B00D59C68 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
@@ -72,8 +73,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3AA519C420155259008F3CE6 /* template.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = template.txt; sourceTree = "<group>"; };
-		3AA519C6201552B7008F3CE6 /* import.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = import.txt; sourceTree = "<group>"; };
+		3AA9E2F7201D330C00D59C68 /* import.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = import.txt; sourceTree = "<group>"; };
+		3AA9E2F8201D330C00D59C68 /* template.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = template.txt; sourceTree = "<group>"; };
 		"Eval::Eval::Product" /* Eval.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Eval.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_12 /* TemplateExampleComponentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateExampleComponentTests.swift; sourceTree = "<group>"; };
 		OBJ_13 /* TemplateExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateExampleTests.swift; sourceTree = "<group>"; };
@@ -83,8 +84,9 @@
 		OBJ_20 /* TypedInterpreter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedInterpreter.swift; sourceTree = "<group>"; };
 		OBJ_22 /* MatchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchResult.swift; sourceTree = "<group>"; };
 		OBJ_23 /* Matcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Matcher.swift; sourceTree = "<group>"; };
-		OBJ_24 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		OBJ_25 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = "/Users/laszloteveli/Documents/Interpreter/Examples/TemplateExample/.build/checkouts/Interpreter-5597044658201779578/Package.swift"; sourceTree = "<group>"; };
+		OBJ_24 /* Pattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pattern.swift; sourceTree = "<group>"; };
+		OBJ_25 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		OBJ_26 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = "/Users/laszloteveli/Documents/Interpreter/Examples/TemplateExample/.build/checkouts/Interpreter-5597044658201779578/Package.swift"; sourceTree = "<group>"; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		OBJ_9 /* TemplateExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateExample.swift; sourceTree = "<group>"; };
 		"TemplateExample::TemplateExample::Product" /* TemplateExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TemplateExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -92,24 +94,24 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		OBJ_49 /* Frameworks */ = {
+		OBJ_50 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_50 /* TemplateExample.framework in Frameworks */,
-				OBJ_51 /* Eval.framework in Frameworks */,
+				OBJ_51 /* TemplateExample.framework in Frameworks */,
+				OBJ_52 /* Eval.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_61 /* Frameworks */ = {
+		OBJ_62 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_62 /* Eval.framework in Frameworks */,
+				OBJ_63 /* Eval.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_75 /* Frameworks */ = {
+		OBJ_77 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
@@ -130,10 +132,10 @@
 		OBJ_11 /* TemplateExampleTests */ = {
 			isa = PBXGroup;
 			children = (
-				3AA519C420155259008F3CE6 /* template.txt */,
+				3AA9E2F7201D330C00D59C68 /* import.txt */,
+				3AA9E2F8201D330C00D59C68 /* template.txt */,
 				OBJ_12 /* TemplateExampleComponentTests.swift */,
 				OBJ_13 /* TemplateExampleTests.swift */,
-				3AA519C6201552B7008F3CE6 /* import.txt */,
 			);
 			name = TemplateExampleTests;
 			path = Tests/TemplateExampleTests;
@@ -151,7 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_16 /* Eval */,
-				OBJ_25 /* Package.swift */,
+				OBJ_26 /* Package.swift */,
 			);
 			name = "Eval 1.2.0";
 			sourceTree = SOURCE_ROOT;
@@ -174,12 +176,13 @@
 			children = (
 				OBJ_22 /* MatchResult.swift */,
 				OBJ_23 /* Matcher.swift */,
-				OBJ_24 /* Utils.swift */,
+				OBJ_24 /* Pattern.swift */,
+				OBJ_25 /* Utils.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		OBJ_26 /* Products */ = {
+		OBJ_27 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				"TemplateExample::TemplateExampleTests::Product" /* TemplateExampleTests.xctest */,
@@ -196,7 +199,7 @@
 				OBJ_7 /* Sources */,
 				OBJ_10 /* Tests */,
 				OBJ_14 /* Dependencies */,
-				OBJ_26 /* Products */,
+				OBJ_27 /* Products */,
 			);
 			name = "";
 			sourceTree = "<group>";
@@ -223,10 +226,10 @@
 /* Begin PBXNativeTarget section */
 		"Eval::Eval" /* Eval */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_64 /* Build configuration list for PBXNativeTarget "Eval" */;
+			buildConfigurationList = OBJ_65 /* Build configuration list for PBXNativeTarget "Eval" */;
 			buildPhases = (
-				OBJ_67 /* Sources */,
-				OBJ_75 /* Frameworks */,
+				OBJ_68 /* Sources */,
+				OBJ_77 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -239,9 +242,9 @@
 		};
 		"Eval::SwiftPMPackageDescription" /* EvalPackageDescription */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_37 /* Build configuration list for PBXNativeTarget "EvalPackageDescription" */;
+			buildConfigurationList = OBJ_38 /* Build configuration list for PBXNativeTarget "EvalPackageDescription" */;
 			buildPhases = (
-				OBJ_40 /* Sources */,
+				OBJ_41 /* Sources */,
 			);
 			buildRules = (
 			);
@@ -253,9 +256,9 @@
 		};
 		"TemplateExample::SwiftPMPackageDescription" /* TemplateExamplePackageDescription */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_31 /* Build configuration list for PBXNativeTarget "TemplateExamplePackageDescription" */;
+			buildConfigurationList = OBJ_32 /* Build configuration list for PBXNativeTarget "TemplateExamplePackageDescription" */;
 			buildPhases = (
-				OBJ_34 /* Sources */,
+				OBJ_35 /* Sources */,
 			);
 			buildRules = (
 			);
@@ -267,15 +270,15 @@
 		};
 		"TemplateExample::TemplateExample" /* TemplateExample */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_56 /* Build configuration list for PBXNativeTarget "TemplateExample" */;
+			buildConfigurationList = OBJ_57 /* Build configuration list for PBXNativeTarget "TemplateExample" */;
 			buildPhases = (
-				OBJ_59 /* Sources */,
-				OBJ_61 /* Frameworks */,
+				OBJ_60 /* Sources */,
+				OBJ_62 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				OBJ_63 /* PBXTargetDependency */,
+				OBJ_64 /* PBXTargetDependency */,
 			);
 			name = TemplateExample;
 			productName = TemplateExample;
@@ -284,17 +287,17 @@
 		};
 		"TemplateExample::TemplateExampleTests" /* TemplateExampleTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_43 /* Build configuration list for PBXNativeTarget "TemplateExampleTests" */;
+			buildConfigurationList = OBJ_44 /* Build configuration list for PBXNativeTarget "TemplateExampleTests" */;
 			buildPhases = (
-				OBJ_46 /* Sources */,
-				OBJ_49 /* Frameworks */,
-				3AA519C32015524A008F3CE6 /* Resources */,
+				OBJ_47 /* Sources */,
+				OBJ_50 /* Frameworks */,
+				3AA9E2FC201D335C00D59C68 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				OBJ_52 /* PBXTargetDependency */,
-				OBJ_54 /* PBXTargetDependency */,
+				OBJ_53 /* PBXTargetDependency */,
+				OBJ_55 /* PBXTargetDependency */,
 			);
 			name = TemplateExampleTests;
 			productName = TemplateExampleTests;
@@ -317,7 +320,7 @@
 				en,
 			);
 			mainGroup = OBJ_5 /*  */;
-			productRefGroup = OBJ_26 /* Products */;
+			productRefGroup = OBJ_27 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -332,87 +335,88 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		3AA519C32015524A008F3CE6 /* Resources */ = {
+		3AA9E2FC201D335C00D59C68 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3AA519C520155259008F3CE6 /* template.txt in Resources */,
-				3AA519C7201552B7008F3CE6 /* import.txt in Resources */,
+				3AA9E2FD201D336100D59C68 /* import.txt in Resources */,
+				3AA9E2FE201D336400D59C68 /* template.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		OBJ_34 /* Sources */ = {
+		OBJ_35 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_35 /* Package.swift in Sources */,
+				OBJ_36 /* Package.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_40 /* Sources */ = {
+		OBJ_41 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_41 /* Package.swift in Sources */,
+				OBJ_42 /* Package.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_46 /* Sources */ = {
+		OBJ_47 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_47 /* TemplateExampleComponentTests.swift in Sources */,
-				OBJ_48 /* TemplateExampleTests.swift in Sources */,
+				OBJ_48 /* TemplateExampleComponentTests.swift in Sources */,
+				OBJ_49 /* TemplateExampleTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_59 /* Sources */ = {
+		OBJ_60 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_60 /* TemplateExample.swift in Sources */,
+				OBJ_61 /* TemplateExample.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		OBJ_67 /* Sources */ = {
+		OBJ_68 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_68 /* Common.swift in Sources */,
-				OBJ_69 /* Elements.swift in Sources */,
-				OBJ_70 /* TemplateInterpreter.swift in Sources */,
-				OBJ_71 /* TypedInterpreter.swift in Sources */,
-				OBJ_72 /* MatchResult.swift in Sources */,
-				OBJ_73 /* Matcher.swift in Sources */,
-				OBJ_74 /* Utils.swift in Sources */,
+				OBJ_69 /* Common.swift in Sources */,
+				OBJ_70 /* Elements.swift in Sources */,
+				OBJ_71 /* TemplateInterpreter.swift in Sources */,
+				OBJ_72 /* TypedInterpreter.swift in Sources */,
+				OBJ_73 /* MatchResult.swift in Sources */,
+				OBJ_74 /* Matcher.swift in Sources */,
+				OBJ_75 /* Pattern.swift in Sources */,
+				OBJ_76 /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		OBJ_52 /* PBXTargetDependency */ = {
+		OBJ_53 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "TemplateExample::TemplateExample" /* TemplateExample */;
-			targetProxy = 3AA519C0201551FC008F3CE6 /* PBXContainerItemProxy */;
+			targetProxy = 3AA9E2F4201D301B00D59C68 /* PBXContainerItemProxy */;
 		};
-		OBJ_54 /* PBXTargetDependency */ = {
+		OBJ_55 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Eval::Eval" /* Eval */;
-			targetProxy = 3AA519C1201551FC008F3CE6 /* PBXContainerItemProxy */;
+			targetProxy = 3AA9E2F5201D301B00D59C68 /* PBXContainerItemProxy */;
 		};
-		OBJ_63 /* PBXTargetDependency */ = {
+		OBJ_64 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Eval::Eval" /* Eval */;
-			targetProxy = 3AA519BF201551FC008F3CE6 /* PBXContainerItemProxy */;
+			targetProxy = 3AA9E2F3201D301B00D59C68 /* PBXContainerItemProxy */;
 		};
-		OBJ_80 /* PBXTargetDependency */ = {
+		OBJ_82 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "TemplateExample::TemplateExampleTests" /* TemplateExampleTests */;
-			targetProxy = 3AA519C2201551FC008F3CE6 /* PBXContainerItemProxy */;
+			targetProxy = 3AA9E2F6201D301B00D59C68 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -439,7 +443,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_32 /* Debug */ = {
+		OBJ_33 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LD = /usr/bin/true;
@@ -448,7 +452,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_33 /* Release */ = {
+		OBJ_34 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LD = /usr/bin/true;
@@ -457,7 +461,7 @@
 			};
 			name = Release;
 		};
-		OBJ_38 /* Debug */ = {
+		OBJ_39 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				LD = /usr/bin/true;
@@ -465,15 +469,6 @@
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
-		};
-		OBJ_39 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				LD = /usr/bin/true;
-				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
-				SWIFT_VERSION = 4.0;
-			};
-			name = Release;
 		};
 		OBJ_4 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -495,7 +490,16 @@
 			};
 			name = Release;
 		};
-		OBJ_44 /* Debug */ = {
+		OBJ_40 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LD = /usr/bin/true;
+				OTHER_SWIFT_FLAGS = "-swift-version 4 -I /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/pm/4 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		OBJ_45 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
@@ -513,7 +517,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_45 /* Release */ = {
+		OBJ_46 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
@@ -531,7 +535,7 @@
 			};
 			name = Release;
 		};
-		OBJ_57 /* Debug */ = {
+		OBJ_58 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -553,7 +557,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_58 /* Release */ = {
+		OBJ_59 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -575,7 +579,7 @@
 			};
 			name = Release;
 		};
-		OBJ_65 /* Debug */ = {
+		OBJ_66 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -597,7 +601,7 @@
 			};
 			name = Debug;
 		};
-		OBJ_66 /* Release */ = {
+		OBJ_67 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
@@ -619,13 +623,13 @@
 			};
 			name = Release;
 		};
-		OBJ_78 /* Debug */ = {
+		OBJ_80 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Debug;
 		};
-		OBJ_79 /* Release */ = {
+		OBJ_81 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
@@ -643,56 +647,56 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_31 /* Build configuration list for PBXNativeTarget "TemplateExamplePackageDescription" */ = {
+		OBJ_32 /* Build configuration list for PBXNativeTarget "TemplateExamplePackageDescription" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_32 /* Debug */,
-				OBJ_33 /* Release */,
+				OBJ_33 /* Debug */,
+				OBJ_34 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_37 /* Build configuration list for PBXNativeTarget "EvalPackageDescription" */ = {
+		OBJ_38 /* Build configuration list for PBXNativeTarget "EvalPackageDescription" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_38 /* Debug */,
-				OBJ_39 /* Release */,
+				OBJ_39 /* Debug */,
+				OBJ_40 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_43 /* Build configuration list for PBXNativeTarget "TemplateExampleTests" */ = {
+		OBJ_44 /* Build configuration list for PBXNativeTarget "TemplateExampleTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_44 /* Debug */,
-				OBJ_45 /* Release */,
+				OBJ_45 /* Debug */,
+				OBJ_46 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_56 /* Build configuration list for PBXNativeTarget "TemplateExample" */ = {
+		OBJ_57 /* Build configuration list for PBXNativeTarget "TemplateExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_57 /* Debug */,
-				OBJ_58 /* Release */,
+				OBJ_58 /* Debug */,
+				OBJ_59 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_64 /* Build configuration list for PBXNativeTarget "Eval" */ = {
+		OBJ_65 /* Build configuration list for PBXNativeTarget "Eval" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_65 /* Debug */,
-				OBJ_66 /* Release */,
+				OBJ_66 /* Debug */,
+				OBJ_67 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		OBJ_77 /* Build configuration list for PBXAggregateTarget "TemplateExamplePackageTests" */ = {
+		OBJ_79 /* Build configuration list for PBXAggregateTarget "TemplateExamplePackageTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				OBJ_78 /* Debug */,
-				OBJ_79 /* Release */,
+				OBJ_80 /* Debug */,
+				OBJ_81 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

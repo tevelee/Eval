@@ -10,7 +10,7 @@ The way to create typed interpreters is the following:
 ```swift
 let interpreter = TypedInterpreter(dataTypes: [number, string, boolean, array, date],
                                    functions: [concat, add, multiply, substract, divide],
-                                   context: InterpreterContext(variables: ["example": 1]))
+                                   context: Context(variables: ["example": 1]))
 ```
 
 First, you'll need the data types you are going to work with. These are a smaller subsets of the build in Swift data types, you can map them to existing types (Swift types of the ones of your own)
@@ -130,7 +130,7 @@ Variables also have optional properties, such as `interpreted`, `shortest`, or `
 Let's find out why! A general addition operator (which looks like this `Variable<Double>("lhs") + Keyword("+") + Variable<Double>("rhs")`) would recognise the pattern `12 + 34`, but it also matches to `12 + 3`. What's what shortest means, the shortest match, in this case, is `12 + 3`, which - semantically - is an incorrect match. 
 But don't worry, the framework already knows about this, so it sets the right value for your variables, even in the last place!
 * `acceptsNilValue` informs the framework if `nil` should be accepted by the pattern. For example, `1 + '5'` with the previous example (`Double + Double`) would not match. But, if the `acceptsNilValue` is defined, then the block would trigger, with `{'lhs': 1, 'rhs': nil}`, so you can decide by your own logic what to do in this case.
-* Finally, the `map` block can be used to further transform the value of your `Variable` before calling the block on the `Matcher`. Since map is a trailing closure, it's quite easy to add. For example, `Variable<Int>("example") { Double($0) }` would recognise only `Int` values, but would transform them to `Double` instances when providing them in the `variables` dictionary. This map can also return `nil` values but depends on your logic if you want to accept them or not. Side note: the previous map generates a `Variable<Double>` kind of variable instance.
+* Finally, the `map` block can be used to further transform the value of your `Variable` before calling the block on the `Pattern`. Since map is a trailing closure, it's quite easy to add. For example, `Variable<Int>("example") { Double($0) }` would recognise only `Int` values, but would transform them to `Double` instances when providing them in the `variables` dictionary. This map can also return `nil` values but depends on your logic if you want to accept them or not. Side note: the previous map generates a `Variable<Double>` kind of variable instance.
 
 ### Specialised elements
 
@@ -154,19 +154,19 @@ Function(OpenVariable<String>("lhs") + Keyword("+") + CloseVariable<String>("rhs
 By using the `OpenKeyword` and `CloseKeyword` types, these become connected, so embedding parentheses in an expression shouldn't be a problem. 
 After this match is defined, they can be embedded in each other as deeply as needed.
 
-#### Multiple Matchers in one Function
+#### Multiple Patterns in one Function
 
-This is a rarely used pattern, but `Function`s consists of an array of `Matcher` elements. 
-Usually, one `Function` does only one operation. Unless this is true, grouping multiple `Matcher`s into one `Function` allows semantical grouping of opeartors. 
+This is a rarely used pattern, but `Function`s consists of an array of `Pattern` elements. 
+Usually, one `Function` does only one operation. Unless this is true, grouping multiple `Pattern`s into one `Function` allows semantical grouping of opeartors. 
 
-For example a Boolean negation can be expressed in multiple ways: `not(true)` or `!true`. In this case, semantically both expressions do the same thing, therefore it might be a good practice to use one `Function` with two `Matcher`s for this. 
+For example a Boolean negation can be expressed in multiple ways: `not(true)` or `!true`. In this case, semantically both expressions do the same thing, therefore it might be a good practice to use one `Function` with two `Pattern`s for this. 
 
 ## Context
 
 You can also pass contextual values, which - for now - equal to variables.
 
 ```swift
-expression.evaluate("1 + var", context: InterpreterContext(variables: ["var": 2]))
+expression.evaluate("1 + var", context: Context(variables: ["var": 2]))
 ```
 
 The reason that the variables are encapsulated in a context is that context is a class, while variables are mutable `var` struct properties on that object. With this construction the context reference can be passed around to multiple interpreter instances, but keeps the copy-on-write (🐮) behaviour of the modification.

@@ -156,7 +156,7 @@ class Matcher {
     }
 
     /// Removes and returns the next character from the input
-    /// - parameter remainder: The remainder of the niput
+    /// - parameter remainder: The remainder of the input
     /// - parameter length: The number of characters to be removed
     /// - returns: The last few characers from the input, defined by the `length` parameter
     fileprivate func drop(_ remainder: String, length: Int) -> String {
@@ -165,6 +165,21 @@ class Matcher {
         } else {
             return String(remainder.dropFirst(length))
         }
+    }
+
+    /// Removes whitespaces characters from the upcoming consecutive input characters
+    /// - parameter remainder: The input to remove whitespaces from
+    fileprivate func skipWhitespaces(_ remainder: inout String) {
+        let whitespaces = CharacterSet.whitespacesAndNewlines
+        repeat {
+            if options.contains(.backwardMatch), let last = remainder.last?.unicodeScalars.first, whitespaces.contains(last) {
+                _ = remainder.removeLast()
+            } else if let first = remainder.first?.unicodeScalars.first, whitespaces.contains(first) {
+                _ = remainder.removeFirst()
+            } else {
+                break
+            }
+        } while true
     }
 
     // swiftlint:disable cyclomatic_complexity
@@ -215,7 +230,7 @@ class Matcher {
                     nextElement(&elementIndex)
                     remainder = drop(remainder, length: length)
                     if notFinished(elementIndex) {
-                        remainder = remainder.trim()
+                        skipWhitespaces(&remainder)
                     }
                 }
             }
@@ -234,7 +249,7 @@ class Matcher {
     /// - parameter in: The input
     /// - parameter at: The starting position to check from
     /// - returns: Whether the element conditions apply and the position is before the last one
-    fileprivate func isEmbedded(element: PatternElement, in string: String, at currentPosition: Int) -> Bool {
+    func isEmbedded(element: PatternElement, in string: String, at currentPosition: Int) -> Bool {
         if let closingTag = element as? Keyword, closingTag.type == .closingStatement, let closingPosition = positionOfClosingTag(in: string),
             currentPosition < closingPosition {
             return true
@@ -246,7 +261,7 @@ class Matcher {
     /// - parameter in: The input
     /// - parameter from: The starting position of the checking range
     /// - returns: `nil` if the `CloseKeyword` pair cannot be found. The position otherwise
-    fileprivate func positionOfClosingTag(in string: String, from start: Int = 0) -> Int? {
+    func positionOfClosingTag(in string: String, from start: Int = 0) -> Int? {
         if let opening = elements.first(where: { ($0 as? Keyword)?.type == .openingStatement }) as? Keyword,
             let closing = elements.first(where: { ($0 as? Keyword)?.type == .closingStatement }) as? Keyword {
             var counter = 0

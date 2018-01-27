@@ -1,7 +1,8 @@
 import Foundation
-import Eval
+@_exported import Eval
+@_exported import class Eval.Pattern
 
-public class TemplateLanguage: EvaluatorWithContext {
+public class TemplateLanguage: EvaluatorWithLocalContext {
     public typealias EvaluatedType = String
     
     let language: StringTemplateInterpreter
@@ -9,15 +10,15 @@ public class TemplateLanguage: EvaluatorWithContext {
     
     init(dataTypes: [DataTypeProtocol] = StandardLibrary.dataTypes,
          functions: [FunctionProtocol] = StandardLibrary.functions,
-         templates: [Matcher<String, TemplateInterpreter<String>>] = TemplateLibrary.templates,
-         context: InterpreterContext = InterpreterContext()) {
+         templates: [Pattern<String, TemplateInterpreter<String>>] = TemplateLibrary.templates,
+         context: Context = Context()) {
         TemplateLanguage.preprocess(context)
         
         let interpreter = TypedInterpreter(dataTypes: dataTypes, functions: functions, context: context)
         let language = StringTemplateInterpreter(statements: templates, interpreter: interpreter, context: context)
         self.language = language
         
-        let block = Matcher<String, TemplateInterpreter<String>>([OpenKeyword("{{{"), TemplateVariable("name", interpreted: false), CloseKeyword("}}}")]) { variables, interpreter, _ in
+        let block = Pattern<String, TemplateInterpreter<String>>([OpenKeyword("{{{"), TemplateVariable("name", options: .notInterpreted), CloseKeyword("}}}")]) { variables, interpreter, _ in
             guard let name = variables["name"] as? String else { return nil }
             return language.context.blocks[name]?.last?(language.context)
         }
@@ -29,7 +30,7 @@ public class TemplateLanguage: EvaluatorWithContext {
         return macroReplacer.evaluate(result)
     }
     
-    public func evaluate(_ expression: String, context: InterpreterContext) -> String {
+    public func evaluate(_ expression: String, context: Context) -> String {
         TemplateLanguage.preprocess(context)
         let result = language.evaluate(expression, context: context)
         return macroReplacer.evaluate(result)
@@ -40,12 +41,12 @@ public class TemplateLanguage: EvaluatorWithContext {
         return evaluate(expression)
     }
     
-    public func evaluate(template from: URL, context: InterpreterContext) throws -> String {
+    public func evaluate(template from: URL, context: Context) throws -> String {
         let expression = try String(contentsOf: from)
         return evaluate(expression, context: context)
     }
     
-    static func preprocess(_ context: InterpreterContext) {
+    static func preprocess(_ context: Context) {
         context.variables = context.variables.mapValues { value in
             convert(value) {
                 if let integerValue = $0 as? Int {
@@ -68,33 +69,33 @@ public class TemplateLanguage: EvaluatorWithContext {
 }
 
 typealias Macro = (arguments: [String], body: String)
-typealias BlockRenderer = (_ context: InterpreterContext) -> String
+typealias BlockRenderer = (_ context: Context) -> String
 
-extension InterpreterContext {
+extension Context {
     static let macrosKey = "__macros"
     var macros: [String: Macro] {
         get {
-            return variables[InterpreterContext.macrosKey] as? [String : Macro] ?? [:]
+            return variables[Context.macrosKey] as? [String : Macro] ?? [:]
         }
         set {
-            variables[InterpreterContext.macrosKey] = macros.merging(newValue) { _, new in new }
+            variables[Context.macrosKey] = macros.merging(newValue) { _, new in new }
         }
     }
     
     static let blocksKey = "__blocks"
     var blocks: [String: [BlockRenderer]] {
         get {
-            return variables[InterpreterContext.blocksKey] as? [String : [BlockRenderer]] ?? [:]
+            return variables[Context.blocksKey] as? [String : [BlockRenderer]] ?? [:]
         }
         set {
-            variables[InterpreterContext.blocksKey] = blocks.merging(newValue) { _, new in new }
+            variables[Context.blocksKey] = blocks.merging(newValue) { _, new in new }
         }
     }
 }
 
 public class TemplateLibrary {
     public static var standardLibrary = StandardLibrary()
-    public static var templates: [Matcher<String, TemplateInterpreter<String>>] {
+    public static var templates: [Pattern<String, TemplateInterpreter<String>>] {
         return [
             ifElseStatement,
             ifStatement,
@@ -112,8 +113,8 @@ public class TemplateLibrary {
     public static var tagPrefix = "{%"
     public static var tagSuffix = "%}"
     
-    public static var ifStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", trimmed: false), CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, interpreter, _ in
+    public static var ifStatement: Pattern<String, TemplateInterpreter<String>> {
+        return Pattern([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", options: .notTrimmed), CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, interpreter, _ in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body
@@ -122,8 +123,8 @@ public class TemplateLibrary {
         }
     }
     
-    public static var ifElseStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", trimmed: false), Keyword(tagPrefix + " else " + tagSuffix), TemplateVariable("else", trimmed: false), CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, interpreter, _ in
+    public static var ifElseStatement: Pattern<String, TemplateInterpreter<String>> {
+        return Pattern([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", options: .notTrimmed), Keyword(tagPrefix + " else " + tagSuffix), TemplateVariable("else", options: .notTrimmed), CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, interpreter, _ in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body
@@ -133,15 +134,15 @@ public class TemplateLibrary {
         }
     }
     
-    public static var printStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([OpenKeyword("{{"), Variable<Any>("body"), CloseKeyword("}}")]) { variables, interpreter, _ in
+    public static var printStatement: Pattern<String, TemplateInterpreter<String>> {
+        return Pattern([OpenKeyword("{{"), Variable<Any>("body"), CloseKeyword("}}")]) { variables, interpreter, _ in
             guard let body = variables["body"] else { return nil }
             return interpreter.typedInterpreter.print(body)
         }
     }
     
-    public static var forInStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([OpenKeyword(tagPrefix + " for"), GenericVariable<String, StringTemplateInterpreter>("variable", interpreted: false), Keyword("in"), Variable<[Any]>("items"), Keyword(tagSuffix), GenericVariable<String, StringTemplateInterpreter>("body", interpreted: false, trimmed: false), CloseKeyword(tagPrefix + " endfor " + tagSuffix)]) { variables, interpreter, context in
+    public static var forInStatement: Pattern<String, TemplateInterpreter<String>> {
+        return Pattern([OpenKeyword(tagPrefix + " for"), GenericVariable<String, StringTemplateInterpreter>("variable", options: .notInterpreted), Keyword("in"), Variable<[Any]>("items"), Keyword(tagSuffix), GenericVariable<String, StringTemplateInterpreter>("body", options: [.notInterpreted, .notTrimmed]), CloseKeyword(tagPrefix + " endfor " + tagSuffix)]) { variables, interpreter, context in
             guard let variableName = variables["variable"] as? String,
                 let items = variables["items"] as? [Any],
                 let body = variables["body"] as? String else { return nil }
@@ -149,8 +150,8 @@ public class TemplateLibrary {
             context.push()
             context.variables["__loop"] = items
             for (index, item) in items.enumerated() {
-                context.variables["__first"] = index == 0
-                context.variables["__last"] = index == items.count - 1
+                context.variables["__first"] = index == items.startIndex
+                context.variables["__last"] = index == items.index(before: items.endIndex)
                 context.variables[variableName] = item
                 result += interpreter.evaluate(body, context: context)
             }
@@ -159,24 +160,24 @@ public class TemplateLibrary {
         }
     }
     
-    public static var setStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([OpenKeyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword(tagSuffix), TemplateVariable("body"), CloseKeyword(tagPrefix + " endset " + tagSuffix)]) { variables, interpreter, context in
+    public static var setStatement: Pattern<String, TemplateInterpreter<String>> {
+        return Pattern([OpenKeyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword(tagSuffix), TemplateVariable("body"), CloseKeyword(tagPrefix + " endset " + tagSuffix)]) { variables, interpreter, context in
             guard let variableName = variables["variable"] as? String, let body = variables["body"] as? String else { return nil }
             interpreter.context.variables[variableName] = body
             return ""
         }
     }
     
-    public static var setUsingBodyStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([OpenKeyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword("="), Variable<Any>("value"), CloseKeyword(tagSuffix)]) { variables, interpreter, context in
+    public static var setUsingBodyStatement: Pattern<String, TemplateInterpreter<String>> {
+        return Pattern([OpenKeyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword("="), Variable<Any>("value"), CloseKeyword(tagSuffix)]) { variables, interpreter, context in
             guard let variableName = variables["variable"] as? String else { return nil }
             interpreter.context.variables[variableName] = variables["value"]
             return ""
         }
     }
     
-    public static var blockStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([OpenKeyword(tagPrefix + " block"), GenericVariable<String, StringTemplateInterpreter>("name", interpreted: false), Keyword(tagSuffix), GenericVariable<String, StringTemplateInterpreter>("body", interpreted: false), CloseKeyword(tagPrefix + " endblock " + tagSuffix)]) { variables, interpreter, localContext in
+    public static var blockStatement: Pattern<String, TemplateInterpreter<String>> {
+        return Pattern([OpenKeyword(tagPrefix + " block"), GenericVariable<String, StringTemplateInterpreter>("name", options: .notInterpreted), Keyword(tagSuffix), GenericVariable<String, StringTemplateInterpreter>("body", options: .notInterpreted), CloseKeyword(tagPrefix + " endblock " + tagSuffix)]) { variables, interpreter, localContext in
             guard let name = variables["name"] as? String, let body = variables["body"] as? String else { return nil }
             let block : BlockRenderer = { context in
                 context.push()
@@ -199,11 +200,11 @@ public class TemplateLibrary {
         }
     }
     
-    public static var macroStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([OpenKeyword(tagPrefix + " macro"), GenericVariable<String, StringTemplateInterpreter>("name", interpreted: false), Keyword("("), GenericVariable<[String], StringTemplateInterpreter>("arguments", interpreted: false) { arguments, _ in
+    public static var macroStatement: Pattern<String, TemplateInterpreter<String>> {
+        return Pattern([OpenKeyword(tagPrefix + " macro"), GenericVariable<String, StringTemplateInterpreter>("name", options: .notInterpreted), Keyword("("), GenericVariable<[String], StringTemplateInterpreter>("arguments", options: .notInterpreted) { arguments, _ in
                 guard let arguments = arguments as? String else { return nil }
                 return arguments.split(separator: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            }, Keyword(")"), Keyword(tagSuffix), GenericVariable<String, StringTemplateInterpreter>("body", interpreted: false), CloseKeyword(tagPrefix + " endmacro " + tagSuffix)]) { variables, interpreter, context in
+            }, Keyword(")"), Keyword(tagSuffix), GenericVariable<String, StringTemplateInterpreter>("body", options: .notInterpreted), CloseKeyword(tagPrefix + " endmacro " + tagSuffix)]) { variables, interpreter, context in
             guard let name = variables["name"] as? String,
                 let arguments = variables["arguments"] as? [String],
                 let body = variables["body"] as? String else { return nil }
@@ -212,14 +213,14 @@ public class TemplateLibrary {
         }
     }
     
-    public static var commentStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([OpenKeyword("{#"), GenericVariable<String, StringTemplateInterpreter>("body", interpreted: false), CloseKeyword("#}")]) { _, _, _ in "" }
+    public static var commentStatement: Pattern<String, TemplateInterpreter<String>> {
+        return Pattern([OpenKeyword("{#"), GenericVariable<String, StringTemplateInterpreter>("body", options: .notInterpreted), CloseKeyword("#}")]) { _, _, _ in "" }
     }
     
-    public static var importStatement: Matcher<String, TemplateInterpreter<String>> {
-        return Matcher([OpenKeyword(tagPrefix + " import"), Variable<String>("file"), CloseKeyword(tagSuffix)]) { variables, interpreter, context in
+    public static var importStatement: Pattern<String, TemplateInterpreter<String>> {
+        return Pattern([OpenKeyword(tagPrefix + " import"), Variable<String>("file"), CloseKeyword(tagSuffix)]) { variables, interpreter, context in
             guard let file = variables["file"] as? String,
-                let url = Bundle.allBundles.first?.url(forResource: file, withExtension: nil),
+                let url = Bundle.allBundles.flatMap({ $0.url(forResource: file, withExtension: nil) }).first,
                 let expression = try? String(contentsOf: url) else { return nil }
             return interpreter.evaluate(expression, context: context)
         }
@@ -239,88 +240,91 @@ public class StandardLibrary {
     }
     public static var functions: [FunctionProtocol] {
         return [
-           parentheses,
-           macro,
-           blockParent,
-           ternaryOperator,
-           
-           rangeFunction,
-           rangeOfStringFunction,
-           rangeBySteps,
-           
-           loopIsFirst,
-           loopIsLast,
-           loopIsNotFirst,
-           loopIsNotLast,
+            parentheses,
+            macro,
+            blockParent,
+            ternaryOperator,
 
-           startsWithOperator,
-           endsWithOperator,
-           containsOperator,
-           matchesOperator,
-           capitalise,
-           lowercase,
-           uppercase,
-           lowercaseFirst,
-           uppercaseFirst,
-           trim,
-           escape,
+            rangeFunction,
+            rangeOfStringFunction,
+            rangeBySteps,
 
-           stringConcatenationOperator,
+            loopIsFirst,
+            loopIsLast,
+            loopIsNotFirst,
+            loopIsNotLast,
 
-           multiplicationOperator,
-           divisionOperator,
-           additionOperator,
-           substractionOperator,
-           moduloOperator,
-           
-           lessThanOperator,
-           lessThanOrEqualsOperator,
-           moreThanOperator,
-           moreThanOrEqualsOperator,
-           equalsOperator,
-           notEqualsOperator,
+            startsWithOperator,
+            endsWithOperator,
+            containsOperator,
+            matchesOperator,
+            capitalise,
+            lowercase,
+            uppercase,
+            lowercaseFirst,
+            uppercaseFirst,
+            trim,
+            escape,
 
-           inNumericArrayOperator,
-           inStringArrayOperator,
+            stringConcatenationOperator,
 
-           incrementOperator,
-           decrementOperator,
+            multiplicationOperator,
+            divisionOperator,
+            additionOperator,
+            subtractionOperator,
+            moduloOperator,
 
-           negationOperator,
-           notOperator,
-           
-           absoluteValue,
+            lessThanOperator,
+            lessThanOrEqualsOperator,
+            moreThanOperator,
+            moreThanOrEqualsOperator,
+            equalsOperator,
+            notEqualsOperator,
 
-           isEvenOperator,
-           isOddOperator,
+            inNumericArrayOperator,
+            inStringArrayOperator,
 
-           minFunction,
-           maxFunction,
-           sumFunction,
-           sqrtFunction,
-           roundFunction,
-           averageFunction,
-           arraySortFunction,
-           arrayReverseFunction,
-           arrayMinFunction,
-           arrayMaxFunction,
-           arrayFirstFunction,
-           arrayLastFunction,
-           arrayJoinFunction,
-           arraySplitFunction,
-           arrayMergeFunction,
-           arraySumFunction,
-           arrayAverageFunction,
-           arrayCountFunction,
-           dictionaryCountFunction,
+            incrementOperator,
+            decrementOperator,
 
-           arraySubscript,
-           dictionarySubscript,
-           dictionaryKeys,
-           dictionaryValues,
+            negationOperator,
+            notOperator,
 
-           dateFactory,
-           dateFormat,
+            absoluteValue,
+
+            isEvenOperator,
+            isOddOperator,
+
+            minFunction,
+            maxFunction,
+            sumFunction,
+            sqrtFunction,
+            roundFunction,
+            averageFunction,
+            
+            arraySubscript,
+            arrayCountFunction,
+            arraySortFunction,
+            arrayReverseFunction,
+            arrayMinFunction,
+            arrayMaxFunction,
+            arrayFirstFunction,
+            arrayLastFunction,
+            arrayJoinFunction,
+            arraySplitFunction,
+            arrayMergeFunction,
+            arraySumFunction,
+            arrayAverageFunction,
+            
+            dictionarySubscript,
+            dictionaryCountFunction,
+            dictionaryKeys,
+            dictionaryValues,
+
+            dateFactory,
+            dateFormat,
+            
+            stringFactory,
         ]
     }
     
@@ -391,10 +395,10 @@ public class StandardLibrary {
     }
     
     public static var macro: Function<Any> {
-        return Function([Variable<String>("name", interpreted: false) { value, interpreter in
+        return Function([Variable<String>("name", options: .notInterpreted) { value, interpreter in
             guard let value = value as? String else { return nil }
             return interpreter.context.macros.keys.contains(value) ? value : nil
-        }, OpenKeyword("("), Variable<String>("arguments", interpreted: false), CloseKeyword(")")]) { variables, interpreter, context in
+        }, OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, context in
             guard let arguments = variables["arguments"] as? String,
                 let name = variables["name"] as? String,
                 let macro = interpreter.context.macros[name.trimmingCharacters(in: .whitespacesAndNewlines)] else { return nil }
@@ -410,7 +414,7 @@ public class StandardLibrary {
     }
     
     public static var blockParent: Function<Any> {
-        return Function([Keyword("parent"), OpenKeyword("("), Variable<String>("arguments", interpreted: false), CloseKeyword(")")]) { variables, interpreter, context in
+        return Function([Keyword("parent"), OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, context in
             guard let arguments = variables["arguments"] as? String else { return nil }
             var interpretedArguments: [String: Any] = [:]
             for argument in arguments.split(separator: ",") {
@@ -511,7 +515,7 @@ public class StandardLibrary {
         return infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs}
     }
     
-    public static var substractionOperator: Function<Double?> {
+    public static var subtractionOperator: Function<Double?> {
         return infixOperator("-") { (lhs: Double, rhs: Double) in lhs - rhs}
     }
     
@@ -633,15 +637,21 @@ public class StandardLibrary {
     }
     
     public static var arraySplitFunction: Function<[String]> {
-        return objectFunctionWithParameters("join") { (object: String, arguments: [Any]) -> [String]? in
-            guard let separator = arguments.first as? String else { return nil }
+        return Function([Variable<String>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value,_ in
+            guard let value = value as? String, value == "split" else { return nil }
+            return value
+        }, Keyword("("), Variable<String>("separator"), Keyword(")")]) { variables, interpreter, _ in
+            guard let object = variables["lhs"] as? String, variables["rhs"] != nil, let separator = variables["separator"] as? String else { return nil }
             return object.split(separator: Character(separator)).map { String($0) }
         }
     }
     
     public static var arrayMergeFunction: Function<[Any]> {
-        return objectFunctionWithParameters("merge") { (object: [Any], arguments: [Any]) -> [Any]? in
-            guard let other = arguments.first as? [Any] else { return nil }
+        return Function([Variable<[Any]>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value,_ in
+            guard let value = value as? String, value == "merge" else { return nil }
+            return value
+        }, Keyword("("), Variable<[Any]>("other"), Keyword(")")]) { variables, interpreter, _ in
+            guard let object = variables["lhs"] as? [Any], variables["rhs"] != nil, let other = variables["other"] as? [Any] else { return nil }
             return object + other
         }
     }
@@ -705,6 +715,13 @@ public class StandardLibrary {
         }
     }
     
+    public static var stringFactory: Function<String?> {
+        return function("String") { (arguments: [Any]) -> String? in
+            guard let argument = arguments.first as? Double else { return nil }
+            return String(format: "%g", argument)
+        }
+    }
+    
     public static var rangeBySteps: Function<[Double]> {
         return functionWithNamedParameters("range") { (arguments: [String: Any]) -> [Double]? in
             guard let start = arguments["start"] as? Double, let end = arguments["end"] as? Double, let step = arguments["step"] as? Double else { return nil }
@@ -753,14 +770,14 @@ public class StandardLibrary {
     }
 
     public static var arraySubscript: Function<Any?> {
-        return Function([Variable<[Any]>("array"), Keyword("."), Variable<Double>("index", shortest: false)]) { variables, _, _ in
+        return Function([Variable<[Any]>("array"), Keyword("."), Variable<Double>("index")]) { variables, _, _ in
             guard let array = variables["array"] as? [Any], let index = variables["index"] as? Double, index > 0, Int(index) < array.count else { return nil }
             return array[Int(index)]
         }
     }
     
     public static var dictionarySubscript: Function<Any?> {
-        return Function([Variable<[String: Any]>("dictionary"), Keyword("."), Variable<String>("key", shortest: false, interpreted: false)]) { variables, _, _ in
+        return Function([Variable<[String: Any]>("dictionary"), Keyword("."), Variable<String>("key", options: .notInterpreted)]) { variables, _, _ in
             guard let dictionary = variables["dictionary"] as? [String: Any], let key = variables["key"] as? String else { return nil }
             return dictionary[key]
         }
@@ -785,7 +802,7 @@ public class StandardLibrary {
     }
     
     public static var methodCallWithIntResult: Function<Double> {
-        return Function([Variable<Any>("lhs", shortest: true), Keyword("."), Variable<String>("rhs", shortest: false, interpreted: false)]) { (arguments,_,_) -> Double? in
+        return Function([Variable<Any>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted)]) { (arguments,_,_) -> Double? in
             if let lhs = arguments["lhs"] as? NSObjectProtocol,
                 let rhs = arguments["rhs"] as? String,
                 let result = lhs.perform(Selector(rhs)) {
@@ -799,7 +816,7 @@ public class StandardLibrary {
     
     public static func literal<T>(opening: String, closing: String, convert: @escaping (_ input: String, _ interpreter: TypedInterpreter) -> T?) -> Literal<T> {
         return Literal { (input, interpreter) -> T? in
-            guard input.hasPrefix(opening), input.hasSuffix(closing) else { return nil }
+            guard input.hasPrefix(opening), input.hasSuffix(closing), input.count > 1 else { return nil }
             let inputWithoutOpening = String(input.suffix(from: input.index(input.startIndex, offsetBy: opening.count)))
             let inputWithoutSides = String(inputWithoutOpening.prefix(upTo: inputWithoutOpening.index(inputWithoutOpening.endIndex, offsetBy: -closing.count)))
             guard !inputWithoutSides.contains(opening) && !inputWithoutSides.contains(closing) else { return nil }
@@ -810,21 +827,21 @@ public class StandardLibrary {
     //MARK: Operator helpers
     
     public static func infixOperator<A,B,T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T?> {
-        return Function([Variable<A>("lhs", shortest: true), Keyword(symbol), Variable<B>("rhs", shortest: false)]) { arguments,_,_ in
+        return Function([Variable<A>("lhs"), Keyword(symbol), Variable<B>("rhs")], options: .backwardMatch) { arguments,_,_ in
             guard let lhs = arguments["lhs"] as? A, let rhs = arguments["rhs"] as? B else { return nil }
             return body(lhs, rhs)
         }
     }
     
     public static func prefixOperator<A,T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T?> {
-        return Function([Keyword(symbol), Variable<A>("value", shortest: false)]) { arguments,_,_ in
+        return Function([Keyword(symbol), Variable<A>("value")]) { arguments,_,_ in
             guard let value = arguments["value"] as? A else { return nil }
             return body(value)
         }
     }
     
     public static func suffixOperator<A,T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T?> {
-        return Function([Variable<A>("value", shortest: true), Keyword(symbol)]) { arguments,_,_ in
+        return Function([Variable<A>("value"), Keyword(symbol)]) { arguments,_,_ in
             guard let value = arguments["value"] as? A else { return nil }
             return body(value)
         }
@@ -833,7 +850,7 @@ public class StandardLibrary {
     //MARK: Function helpers
     
     public static func function<T>(_ name: String, body: @escaping ([Any]) -> T?) -> Function<T> {
-        return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", shortest: true, interpreted: false), CloseKeyword(")")]) { variables, interpreter, _ in
+        return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, _ in
             guard let arguments = variables["arguments"] as? String else { return nil }
             let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
             return body(interpretedArguments)
@@ -841,7 +858,7 @@ public class StandardLibrary {
     }
     
     public static func functionWithNamedParameters<T>(_ name: String, body: @escaping ([String: Any]) -> T?) -> Function<T> {
-        return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", shortest: true, interpreted: false), CloseKeyword(")")]) { variables, interpreter, _ in
+        return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, _ in
             guard let arguments = variables["arguments"] as? String else { return nil }
             var interpretedArguments: [String: Any] = [:]
             for argument in arguments.split(separator: ",") {
@@ -855,20 +872,20 @@ public class StandardLibrary {
     }
     
     public static func objectFunction<O,T>(_ name: String, body: @escaping (O) -> T?) -> Function<T> {
-        return Function([Variable<O>("lhs", shortest: true), Keyword("."), Variable<String>("rhs", shortest: false, interpreted: false) { value,_ in
+        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value,_ in
             guard let value = value as? String, value == name else { return nil }
             return value
-        }]) { variables, interpreter, _ in
+        }], options: .backwardMatch) { variables, interpreter, _ in
             guard let object = variables["lhs"] as? O, variables["rhs"] != nil else { return nil }
             return body(object)
         }
     }
     
     public static func objectFunctionWithParameters<O,T>(_ name: String, body: @escaping (O, [Any]) -> T?) -> Function<T> {
-        return Function([Variable<O>("lhs", shortest: true), Keyword("."), Variable<String>("rhs", interpreted: false) { value,_ in
+        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value,_ in
             guard let value = value as? String, value == name else { return nil }
             return value
-        }, Keyword("("), Variable<String>("arguments", interpreted: false), Keyword(")")]) { variables, interpreter, _ in
+        }, Keyword("("), Variable<String>("arguments", options: .notInterpreted), Keyword(")")]) { variables, interpreter, _ in
             guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
             let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
             return body(object, interpretedArguments)
@@ -876,10 +893,10 @@ public class StandardLibrary {
     }
     
     public static func objectFunctionWithNamedParameters<O,T>(_ name: String, body: @escaping (O, [String: Any]) -> T?) -> Function<T> {
-        return Function([Variable<O>("lhs", shortest: true), Keyword("."), Variable<String>("rhs", interpreted: false) { value,_ in
+        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value,_ in
             guard let value = value as? String, value == name else { return nil }
             return value
-        }, OpenKeyword("("), Variable<String>("arguments", interpreted: false), CloseKeyword(")")]) { variables, interpreter, _ in
+        }, OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, _ in
             guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
             var interpretedArguments: [String: Any] = [:]
             for argument in arguments.split(separator: ",") {

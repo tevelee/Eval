@@ -26,7 +26,7 @@ class TemplateExampleComponentTests: XCTestCase {
     //MARK: Helpers
     
     func eval(_ template: String, _ variables: [String: Any] = [:]) -> String {
-        let context = InterpreterContext(variables: variables)
+        let context = Context(variables: variables)
         let result = interpreter.evaluate(template, context: context)
         if !context.debugInfo.isEmpty {
             print(context.debugInfo)

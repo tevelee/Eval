@@ -64,6 +64,7 @@ class TemplateExampleTests: XCTestCase {
     
     func testString() {
         XCTAssertEqual(eval("{{ 'hello' }}"), "hello")
+        XCTAssertEqual(eval("{{ String(1) }}"), "1")
     }
     
     func testBoolean() {
@@ -86,10 +87,12 @@ class TemplateExampleTests: XCTestCase {
     
     func testDictionary() {
         XCTAssertEqual(eval("{{ {'a': 1, 'b': 2} }}"), "[a: 1, b: 2]")
+        XCTAssertEqual(eval("{{ {} }}"), "[]")
     }
     
     func testArray() {
         XCTAssertEqual(eval("{{ [1,2,3] }}"), "1,2,3")
+        XCTAssertEqual(eval("{{ [] }}"), "")
     }
     
     //MARK: Functions and operators
@@ -147,7 +150,7 @@ class TemplateExampleTests: XCTestCase {
     
     func testSubstraction() {
         XCTAssertEqual(eval("{{ 5 - 2 }}"), "3")
-//        XCTAssertEqual(eval("{{ 5 - 2 - 3 }}"), "0")
+        XCTAssertEqual(eval("{{ 5 - 2 - 3 }}"), "0")
     }
     
     func testMultiplication() {
@@ -157,7 +160,7 @@ class TemplateExampleTests: XCTestCase {
     
     func testDivision() {
         XCTAssertEqual(eval("{{ 5 / 5 }}"), "1")
-//        XCTAssertEqual(eval("{{ 144 / 12 / 4 }}"), "3")
+        XCTAssertEqual(eval("{{ 144 / 12 / 4 }}"), "3")
     }
     
     func testNumericPrecedence() {
@@ -288,7 +291,7 @@ class TemplateExampleTests: XCTestCase {
     }
     
     func testJoin() {
-        XCTAssertEqual(eval("{{ [1,2,3].join('-') }}"), "1-2-3")
+        XCTAssertEqual(eval("{{ ['1','2','3'].join('-') }}"), "1-2-3")
         XCTAssertEqual(eval("{{ [].join('-') }}"), "")
     }
     
@@ -327,8 +330,8 @@ class TemplateExampleTests: XCTestCase {
     }
     
     func testRound() {
-        XCTAssertEqual(eval("{{ 2.5.round }}"), "3")
-        XCTAssertEqual(eval("{{ 1.2.round }}"), "1")
+        XCTAssertEqual(eval("{{ round(2.5) }}"), "3")
+        XCTAssertEqual(eval("{{ round(1.2) }}"), "1")
     }
     
     func testTrim() {
@@ -360,29 +363,29 @@ class TemplateExampleTests: XCTestCase {
     }
     
     func testUpperCapitalise() {
-        XCTAssertEqual(eval("{{ ('hello there'.capitalise).upperFirst }}"), "Hello There")
+        XCTAssertEqual(eval("{{ 'hello there'.capitalise.upperFirst }}"), "Hello There")
     }
     
     func testLowerCapitalise() {
-        XCTAssertEqual(eval("{{ ('HELLO THERE'.capitalise).lowerFirst }}"), "hello There")
+        XCTAssertEqual(eval("{{ 'HELLO THERE'.capitalise.lowerFirst }}"), "hello There")
     }
     
     //MARK: Template file
     
     func testTemplateFile() {
-        let result = try! interpreter.evaluate(template: Bundle(for: type(of: self)).url(forResource: "template", withExtension: "txt")!, context: InterpreterContext(variables: ["name": "Laszlo"]))
+        let result = try! interpreter.evaluate(template: Bundle(for: type(of: self)).url(forResource: "template", withExtension: "txt")!, context: Context(variables: ["name": "Laszlo"]))
         XCTAssertEqual(result, "Hello Laszlo!")
     }
     
     func testTemplateWithImportFile() {
-        let result = try! interpreter.evaluate(template: Bundle(for: type(of: self)).url(forResource: "import", withExtension: "txt")!, context: InterpreterContext(variables: ["name": "Laszlo"]))
+        let result = try! interpreter.evaluate(template: Bundle(for: type(of: self)).url(forResource: "import", withExtension: "txt")!, context: Context(variables: ["name": "Laszlo"]))
         XCTAssertEqual(result, "Hello Laszlo!\nBye!")
     }
     
     //MARK: Helpers
     
     func eval(_ template: String, _ variables: [String: Any] = [:]) -> String {
-        let context = InterpreterContext(variables: variables)
+        let context = Context(variables: variables)
         let result = interpreter.evaluate(template, context: context)
         if !context.debugInfo.isEmpty {
             print(context.debugInfo)

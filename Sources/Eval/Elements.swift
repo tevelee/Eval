@@ -64,7 +64,7 @@ public class Keyword: PatternElement, Equatable {
     /// - parameter prefix: The input
     /// - parameter options: Options that modify the matching algorithm
     /// - returns: The result of the match operation
-    public func matches(prefix: String, options: PatternOptions) -> MatchResult<Any> {
+    public func matches(prefix: String, options: PatternOptions = []) -> MatchResult<Any> {
         let checker = options.contains(.backwardMatch) ? String.hasSuffix : String.hasPrefix
         if name == prefix || checker(prefix)(name) {
             return .exactMatch(length: name.count, output: name, variables: [:])

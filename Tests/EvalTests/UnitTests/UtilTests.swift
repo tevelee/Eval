@@ -5,12 +5,12 @@ class UtilTests: XCTestCase {
     
     //MARK: plus operator on Elements
     
-    class X : MatchElement, Equatable {
+    class X : PatternElement, Equatable {
         func matches(prefix: String, isBackward: Bool) -> MatchResult<Any> { return .noMatch }
         static func ==(lhs: X, rhs: X) -> Bool { return true }
     }
     
-    class Y : MatchElement, Equatable {
+    class Y : PatternElement, Equatable {
         func matches(prefix: String, isBackward: Bool) -> MatchResult<Any> { return .possibleMatch }
         static func ==(lhs: Y, rhs: Y) -> Bool { return true }
     }

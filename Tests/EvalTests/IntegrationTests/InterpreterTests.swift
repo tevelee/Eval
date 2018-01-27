@@ -48,7 +48,7 @@ class InterpreterTests: XCTestCase {
         
         let interpreter = TypedInterpreter(dataTypes: [number, string, boolean, array, date],
                                              functions: [concat, parenthesis, methodCall, sum, range, sqrtFunction, dateFactory, format, multipicationOperator, plusOperator, inArrayNumber, inArrayString, isOdd, isEven, add, max, min, not, not2, prefix, increment, lessThan, test],
-                                             context: InterpreterContext(variables: ["test": 2.0, "name": "Teve"]))
+                                             context: Context(variables: ["test": 2.0, "name": "Teve"]))
         XCTAssertEqual(interpreter.evaluate("123") as! Double, 123)
         XCTAssertEqual(interpreter.evaluate("1 + 2 + 3") as! Double, 6)
         XCTAssertEqual(interpreter.evaluate("2 + 3 * 4") as! Double, 14)
@@ -91,14 +91,14 @@ class InterpreterTests: XCTestCase {
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))
         
-        let c = InterpreterContext()
+        let c = Context()
         _ = interpreter.evaluate("Date(1009 * 2, sqrt(144), 10 + 3).format('yyyy-MM-dd')", context: c)
         
         c.debugInfo.forEach {
             print("DEBUG STEP: '\($0.value.pattern)', where \($0.value.variables), rendered to \($0.value.output) from input \($0.key)");
         }
         
-        let ifStatement = Matcher([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{%"), Keyword("endif"), Keyword("%}")]) { (variables, interpreter: TemplateInterpreter<String>, _) -> String? in
+        let ifStatement = Pattern([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{%"), Keyword("endif"), Keyword("%}")]) { (variables, interpreter: TemplateInterpreter<String>, _) -> String? in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body
@@ -106,12 +106,12 @@ class InterpreterTests: XCTestCase {
             return nil
         }
 
-        let printStatement = Matcher([Keyword("{{"), Variable<Any>("body"), Keyword("}}")]) { (variables, interpreter: TemplateInterpreter<String>, _) -> String? in
+        let printStatement = Pattern([Keyword("{{"), Variable<Any>("body"), Keyword("}}")]) { (variables, interpreter: TemplateInterpreter<String>, _) -> String? in
             guard let body = variables["body"] else { return nil }
             return interpreter.typedInterpreter.print(body)
         }
 
-        let template = StringTemplateInterpreter(statements: [ifStatement, printStatement], interpreter: interpreter, context: InterpreterContext())
+        let template = StringTemplateInterpreter(statements: [ifStatement, printStatement], interpreter: interpreter, context: Context())
         XCTAssertEqual(template.evaluate("{{ 1 + 2 }}"), "3.0")
         XCTAssertEqual(template.evaluate("{{ 'Hello' + ' ' + 'World' + '!' }}"), "Hello World!")
         XCTAssertEqual(template.evaluate("asd {% if 10 < 21 %}Hello{% endif %} asd"), "asd Hello asd")
@@ -123,7 +123,7 @@ class InterpreterTests: XCTestCase {
         let addition = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
         let interpreter = TypedInterpreter(dataTypes: [numberDataType(), stringDataType()],
                                            functions: [parenthesis, addition],
-                                           context: InterpreterContext())
+                                           context: Context())
         
         XCTAssertEqual(interpreter.evaluate("(1)") as! Double, 1)
         XCTAssertEqual(interpreter.evaluate("(1) + (2)") as! Double, 3)
@@ -243,7 +243,7 @@ class InterpreterTests: XCTestCase {
     
     func methodCallFunction() -> Function<Double> {
         return Function(patterns: [
-            Matcher(Variable<Any>("lhs", shortest: true) + Keyword(".") + Variable<String>("rhs", shortest: false, interpreted: false)) { (arguments,_,_) -> Double? in
+            Pattern(Variable<Any>("lhs", shortest: true) + Keyword(".") + Variable<String>("rhs", shortest: false, interpreted: false)) { (arguments,_,_) -> Double? in
                 if let lhs = arguments["lhs"] as? NSObjectProtocol,
                     let rhs = arguments["rhs"] as? String,
                     let result = lhs.perform(Selector(rhs)) {

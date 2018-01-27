@@ -8,7 +8,7 @@ class TypedInterpreterTests: XCTestCase {
     func test_whenInitialised_thenPropertiesAreSaved() {
         let dataTypes = [DataType(type: String.self, literals: []) { value, _ in value }]
         let functions = [Function([Keyword("a")]) { _,_,_ in "a" } ]
-        let context = InterpreterContext()
+        let context = Context()
         
         let interpreter = TypedInterpreter(dataTypes: dataTypes,
                                            functions: functions,
@@ -28,7 +28,7 @@ class TypedInterpreterTests: XCTestCase {
     func test_whenEvaluates_thenTransformationHappens() {
         let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { value, _ in String(value) }],
                                            functions: [Function([Variable<Int>("lhs"), Keyword("plus"), Variable<Int>("rhs")]) { v,_,_ in (v["lhs"] as! Int) + (v["rhs"] as! Int) } ],
-                                           context: InterpreterContext())
+                                           context: Context())
         
         let result = interpreter.evaluate("1 plus 2")
         
@@ -38,7 +38,7 @@ class TypedInterpreterTests: XCTestCase {
     func test_whenEvaluates_thenUsesGlobalContext() {
         let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { value, _ in String(value) }],
                                            functions: [Function([Variable<Int>("lhs"), Keyword("plus"), Variable<Int>("rhs")]) { v,_,_ in (v["lhs"] as! Int) + (v["rhs"] as! Int) } ],
-                                           context: InterpreterContext(variables: ["a": 2]))
+                                           context: Context(variables: ["a": 2]))
         
         let result = interpreter.evaluate("1 plus a")
         
@@ -50,9 +50,9 @@ class TypedInterpreterTests: XCTestCase {
     func test_whenEvaluatesWithContext_thenUsesLocalContext() {
         let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { value, _ in String(value) }],
                                            functions: [Function([Variable<Int>("lhs"), Keyword("plus"), Variable<Int>("rhs")]) { v,_,_ in (v["lhs"] as! Int) + (v["rhs"] as! Int) } ],
-                                           context: InterpreterContext())
+                                           context: Context())
         
-        let result = interpreter.evaluate("1 plus a", context: InterpreterContext(variables: ["a": 2]))
+        let result = interpreter.evaluate("1 plus a", context: Context(variables: ["a": 2]))
         
         XCTAssertEqual(result as! Int, 3)
     }
@@ -60,9 +60,9 @@ class TypedInterpreterTests: XCTestCase {
     func test_whenEvaluatesWithContext_thenLocalOverridesGlobalContext() {
         let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { value, _ in String(value) }],
                                            functions: [Function([Variable<Int>("lhs"), Keyword("plus"), Variable<Int>("rhs")]) { v,_,_ in (v["lhs"] as! Int) + (v["rhs"] as! Int) } ],
-                                           context: InterpreterContext(variables: ["a": 1]))
+                                           context: Context(variables: ["a": 1]))
         
-        let result = interpreter.evaluate("1 plus a", context: InterpreterContext(variables: ["a": 2]))
+        let result = interpreter.evaluate("1 plus a", context: Context(variables: ["a": 2]))
         
         XCTAssertEqual(result as! Int, 3)
     }
@@ -72,7 +72,7 @@ class TypedInterpreterTests: XCTestCase {
     func test_whenPrintingDataType_thenReturnsItsBlock() {
         let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { value, _ in String(value) }],
                                            functions: [],
-                                           context: InterpreterContext())
+                                           context: Context())
         
         let result = interpreter.print(1)
         
@@ -82,7 +82,7 @@ class TypedInterpreterTests: XCTestCase {
     func test_whenPrintingUnknownDataType_thenReturnsDescription() {
         let interpreter = TypedInterpreter(dataTypes: [DataType(type: Int.self, literals: [Literal { v,_ in Int(v) }]) { value, _ in String(value) }],
                                            functions: [],
-                                           context: InterpreterContext())
+                                           context: Context())
         
         let result = interpreter.print(true)
         

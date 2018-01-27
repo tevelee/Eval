@@ -27,7 +27,7 @@ public class TypedInterpreter: Interpreter, Printer {
     public typealias EvaluatedType = Any?
 
     /// The global context used for every evaluation with this instance
-    public let context: InterpreterContext
+    public let context: Context
 
     /// The interpreter used for evaluating variable values. In case of the `TypedInterpreter`, it's itself
     public lazy var interpreterForEvaluatingVariables: TypedInterpreter = { [unowned self] in self }()
@@ -50,7 +50,7 @@ public class TypedInterpreter: Interpreter, Printer {
     /// - context: Global context that is going to be used with every expression evaluated with the current instance. Defaults to empty context
     public init(dataTypes: [DataTypeProtocol] = [],
                 functions: [FunctionProtocol] = [],
-                context: InterpreterContext = InterpreterContext()) {
+                context: Context = Context()) {
         self.dataTypes = dataTypes
         self.functions = functions
         self.context = context
@@ -60,14 +60,14 @@ public class TypedInterpreter: Interpreter, Printer {
     /// - parameter expression: The input
     /// - returns: The output of the evaluation
     public func evaluate(_ expression: String) -> Any? {
-        return evaluate(expression, context: InterpreterContext())
+        return evaluate(expression, context: Context())
     }
 
     /// The evaluation method, that produces the strongly typed results. In this case, only the context is a result of merging the global context and the one provided in the parameter
     /// - parameter expression: The input
     /// - parameter context: Local context that is going to be used with this expression only
     /// - returns: The output of the evaluation
-    public func evaluate(_ expression: String, context: InterpreterContext) -> Any? {
+    public func evaluate(_ expression: String, context: Context) -> Any? {
         context.merge(with: self.context) { existing, _ in existing}
         let expression = expression.trim()
         
@@ -82,7 +82,7 @@ public class TypedInterpreter: Interpreter, Printer {
     /// - parameter expression: The expression to evaluate
     /// - parameter context: The context to be using when the evaluation happens
     /// - returns: The value - if the expression is interpreted. `nil` otherwise
-    func functionFromCache(for expression: String, using context: InterpreterContext) -> Any? {
+    func functionFromCache(for expression: String, using context: Context) -> Any? {
         guard let cachedFunction = functionCache[expression],
             let value = cachedFunction.convert(input: expression, interpreter: self, context: context) else { return nil }
         return value
@@ -101,7 +101,7 @@ public class TypedInterpreter: Interpreter, Printer {
     /// - parameter expression: The expression to evaluate
     /// - parameter context: The context to be using when the evaluation happens
     /// - returns: The value - if the expression is interpreted. `nil` otherwise
-    func function(for expression: String, using context: InterpreterContext) -> Any? {
+    func function(for expression: String, using context: Context) -> Any? {
         for function in functions.reversed() {
             if let value = function.convert(input: expression, interpreter: self, context: context) {
                 functionCache[expression] = function
@@ -129,7 +129,7 @@ public class TypedInterpreter: Interpreter, Printer {
     /// - parameter expression: The expression to evaluate
     /// - parameter context: The context where the variables are stored
     /// - returns: The value - if the expression is interpreted. `nil` otherwise
-    func variable(for expression: String, using context: InterpreterContext) -> Any? {
+    func variable(for expression: String, using context: Context) -> Any? {
         for variable in context.variables where expression == variable.key {
             return variable.value
         }
@@ -255,25 +255,25 @@ public protocol FunctionProtocol {
     /// - parameter interpreter: An interpreter instance if the content needs any further evaluation
     /// - parameter context: The context - if vaiables need any contextual information
     /// - returns: A valid value of any `DataType` or `nil` if it cannot be processed
-    func convert(input: String, interpreter: TypedInterpreter, context: InterpreterContext) -> Any?
+    func convert(input: String, interpreter: TypedInterpreter, context: Context) -> Any?
 }
 
 /// `Function`s can process values in given `DataType`s, allowing the expressions to be feature-rich
 public class Function<T> : FunctionProtocol {
     /// Although `Function`s typically contain only one pattern, multiple ones can be added, for semantic grouping purposes
-    public let patterns: [Matcher<T, TypedInterpreter>]
+    public let patterns: [Pattern<T, TypedInterpreter>]
 
     /// If multiple patterns are provided use this initialiser. Otherwise, for only one, there is `init(_,matcher:)`
     /// - parameter patterns: The array of patterns to be able to recognise
-    public init(patterns: [Matcher<T, TypedInterpreter>]) {
+    public init(patterns: [Pattern<T, TypedInterpreter>]) {
         self.patterns = patterns
     }
 
     /// In case there is only one pattern, this initialiser is the preferred one to use
     /// - parameter elements: Contains the pattern that needs to be recognised
     /// - parameter matcher: Ending closure that transforms and processes the recognised value
-    public init(_ elements: [MatchElement], matcher: @escaping MatcherBlock<T, TypedInterpreter>) {
-        self.patterns = [Matcher(elements, matcher: matcher)]
+    public init(_ elements: [PatternElement], matcher: @escaping MatcherBlock<T, TypedInterpreter>) {
+        self.patterns = [Pattern(elements, matcher: matcher)]
     }
 
     /// The matching of the input expression of a given `Function` happens in this method. It only accepts matches from the matcher, that are exact matches.
@@ -281,7 +281,7 @@ public class Function<T> : FunctionProtocol {
     /// - parameter interpreter: An interpreter instance if the content needs any further evaluation
     /// - parameter context: The context - if vaiables need any contextual information
     /// - returns: A valid value of any `DataType` or `nil` if it cannot be processed
-    public func convert(input: String, interpreter: TypedInterpreter, context: InterpreterContext) -> Any? {
+    public func convert(input: String, interpreter: TypedInterpreter, context: Context) -> Any? {
         guard case let .exactMatch(_, output, _) = matchStatement(amongst: patterns, in: input, interpreter: interpreter, context: context) else { return nil }
         return output
     }

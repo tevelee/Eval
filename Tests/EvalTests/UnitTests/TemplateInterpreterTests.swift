@@ -6,10 +6,10 @@ class StringTemplateInterpreterTests: XCTestCase {
     //MARK: init
     
     func test_whenInitialised_thenPropertiesAreSaved() {
-        let matcher = Matcher<String, TemplateInterpreter<String>>([Keyword("in")]) { _,_,_ in "a" }
+        let matcher = Pattern<String, TemplateInterpreter<String>>([Keyword("in")]) { _,_,_ in "a" }
         let statements = [matcher]
         let interpreter = TypedInterpreter()
-        let context = InterpreterContext()
+        let context = Context()
         
         let stringTemplateInterpreter = StringTemplateInterpreter(statements: statements,
                                                                   interpreter: interpreter,
@@ -23,7 +23,7 @@ class StringTemplateInterpreterTests: XCTestCase {
     }
     
     func test_whenInitialised_thenTypedAndTemplateInterpreterDoNotShareTheSameContext() {
-        let stringTemplateInterpreter = StringTemplateInterpreter(statements: [], interpreter: TypedInterpreter(), context: InterpreterContext())
+        let stringTemplateInterpreter = StringTemplateInterpreter(statements: [], interpreter: TypedInterpreter(), context: Context())
 
         XCTAssertFalse(stringTemplateInterpreter.typedInterpreter.context === stringTemplateInterpreter.context)
     }
@@ -31,10 +31,10 @@ class StringTemplateInterpreterTests: XCTestCase {
     //MARK: evaluate
     
     func test_whenEvaluates_thenTransformationHappens() {
-        let matcher = Matcher<String, TemplateInterpreter<String>>([Keyword("in")]) { _,_,_ in "contains" }
+        let matcher = Pattern<String, TemplateInterpreter<String>>([Keyword("in")]) { _,_,_ in "contains" }
         let interpreter = StringTemplateInterpreter(statements: [matcher],
                                                     interpreter:TypedInterpreter(),
-                                                    context: InterpreterContext())
+                                                    context: Context())
         
         let result = interpreter.evaluate("a in b")
         
@@ -42,10 +42,10 @@ class StringTemplateInterpreterTests: XCTestCase {
     }
     
     func test_whenEvaluates_thenUsesGlobalContext() {
-        let matcher = Matcher<String, TemplateInterpreter<String>>([Keyword("{somebody}")]) { _,_,context in context.variables["person"] as? String }
+        let matcher = Pattern<String, TemplateInterpreter<String>>([Keyword("{somebody}")]) { _,_,context in context.variables["person"] as? String }
         let interpreter = StringTemplateInterpreter(statements: [matcher],
                                                     interpreter:TypedInterpreter(),
-                                                    context: InterpreterContext(variables: ["person": "you"]))
+                                                    context: Context(variables: ["person": "you"]))
         
         let result = interpreter.evaluate("{somebody} + me")
         
@@ -55,23 +55,23 @@ class StringTemplateInterpreterTests: XCTestCase {
     //MARK: evaluate with context
     
     func test_whenEvaluatesWithContext_thenUsesLocalContext() {
-        let matcher = Matcher<String, TemplateInterpreter<String>>([Keyword("{somebody}")]) { _,_,context in context.variables["person"] as? String }
+        let matcher = Pattern<String, TemplateInterpreter<String>>([Keyword("{somebody}")]) { _,_,context in context.variables["person"] as? String }
         let interpreter = StringTemplateInterpreter(statements: [matcher],
                                               interpreter:TypedInterpreter(),
-                                              context: InterpreterContext())
+                                              context: Context())
         
-        let result = interpreter.evaluate("{somebody} + me", context: InterpreterContext(variables: ["person": "you"]))
+        let result = interpreter.evaluate("{somebody} + me", context: Context(variables: ["person": "you"]))
         
         XCTAssertEqual(result, "you + me")
     }
 
     func test_whenEvaluatesWithContext_thenLocalOverridesGlobalContext() {
-        let matcher = Matcher<String, TemplateInterpreter<String>>([Keyword("{somebody}")]) { _,_,context in context.variables["person"] as? String }
+        let matcher = Pattern<String, TemplateInterpreter<String>>([Keyword("{somebody}")]) { _,_,context in context.variables["person"] as? String }
         let interpreter = StringTemplateInterpreter(statements: [matcher],
                                               interpreter:TypedInterpreter(),
-                                              context: InterpreterContext(variables: ["person": "nobody"]))
+                                              context: Context(variables: ["person": "nobody"]))
         
-        let result = interpreter.evaluate("{somebody} + me", context: InterpreterContext(variables: ["person": "you"]))
+        let result = interpreter.evaluate("{somebody} + me", context: Context(variables: ["person": "you"]))
         
         XCTAssertEqual(result, "you + me")
     }
@@ -79,10 +79,10 @@ class StringTemplateInterpreterTests: XCTestCase {
     //MARK: TemplateVariable
     
     func test_whenUsingTemplateVariable_thenTransformationHappens() {
-        let matcher = Matcher<String, TemplateInterpreter<String>>([Keyword("{"), TemplateVariable("person"), Keyword("}")]) { _,_,_ in "you" }
+        let matcher = Pattern<String, TemplateInterpreter<String>>([Keyword("{"), TemplateVariable("person"), Keyword("}")]) { _,_,_ in "you" }
         let interpreter = StringTemplateInterpreter(statements: [matcher],
                                               interpreter:TypedInterpreter(),
-                                              context: InterpreterContext())
+                                              context: Context())
         
         let result = interpreter.evaluate("{somebody} + me")
         
@@ -90,10 +90,10 @@ class StringTemplateInterpreterTests: XCTestCase {
     }
     
     func test_whenUsingTemplateVariableWithNilResult_thenTransformationNotHappens() {
-        let matcher = Matcher<String, TemplateInterpreter<String>>([Keyword("{"), TemplateVariable("person"), Keyword("}")]) { _,_,_ in nil }
+        let matcher = Pattern<String, TemplateInterpreter<String>>([Keyword("{"), TemplateVariable("person"), Keyword("}")]) { _,_,_ in nil }
         let interpreter = StringTemplateInterpreter(statements: [matcher],
                                               interpreter:TypedInterpreter(),
-                                              context: InterpreterContext())
+                                              context: Context())
         
         let result = interpreter.evaluate("{somebody} + me")
         

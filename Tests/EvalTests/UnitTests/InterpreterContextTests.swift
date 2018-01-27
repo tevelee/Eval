@@ -8,7 +8,7 @@ class InterpreterContextTests: XCTestCase {
     func test_whenCreated_thenVariablesAreSet() {
         let variables = ["test": 2]
         
-        let context = InterpreterContext(variables: variables)
+        let context = Context(variables: variables)
         
         XCTAssertEqual(variables, context.variables as! [String: Int])
     }
@@ -17,7 +17,7 @@ class InterpreterContextTests: XCTestCase {
     
     func test_whenPushing_thenRemainsTheSame() {
         let variables = ["test": 2]
-        let context = InterpreterContext(variables: variables)
+        let context = Context(variables: variables)
         
         context.push()
         
@@ -26,7 +26,7 @@ class InterpreterContextTests: XCTestCase {
     
     func test_whenPushingAndModifying_thenContextChanges() {
         let variables = ["test": 2]
-        let context = InterpreterContext(variables: variables)
+        let context = Context(variables: variables)
         
         context.push()
         context.variables["a"] = 3
@@ -36,7 +36,7 @@ class InterpreterContextTests: XCTestCase {
     
     func test_whenPushingModifyingAndPopping_thenRestores() {
         let variables = ["test": 2]
-        let context = InterpreterContext(variables: variables)
+        let context = Context(variables: variables)
         
         context.push()
         context.variables["a"] = 3
@@ -47,7 +47,7 @@ class InterpreterContextTests: XCTestCase {
     
     func test_whenJustPopping_thenNothingHappens() {
         let variables = ["test": 2]
-        let context = InterpreterContext(variables: variables)
+        let context = Context(variables: variables)
         
         context.pop()
         
@@ -57,8 +57,8 @@ class InterpreterContextTests: XCTestCase {
     //MARK: merging
     
     func test_whenMergingTwo_thenCreatesANewContext() {
-        let one = InterpreterContext(variables: ["a": 1])
-        let two = InterpreterContext(variables: ["b": 2])
+        let one = Context(variables: ["a": 1])
+        let two = Context(variables: ["b": 2])
         
         let result = one.merging(with: two)
         
@@ -68,8 +68,8 @@ class InterpreterContextTests: XCTestCase {
     }
     
     func test_whenMergingTwo_thenParameterOverridesVariablesInSelf() {
-        let one = InterpreterContext(variables: ["a": 1])
-        let two = InterpreterContext(variables: ["a": 2, "x": 3])
+        let one = Context(variables: ["a": 1])
+        let two = Context(variables: ["a": 2, "x": 3])
         
         let result = one.merging(with: two)
         
@@ -77,7 +77,7 @@ class InterpreterContextTests: XCTestCase {
     }
     
     func test_whenMergingWithNil_thenReturnsSelf() {
-        let context = InterpreterContext(variables: ["a": 1])
+        let context = Context(variables: ["a": 1])
         
         let result = context.merging(with: nil)
         
@@ -87,8 +87,8 @@ class InterpreterContextTests: XCTestCase {
     //MARK: merge
     
     func test_whenMergingTwoInAMutableWay_thenMergesVariables() {
-        let one = InterpreterContext(variables: ["a": 1])
-        let two = InterpreterContext(variables: ["b": 2])
+        let one = Context(variables: ["a": 1])
+        let two = Context(variables: ["b": 2])
         
         one.merge(with: two) { existing, _ in existing }
         
@@ -96,8 +96,8 @@ class InterpreterContextTests: XCTestCase {
     }
     
     func test_whenMergingTwoInAMutableWay_thenParameterOverridesVariablesInSelf() {
-        let one = InterpreterContext(variables: ["a": 1])
-        let two = InterpreterContext(variables: ["a": 2, "x": 3])
+        let one = Context(variables: ["a": 1])
+        let two = Context(variables: ["a": 2, "x": 3])
         
         one.merge(with: two) { existing, _ in existing }
         
@@ -105,8 +105,8 @@ class InterpreterContextTests: XCTestCase {
     }
     
     func test_whenMergingTwoInAMutableWayReversed_thenParameterOverridesVariablesInSelf() {
-        let one = InterpreterContext(variables: ["a": 1])
-        let two = InterpreterContext(variables: ["a": 2, "x": 3])
+        let one = Context(variables: ["a": 1])
+        let two = Context(variables: ["a": 2, "x": 3])
         
         two.merge(with: one) { _, new in new }
         
@@ -114,7 +114,7 @@ class InterpreterContextTests: XCTestCase {
     }
     
     func test_whenMergingWithNilInAMutableWay_thenReturnsSelf() {
-        let context = InterpreterContext(variables: ["a": 1])
+        let context = Context(variables: ["a": 1])
         
         context.merge(with: nil) { existing, _ in existing }
         

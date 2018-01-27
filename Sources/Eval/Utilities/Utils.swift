@@ -25,7 +25,7 @@ import Foundation
 /// - parameter left: Left hand side
 /// - parameter right: Right hand side
 /// - returns: An array with two elements (left and right in this order)
-public func + (left: MatchElement, right: MatchElement) -> [MatchElement] {
+public func + (left: PatternElement, right: PatternElement) -> [PatternElement] {
     return [left, right]
 }
 

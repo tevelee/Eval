@@ -23,7 +23,7 @@ import Foundation
 
 /// `MatchElement`s are used by `Matcher` instances to be able to recognise patterns.
 /// Currently, the two main kind of `MatchElement` classes are `Keyword`s and `Variable`s
-public protocol MatchElement {
+public protocol PatternElement {
     /// Using this method, an element returns how much the String provided in the `prefix` parameter matches the current element
     /// - parameter prefix: The input
     /// - returns: The result of the match operation
@@ -31,7 +31,7 @@ public protocol MatchElement {
 }
 
 /// `Keyword` instances are used to provide static points in match sequences so that they can be used as pillars of the expressions the developer tries to match
-public class Keyword: MatchElement, Equatable {
+public class Keyword: PatternElement, Equatable {
     /// The type of the Keyword determines whether the item holds some special purpose, or it's just an ordinary static String
     public enum KeywordType: Equatable {
         /// By default, `Keyword` is created as a generic type, meaning, that there is no special requirement, that they need to fulfil
@@ -122,7 +122,7 @@ protocol VariableProtocol {
 
 /// Generic superclass of `Variable`s which are aware of their `Interpreter` classes,
 /// as they use it when mapping their values
-public class GenericVariable<T, E: Interpreter> : VariableProtocol, MatchElement {
+public class GenericVariable<T, E: Interpreter> : VariableProtocol, PatternElement {
     /// Unique identifier of the variable that is used when matching and returning them in the matcher.
     let name: String
     /// Provides information whether the match should be exhaustive or just use the shortest possible matching string (even zero characters in some edge cases). This depends on the surrounding `Keyword` instances in the containing collection.

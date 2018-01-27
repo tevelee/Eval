@@ -25,10 +25,10 @@ import Foundation
 /// Typically used in web applications, where the rendering of an HTML page is provided as a template, and the application replaces certain statements, based on input parameters.
 open class TemplateInterpreter<T> : Interpreter {
     /// The statements (patterns) registered to the interpreter. If found, these are going to be processed and replaced with the evaluated value
-    public let statements: [Matcher<T, TemplateInterpreter<T>>]
+    public let statements: [Pattern<T, TemplateInterpreter<T>>]
 
     /// The context used when evaluating the expressions. These context variables are global, used in every evaluation processed with this instance.
-    public let context: InterpreterContext
+    public let context: Context
 
     /// The `StringTemplateInterpreter` contains a `TypedInterpreter`, as it is quite common practice to evaluate strongly typed expression as s support for the template language.
     /// Common examples are: condition part of an if statement, or body of a print statement
@@ -48,9 +48,9 @@ open class TemplateInterpreter<T> : Interpreter {
     /// - parameter statements: The patterns that the interpreter should recognise
     /// - parameter interpreter: A `TypedInterpreter` instance to evaluate typed expressions appearing in the template
     /// - parameter context: Global context that is going to be used with every expression evaluated with the current instance. Defaults to empty context
-    public init(statements: [Matcher<T, TemplateInterpreter<T>>] = [],
+    public init(statements: [Pattern<T, TemplateInterpreter<T>>] = [],
                 interpreter: TypedInterpreter = TypedInterpreter(),
-                context: InterpreterContext = InterpreterContext()) {
+                context: Context = Context()) {
         self.statements = statements
         self.typedInterpreter = interpreter
         self.context = context
@@ -60,14 +60,14 @@ open class TemplateInterpreter<T> : Interpreter {
     /// - parameter expression: The input
     /// - returns: The output of the evaluation
     public func evaluate(_ expression: String) -> T {
-        return evaluate(expression, context: InterpreterContext())
+        return evaluate(expression, context: Context())
     }
 
     /// The main part of the evaluation happens here. In this case, the global context variables merged with the provided context are going to be used.
     /// - parameter expression: The input
     /// - parameter context: Local context that is going to be used with this expression only
     /// - returns: The output of the evaluation
-    open func evaluate(_ expression: String, context: InterpreterContext) -> T {
+    open func evaluate(_ expression: String, context: Context) -> T {
         fatalError("Shouldn't instantiate `TemplateInterpreter` directly. Please subclass with a dedicated type instead")
     }
 
@@ -88,7 +88,7 @@ open class TemplateInterpreter<T> : Interpreter {
     /// - parameter context: Local context that is going to be used with this expression only
     /// - parameter reducer: In order to support generic types, not just plain String objects, a reducer helps to convert the output to the dedicated output type
     /// - returns: The output of the evaluation
-    public func evaluate(_ expression: String, context: InterpreterContext = InterpreterContext(), reducer: TemplateReducer) -> T {
+    public func evaluate(_ expression: String, context: Context = Context(), reducer: TemplateReducer) -> T {
         context.merge(with: self.context) { existing, _ in existing }
         var output = reducer.initialValue
 
@@ -121,7 +121,7 @@ public class StringTemplateInterpreter: TemplateInterpreter<String> {
     /// - parameter expression: The input
     /// - parameter context: Local context that is going to be used with this expression only
     /// - returns: The output of the evaluation
-    public override func evaluate(_ expression: String, context: InterpreterContext) -> String {
+    public override func evaluate(_ expression: String, context: Context) -> String {
         guard !expression.isEmpty else { return "" }
         return evaluate(expression, context: context, reducer: (initialValue: "", reduceValue: { existing, next in existing + next }, reduceCharacter: { existing, next in existing + String(next) }))
     }

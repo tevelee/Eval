@@ -95,6 +95,12 @@ class TemplateExampleTests: XCTestCase {
         XCTAssertEqual(eval("{{ [] }}"), "")
     }
     
+    func testEmpty() {
+        XCTAssertEqual(eval("{{ null }}"), "null")
+        XCTAssertEqual(eval("{{ nil }}"), "null")
+        XCTAssertEqual(eval("{{ [].0 }}"), "null")
+    }
+    
     //MARK: Functions and operators
     
     func testParentheses() {
@@ -300,12 +306,18 @@ class TemplateExampleTests: XCTestCase {
     
     func testFirst() {
         XCTAssertEqual(eval("{{ [1,2,3].first }}"), "1")
-        XCTAssertEqual(eval("{{ [].first }}"), "")
+        XCTAssertEqual(eval("{{ [].first }}"), "null")
     }
     
     func testLast() {
         XCTAssertEqual(eval("{{ [1,2,3].last }}"), "3")
-        XCTAssertEqual(eval("{{ [].last }}"), "")
+        XCTAssertEqual(eval("{{ [].last }}"), "null")
+    }
+    
+    func testDefault() {
+        XCTAssertEqual(eval("{{ null.default('fallback') }}", ["array": []]), "fallback")
+        XCTAssertEqual(eval("{{ array.last.default('none') }}", ["array": [1]]), "1")
+        XCTAssertEqual(eval("{{ array.last.default('none') }}", ["array": []]), "none")
     }
     
     func testJoin() {

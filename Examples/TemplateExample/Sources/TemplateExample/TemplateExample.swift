@@ -236,6 +236,7 @@ public class StandardLibrary {
             dictionaryType,
             dateType,
             numericType,
+            emptyType,
         ]
     }
     public static var functions: [FunctionProtocol] {
@@ -300,6 +301,7 @@ public class StandardLibrary {
             andOperator,
 
             absoluteValue,
+            defaultValue,
 
             isEvenOperator,
             isOddOperator,
@@ -398,6 +400,12 @@ public class StandardLibrary {
         let trueLiteral = Literal("true", convertsTo: true)
         let falseLiteral = Literal("false", convertsTo: false)
         return DataType(type: Bool.self, literals: [trueLiteral, falseLiteral]) { value, _ in value ? "true" : "false" }
+    }
+    
+    public static var emptyType: DataType<Optional<Any>> {
+        let nullLiteral = Literal<Optional<Any>>("null", convertsTo: nil)
+        let nilLiteral = Literal<Optional<Any>>("nil", convertsTo: nil)
+        return DataType(type: Optional<Any>.self, literals: [nullLiteral, nilLiteral]) { _,_ in "null" }
     }
     
     //MARK: Functions
@@ -620,6 +628,16 @@ public class StandardLibrary {
     
     public static var absoluteValue: Function<Double> {
         return objectFunction("abs") { (value: Double) -> Double? in abs(value) }
+    }
+    
+    public static var defaultValue: Function<Any> {
+        return Function([Variable<Any>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value,_ in
+            guard let value = value as? String, value == "default" else { return nil }
+            return value
+        }, Keyword("("), Variable<Any>("fallback"), Keyword(")")], options: .backwardMatch) { variables, interpreter, _ in
+            guard let value = variables["lhs"], variables["rhs"] != nil else { return nil }
+            return isNilOrWrappedNil(value: value) ? variables["fallback"] : value
+        }
     }
     
     public static var incrementOperator: Function<Double> {
@@ -1063,4 +1081,16 @@ extension String {
             return html
         }
     }
+}
+
+func isNilOrWrappedNil(value: Any) -> Bool {
+    let mirror = Mirror(reflecting: value)
+    if mirror.displayStyle == .optional {
+        if let first = mirror.children.first {
+            return isNilOrWrappedNil(value: first.value)
+        } else {
+            return true
+        }
+    }
+    return false
 }

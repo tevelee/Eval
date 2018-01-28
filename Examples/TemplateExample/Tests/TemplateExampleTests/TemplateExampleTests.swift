@@ -318,6 +318,7 @@ class TemplateExampleTests: XCTestCase {
         XCTAssertEqual(eval("{{ null.default('fallback') }}", ["array": []]), "fallback")
         XCTAssertEqual(eval("{{ array.last.default('none') }}", ["array": [1]]), "1")
         XCTAssertEqual(eval("{{ array.last.default('none') }}", ["array": []]), "none")
+        XCTAssertEqual(eval("{{ array.last.default(2) }}", ["array": []]), "2")
     }
     
     func testJoin() {
@@ -422,6 +423,12 @@ class TemplateExampleTests: XCTestCase {
     
     func testLowerCapitalise() {
         XCTAssertEqual(eval("{{ 'HELLO THERE'.capitalise.lowerFirst }}"), "hello There")
+    }
+    
+    //MARK: Whitespace truncation
+    
+    func testSpacelessTag() {
+        XCTAssertEqual(eval("{% spaceless %}   {% if true %}    Hello    {% endif %}    {% endspaceless %}"), "Hello")
     }
     
     //MARK: Template file

@@ -107,6 +107,7 @@ public class TemplateLibrary {
             macroStatement,
             commentStatement,
             importStatement,
+            spacelessStatement,
         ]
     }
     
@@ -223,6 +224,13 @@ public class TemplateLibrary {
                 let url = Bundle.allBundles.flatMap({ $0.url(forResource: file, withExtension: nil) }).first,
                 let expression = try? String(contentsOf: url) else { return nil }
             return interpreter.evaluate(expression, context: context)
+        }
+    }
+    
+    public static var spacelessStatement: Pattern<String, TemplateInterpreter<String>> {
+        return Pattern([OpenKeyword(tagPrefix + " spaceless " + tagSuffix), TemplateVariable("body"), CloseKeyword(tagPrefix + " endspaceless " + tagSuffix)]) { variables, _, _ in
+            guard let body = variables["body"] as? String else { return nil }
+            return body.self.components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }.joined(separator: "")
         }
     }
 }

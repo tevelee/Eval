@@ -55,6 +55,9 @@
                 <a href="Classes/CloseKeyword.html">CloseKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Context.html">Context</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/DataType.html">DataType</a>
               </li>
               <li class="nav-group-task">
@@ -62,9 +65,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/GenericVariable.html">GenericVariable</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/InterpreterContext.html">InterpreterContext</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Keyword.html">Keyword</a>
@@ -82,6 +82,9 @@
                 <a href="Classes/OpenKeyword.html">OpenKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Pattern.html">Pattern</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a>
               </li>
               <li class="nav-group-task">
@@ -95,6 +98,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes.html#/s:4Eval8VariableC">Variable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/VariableProcessor.html">VariableProcessor</a>
               </li>
             </ul>
           </li>
@@ -118,7 +124,7 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+                <a href="Functions.html#/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="Functions/+(_:_:).html">+(_:_:)</a>
@@ -127,7 +133,7 @@
                 <a href="Functions/+=(_:_:).html">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA18InterpreterContextC7contexttAA0K0R_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
+                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA7ContextC7contexttAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
               </li>
             </ul>
           </li>
@@ -135,16 +141,13 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/ContextAware.html">ContextAware</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Protocols/DataTypeProtocol.html">DataTypeProtocol</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/Evaluator.html">Evaluator</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/EvaluatorWithContext.html">EvaluatorWithContext</a>
+                <a href="Protocols/EvaluatorWithLocalContext.html">EvaluatorWithLocalContext</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/FunctionProtocol.html">FunctionProtocol</a>
@@ -153,10 +156,13 @@
                 <a href="Protocols/Interpreter.html">Interpreter</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/MatchElement.html">MatchElement</a>
+                <a href="Protocols/PatternElement.html">PatternElement</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/Printer.html">Printer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/VariableProcessorProtocol.html">VariableProcessorProtocol</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/VariableProtocol.html">VariableProtocol</a>
@@ -169,6 +175,12 @@
               <li class="nav-group-task">
                 <a href="Structs/ExpressionInfo.html">ExpressionInfo</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Structs/PatternOptions.html">PatternOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/VariableOptions.html">VariableOptions</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -176,6 +188,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:4Eval13VariableValuea">VariableValue</a>
               </li>
             </ul>
           </li>
@@ -307,7 +322,7 @@
 <p>For the expressions to work, you&rsquo;ll need to create an interpreter instance, providing your data types and expressions you aim to support, and maybe some input variables - if you need any.</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">interpreter</span> <span class="o">=</span> <span class="kt">TypedInterpreter</span><span class="p">(</span><span class="nv">dataTypes</span><span class="p">:</span> <span class="p">[</span><span class="n">number</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">boolean</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">date</span><span class="p">],</span>
                                    <span class="nv">functions</span><span class="p">:</span> <span class="p">[</span><span class="n">multipication</span><span class="p">,</span> <span class="n">addition</span><span class="p">,</span> <span class="n">ternary</span><span class="p">],</span>
-                                   <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"x"</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">]))</span>
+                                   <span class="nv">context</span><span class="p">:</span> <span class="kt">Context</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"x"</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">]))</span>
 </code></pre>
 
 <p>And call it with a string expression, as follows.</p>
@@ -365,7 +380,7 @@
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">interpreter</span> <span class="o">=</span> <span class="kt">TypedInterpreter</span><span class="p">(</span><span class="nv">dataTypes</span><span class="p">:</span> <span class="p">[</span><span class="n">number</span><span class="p">,</span> <span class="n">boolean</span><span class="p">],</span>
                                    <span class="nv">functions</span><span class="p">:</span> <span class="p">[</span><span class="n">multipication</span><span class="p">,</span> <span class="n">addition</span><span class="p">,</span> <span class="n">notEquals</span><span class="p">,</span> <span class="n">ternary</span><span class="p">])</span>
 
-<span class="k">let</span> <span class="nv">result</span> <span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="n">interpreter</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"x != 0 ? 5 * x : pi + 1"</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"x"</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">]))</span>
+<span class="k">let</span> <span class="nv">result</span> <span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="n">interpreter</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"x != 0 ? 5 * x : pi + 1"</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">Context</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"x"</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">]))</span>
 <span class="kt">XCTAssertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span> <span class="c1">//Pass!</span>
 </code></pre>
 
@@ -510,7 +525,7 @@ Definition-wise, this framework provides an easily understandable way of languag
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-27)</p>
+          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-28)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

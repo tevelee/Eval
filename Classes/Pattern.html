@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Pattern Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/Pattern" class="dashAnchor"></a>
+    <a title="Pattern Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Eval Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/tevelee/Eval"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftevelee%2Egithub%2Eio%2Fdocsets%2FEval%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Eval Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Pattern Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../example-projects.html">Example projects</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../interpreter-engine-details.html">Interpreter engine details</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../strongly-typed-evaluator.html">Strongly-typed evaluator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../template-evaluator.html">Template evaluator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../tips--tricks.html">Tips &amp; Tricks</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/CloseKeyword.html">CloseKeyword</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Context.html">Context</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DataType.html">DataType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Function.html">Function</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/GenericVariable.html">GenericVariable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Keyword.html">Keyword</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Keyword/KeywordType.html">– KeywordType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Literal.html">Literal</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Matcher.html">Matcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OpenKeyword.html">OpenKeyword</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Pattern.html">Pattern</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TemplateInterpreter.html">TemplateInterpreter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TemplateVariable.html">TemplateVariable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TypedInterpreter.html">TypedInterpreter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:4Eval8VariableC">Variable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/VariableProcessor.html">VariableProcessor</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/MatchResult.html">MatchResult</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/String.html">String</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions/+(_:_:).html">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions/+=(_:_:).html">+=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA7ContextC7contexttAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/DataTypeProtocol.html">DataTypeProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Evaluator.html">Evaluator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EvaluatorWithLocalContext.html">EvaluatorWithLocalContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/FunctionProtocol.html">FunctionProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Interpreter.html">Interpreter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/PatternElement.html">PatternElement</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Printer.html">Printer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/VariableProcessorProtocol.html">VariableProcessorProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/VariableProtocol.html">VariableProtocol</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/ExpressionInfo.html">ExpressionInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PatternOptions.html">PatternOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariableOptions.html">VariableOptions</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4Eval13VariableValuea">VariableValue</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Pattern</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Pattern</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">I</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Interpreter.html">Interpreter</a></span><span class="o">&gt;</span></code></pre>
+
+                </div>
+              </div>
+            <p>Matchers are the heart of the Eval framework, providing pattern matching capabilities to the library.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval7PatternC8elementsSayAA0B7Element_pGv"></a>
+                    <a name="//apple_ref/swift/Property/elements" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval7PatternC8elementsSayAA0B7Element_pGv">elements</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Matcher.html">Matcher</a></code> instances are capable of recognising patterns described in the <code>elements</code> collection. It only remains effective, if the <code><a href="../Classes.html#/s:4Eval8VariableC">Variable</a></code> instances are surrounded by <code><a href="../Classes/Keyword.html">Keyword</a></code> instances, so no two <code><a href="../Classes.html#/s:4Eval8VariableC">Variable</a></code>s should be next to each other. Otherwise, their matching result and value would be undefined.
+This collection should be provided during the initialisation, and cannot be modified once the <code><a href="../Classes/Matcher.html">Matcher</a></code> instance has been created.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">elements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/PatternElement.html">PatternElement</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L51">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval7PatternC7matcherxSgs10DictionaryVySSypG_q_AA7ContextCtcv"></a>
+                    <a name="//apple_ref/swift/Property/matcher" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval7PatternC7matcherxSgs10DictionaryVySSypG_q_AA7ContextCtcv">matcher</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The block to process the elements with</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">let</span> <span class="nv">matcher</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">I</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L54">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval7PatternC7optionsAA0B7OptionsVv"></a>
+                    <a name="//apple_ref/swift/Property/options" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval7PatternC7optionsAA0B7OptionsVv">options</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Options that modify the pattern matching algorithm</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">let</span> <span class="nv">options</span><span class="p">:</span> <span class="kt"><a href="../Structs/PatternOptions.html">PatternOptions</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L57">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval7PatternCACyxq_GSayAA0B7Element_pG_AA0B7OptionsV7optionsxSgs10DictionaryVySSypG_q_AA7ContextCtc7matchertcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(_:options:matcher:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval7PatternCACyxq_GSayAA0B7Element_pG_AA0B7OptionsV7optionsxSgs10DictionaryVySSypG_q_AA7ContextCtc7matchertcfc">init(_:options:matcher:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The first parameter is the pattern, that needs to be recognised. The <code><a href="../Classes/Pattern.html#/s:4Eval7PatternC7matcherxSgs10DictionaryVySSypG_q_AA7ContextCtcv">matcher</a></code> ending closure is called whenever the pattern has successfully been recognised and allows the users of this framework to provide custom computations using the matched <code><a href="../Classes.html#/s:4Eval8VariableC">Variable</a></code> values.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">elements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/PatternElement.html">PatternElement</a></span><span class="p">],</span>
+            <span class="nv">options</span><span class="p">:</span> <span class="kt"><a href="../Structs/PatternOptions.html">PatternOptions</a></span> <span class="o">=</span> <span class="p">[],</span>
+            <span class="nv">matcher</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">I</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>elemenets</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The pattern to recognise</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Options that modify the pattern matching algorithm</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>matcher</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The block to process the input with</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L63-L69">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval7PatternC54elementsByReplacingTheLastVariableNotToBeShortestMatchSayAA0B7Element_pGAF2in_AA0B7OptionsV7optionstFZ"></a>
+                    <a name="//apple_ref/swift/Method/elementsByReplacingTheLastVariableNotToBeShortestMatch(in:options:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval7PatternC54elementsByReplacingTheLastVariableNotToBeShortestMatchSayAA0B7Element_pGAF2in_AA0B7OptionsV7optionstFZ">elementsByReplacingTheLastVariableNotToBeShortestMatch(in:options:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If the last element in the elements pattern is a variable, shortest match will not match until the end of the input string, but just until the first empty character.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">elementsByReplacingTheLastVariableNotToBeShortestMatch</span><span class="p">(</span><span class="k">in</span> <span class="nv">elements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/PatternElement.html">PatternElement</a></span><span class="p">],</span> <span class="nv">options</span><span class="p">:</span> <span class="kt"><a href="../Structs/PatternOptions.html">PatternOptions</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Protocols/PatternElement.html">PatternElement</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>in</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The elements array where the last element should be replaced</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Options that modify the pattern matching algorithm</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new collection of elements, where the last element is replaced, whether it&rsquo;s a variable with shortest flag on</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L75-L94">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval7PatternC7matchesAA11MatchResultOyxGSS6string_Si4fromq_11interpreterAA7ContextC7contexttF"></a>
+                    <a name="//apple_ref/swift/Method/matches(string:from:interpreter:context:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval7PatternC7matchesAA11MatchResultOyxGSS6string_Si4fromq_11interpreterAA7ContextC7contexttF">matches(string:from:interpreter:context:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>This matcher provides the main logic of the <code>Eval</code> framework, performing the pattern matching, trying to identify, whether the input string is somehow related, or completely matches the pattern of the <code>Pattern</code> instance.
+Uses the <code><a href="../Classes/Matcher.html">Matcher</a></code> class for the evaluation</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">matches</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">from</span> <span class="nv">start</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">interpreter</span><span class="p">:</span> <span class="kt">I</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="../Classes/Context.html">Context</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/MatchResult.html">MatchResult</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>string</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The input</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>from</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The start of the range to analyse the result in</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>interpreter</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An interpreter instance - if the variables need any further evaluation</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>context</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The context - if the block uses any contextual data</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The result of the matching operation</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L103-L116">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval7PatternC7patternSSyF"></a>
+                    <a name="//apple_ref/swift/Method/pattern()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval7PatternC7patternSSyF">pattern()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A textual representation of the elements array</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">pattern</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A stringified version of the input elements</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L120-L129">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-28)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

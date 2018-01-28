@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>VariableOptions Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/VariableOptions" class="dashAnchor"></a>
+    <a title="VariableOptions Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Eval Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/tevelee/Eval"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftevelee%2Egithub%2Eio%2Fdocsets%2FEval%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Eval Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        VariableOptions Structure Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../example-projects.html">Example projects</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../interpreter-engine-details.html">Interpreter engine details</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../strongly-typed-evaluator.html">Strongly-typed evaluator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../template-evaluator.html">Template evaluator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../tips--tricks.html">Tips &amp; Tricks</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/CloseKeyword.html">CloseKeyword</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Context.html">Context</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DataType.html">DataType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Function.html">Function</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/GenericVariable.html">GenericVariable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Keyword.html">Keyword</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Keyword/KeywordType.html">– KeywordType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Literal.html">Literal</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Matcher.html">Matcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OpenKeyword.html">OpenKeyword</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Pattern.html">Pattern</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TemplateInterpreter.html">TemplateInterpreter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TemplateVariable.html">TemplateVariable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TypedInterpreter.html">TypedInterpreter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:4Eval8VariableC">Variable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/VariableProcessor.html">VariableProcessor</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/MatchResult.html">MatchResult</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/String.html">String</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions/+(_:_:).html">+(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions/+=(_:_:).html">+=(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA7ContextC7contexttAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/DataTypeProtocol.html">DataTypeProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Evaluator.html">Evaluator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/EvaluatorWithLocalContext.html">EvaluatorWithLocalContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/FunctionProtocol.html">FunctionProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Interpreter.html">Interpreter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/PatternElement.html">PatternElement</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Printer.html">Printer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/VariableProcessorProtocol.html">VariableProcessorProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/VariableProtocol.html">VariableProtocol</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/ExpressionInfo.html">ExpressionInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PatternOptions.html">PatternOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariableOptions.html">VariableOptions</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4Eval13VariableValuea">VariableValue</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>VariableOptions</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">VariableOptions</span><span class="p">:</span> <span class="kt">OptionSet</span></code></pre>
+
+                </div>
+              </div>
+            <p>Options that modify the behaviour of the variable matching, and the output that the framework provides</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval15VariableOptionsV8rawValueSiv"></a>
+                    <a name="//apple_ref/swift/Property/rawValue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval15VariableOptionsV8rawValueSiv">rawValue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Integer representation of the option</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">rawValue</span><span class="p">:</span> <span class="kt">Int</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L109">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval15VariableOptionsVACSi8rawValue_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(rawValue:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval15VariableOptionsVACSi8rawValue_tcfc">init(rawValue:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Basic initialiser with the integer representation</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L111-L113">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval15VariableOptionsV14notInterpretedACvZ"></a>
+                    <a name="//apple_ref/swift/Variable/notInterpreted" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval15VariableOptionsV14notInterpretedACvZ">notInterpreted</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If set, the value of the recognised placeholder will not be processed. Otherwise, it will be evaluated, using the <code>interpreterForEvaluatingVariables</code> property of the interpreter instance</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">notInterpreted</span>  <span class="o">=</span> <span class="kt">VariableOptions</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L116">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval15VariableOptionsV10notTrimmedACvZ"></a>
+                    <a name="//apple_ref/swift/Variable/notTrimmed" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval15VariableOptionsV10notTrimmedACvZ">notTrimmed</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Whether the processed variable should be or not to be trimmed (removing whitespaces from both sides)</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">notTrimmed</span>      <span class="o">=</span> <span class="kt">VariableOptions</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L118">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval15VariableOptionsV15exhaustiveMatchACvZ"></a>
+                    <a name="//apple_ref/swift/Variable/exhaustiveMatch" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval15VariableOptionsV15exhaustiveMatchACvZ">exhaustiveMatch</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Provides information whether the match should be exhaustive or just use the shortest possible matching string (even zero characters in some edge cases). This depends on the surrounding <code><a href="../Classes/Keyword.html">Keyword</a></code> instances in the containing collection.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">exhaustiveMatch</span> <span class="o">=</span> <span class="kt">VariableOptions</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L120">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval15VariableOptionsV15acceptsNilValueACvZ"></a>
+                    <a name="//apple_ref/swift/Variable/acceptsNilValue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval15VariableOptionsV15acceptsNilValueACvZ">acceptsNilValue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If interpreted and the result of the evaluation is <code>nil</code>, then <code>acceptsNilValue</code> determines if the current match result should be instant noMatch, or <code>nil</code> is an accepted value, so the matching should be continued</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">acceptsNilValue</span> <span class="o">=</span> <span class="kt">VariableOptions</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L122">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval15VariableOptionsV11interpretedSbv"></a>
+                    <a name="//apple_ref/swift/Property/interpreted" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval15VariableOptionsV11interpretedSbv">interpreted</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>In order to avoid double negatives in the source code (e.g. !notInterpreted), this helper checks the lack of .notInterpreted value in the optionset</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">interpreted</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L125">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval15VariableOptionsV7trimmedSbv"></a>
+                    <a name="//apple_ref/swift/Property/trimmed" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval15VariableOptionsV7trimmedSbv">trimmed</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>In order to avoid double negatives in the source code (e.g. !notTrimmed), this helper checks the lack of .notTrimmed value in the optionset</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">trimmed</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L127">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-28)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

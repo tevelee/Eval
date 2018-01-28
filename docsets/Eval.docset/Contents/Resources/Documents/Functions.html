@@ -55,6 +55,9 @@
                 <a href="Classes/CloseKeyword.html">CloseKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Context.html">Context</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/DataType.html">DataType</a>
               </li>
               <li class="nav-group-task">
@@ -62,9 +65,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/GenericVariable.html">GenericVariable</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/InterpreterContext.html">InterpreterContext</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Keyword.html">Keyword</a>
@@ -82,6 +82,9 @@
                 <a href="Classes/OpenKeyword.html">OpenKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Pattern.html">Pattern</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a>
               </li>
               <li class="nav-group-task">
@@ -95,6 +98,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes.html#/s:4Eval8VariableC">Variable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/VariableProcessor.html">VariableProcessor</a>
               </li>
             </ul>
           </li>
@@ -118,7 +124,7 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+                <a href="Functions.html#/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="Functions/+(_:_:).html">+(_:_:)</a>
@@ -127,7 +133,7 @@
                 <a href="Functions/+=(_:_:).html">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA18InterpreterContextC7contexttAA0K0R_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
+                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA7ContextC7contexttAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
               </li>
             </ul>
           </li>
@@ -135,16 +141,13 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/ContextAware.html">ContextAware</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Protocols/DataTypeProtocol.html">DataTypeProtocol</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/Evaluator.html">Evaluator</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/EvaluatorWithContext.html">EvaluatorWithContext</a>
+                <a href="Protocols/EvaluatorWithLocalContext.html">EvaluatorWithLocalContext</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/FunctionProtocol.html">FunctionProtocol</a>
@@ -153,10 +156,13 @@
                 <a href="Protocols/Interpreter.html">Interpreter</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/MatchElement.html">MatchElement</a>
+                <a href="Protocols/PatternElement.html">PatternElement</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/Printer.html">Printer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/VariableProcessorProtocol.html">VariableProcessorProtocol</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/VariableProtocol.html">VariableProtocol</a>
@@ -169,6 +175,12 @@
               <li class="nav-group-task">
                 <a href="Structs/ExpressionInfo.html">ExpressionInfo</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Structs/PatternOptions.html">PatternOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/VariableOptions.html">VariableOptions</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -176,6 +188,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:4Eval13VariableValuea">VariableValue</a>
               </li>
             </ul>
           </li>
@@ -194,9 +209,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA18InterpreterContextC7contexttAA0K0R_r0_lF"></a>
+                    <a name="/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA7ContextC7contexttAA11InterpreterR_r0_lF"></a>
                     <a name="//apple_ref/swift/Function/matchStatement(amongst:in:from:interpreter:context:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA18InterpreterContextC7contexttAA0K0R_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
+                    <a class="token" href="#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA7ContextC7contexttAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -211,7 +226,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">func</span> <span class="n">matchStatement</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">E</span><span class="o">&gt;</span><span class="p">(</span><span class="n">amongst</span> <span class="nv">statements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="Classes/Matcher.html">Matcher</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">E</span><span class="o">&gt;</span><span class="p">],</span> <span class="k">in</span> <span class="nv">input</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">from</span> <span class="nv">start</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">interpreter</span><span class="p">:</span> <span class="kt">E</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="Classes/InterpreterContext.html">InterpreterContext</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Enums/MatchResult.html">MatchResult</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="n">matchStatement</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">E</span><span class="o">&gt;</span><span class="p">(</span><span class="n">amongst</span> <span class="nv">statements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="Classes/Pattern.html">Pattern</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">E</span><span class="o">&gt;</span><span class="p">],</span> <span class="k">in</span> <span class="nv">input</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">from</span> <span class="nv">start</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">interpreter</span><span class="p">:</span> <span class="kt">E</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="Classes/Context.html">Context</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Enums/MatchResult.html">MatchResult</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -299,9 +314,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF"></a>
+                    <a name="/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF"></a>
                     <a name="//apple_ref/swift/Function/+(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+                    <a class="token" href="#/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -309,14 +324,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Syntactic sugar for <code><a href="Protocols/MatchElement.html">MatchElement</a></code> instances to feel like concatenation, whenever the input requires an array of elements.</p>
+                        <p>Syntactic sugar for <code>MatchElement</code> instances to feel like concatenation, whenever the input requires an array of elements.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="o">+</span> <span class="p">(</span><span class="nv">left</span><span class="p">:</span> <span class="kt"><a href="Protocols/MatchElement.html">MatchElement</a></span><span class="p">,</span> <span class="nv">right</span><span class="p">:</span> <span class="kt"><a href="Protocols/MatchElement.html">MatchElement</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="Protocols/MatchElement.html">MatchElement</a></span><span class="p">]</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="o">+</span> <span class="p">(</span><span class="nv">left</span><span class="p">:</span> <span class="kt"><a href="Protocols/PatternElement.html">PatternElement</a></span><span class="p">,</span> <span class="nv">right</span><span class="p">:</span> <span class="kt"><a href="Protocols/PatternElement.html">PatternElement</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="Protocols/PatternElement.html">PatternElement</a></span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -494,7 +509,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-27)</p>
+          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-28)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

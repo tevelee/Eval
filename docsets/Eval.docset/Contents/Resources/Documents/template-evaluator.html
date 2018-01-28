@@ -55,6 +55,9 @@
                 <a href="Classes/CloseKeyword.html">CloseKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Context.html">Context</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/DataType.html">DataType</a>
               </li>
               <li class="nav-group-task">
@@ -62,9 +65,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/GenericVariable.html">GenericVariable</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/InterpreterContext.html">InterpreterContext</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Keyword.html">Keyword</a>
@@ -82,6 +82,9 @@
                 <a href="Classes/OpenKeyword.html">OpenKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Pattern.html">Pattern</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a>
               </li>
               <li class="nav-group-task">
@@ -95,6 +98,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes.html#/s:4Eval8VariableC">Variable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/VariableProcessor.html">VariableProcessor</a>
               </li>
             </ul>
           </li>
@@ -118,7 +124,7 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+                <a href="Functions.html#/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="Functions/+(_:_:).html">+(_:_:)</a>
@@ -127,7 +133,7 @@
                 <a href="Functions/+=(_:_:).html">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA18InterpreterContextC7contexttAA0K0R_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
+                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA7ContextC7contexttAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
               </li>
             </ul>
           </li>
@@ -135,16 +141,13 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/ContextAware.html">ContextAware</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Protocols/DataTypeProtocol.html">DataTypeProtocol</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/Evaluator.html">Evaluator</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/EvaluatorWithContext.html">EvaluatorWithContext</a>
+                <a href="Protocols/EvaluatorWithLocalContext.html">EvaluatorWithLocalContext</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/FunctionProtocol.html">FunctionProtocol</a>
@@ -153,10 +156,13 @@
                 <a href="Protocols/Interpreter.html">Interpreter</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/MatchElement.html">MatchElement</a>
+                <a href="Protocols/PatternElement.html">PatternElement</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/Printer.html">Printer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/VariableProcessorProtocol.html">VariableProcessorProtocol</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/VariableProtocol.html">VariableProtocol</a>
@@ -169,6 +175,12 @@
               <li class="nav-group-task">
                 <a href="Structs/ExpressionInfo.html">ExpressionInfo</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Structs/PatternOptions.html">PatternOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/VariableOptions.html">VariableOptions</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -176,6 +188,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:4Eval13VariableValuea">VariableValue</a>
               </li>
             </ul>
           </li>
@@ -193,7 +208,7 @@
 <p>The way to create template interpreters is the following:</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">template</span> <span class="o">=</span> <span class="kt">StringTemplateInterpreter</span><span class="p">(</span><span class="nv">statements</span><span class="p">:</span> <span class="p">[</span><span class="n">ifStatement</span><span class="p">,</span> <span class="n">printStatement</span><span class="p">],</span> 
                                    <span class="nv">interpreter</span><span class="p">:</span> <span class="n">interpreter</span><span class="p">,</span> 
-                                   <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"example"</span><span class="p">:</span> <span class="mi">1</span><span class="p">]))</span>
+                                   <span class="nv">context</span><span class="p">:</span> <span class="kt">Context</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"example"</span><span class="p">:</span> <span class="mi">1</span><span class="p">]))</span>
 </code></pre>
 
 <p>First, you&rsquo;ll need the statements that you aim to recognise.
@@ -212,7 +227,7 @@ And lastly, an optional context object, if you have any global variables.</p>
 <h3 id='variables' class='heading'>Variables</h3>
 
 <p>Let&rsquo;s check out the following, really straightforward pattern:</p>
-<pre class="highlight swift"><code><span class="kt">Matcher</span><span class="p">(</span><span class="kt">Keyword</span><span class="p">(</span><span class="s">"{{"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"body"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"}}"</span><span class="p">))</span> <span class="p">{</span> <span class="n">variables</span><span class="p">,</span> <span class="n">interpreter</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span>
+<pre class="highlight swift"><code><span class="kt">Pattern</span><span class="p">(</span><span class="kt">Keyword</span><span class="p">(</span><span class="s">"{{"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"body"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"}}"</span><span class="p">))</span> <span class="p">{</span> <span class="n">variables</span><span class="p">,</span> <span class="n">interpreter</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span>
     <span class="k">guard</span> <span class="k">let</span> <span class="nv">body</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s">"body"</span><span class="p">]</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
     <span class="k">return</span> <span class="n">interpreter</span><span class="o">.</span><span class="n">typedInterpreter</span><span class="o">.</span><span class="nf">print</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
 <span class="p">}</span>
@@ -232,13 +247,13 @@ And lastly, an optional context object, if you have any global variables.</p>
 Let&rsquo;s find out why! A general addition operator (which looks like this <code>Variable&lt;Double&gt;(&quot;lhs&quot;) + Keyword(&quot;+&quot;) + Variable&lt;Double&gt;(&quot;rhs&quot;)</code>) would recognise the pattern <code>12 + 34</code>, but it also matches to <code>12 + 3</code>. What&rsquo;s what shortest means, the shortest match, in this case, is <code>12 + 3</code>, which - semantically - is an incorrect match. 
 But don&rsquo;t worry, the framework already knows about this, so it sets the right value for your variables, even in the last place!</li>
 <li><code>acceptsNilValue</code> informs the framework if <code>nil</code> should be accepted by the pattern. For example, <code>1 + &#39;5&#39;</code> with the previous example (<code>Double + Double</code>) would not match. But, if the <code>acceptsNilValue</code> is defined, then the block would trigger, with <code>{&#39;lhs&#39;: 1, &#39;rhs&#39;: nil}</code>, so you can decide by your own logic what to do in this case.</li>
-<li>Finally, the <code>map</code> block can be used to further transform the value of your <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code> before calling the block on the <code><a href="Classes/Matcher.html">Matcher</a></code>. Since map is a trailing closure, it&rsquo;s quite easy to add. For example, <code>Variable&lt;Int&gt;(&quot;example&quot;) { Double($0) }</code> would recognise only <code>Int</code> values, but would transform them to <code>Double</code> instances when providing them in the <code>variables</code> dictionary. This map can also return <code>nil</code> values but depends on your logic if you want to accept them or not. Side note: the previous map generates a <code><a href="Classes.html#/s:4Eval8VariableC">Variable&lt;Double&gt;</a></code> kind of variable instance.</li>
+<li>Finally, the <code>map</code> block can be used to further transform the value of your <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code> before calling the block on the <code><a href="Classes/Pattern.html">Pattern</a></code>. Since map is a trailing closure, it&rsquo;s quite easy to add. For example, <code>Variable&lt;Int&gt;(&quot;example&quot;) { Double($0) }</code> would recognise only <code>Int</code> values, but would transform them to <code>Double</code> instances when providing them in the <code>variables</code> dictionary. This map can also return <code>nil</code> values but depends on your logic if you want to accept them or not. Side note: the previous map generates a <code><a href="Classes.html#/s:4Eval8VariableC">Variable&lt;Double&gt;</a></code> kind of variable instance.</li>
 </ul>
 <h3 id='specialised-elements' class='heading'>Specialised elements</h3>
 <h4 id='template-variable' class='heading'>Template Variable</h4>
 
 <p>By default, <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code> instances use typed interpreters to evaluate their value. Sometimes though, they should be processed with the template interpreter. A good example is the <code>if</code> statement:</p>
-<pre class="highlight swift"><code><span class="kt">Matcher</span><span class="p">(</span><span class="kt">Keyword</span><span class="p">(</span><span class="s">"{%"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"if"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"condition"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"%}"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">TemplateVariable</span><span class="p">(</span><span class="s">"body"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"{% endif %}"</span><span class="p">))</span> <span class="p">{</span> <span class="n">variables</span><span class="p">,</span> <span class="n">interpreter</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span>
+<pre class="highlight swift"><code><span class="kt">Pattern</span><span class="p">(</span><span class="kt">Keyword</span><span class="p">(</span><span class="s">"{%"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"if"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"condition"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"%}"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">TemplateVariable</span><span class="p">(</span><span class="s">"body"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Keyword</span><span class="p">(</span><span class="s">"{% endif %}"</span><span class="p">))</span> <span class="p">{</span> <span class="n">variables</span><span class="p">,</span> <span class="n">interpreter</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span>
     <span class="k">guard</span> <span class="k">let</span> <span class="nv">condition</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s">"condition"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">Bool</span><span class="p">,</span> <span class="k">let</span> <span class="nv">body</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s">"body"</span><span class="p">]</span> <span class="k">as?</span> <span class="kt">String</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
     <span class="k">if</span> <span class="n">condition</span> <span class="p">{</span>
         <span class="k">return</span> <span class="n">body</span>
@@ -270,7 +285,7 @@ But don&rsquo;t worry, the framework already knows about this, so it sets the ri
 <p>This, of course, needs to be solved, but it&rsquo;s not that easy as it first looks! Some edge cases would not work unless we somehow try to connect them together. For this reason, I added two special elements: <code><a href="Classes/OpenKeyword.html">OpenKeyword</a></code> and <code><a href="Classes/CloseKeyword.html">CloseKeyword</a></code>. These work exactly the same way as normal <code><a href="Classes/Keyword.html">Keyword</a></code>s do, but add a bit more semantics to the framework: these two should be connected together, and therefore embedding them should not be a problem as they come in pairs. </p>
 
 <p>The previous <code>if</code> statement, now with an <code>else</code> block should - correctly - look like this:</p>
-<pre class="highlight swift"><code><span class="kt">Matcher</span><span class="p">(</span><span class="kt">OpenKeyword</span><span class="p">(</span><span class="s">"{% "</span><span class="k">if</span><span class="s">") + Variable&lt;Bool&gt;("</span><span class="n">condition</span><span class="s">") + Keyword("</span><span class="o">%</span><span class="p">}</span><span class="s">") + TemplateVariable("</span><span class="n">body</span><span class="s">") + Keyword("</span><span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="o">%</span><span class="p">}</span><span class="s">") + TemplateVariable("</span><span class="k">else</span><span class="s">") + CloseKeyword("</span><span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span><span class="s">")) { variables, interpreter, _ in
+<pre class="highlight swift"><code><span class="kt">Pattern</span><span class="p">(</span><span class="kt">OpenKeyword</span><span class="p">(</span><span class="s">"{% "</span><span class="k">if</span><span class="s">") + Variable&lt;Bool&gt;("</span><span class="n">condition</span><span class="s">") + Keyword("</span><span class="o">%</span><span class="p">}</span><span class="s">") + TemplateVariable("</span><span class="n">body</span><span class="s">") + Keyword("</span><span class="p">{</span><span class="o">%</span> <span class="k">else</span> <span class="o">%</span><span class="p">}</span><span class="s">") + TemplateVariable("</span><span class="k">else</span><span class="s">") + CloseKeyword("</span><span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span><span class="s">")) { variables, interpreter, _ in
     guard let condition = variables["</span><span class="n">condition</span><span class="s">"] as? Bool, let body = variables["</span><span class="n">body</span><span class="s">"] as? String else { return nil }
     if condition {
         return body
@@ -283,7 +298,7 @@ But don&rsquo;t worry, the framework already knows about this, so it sets the ri
 <p>By using the <code><a href="Classes/OpenKeyword.html">OpenKeyword</a></code> and <code><a href="Classes/CloseKeyword.html">CloseKeyword</a></code> types, these become connected, so embedding <code>if</code> statements in a template shouldn&rsquo;t be a problem. </p>
 
 <p>Similarly, this works for the <code>print</code> statement from an earlier example:</p>
-<pre class="highlight swift"><code><span class="kt">Matcher</span><span class="p">(</span><span class="kt">OpenKeyword</span><span class="p">(</span><span class="s">"{{"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"body"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">CloseKeyword</span><span class="p">(</span><span class="s">"}}"</span><span class="p">))</span> <span class="p">{</span> <span class="n">variables</span><span class="p">,</span> <span class="n">interpreter</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span>
+<pre class="highlight swift"><code><span class="kt">Pattern</span><span class="p">(</span><span class="kt">OpenKeyword</span><span class="p">(</span><span class="s">"{{"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">Variable</span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"body"</span><span class="p">)</span> <span class="o">+</span> <span class="kt">CloseKeyword</span><span class="p">(</span><span class="s">"}}"</span><span class="p">))</span> <span class="p">{</span> <span class="n">variables</span><span class="p">,</span> <span class="n">interpreter</span><span class="p">,</span> <span class="n">_</span> <span class="k">in</span>
     <span class="k">guard</span> <span class="k">let</span> <span class="nv">body</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="s">"body"</span><span class="p">]</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
     <span class="k">return</span> <span class="n">interpreter</span><span class="o">.</span><span class="n">typedInterpreter</span><span class="o">.</span><span class="nf">print</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
 <span class="p">}</span>
@@ -298,7 +313,7 @@ But don&rsquo;t worry, the framework already knows about this, so it sets the ri
 <h3 id='context' class='heading'>Context</h3>
 
 <p>You can also pass contextual values, which - for now - equal to variables.</p>
-<pre class="highlight swift"><code><span class="n">template</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"{{ 1 + var }}"</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"var"</span><span class="p">:</span> <span class="mi">2</span><span class="p">]))</span>
+<pre class="highlight swift"><code><span class="n">template</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"{{ 1 + var }}"</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">Context</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"var"</span><span class="p">:</span> <span class="mi">2</span><span class="p">]))</span>
 </code></pre>
 
 <p>The reason that the variables are encapsulated in a context is that context is a class, while variables are mutable <code>var</code> struct properties on that object. With this construction the context reference can be passed around to multiple interpreter instances, but keeps the copy-on-write (🐮) behaviour of the modification.</p>
@@ -317,7 +332,7 @@ Practically, if there is an <code>if</code> statement and an <code>if-else</code
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-27)</p>
+          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-28)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

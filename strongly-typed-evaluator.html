@@ -55,6 +55,9 @@
                 <a href="Classes/CloseKeyword.html">CloseKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Context.html">Context</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/DataType.html">DataType</a>
               </li>
               <li class="nav-group-task">
@@ -62,9 +65,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/GenericVariable.html">GenericVariable</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/InterpreterContext.html">InterpreterContext</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Keyword.html">Keyword</a>
@@ -82,6 +82,9 @@
                 <a href="Classes/OpenKeyword.html">OpenKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Pattern.html">Pattern</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a>
               </li>
               <li class="nav-group-task">
@@ -95,6 +98,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes.html#/s:4Eval8VariableC">Variable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/VariableProcessor.html">VariableProcessor</a>
               </li>
             </ul>
           </li>
@@ -118,7 +124,7 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+                <a href="Functions.html#/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="Functions/+(_:_:).html">+(_:_:)</a>
@@ -127,7 +133,7 @@
                 <a href="Functions/+=(_:_:).html">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA18InterpreterContextC7contexttAA0K0R_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
+                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA7ContextC7contexttAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
               </li>
             </ul>
           </li>
@@ -135,16 +141,13 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/ContextAware.html">ContextAware</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Protocols/DataTypeProtocol.html">DataTypeProtocol</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/Evaluator.html">Evaluator</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/EvaluatorWithContext.html">EvaluatorWithContext</a>
+                <a href="Protocols/EvaluatorWithLocalContext.html">EvaluatorWithLocalContext</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/FunctionProtocol.html">FunctionProtocol</a>
@@ -153,10 +156,13 @@
                 <a href="Protocols/Interpreter.html">Interpreter</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/MatchElement.html">MatchElement</a>
+                <a href="Protocols/PatternElement.html">PatternElement</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/Printer.html">Printer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/VariableProcessorProtocol.html">VariableProcessorProtocol</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/VariableProtocol.html">VariableProtocol</a>
@@ -169,6 +175,12 @@
               <li class="nav-group-task">
                 <a href="Structs/ExpressionInfo.html">ExpressionInfo</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Structs/PatternOptions.html">PatternOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/VariableOptions.html">VariableOptions</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -176,6 +188,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:4Eval13VariableValuea">VariableValue</a>
               </li>
             </ul>
           </li>
@@ -194,7 +209,7 @@ Ocassionally, more functions are present in the same expression. In this case, i
 <p>The way to create typed interpreters is the following:</p>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">interpreter</span> <span class="o">=</span> <span class="kt">TypedInterpreter</span><span class="p">(</span><span class="nv">dataTypes</span><span class="p">:</span> <span class="p">[</span><span class="n">number</span><span class="p">,</span> <span class="n">string</span><span class="p">,</span> <span class="n">boolean</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">date</span><span class="p">],</span>
                                    <span class="nv">functions</span><span class="p">:</span> <span class="p">[</span><span class="n">concat</span><span class="p">,</span> <span class="n">add</span><span class="p">,</span> <span class="n">multiply</span><span class="p">,</span> <span class="n">substract</span><span class="p">,</span> <span class="n">divide</span><span class="p">],</span>
-                                   <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"example"</span><span class="p">:</span> <span class="mi">1</span><span class="p">]))</span>
+                                   <span class="nv">context</span><span class="p">:</span> <span class="kt">Context</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"example"</span><span class="p">:</span> <span class="mi">1</span><span class="p">]))</span>
 </code></pre>
 
 <p>First, you&rsquo;ll need the data types you are going to work with. These are a smaller subsets of the build in Swift data types, you can map them to existing types (Swift types of the ones of your own)</p>
@@ -296,7 +311,7 @@ Most of the times, only the input is enough to recognise things, like numbers:</
 Let&rsquo;s find out why! A general addition operator (which looks like this <code>Variable&lt;Double&gt;(&quot;lhs&quot;) + Keyword(&quot;+&quot;) + Variable&lt;Double&gt;(&quot;rhs&quot;)</code>) would recognise the pattern <code>12 + 34</code>, but it also matches to <code>12 + 3</code>. What&rsquo;s what shortest means, the shortest match, in this case, is <code>12 + 3</code>, which - semantically - is an incorrect match. 
 But don&rsquo;t worry, the framework already knows about this, so it sets the right value for your variables, even in the last place!</li>
 <li><code>acceptsNilValue</code> informs the framework if <code>nil</code> should be accepted by the pattern. For example, <code>1 + &#39;5&#39;</code> with the previous example (<code>Double + Double</code>) would not match. But, if the <code>acceptsNilValue</code> is defined, then the block would trigger, with <code>{&#39;lhs&#39;: 1, &#39;rhs&#39;: nil}</code>, so you can decide by your own logic what to do in this case.</li>
-<li>Finally, the <code>map</code> block can be used to further transform the value of your <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code> before calling the block on the <code><a href="Classes/Matcher.html">Matcher</a></code>. Since map is a trailing closure, it&rsquo;s quite easy to add. For example, <code>Variable&lt;Int&gt;(&quot;example&quot;) { Double($0) }</code> would recognise only <code>Int</code> values, but would transform them to <code>Double</code> instances when providing them in the <code>variables</code> dictionary. This map can also return <code>nil</code> values but depends on your logic if you want to accept them or not. Side note: the previous map generates a <code><a href="Classes.html#/s:4Eval8VariableC">Variable&lt;Double&gt;</a></code> kind of variable instance.</li>
+<li>Finally, the <code>map</code> block can be used to further transform the value of your <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code> before calling the block on the <code><a href="Classes/Pattern.html">Pattern</a></code>. Since map is a trailing closure, it&rsquo;s quite easy to add. For example, <code>Variable&lt;Int&gt;(&quot;example&quot;) { Double($0) }</code> would recognise only <code>Int</code> values, but would transform them to <code>Double</code> instances when providing them in the <code>variables</code> dictionary. This map can also return <code>nil</code> values but depends on your logic if you want to accept them or not. Side note: the previous map generates a <code><a href="Classes.html#/s:4Eval8VariableC">Variable&lt;Double&gt;</a></code> kind of variable instance.</li>
 </ul>
 <h3 id='specialised-elements' class='heading'>Specialised elements</h3>
 <h4 id='open-amp-close-keyword' class='heading'>Open &amp; Close Keyword</h4>
@@ -316,16 +331,16 @@ But don&rsquo;t worry, the framework already knows about this, so it sets the ri
 
 <p>By using the <code><a href="Classes/OpenKeyword.html">OpenKeyword</a></code> and <code><a href="Classes/CloseKeyword.html">CloseKeyword</a></code> types, these become connected, so embedding parentheses in an expression shouldn&rsquo;t be a problem. 
 After this match is defined, they can be embedded in each other as deeply as needed.</p>
-<h4 id='multiple-matchers-in-one-function' class='heading'>Multiple Matchers in one Function</h4>
+<h4 id='multiple-patterns-in-one-function' class='heading'>Multiple Patterns in one Function</h4>
 
-<p>This is a rarely used pattern, but <code><a href="Classes/Function.html">Function</a></code>s consists of an array of <code><a href="Classes/Matcher.html">Matcher</a></code> elements. 
-Usually, one <code><a href="Classes/Function.html">Function</a></code> does only one operation. Unless this is true, grouping multiple <code><a href="Classes/Matcher.html">Matcher</a></code>s into one <code><a href="Classes/Function.html">Function</a></code> allows semantical grouping of opeartors. </p>
+<p>This is a rarely used pattern, but <code><a href="Classes/Function.html">Function</a></code>s consists of an array of <code><a href="Classes/Pattern.html">Pattern</a></code> elements. 
+Usually, one <code><a href="Classes/Function.html">Function</a></code> does only one operation. Unless this is true, grouping multiple <code><a href="Classes/Pattern.html">Pattern</a></code>s into one <code><a href="Classes/Function.html">Function</a></code> allows semantical grouping of opeartors. </p>
 
-<p>For example a Boolean negation can be expressed in multiple ways: <code>not(true)</code> or <code>!true</code>. In this case, semantically both expressions do the same thing, therefore it might be a good practice to use one <code><a href="Classes/Function.html">Function</a></code> with two <code><a href="Classes/Matcher.html">Matcher</a></code>s for this. </p>
+<p>For example a Boolean negation can be expressed in multiple ways: <code>not(true)</code> or <code>!true</code>. In this case, semantically both expressions do the same thing, therefore it might be a good practice to use one <code><a href="Classes/Function.html">Function</a></code> with two <code><a href="Classes/Pattern.html">Pattern</a></code>s for this. </p>
 <h2 id='context' class='heading'>Context</h2>
 
 <p>You can also pass contextual values, which - for now - equal to variables.</p>
-<pre class="highlight swift"><code><span class="n">expression</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"1 + var"</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">InterpreterContext</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"var"</span><span class="p">:</span> <span class="mi">2</span><span class="p">]))</span>
+<pre class="highlight swift"><code><span class="n">expression</span><span class="o">.</span><span class="nf">evaluate</span><span class="p">(</span><span class="s">"1 + var"</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">Context</span><span class="p">(</span><span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="s">"var"</span><span class="p">:</span> <span class="mi">2</span><span class="p">]))</span>
 </code></pre>
 
 <p>The reason that the variables are encapsulated in a context is that context is a class, while variables are mutable <code>var</code> struct properties on that object. With this construction the context reference can be passed around to multiple interpreter instances, but keeps the copy-on-write (🐮) behaviour of the modification.</p>
@@ -344,7 +359,7 @@ Practically, if there is an addition function and a multiplication one, the mult
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-27)</p>
+          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-28)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

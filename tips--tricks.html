@@ -55,6 +55,9 @@
                 <a href="Classes/CloseKeyword.html">CloseKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Context.html">Context</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/DataType.html">DataType</a>
               </li>
               <li class="nav-group-task">
@@ -62,9 +65,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/GenericVariable.html">GenericVariable</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/InterpreterContext.html">InterpreterContext</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Keyword.html">Keyword</a>
@@ -82,6 +82,9 @@
                 <a href="Classes/OpenKeyword.html">OpenKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Pattern.html">Pattern</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a>
               </li>
               <li class="nav-group-task">
@@ -95,6 +98,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes.html#/s:4Eval8VariableC">Variable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/VariableProcessor.html">VariableProcessor</a>
               </li>
             </ul>
           </li>
@@ -118,7 +124,7 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+                <a href="Functions.html#/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="Functions/+(_:_:).html">+(_:_:)</a>
@@ -127,7 +133,7 @@
                 <a href="Functions/+=(_:_:).html">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA18InterpreterContextC7contexttAA0K0R_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
+                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA7ContextC7contexttAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
               </li>
             </ul>
           </li>
@@ -135,16 +141,13 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/ContextAware.html">ContextAware</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Protocols/DataTypeProtocol.html">DataTypeProtocol</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/Evaluator.html">Evaluator</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/EvaluatorWithContext.html">EvaluatorWithContext</a>
+                <a href="Protocols/EvaluatorWithLocalContext.html">EvaluatorWithLocalContext</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/FunctionProtocol.html">FunctionProtocol</a>
@@ -153,10 +156,13 @@
                 <a href="Protocols/Interpreter.html">Interpreter</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/MatchElement.html">MatchElement</a>
+                <a href="Protocols/PatternElement.html">PatternElement</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/Printer.html">Printer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/VariableProcessorProtocol.html">VariableProcessorProtocol</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/VariableProtocol.html">VariableProtocol</a>
@@ -169,6 +175,12 @@
               <li class="nav-group-task">
                 <a href="Structs/ExpressionInfo.html">ExpressionInfo</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Structs/PatternOptions.html">PatternOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/VariableOptions.html">VariableOptions</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -176,6 +188,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:4Eval13VariableValuea">VariableValue</a>
               </li>
             </ul>
           </li>
@@ -221,7 +236,7 @@ Practically, if there is an addition function and a multiplication one, the mult
 <p>Typically, parentheses and higher precedence operators should go earlier in the array.</p>
 <h2 id='use-any-for-generics-code-variable-lt-any-gt-code' class='heading'>Use Any for generics: <code><a href="Classes.html#/s:4Eval8VariableC">Variable&lt;Any&gt;</a></code></h2>
 
-<p>If you are not sure about the allowed input type of your expressions, or you just want to defer that decision until your match is ran and your hit the block in the matcher, feel free to use <code>Variable&lt;Any&gt;(&quot;name&quot;)</code> in your patterns.</p>
+<p>If you are not sure about the allowed input type of your expressions, or you just want to defer that decision until your match is ran and your hit the block in the pattern, feel free to use <code>Variable&lt;Any&gt;(&quot;name&quot;)</code> in your patterns.</p>
 
 <p>It makes life a lot easier, than definig functions for each type.</p>
 <h2 id='use-map-on-code-variable-code-s-for-pre-filtering' class='heading'>Use map on <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code>s for pre-filtering</h2>
@@ -236,7 +251,7 @@ Practically, if there is an addition function and a multiplication one, the mult
 
 <p>If you use template interpreters, they need a typed interpreter to hold. Both interpreters have <code>context</code> variables, so if you are not being careful enough, it can cause headaches. </p>
 
-<p>Since <code><a href="Classes/InterpreterContext.html">InterpreterContext</a></code> is a class, its reference can be passed around and used in multiple places. </p>
+<p>Since <code><a href="Classes/Context.html">Context</a></code> is a class, its reference can be passed around and used in multiple places. </p>
 
 <p>The reason that the variables are encapsulated in a context is that context is a class, while variables are mutable <code>var</code> struct properties on that object. With this construction the context reference can be passed around to multiple interpreter instances, but keeps the copy-on-write (🐮) behaviour of the modification.</p>
 
@@ -299,7 +314,7 @@ I believe the best place to put constants are in the <code><a href="Classes/Lite
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-27)</p>
+          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-28)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

@@ -55,6 +55,9 @@
                 <a href="Classes/CloseKeyword.html">CloseKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Context.html">Context</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/DataType.html">DataType</a>
               </li>
               <li class="nav-group-task">
@@ -62,9 +65,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/GenericVariable.html">GenericVariable</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/InterpreterContext.html">InterpreterContext</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Keyword.html">Keyword</a>
@@ -82,6 +82,9 @@
                 <a href="Classes/OpenKeyword.html">OpenKeyword</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Pattern.html">Pattern</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a>
               </li>
               <li class="nav-group-task">
@@ -95,6 +98,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes.html#/s:4Eval8VariableC">Variable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/VariableProcessor.html">VariableProcessor</a>
               </li>
             </ul>
           </li>
@@ -118,7 +124,7 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval1poiSayAA12MatchElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+                <a href="Functions.html#/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
                 <a href="Functions/+(_:_:).html">+(_:_:)</a>
@@ -127,7 +133,7 @@
                 <a href="Functions/+=(_:_:).html">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7MatcherCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA18InterpreterContextC7contexttAA0K0R_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
+                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSi4fromq_11interpreterAA7ContextC7contexttAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:)</a>
               </li>
             </ul>
           </li>
@@ -135,16 +141,13 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/ContextAware.html">ContextAware</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Protocols/DataTypeProtocol.html">DataTypeProtocol</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/Evaluator.html">Evaluator</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/EvaluatorWithContext.html">EvaluatorWithContext</a>
+                <a href="Protocols/EvaluatorWithLocalContext.html">EvaluatorWithLocalContext</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/FunctionProtocol.html">FunctionProtocol</a>
@@ -153,10 +156,13 @@
                 <a href="Protocols/Interpreter.html">Interpreter</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/MatchElement.html">MatchElement</a>
+                <a href="Protocols/PatternElement.html">PatternElement</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/Printer.html">Printer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/VariableProcessorProtocol.html">VariableProcessorProtocol</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/VariableProtocol.html">VariableProtocol</a>
@@ -169,6 +175,12 @@
               <li class="nav-group-task">
                 <a href="Structs/ExpressionInfo.html">ExpressionInfo</a>
               </li>
+              <li class="nav-group-task">
+                <a href="Structs/PatternOptions.html">PatternOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/VariableOptions.html">VariableOptions</a>
+              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -176,6 +188,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:4Eval13VariableValuea">VariableValue</a>
               </li>
             </ul>
           </li>
@@ -217,7 +232,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L25-L32">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L25-L33">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -225,9 +240,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval20EvaluatorWithContextP"></a>
-                    <a name="//apple_ref/swift/Protocol/EvaluatorWithContext" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval20EvaluatorWithContextP">EvaluatorWithContext</a>
+                    <a name="/s:4Eval25EvaluatorWithLocalContextP"></a>
+                    <a name="//apple_ref/swift/Protocol/EvaluatorWithLocalContext" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval25EvaluatorWithLocalContextP">EvaluatorWithLocalContext</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -235,52 +250,21 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A special kind of evaluator which uses an <code><a href="Classes/InterpreterContext.html">InterpreterContext</a></code> instance to evaluate expressions
+                        <p>A special kind of evaluator which uses an <code>InterpreterContext</code> instance to evaluate expressions
 The context contains variables which can be used during the evaluation</p>
 
-                        <a href="Protocols/EvaluatorWithContext.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/EvaluatorWithLocalContext.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">EvaluatorWithContext</span><span class="p">:</span> <span class="kt"><a href="Protocols/Evaluator.html">Evaluator</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">EvaluatorWithLocalContext</span><span class="p">:</span> <span class="kt"><a href="Protocols/Evaluator.html">Evaluator</a></span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L36-L42">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval12ContextAwareP"></a>
-                    <a name="//apple_ref/swift/Protocol/ContextAware" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval12ContextAwareP">ContextAware</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>A protocol which stores one <code><a href="Classes/InterpreterContext.html">InterpreterContext</a></code> instance</p>
-
-                        <a href="Protocols/ContextAware.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">ContextAware</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L45-L48">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L37-L43">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -306,12 +290,12 @@ The context contains variables which can be used during the evaluation</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">Interpreter</span><span class="p">:</span> <span class="kt"><a href="Protocols/EvaluatorWithContext.html">EvaluatorWithContext</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/ContextAware.html">ContextAware</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">Interpreter</span><span class="p">:</span> <span class="kt"><a href="Protocols/EvaluatorWithLocalContext.html">EvaluatorWithLocalContext</a></span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L51-L55">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Common.swift#L46-L55">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -354,9 +338,9 @@ The context contains variables which can be used during the evaluation</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval12MatchElementP"></a>
-                    <a name="//apple_ref/swift/Protocol/MatchElement" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval12MatchElementP">MatchElement</a>
+                    <a name="/s:4Eval14PatternElementP"></a>
+                    <a name="//apple_ref/swift/Protocol/PatternElement" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval14PatternElementP">PatternElement</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -367,18 +351,18 @@ The context contains variables which can be used during the evaluation</p>
                         <p><code>MatchElement</code>s are used by <code><a href="Classes/Matcher.html">Matcher</a></code> instances to be able to recognise patterns.
 Currently, the two main kind of <code>MatchElement</code> classes are <code><a href="Classes/Keyword.html">Keyword</a></code>s and <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code>s</p>
 
-                        <a href="Protocols/MatchElement.html" class="slightly-smaller">See more</a>
+                        <a href="Protocols/PatternElement.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">MatchElement</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">PatternElement</span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L26-L31">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L26-L32">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -409,7 +393,7 @@ Currently, the two main kind of <code>MatchElement</code> classes are <code><a h
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L105-L121">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L131-L141">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -482,10 +466,45 @@ Currently, the two main kind of <code>MatchElement</code> classes are <code><a h
                 </li>
               </ul>
             </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval25VariableProcessorProtocolP"></a>
+                    <a name="//apple_ref/swift/Protocol/VariableProcessorProtocol" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval25VariableProcessorProtocolP">VariableProcessorProtocol</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A processor that can process a raw value with extra information, such as interpreter and context</p>
+
+                        <a href="Protocols/VariableProcessorProtocol.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">protocol</span> <span class="kt">VariableProcessorProtocol</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L30-L35">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-27)</p>
+          <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-01-28)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

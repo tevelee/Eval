@@ -163,6 +163,10 @@ class TemplateExampleTests: XCTestCase {
         XCTAssertEqual(eval("{{ 144 / 12 / 4 }}"), "3")
     }
     
+    func testPow() {
+        XCTAssertEqual(eval("{{ 2 ** 5 }}"), "32")
+    }
+    
     func testNumericPrecedence() {
         XCTAssertEqual(eval("{{ 4 + 2 * 3 }}"), "10")
         XCTAssertEqual(eval("{{ 4 - 2 * 3 }}"), "-2")
@@ -228,6 +232,20 @@ class TemplateExampleTests: XCTestCase {
         XCTAssertEqual(eval("{{ not false }}"), "true")
         XCTAssertEqual(eval("{{ !true }}"), "false")
         XCTAssertEqual(eval("{{ !false }}"), "true")
+    }
+    
+    func testAnd() {
+        XCTAssertEqual(eval("{{ true and true }}"), "true")
+        XCTAssertEqual(eval("{{ false and false }}"), "false")
+        XCTAssertEqual(eval("{{ true and false }}"), "false")
+        XCTAssertEqual(eval("{{ false and true }}"), "false")
+    }
+    
+    func testOr() {
+        XCTAssertEqual(eval("{{ true or true }}"), "true")
+        XCTAssertEqual(eval("{{ false or false }}"), "false")
+        XCTAssertEqual(eval("{{ true or false }}"), "true")
+        XCTAssertEqual(eval("{{ false or true }}"), "true")
     }
     
     func testIsEven() {
@@ -311,6 +329,18 @@ class TemplateExampleTests: XCTestCase {
         XCTAssertEqual(eval("{{ ['a', 'b', 'c'].1 }}"), "b")
     }
     
+    func testArrayMap() {
+        XCTAssertEqual(eval("{{ [1,2,3].map(i => i * 2) }}"), "2,4,6")
+    }
+    
+    func testArrayFilter() {
+        XCTAssertEqual(eval("{{ [1,2,3].filter(i => i % 2 == 1) }}"), "1,3")
+    }
+    
+    func testDictionaryFilter() {
+        XCTAssertEqual(eval("{{ {'a': 1, 'b': 2}.filter(k,v => k == 'a') }}"), "[a: 1]")
+    }
+    
     func testDictionarySubscript() {
         XCTAssertEqual(eval("{{ dict.b }}", ["dict": ["a": 1, "b": 2]]), "2")
         XCTAssertEqual(eval("{{ {'a': 1, 'b': 2}.b }}"), "2")
@@ -339,7 +369,19 @@ class TemplateExampleTests: XCTestCase {
     }
     
     func testEscape() {
-        XCTAssertEqual(eval("{{ ' '.escape }}"), "%20")
+        XCTAssertEqual(eval("{{ ' ?&:/'.escape }}"), "&nbsp;?&amp;:/")
+    }
+    
+    func testUrlEncode() {
+        XCTAssertEqual(eval("{{ ' ?&:/'.urlEncode }}"), "%20%3F%26%3A%2F")
+    }
+    
+    func testUrlDecode() {
+        XCTAssertEqual(eval("{{ '%20%3F%26%3A%2F'.urlDecode }}"), " ?&:/")
+    }
+    
+    func testNl2br() {
+        XCTAssertEqual(eval("{{ 'a\nb'.nl2br }}"), "a<br/>b")
     }
     
     func testCapitalise() {

@@ -264,7 +264,10 @@ public class StandardLibrary {
             lowercaseFirst,
             uppercaseFirst,
             trim,
+            urlEncode,
+            urlDecode,
             escape,
+            nl2br,
 
             stringConcatenationOperator,
 
@@ -273,6 +276,7 @@ public class StandardLibrary {
             additionOperator,
             subtractionOperator,
             moduloOperator,
+            powOperator,
 
             lessThanOperator,
             lessThanOrEqualsOperator,
@@ -280,6 +284,9 @@ public class StandardLibrary {
             moreThanOrEqualsOperator,
             equalsOperator,
             notEqualsOperator,
+            
+            stringEqualsOperator,
+            stringNotEqualsOperator,
 
             inNumericArrayOperator,
             inStringArrayOperator,
@@ -289,6 +296,8 @@ public class StandardLibrary {
 
             negationOperator,
             notOperator,
+            orOperator,
+            andOperator,
 
             absoluteValue,
 
@@ -304,6 +313,8 @@ public class StandardLibrary {
             
             arraySubscript,
             arrayCountFunction,
+            arrayMapFunction,
+            arrayFilterFunction,
             arraySortFunction,
             arrayReverseFunction,
             arrayMinFunction,
@@ -318,6 +329,7 @@ public class StandardLibrary {
             
             dictionarySubscript,
             dictionaryCountFunction,
+            dictionaryFilterFunction,
             dictionaryKeys,
             dictionaryValues,
 
@@ -439,31 +451,31 @@ public class StandardLibrary {
         }
     }
     
-    public static var rangeFunction: Function<[Double]?> {
+    public static var rangeFunction: Function<[Double]> {
         return infixOperator("...") { (lhs: Double, rhs: Double) in
             CountableClosedRange(uncheckedBounds: (lower: Int(lhs), upper: Int(rhs))).map { Double($0) }
         }
     }
     
-    public static var rangeOfStringFunction: Function<[String]?> {
+    public static var rangeOfStringFunction: Function<[String]> {
         return infixOperator("...") { (lhs: String, rhs: String) in
             CountableClosedRange(uncheckedBounds: (lower: Character(lhs), upper: Character(rhs))).map { String($0) }
         }
     }
     
-    public static var startsWithOperator: Function<Bool?> {
+    public static var startsWithOperator: Function<Bool> {
         return infixOperator("starts with") { (lhs: String, rhs: String) in lhs.hasPrefix(rhs) }
     }
     
-    public static var endsWithOperator: Function<Bool?> {
+    public static var endsWithOperator: Function<Bool> {
         return infixOperator("ends with") { (lhs: String, rhs: String) in lhs.hasSuffix(rhs) }
     }
     
-    public static var containsOperator: Function<Bool?> {
+    public static var containsOperator: Function<Bool> {
         return infixOperator("contains") { (lhs: String, rhs: String) in lhs.contains(rhs) }
     }
     
-    public static var matchesOperator: Function<Bool?> {
+    public static var matchesOperator: Function<Bool> {
         return infixOperator("matches") { (lhs: String, rhs: String) in
             if let regex = try? NSRegularExpression(pattern: rhs) {
                 let matches = regex.numberOfMatches(in: lhs, range: NSRange(lhs.startIndex..., in: lhs))
@@ -503,91 +515,126 @@ public class StandardLibrary {
         return objectFunction("trim") { (value: String) -> String? in value.trimmingCharacters(in: .whitespacesAndNewlines) }
     }
     
-    public static var escape: Function<String> {
-        return objectFunction("escape") { (value: String) -> String? in value.addingPercentEncoding(withAllowedCharacters: .alphanumerics) }
+    public static var urlEncode: Function<String> {
+        return objectFunction("urlEncode") { (value: String) -> String? in value.addingPercentEncoding(withAllowedCharacters: .alphanumerics) }
     }
     
-    public static var stringConcatenationOperator: Function<String?> {
+    public static var urlDecode: Function<String> {
+        return objectFunction("urlDecode") { (value: String) -> String? in value.removingPercentEncoding }
+    }
+    
+    public static var escape: Function<String> {
+        return objectFunction("escape") { (value: String) -> String? in value.html }
+    }
+    
+    public static var nl2br: Function<String> {
+        return objectFunction("nl2br") { (value: String) -> String? in value
+            .replacingOccurrences(of: "\r\n", with: "<br/>")
+            .replacingOccurrences(of: "\n", with: "<br/>")
+        }
+    }
+    
+    public static var stringConcatenationOperator: Function<String> {
         return infixOperator("+") { (lhs: String, rhs: String) in lhs + rhs}
     }
     
-    public static var additionOperator: Function<Double?> {
+    public static var additionOperator: Function<Double> {
         return infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs}
     }
     
-    public static var subtractionOperator: Function<Double?> {
+    public static var subtractionOperator: Function<Double> {
         return infixOperator("-") { (lhs: Double, rhs: Double) in lhs - rhs}
     }
     
-    public static var multiplicationOperator: Function<Double?> {
+    public static var multiplicationOperator: Function<Double> {
         return infixOperator("*") { (lhs: Double, rhs: Double) in lhs * rhs}
     }
     
-    public static var divisionOperator: Function<Double?> {
+    public static var divisionOperator: Function<Double> {
         return infixOperator("/") { (lhs: Double, rhs: Double) in lhs / rhs}
     }
     
-    public static var moduloOperator: Function<Double?> {
+    public static var moduloOperator: Function<Double> {
         return infixOperator("%") { (lhs: Double, rhs: Double) in Double(Int(lhs) % Int(rhs))}
     }
     
-    public static var lessThanOperator: Function<Bool?> {
+    public static var powOperator: Function<Double> {
+        return infixOperator("**") { (lhs: Double, rhs: Double) in pow(lhs, rhs) }
+    }
+    
+    public static var lessThanOperator: Function<Bool> {
         return infixOperator("<") { (lhs: Double, rhs: Double) in lhs < rhs}
     }
     
-    public static var moreThanOperator: Function<Bool?> {
+    public static var moreThanOperator: Function<Bool> {
         return infixOperator("<=") { (lhs: Double, rhs: Double) in lhs <= rhs}
     }
     
-    public static var lessThanOrEqualsOperator: Function<Bool?> {
+    public static var lessThanOrEqualsOperator: Function<Bool> {
         return infixOperator(">") { (lhs: Double, rhs: Double) in lhs > rhs}
     }
     
-    public static var moreThanOrEqualsOperator: Function<Bool?> {
+    public static var moreThanOrEqualsOperator: Function<Bool> {
         return infixOperator(">=") { (lhs: Double, rhs: Double) in lhs >= rhs}
     }
     
-    public static var equalsOperator: Function<Bool?> {
+    public static var equalsOperator: Function<Bool> {
         return infixOperator("==") { (lhs: Double, rhs: Double) in lhs == rhs}
     }
     
-    public static var notEqualsOperator: Function<Bool?> {
+    public static var notEqualsOperator: Function<Bool> {
         return infixOperator("!=") { (lhs: Double, rhs: Double) in lhs != rhs}
     }
     
-    public static var inStringArrayOperator: Function<Bool?> {
+    public static var stringEqualsOperator: Function<Bool> {
+        return infixOperator("==") { (lhs: String, rhs: String) in lhs == rhs}
+    }
+    
+    public static var stringNotEqualsOperator: Function<Bool> {
+        return infixOperator("!=") { (lhs: String, rhs: String) in lhs != rhs}
+    }
+    
+    public static var inStringArrayOperator: Function<Bool> {
         return infixOperator("in") { (lhs: String, rhs: [String]) in rhs.contains(lhs) }
     }
     
-    public static var inNumericArrayOperator: Function<Bool?> {
+    public static var inNumericArrayOperator: Function<Bool> {
         return infixOperator("in") { (lhs: Double, rhs: [Double]) in rhs.contains(lhs) }
     }
     
-    public static var negationOperator: Function<Bool?> {
+    public static var negationOperator: Function<Bool> {
         return prefixOperator("!") { (expression: Bool) in !expression}
     }
     
-    public static var notOperator: Function<Bool?> {
+    public static var notOperator: Function<Bool> {
         return prefixOperator("not") { (expression: Bool) in !expression}
+    }
+    
+    public static var andOperator: Function<Bool> {
+        return infixOperator("and") { (lhs: Bool, rhs: Bool) in lhs && rhs }
+    }
+    
+    public static var orOperator: Function<Bool> {
+        return infixOperator("or") { (lhs: Bool, rhs: Bool) in lhs || rhs }
     }
     
     public static var absoluteValue: Function<Double> {
         return objectFunction("abs") { (value: Double) -> Double? in abs(value) }
     }
     
-    public static var incrementOperator: Function<Double?> {
+    public static var incrementOperator: Function<Double> {
         return suffixOperator("++") { (expression: Double) in expression + 1}
     }
     
-    public static var decrementOperator: Function<Double?> {
+    public static var decrementOperator: Function<Double> {
         return suffixOperator("--") { (expression: Double) in expression - 1}
     }
     
-    public static var isEvenOperator: Function<Bool?> {
+    public static var isEvenOperator: Function<Bool> {
         return suffixOperator("is even") { (expression: Double) in Int(expression) % 2 == 0}
     }
     
-    public static var isOddOperator: Function<Bool?> {
+    public static var isOddOperator: Function<Bool> {
         return suffixOperator("is odd") { (expression: Double) in abs(Int(expression) % 2) == 1}
     }
     
@@ -670,6 +717,68 @@ public class StandardLibrary {
     
     public static var dictionaryCountFunction: Function<Double> {
         return objectFunction("count") { (object: [String: Any]) -> Double? in Double(object.count) }
+    }
+    
+    public static var arrayMapFunction: Function<[Any]> {
+        return Function([Variable<[Any]>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value,_ in
+            guard let value = value as? String, value == "map" else { return nil }
+            return value
+        }, Keyword("("), Variable<String>("variable", options: .notInterpreted), Keyword("=>"), Variable<Any>("body", options: .notInterpreted), Keyword(")")]) { variables, interpreter, context in
+            guard let object = variables["lhs"] as? [Any], variables["rhs"] != nil,
+                let variable = variables["variable"] as? String,
+                let body = variables["body"] as? String else { return nil }
+            context.push()
+            let result : [Any] = object.flatMap { item in
+                context.variables[variable] = item
+                return interpreter.evaluate(body, context: context)
+            }
+            context.pop()
+            return result
+        }
+    }
+    
+    public static var arrayFilterFunction: Function<[Any]> {
+        return Function([Variable<[Any]>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value,_ in
+            guard let value = value as? String, value == "filter" else { return nil }
+            return value
+        }, Keyword("("), Variable<String>("variable", options: .notInterpreted), Keyword("=>"), Variable<Any>("body", options: .notInterpreted), Keyword(")")]) { variables, interpreter, context in
+            guard let object = variables["lhs"] as? [Any], variables["rhs"] != nil,
+                let variable = variables["variable"] as? String,
+                let body = variables["body"] as? String else { return nil }
+            context.push()
+            let result : [Any] = object.filter { item in
+                context.variables[variable] = item
+                if let result = interpreter.evaluate(body, context: context) as? Bool {
+                    return result
+                }
+                return false
+            }
+            context.pop()
+            return result
+        }
+    }
+    
+    public static var dictionaryFilterFunction: Function<[String: Any]> {
+        return Function([Variable<[String: Any]>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value,_ in
+            guard let value = value as? String, value == "filter" else { return nil }
+            return value
+            }, Keyword("("), Variable<String>("key", options: .notInterpreted), Keyword(","), Variable<String>("value", options: .notInterpreted), Keyword("=>"), Variable<Any>("body", options: .notInterpreted), Keyword(")")]) { variables, interpreter, context in
+                guard let object = variables["lhs"] as? [String: Any], variables["rhs"] != nil,
+                    let keyVariable = variables["key"] as? String,
+                    let valueVariable = variables["value"] as? String,
+                    let body = variables["body"] as? String else { return nil }
+                context.push()
+                let result : [String: Any] = object.filter { key, value in
+                    context.variables[keyVariable] = key
+                    context.variables[valueVariable] = value
+                    if let result = interpreter.evaluate(body, context: context) as? Bool {
+                        return result
+                    }
+                    return false
+                }
+                context.pop()
+                return result
+        }
     }
     
     public static var sumFunction: Function<Double> {
@@ -826,21 +935,21 @@ public class StandardLibrary {
 
     //MARK: Operator helpers
     
-    public static func infixOperator<A,B,T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T?> {
+    public static func infixOperator<A,B,T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T> {
         return Function([Variable<A>("lhs"), Keyword(symbol), Variable<B>("rhs")], options: .backwardMatch) { arguments,_,_ in
             guard let lhs = arguments["lhs"] as? A, let rhs = arguments["rhs"] as? B else { return nil }
             return body(lhs, rhs)
         }
     }
     
-    public static func prefixOperator<A,T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T?> {
+    public static func prefixOperator<A,T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T> {
         return Function([Keyword(symbol), Variable<A>("value")]) { arguments,_,_ in
             guard let value = arguments["value"] as? A else { return nil }
             return body(value)
         }
     }
     
-    public static func suffixOperator<A,T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T?> {
+    public static func suffixOperator<A,T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T> {
         return Function([Variable<A>("value"), Keyword(symbol)]) { arguments,_,_ in
             guard let value = arguments["value"] as? A else { return nil }
             return body(value)
@@ -935,5 +1044,23 @@ extension Character : Strideable {
             fatalError("\(String(advancedValue, radix: 16)) does not represent a valid unicode scalar value.")
         }
         return Character(advancedScalar)
+    }
+}
+
+extension String {
+    static let enc:  [Character: String] = [" ":"&emsp;", " ":"&ensp;", " ":"&nbsp;", " ":"&thinsp;", "‾":"&oline;", "–":"&ndash;", "—":"&mdash;", "¡":"&iexcl;", "¿":"&iquest;", "…":"&hellip;", "·":"&middot;", "'":"&apos;", "‘":"&lsquo;", "’":"&rsquo;", "‚":"&sbquo;", "‹":"&lsaquo;", "›":"&rsaquo;", "‎":"&lrm;", "‏":"&rlm;", "­":"&shy;", "‍":"&zwj;", "‌":"&zwnj;", "\"":"&quot;", "“":"&ldquo;", "”":"&rdquo;", "„":"&bdquo;", "«":"&laquo;", "»":"&raquo;", "⌈":"&lceil;", "⌉":"&rceil;", "⌊":"&lfloor;", "⌋":"&rfloor;", "〈":"&lang;", "〉":"&rang;", "§":"&sect;", "¶":"&para;", "&":"&amp;", "‰":"&permil;", "†":"&dagger;", "‡":"&Dagger;", "•":"&bull;", "′":"&prime;", "″":"&Prime;", "´":"&acute;", "˜":"&tilde;", "¯":"&macr;", "¨":"&uml;", "¸":"&cedil;", "ˆ":"&circ;", "°":"&deg;", "©":"&copy;", "®":"&reg;", "℘":"&weierp;", "←":"&larr;", "→":"&rarr;", "↑":"&uarr;", "↓":"&darr;", "↔":"&harr;", "↵":"&crarr;", "⇐":"&lArr;", "⇑":"&uArr;", "⇒":"&rArr;", "⇓":"&dArr;", "⇔":"&hArr;", "∀":"&forall;", "∂":"&part;", "∃":"&exist;", "∅":"&empty;", "∇":"&nabla;", "∈":"&isin;", "∉":"&notin;", "∋":"&ni;", "∏":"&prod;", "∑":"&sum;", "±":"&plusmn;", "÷":"&divide;", "×":"&times;", "<":"&lt;", "≠":"&ne;", ">":"&gt;", "¬":"&not;", "¦":"&brvbar;", "−":"&minus;", "⁄":"&frasl;", "∗":"&lowast;", "√":"&radic;", "∝":"&prop;", "∞":"&infin;", "∠":"&ang;", "∧":"&and;", "∨":"&or;", "∩":"&cap;", "∪":"&cup;", "∫":"&int;", "∴":"&there4;", "∼":"&sim;", "≅":"&cong;", "≈":"&asymp;", "≡":"&equiv;", "≤":"&le;", "≥":"&ge;", "⊄":"&nsub;", "⊂":"&sub;", "⊃":"&sup;", "⊆":"&sube;", "⊇":"&supe;", "⊕":"&oplus;", "⊗":"&otimes;", "⊥":"&perp;", "⋅":"&sdot;", "◊":"&loz;", "♠":"&spades;", "♣":"&clubs;", "♥":"&hearts;", "♦":"&diams;", "¤":"&curren;", "¢":"&cent;", "£":"&pound;", "¥":"&yen;", "€":"&euro;", "¹":"&sup1;", "½":"&frac12;", "¼":"&frac14;", "²":"&sup2;", "³":"&sup3;", "¾":"&frac34;", "á":"&aacute;", "Á":"&Aacute;", "â":"&acirc;", "Â":"&Acirc;", "à":"&agrave;", "À":"&Agrave;", "å":"&aring;", "Å":"&Aring;", "ã":"&atilde;", "Ã":"&Atilde;", "ä":"&auml;", "Ä":"&Auml;", "ª":"&ordf;", "æ":"&aelig;", "Æ":"&AElig;", "ç":"&ccedil;", "Ç":"&Ccedil;", "ð":"&eth;", "Ð":"&ETH;", "é":"&eacute;", "É":"&Eacute;", "ê":"&ecirc;", "Ê":"&Ecirc;", "è":"&egrave;", "È":"&Egrave;", "ë":"&euml;", "Ë":"&Euml;", "ƒ":"&fnof;", "í":"&iacute;", "Í":"&Iacute;", "î":"&icirc;", "Î":"&Icirc;", "ì":"&igrave;", "Ì":"&Igrave;", "ℑ":"&image;", "ï":"&iuml;", "Ï":"&Iuml;", "ñ":"&ntilde;", "Ñ":"&Ntilde;", "ó":"&oacute;", "Ó":"&Oacute;", "ô":"&ocirc;", "Ô":"&Ocirc;", "ò":"&ograve;", "Ò":"&Ograve;", "º":"&ordm;", "ø":"&oslash;", "Ø":"&Oslash;", "õ":"&otilde;", "Õ":"&Otilde;", "ö":"&ouml;", "Ö":"&Ouml;", "œ":"&oelig;", "Œ":"&OElig;", "ℜ":"&real;", "š":"&scaron;", "Š":"&Scaron;", "ß":"&szlig;", "™":"&trade;", "ú":"&uacute;", "Ú":"&Uacute;", "û":"&ucirc;", "Û":"&Ucirc;", "ù":"&ugrave;", "Ù":"&Ugrave;", "ü":"&uuml;", "Ü":"&Uuml;", "ý":"&yacute;", "Ý":"&Yacute;", "ÿ":"&yuml;", "Ÿ":"&Yuml;", "þ":"&thorn;", "Þ":"&THORN;", "α":"&alpha;", "Α":"&Alpha;", "β":"&beta;", "Β":"&Beta;", "γ":"&gamma;", "Γ":"&Gamma;", "δ":"&delta;", "Δ":"&Delta;", "ε":"&epsilon;", "Ε":"&Epsilon;", "ζ":"&zeta;", "Ζ":"&Zeta;", "η":"&eta;", "Η":"&Eta;", "θ":"&theta;", "Θ":"&Theta;", "ϑ":"&thetasym;", "ι":"&iota;", "Ι":"&Iota;", "κ":"&kappa;", "Κ":"&Kappa;", "λ":"&lambda;", "Λ":"&Lambda;", "µ":"&micro;", "μ":"&mu;", "Μ":"&Mu;", "ν":"&nu;", "Ν":"&Nu;", "ξ":"&xi;", "Ξ":"&Xi;", "ο":"&omicron;", "Ο":"&Omicron;", "π":"&pi;", "Π":"&Pi;", "ϖ":"&piv;", "ρ":"&rho;", "Ρ":"&Rho;", "σ":"&sigma;", "Σ":"&Sigma;", "ς":"&sigmaf;", "τ":"&tau;", "Τ":"&Tau;", "ϒ":"&upsih;", "υ":"&upsilon;", "Υ":"&Upsilon;", "φ":"&phi;", "Φ":"&Phi;", "χ":"&chi;", "Χ":"&Chi;", "ψ":"&psi;", "Ψ":"&Psi;", "ω":"&omega;", "Ω":"&Omega;", "ℵ":"&alefsym;"]
+    
+    var html: String {
+        get {
+            var html = ""
+            for c in self {
+                if let entity = String.enc[c] {
+                    html.append(entity)
+                } else {
+                    html.append(c)
+                }
+            }
+            return html
+        }
     }
 }

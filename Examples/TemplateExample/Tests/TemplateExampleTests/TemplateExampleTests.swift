@@ -449,7 +449,7 @@ class TemplateExampleTests: XCTestCase {
         let context = Context(variables: variables)
         let result = interpreter.evaluate(template, context: context)
         if !context.debugInfo.isEmpty {
-            print(context.debugInfo)
+//            print(context.debugInfo)
         }
         return result
     }

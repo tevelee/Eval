@@ -1,4 +1,6 @@
 import Foundation
+import PathKit
+import xcproj
 
 class Eval {
     static func main() {
@@ -125,7 +127,7 @@ class Eval {
         }
         
         print("🤖 Generating project file")
-        try Shell.executeAndPrint("swift package generate-xcodeproj")
+        try Shell.executeAndPrint("swift package generate-xcodeproj --enable-code-coverage")
     }
 
     static func build() throws {
@@ -225,10 +227,12 @@ class Eval {
                 "rm -rf build"
             ]
             let build = [
-                "swift package update"
+                "swift package generate-xcodeproj"
             ]
-            return (cleanup + build).joined(separator: ";")
+            return (cleanup + build).joined(separator: " && ")
         }
+        
+        try performManualSteps()
     }
     
     static func buildExamples() throws {
@@ -254,7 +258,7 @@ class Eval {
                 try command(name),
                 "popd"
             ]
-            try Shell.executeAndPrint(commands.joined(separator: ";"), timeout: 120)
+            try Shell.executeAndPrint(commands.joined(separator: " && "), timeout: 120)
         }
     }
     
@@ -277,6 +281,50 @@ class Eval {
             return output
         }
         return nil
+    }
+    
+    // MARK: Manual steps
+    
+    static func performManualSteps() throws {
+        try performManualStepsForTemplateExample()
+    }
+    
+    static func performManualStepsForTemplateExample() throws {
+        let example = "TemplateExample"
+        print("⏳ Configuring \(example)")
+        
+        let base = Path("Examples/\(example)/")
+        let path = Path("\(base)/\(example).xcodeproj")
+        let project = try XcodeProj(path: path)
+        
+        let testsGroup = project.pbxproj.objects.groups.first(where: {$0.value.name == "\(example)Tests"})?.value
+        
+        let phase = PBXResourcesBuildPhase()
+        let ref = project.pbxproj.objects.generateReference(phase, "CopyResourcesBuildPhase")
+        project.pbxproj.objects.addObject(phase, reference: ref)
+        
+        if let target = project.pbxproj.objects.targets(named: "\(example)Tests").first {
+            target.object.buildPhases.append(ref)
+        }
+        
+        let tests = Path("\(base)/Tests/\(example)Tests")
+        let files = try tests.children().flatMap { $0.components.last }.filter { $0.hasSuffix("txt") }
+        for file in files {
+            let fileRef = PBXFileReference(sourceTree: .group, name: nil, path: file)
+            fileRef.fileEncoding = 4 //utf8
+            let ref = project.pbxproj.objects.generateReference(fileRef, file)
+            project.pbxproj.objects.fileReferences.append(fileRef, reference: ref)
+            
+            let buildFile = PBXBuildFile(fileRef: ref)
+            let buildFileRef = project.pbxproj.objects.generateReference(buildFile, file)
+            project.pbxproj.objects.buildFiles.append(buildFile, reference: buildFileRef)
+            
+            testsGroup?.children.append(ref)
+            phase.files.append(buildFileRef)
+        }
+        
+        try project.writePBXProj(path: path)
+        print("🤖 Generated project file")
     }
 }
 

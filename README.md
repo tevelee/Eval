@@ -220,7 +220,7 @@ swift package resolve
 Just add the following line to your `Podfile`:
 
 ```ruby
-pod 'Eval', '~> 1.2'
+pod 'Eval', '~> 1.2.0'
 ```
 And install the new dependency:
 

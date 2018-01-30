@@ -113,13 +113,13 @@ public struct VariableOptions: OptionSet {
     }
 
     /// If set, the value of the recognised placeholder will not be processed. Otherwise, it will be evaluated, using the `interpreterForEvaluatingVariables` property of the interpreter instance
-    public static let notInterpreted  = VariableOptions(rawValue: 1 << 0)
+    public static let notInterpreted: VariableOptions = VariableOptions(rawValue: 1 << 0)
     /// Whether the processed variable should be or not to be trimmed (removing whitespaces from both sides)
-    public static let notTrimmed      = VariableOptions(rawValue: 1 << 1)
+    public static let notTrimmed: VariableOptions = VariableOptions(rawValue: 1 << 1)
     /// Provides information whether the match should be exhaustive or just use the shortest possible matching string (even zero characters in some edge cases). This depends on the surrounding `Keyword` instances in the containing collection.
-    public static let exhaustiveMatch = VariableOptions(rawValue: 1 << 2)
+    public static let exhaustiveMatch: VariableOptions = VariableOptions(rawValue: 1 << 2)
     /// If interpreted and the result of the evaluation is `nil`, then `acceptsNilValue` determines if the current match result should be instant noMatch, or `nil` is an accepted value, so the matching should be continued
-    public static let acceptsNilValue = VariableOptions(rawValue: 1 << 3)
+    public static let acceptsNilValue: VariableOptions = VariableOptions(rawValue: 1 << 3)
 
     /// In order to avoid double negatives in the source code (e.g. !notInterpreted), this helper checks the lack of .notInterpreted value in the optionset
     var interpreted: Bool { return !contains(.notInterpreted) }
@@ -128,7 +128,7 @@ public struct VariableOptions: OptionSet {
 }
 
 /// Protocol for all Variables
-protocol VariableProtocol {
+internal protocol VariableProtocol {
     /// Unique identifier of the variable that is used when matching and returning them in the matcher.
     var name: String { get }
     /// Options that modify the behaviour of the variable matching, and the output that the framework provides

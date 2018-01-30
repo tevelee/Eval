@@ -1,10 +1,10 @@
-import XCTest
-import Eval
 @testable import ColorParserExample
+import Eval
+import XCTest
 
 class ColorParserExampleTests: XCTestCase {
-    let colorParser = ColorParser()
-    
+    let colorParser: ColorParser = ColorParser()
+
     func testExample() {
         XCTAssertEqual(colorParser.evaluate("#00ff00") as! NSColor, .green)
         XCTAssertEqual(colorParser.evaluate("red") as! NSColor, .red)

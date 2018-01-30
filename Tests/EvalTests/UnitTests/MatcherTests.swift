@@ -1,9 +1,9 @@
-import XCTest
 @testable import Eval
+import XCTest
 
 class MatcherTests: XCTestCase {
 
-    //MARK: isEmbedded
+    // MARK: isEmbedded
 
     func test_whenEmbedding_thenIsEmbeddedReturnsTrue() {
         let opening = Keyword("(", type: .openingStatement)
@@ -38,7 +38,7 @@ class MatcherTests: XCTestCase {
         XCTAssertFalse(result)
     }
 
-    //MARK: positionOfClosingTag
+    // MARK: positionOfClosingTag
 
     func test_whenEmbedding_thenClosingPositionIsValid() {
         let opening = Keyword("(", type: .openingStatement)

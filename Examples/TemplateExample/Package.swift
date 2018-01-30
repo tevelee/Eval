@@ -7,10 +7,10 @@ let package = Package(
     products: [
         .library(
             name: "TemplateExample",
-            targets: ["TemplateExample"]),
+            targets: ["TemplateExample"])
     ],
     dependencies: [
-        .package(url: "../../", from: "1.0.0"),
+        .package(url: "../../", from: "1.0.0")
     ],
     targets: [
         .target(
@@ -18,6 +18,6 @@ let package = Package(
             dependencies: ["Eval"]),
         .testTarget(
             name: "TemplateExampleTests",
-            dependencies: ["TemplateExample"]),
+            dependencies: ["TemplateExample"])
     ]
 )

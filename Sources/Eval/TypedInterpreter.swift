@@ -68,7 +68,7 @@ public class TypedInterpreter: Interpreter, Printer {
     /// - parameter context: Local context that is going to be used with this expression only
     /// - returns: The output of the evaluation
     public func evaluate(_ expression: String, context: Context) -> Any? {
-        context.merge(with: self.context) { existing, _ in existing}
+        context.merge(with: self.context) { existing, _ in existing }
         let expression = expression.trim()
 
         return functionFromCache(for: expression, using: context)

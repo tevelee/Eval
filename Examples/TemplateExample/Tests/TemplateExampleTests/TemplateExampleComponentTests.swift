@@ -1,30 +1,30 @@
-import XCTest
 import Eval
 @testable import TemplateExample
+import XCTest
 
 class TemplateExampleComponentTests: XCTestCase {
-    let interpreter = TemplateLanguage()
-    
+    let interpreter: TemplateLanguage = TemplateLanguage()
+
     func testComplexExample() {
         XCTAssertEqual(eval(
 """
-    {% if greet %}Hello{% else %}Bye{% endif %} {{ name }}!
-    {% set works = true %}
-    {% for i in [3,2,1] %}{{ i }}, {% endfor %}go!
-    
-    This template engine {% if !works %}does not {% endif %}work{% if works %}s{% endif %}!
+{% if greet %}Hello{% else %}Bye{% endif %} {{ name }}!
+{% set works = true %}
+{% for i in [3,2,1] %}{{ i }}, {% endfor %}go!
+
+This template engine {% if !works %}does not {% endif %}work{% if works %}s{% endif %}!
 """, ["greet": true, "name": "Laszlo"]),
 """
-    Hello Laszlo!
-    
-    3, 2, 1, go!
-    
-    This template engine works!
+Hello Laszlo!
+
+3, 2, 1, go!
+
+This template engine works!
 """)
     }
-    
-    //MARK: Helpers
-    
+
+    // MARK: Helpers
+
     func eval(_ template: String, _ variables: [String: Any] = [:]) -> String {
         let context = Context(variables: variables)
         let result = interpreter.evaluate(template, context: context)
@@ -34,4 +34,3 @@ class TemplateExampleComponentTests: XCTestCase {
         return result
     }
 }
-

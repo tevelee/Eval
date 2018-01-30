@@ -99,7 +99,7 @@ open class TemplateInterpreter<T> : Interpreter {
             case .noMatch, .possibleMatch:
                 output = reducer.reduceCharacter(output, expression[position])
                 position += 1
-            case .exactMatch(let length, let matchOutput, _):
+            case let .exactMatch(length, matchOutput, _):
                 output = reducer.reduceValue(output, matchOutput)
                 position += length
             default:

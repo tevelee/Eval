@@ -41,7 +41,7 @@ public struct PatternOptions: OptionSet {
     }
 
     /// Searches of the elements of the pattern backward from the end of the output. Othwerise, if not present, it matches from the beginning.
-    public static let backwardMatch = PatternOptions(rawValue: 1 << 0)
+    public static let backwardMatch: PatternOptions = PatternOptions(rawValue: 1 << 0)
 }
 
 /// Matchers are the heart of the Eval framework, providing pattern matching capabilities to the library.

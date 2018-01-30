@@ -1,0 +1,7 @@
+disabled_rules:
+  - force_cast
+  - force_try
+  - force_unwrapping
+  - type_name
+  - file_header
+  - explicit_top_level_acl

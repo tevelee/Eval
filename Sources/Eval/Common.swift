@@ -140,7 +140,7 @@ public class Context {
 /// - parameter interpreter: An interpreter instance - if variables need any further evaluation
 /// - parameter context: The context - if variables need any contextual information
 /// - returns: The result of the match operation
-func matchStatement<T, E>(amongst statements: [Pattern<T, E>], in input: String, from start: Int = 0, interpreter: E, context: Context) -> MatchResult<T> {
+internal func matchStatement<T, E>(amongst statements: [Pattern<T, E>], in input: String, from start: Int = 0, interpreter: E, context: Context) -> MatchResult<T> {
     let results = statements.lazy.map { statement -> (element: Pattern<T, E>, result: MatchResult<T>) in
         let result = statement.matches(string: input, from: start, interpreter: interpreter, context: context)
         return (element: statement, result: result)

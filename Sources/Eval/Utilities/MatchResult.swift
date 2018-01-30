@@ -80,13 +80,13 @@ public extension MatchResult where T: Equatable {
     /// - parameter lhs: Left hand side
     /// - parameter rhs: Right hand side
     /// - returns: Whether the `MatchResult` have the same values, including the contents of their associated objects
-    public static func == (lhs: MatchResult<T>, rhs: MatchResult<T>) -> Bool {
+    static func == (lhs: MatchResult<T>, rhs: MatchResult<T>) -> Bool {
         switch (lhs, rhs) {
         case (.noMatch, .noMatch), (.possibleMatch, .possibleMatch):
             return true
-        case (.anyMatch(let lhsShortest), .anyMatch(let rhsShortest)):
+        case let (.anyMatch(lhsShortest), .anyMatch(rhsShortest)):
             return lhsShortest == rhsShortest
-        case (.exactMatch(let lhsLength, let lhsOutput, let lhsVariables), .exactMatch(let rhsLength, let rhsOutput, let rhsVariables)):
+        case let (.exactMatch(lhsLength, lhsOutput, lhsVariables), .exactMatch(rhsLength, rhsOutput, rhsVariables)):
             return lhsLength == rhsLength && lhsOutput == rhsOutput && (lhsVariables as NSDictionary).isEqual(to: rhsVariables)
         default:
             return false

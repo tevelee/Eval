@@ -1,6 +1,6 @@
-import XCTest
 @testable import TemplateExampleTests
+import XCTest
 
 XCTMain([
-    testCase(TemplateExampleTests.allTests),
+    testCase(TemplateExampleTests.allTests)
 ])

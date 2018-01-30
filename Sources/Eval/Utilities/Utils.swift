@@ -33,15 +33,15 @@ public func + (left: PatternElement, right: PatternElement) -> [PatternElement] 
 /// - parameter array: The array to append
 /// - parameter element: The appended element
 /// - returns: A new array by appending `array` with `element`
-func + <A>(array: [A], element: A) -> [A] {
+internal func + <A>(array: [A], element: A) -> [A] {
     return array + [element]
 }
 
 /// Syntactic sugar for appending mutable arrays
 /// - parameter array: The array to append
 /// - parameter element: The appended element
-func += <A> (array: inout [A], element: A) {
-    array = array + element
+internal func += <A> (array: inout [A], element: A) {
+    array = array + element //swiftlint:disable:this shorthand_operator
 }
 
 /// Helpers on `String` to provide `Int` based subscription features and easier usage

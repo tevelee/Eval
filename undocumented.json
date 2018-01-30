@@ -1,6 +1,12 @@
 {
   "warnings": [
-
+    {
+      "file": "/Users/laszloteveli/Documents/Eval/Sources/Eval/Utilities/Matcher.swift",
+      "line": 192,
+      "symbol": "Matcher.match(string:from:renderer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
   ],
-  "source_directory": "/Users/travis/build/tevelee/Eval"
+  "source_directory": "/Users/laszloteveli/Documents/Eval"
 }

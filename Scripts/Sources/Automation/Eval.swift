@@ -51,6 +51,8 @@ class Eval {
             try testCoverage()
 
             try runDanger()
+
+            try releaseNewVersion()
         }
     }
 
@@ -218,6 +220,41 @@ class Eval {
         }
     }
 
+    static func releaseNewVersion() throws {
+        guard case .travisPushOnBranch(_) = TravisCI.jobType() else { return }
+
+        if let message = try commitMessage() {
+            let message = message.trimmingCharacters(in: .whitespacesAndNewlines)
+            let regex = try NSRegularExpression(pattern: "^Version (\\d{1,2}\\.\\d{1,2}\\.\\d{1,2})$")
+            let matches = regex.numberOfMatches(in: message, range: NSRange(message.startIndex..., in: message))
+            if matches > 0, let currentTag = try Shell.execute("git show HEAD~1:.version")?.output {
+                let currentTag = currentTag.trimmingCharacters(in: .whitespacesAndNewlines)
+                let tag = message.replacingOccurrences(of: "Version ", with: "")
+                let files = ["README.md", ".version", "Eval.podspec"]
+
+                print("🤖 Applying new version \(tag) in project")
+                for file in files {
+                    try Shell.executeAndPrint("sed -i '' 's/\(currentTag)/\(tag)/g' \(file)")
+                    try Shell.executeAndPrint("git add \(file)")
+                }
+                try Shell.executeAndPrint("git commit --amend --no-edit")
+
+                print("🔖 Tagging \(tag)")
+                try Shell.executeAndPrint("git tag -d \(tag) || true")
+                try Shell.executeAndPrint("git tag \(tag) HEAD")
+
+                print("💁🏻 Pushing changes")
+                try Shell.executeAndPrint("git remote add ssh_origin git@github.com:tevelee/Eval.git")
+                try Shell.executeAndPrint("git push ssh_origin HEAD:master --force")
+                try Shell.executeAndPrint("git push ssh_origin HEAD:master --force --tags")
+
+                print("📦 Releasing package managers")
+                try Shell.executeAndPrint("pod trunk register $COCOAPODS_TRUNK_EMAIL --description='Eval Automated Release' || true")
+                try Shell.executeAndPrint("pod trunk push . || true", timeout: 600)
+            }
+        }
+    }
+
     static func prepareExamplesForBuild() throws {
         print("🤖 Generating project files for Examples")
         try onAllExamples { _ in
@@ -281,6 +318,14 @@ class Eval {
             return output
         }
         return nil
+    }
+
+    static func commitMessage(dir: String = ".") throws -> String? {
+        if TravisCI.isRunningLocally() {
+            return try Shell.execute("git -C \(dir) log -1 --pretty=%B")?.output
+        } else {
+            return Shell.env(name: "TRAVIS_COMMIT_MESSAGE")
+        }
     }
 
     // MARK: Manual steps

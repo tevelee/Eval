@@ -3,3 +3,4 @@ disabled_rules:
   - file_header
   - file_length
   - explicit_top_level_acl
+  - function_body_length

@@ -14,10 +14,16 @@ class TemplateExampleTests: XCTestCase {
     func testIfStatement() {
         XCTAssertEqual(eval("{% if true %}Hello{% endif %} {{ name }}!", ["name": "Teve"]), "Hello Teve!")
     }
-
-//    func testEmbeddedIfStatement() {
-//        XCTAssertEqual(eval("Result: {% if x > 1 %}{% if x < 5 %}1<x<5{% else %}x>=5{% endif %}{% else %}x<=1{% endif %}", ["x": 2]), "Result: 1<x<5")
-//    }
+    
+    func testEmbeddedIfStatement() {
+        XCTAssertEqual(eval("Result: {% if x > 1 %}{% if x < 5 %}1<x<5{% endif %}{% endif %}", ["x": 2]), "Result: 1<x<5")
+        
+        XCTAssertEqual(eval("Result: {% if x > 1 %}{% if x < 5 %}1<x<5{% endif %}{% else %}x<=1{% endif %}", ["x": 2]), "Result: 1<x<5")
+        XCTAssertEqual(eval("Result: {% if x >= 5 %}x>=5{% else %}{% if x > 1 %}1<x<5{% endif %}{% endif %}", ["x": 2]), "Result: 1<x<5")
+        
+        XCTAssertEqual(eval("Result: {% if x > 1 %}{% if x < 5 %}1<x<5{% else %}x>=5{% endif %}{% else %}x<=1{% endif %}", ["x": 2]), "Result: 1<x<5")
+        XCTAssertEqual(eval("Result: {% if x >= 5 %}x>=5{% else %}{% if x > 1 %}1<x<5{% else %}x<=1{% endif %}{% endif %}", ["x": 2]), "Result: 1<x<5")
+    }
 
     func testPrintStatement() {
         XCTAssertEqual(eval("{{ x }}", ["x": "Yo"]), "Yo")
@@ -49,6 +55,7 @@ class TemplateExampleTests: XCTestCase {
 
     func testMacroStatement() {
         XCTAssertEqual(eval("{% macro double(value) %}value * 2{% endmacro %}{{ double(4) }}"), "8")
+        XCTAssertEqual(eval("{% macro concat(a, b) %}a + b{% endmacro %}{{ concat('Hello ', 'World!') }}"), "Hello World!")
     }
 
     func testBlockStatement() {

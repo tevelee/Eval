@@ -26,14 +26,15 @@ public class TemplateLanguage: EvaluatorWithLocalContext {
     }
 
     public func evaluate(_ expression: String) -> String {
-        let result = language.evaluate(expression)
-        return macroReplacer.evaluate(result)
+        return evaluate(expression, context: Context())
     }
 
     public func evaluate(_ expression: String, context: Context) -> String {
         TemplateLanguage.preprocess(context)
-        let result = language.evaluate(expression, context: context)
-        return macroReplacer.evaluate(result)
+        let input = replaceWhitespaces(expression)
+        let result = language.evaluate(input, context: context)
+        let finalResult = macroReplacer.evaluate(result)
+        return finalResult.contains(TemplateLibrary.tagPrefix) ? language.evaluate(finalResult, context: context) : finalResult
     }
 
     public func evaluate(template from: URL) throws -> String {
@@ -115,7 +116,10 @@ public class TemplateLibrary {
     public static var tagSuffix: String = "%}"
 
     public static var ifStatement: Pattern<String, TemplateInterpreter<String>> {
-        return Pattern([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", options: .notTrimmed), CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, _, _ in
+        return Pattern([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", options: .notTrimmed) { value, _ in
+            guard let content = value as? String, !content.contains(tagPrefix + " else " + tagSuffix) else { return nil }
+            return content
+        }, CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, _, _ in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body
@@ -125,7 +129,13 @@ public class TemplateLibrary {
     }
 
     public static var ifElseStatement: Pattern<String, TemplateInterpreter<String>> {
-        return Pattern([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", options: .notTrimmed), Keyword(tagPrefix + " else " + tagSuffix), TemplateVariable("else", options: .notTrimmed), CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, _, _ in
+        return Pattern([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", options: .notTrimmed) { value, _ in
+            guard let content = value as? String, !content.contains(tagPrefix + " else " + tagSuffix) else { return nil }
+            return content
+        }, Keyword(tagPrefix + " else " + tagSuffix), TemplateVariable("else", options: .notTrimmed) { value, _ in
+            guard let content = value as? String, !content.contains(tagPrefix + " else " + tagSuffix) else { return nil }
+            return content
+        }, CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, _, _ in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body
@@ -134,7 +144,7 @@ public class TemplateLibrary {
             }
         }
     }
-
+    
     public static var printStatement: Pattern<String, TemplateInterpreter<String>> {
         return Pattern([OpenKeyword("{{"), Variable<Any>("body"), CloseKeyword("}}")]) { variables, interpreter, _ in
             guard let body = variables["body"] else { return nil }

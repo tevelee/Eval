@@ -133,11 +133,14 @@ public class TemplateVariable: GenericVariable<String, StringTemplateInterpreter
     /// No changes compared to the initialiser of the superclass `Variable`, uses the same parameters
     /// - parameter name: `GenericVariable`s have a name (unique identifier), that is used when matching and returning them in the matcher.
     /// - parameter options: Options that modify the behaviour of the variable matching, and the output that the framework provides
+    /// - parameter map: If provided, then the result of the evaluated variable will be running through this map function
     /// Whether the processed variable sould be trimmed (removing whitespaces from both sides). Defaults to `true`
-    public init(_ name: String, options: VariableOptions = []) {
+    public override init(_ name: String, options: VariableOptions = [], map: @escaping VariableMapper<String, StringTemplateInterpreter> = { (value, _) in value as? String }) {
         super.init(name, options: options.union(.notInterpreted)) { value, interpreter in
             guard let stringValue = value as? String else { return "" }
-            return options.interpreted ? interpreter.evaluate(stringValue) : stringValue
+            let result = options.interpreted ? interpreter.evaluate(stringValue) : stringValue
+            return map(result, interpreter)
         }
     }
 }
+

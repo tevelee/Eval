@@ -181,6 +181,21 @@ internal class Matcher {
             }
         } while true
     }
+    
+    /// Removes whitespaces characters from the upcoming consecutive input characters, when the context allows to do so
+    /// - parameter remainder: The input to remove whitespaces from
+    /// - parameter index: The index of the current element
+    private func skipWhitespacesIfNeeded(_ remainder: inout String, index: Int) {
+        var shouldTrim = false
+        if let variable = currentlyActiveVariable {
+            shouldTrim = variable.metadata.options.trimmed
+        } else if index < elements.endIndex && elements[index] is Keyword {
+            shouldTrim = true
+        }
+        if shouldTrim && notFinished(index) {
+            skipWhitespaces(&remainder)
+        }
+    }
 
     /// This match method provides the main logic of the `Eval` framework, performing the pattern matching, trying to identify, whether the input string is somehow related, or completely matches the pattern.
     /// - parameter string: The input
@@ -229,9 +244,7 @@ internal class Matcher {
                     }
                     nextElement(&elementIndex)
                     remainder = drop(remainder, length: length)
-                    if notFinished(elementIndex) {
-                        skipWhitespaces(&remainder)
-                    }
+                    skipWhitespacesIfNeeded(&remainder, index: elementIndex)
                 }
             }
         } while notFinished(elementIndex)

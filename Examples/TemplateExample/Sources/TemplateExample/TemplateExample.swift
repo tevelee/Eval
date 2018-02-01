@@ -67,6 +67,43 @@ public class TemplateLanguage: EvaluatorWithLocalContext {
         }
         return convert(value)
     }
+    
+    func replaceWhitespaces(_ input: String) -> String {
+        let tag = "{-}"
+        var input = input
+        repeat {
+            if var range = input.range(of: tag) {
+                searchForward: while true {
+                    if range.upperBound < input.index(before: input.endIndex) {
+                        let nextIndex = range.upperBound
+                        if let unicodeScalar = input[nextIndex].unicodeScalars.first,
+                            CharacterSet.whitespacesAndNewlines.contains(unicodeScalar) {
+                            range = Range(uncheckedBounds: (lower: range.lowerBound, upper: input.index(after: range.upperBound)))
+                        } else {
+                            break searchForward
+                        }
+                    } else {
+                        break searchForward
+                    }
+                }
+                searchBackward: while true {
+                    if range.lowerBound > input.startIndex {
+                        let nextIndex = input.index(before: range.lowerBound)
+                        if let unicodeScalar = input[nextIndex].unicodeScalars.first,
+                            CharacterSet.whitespacesAndNewlines.contains(unicodeScalar) {
+                            range = Range(uncheckedBounds: (lower: input.index(before: range.lowerBound), upper: range.upperBound))
+                        } else {
+                            break searchBackward
+                        }
+                    } else {
+                        break searchBackward
+                    }
+                }
+                input.replaceSubrange(range, with: "")
+            }
+        } while input.contains(tag)
+        return input
+    }
 }
 
 typealias Macro = (arguments: [String], body: String)
@@ -116,10 +153,10 @@ public class TemplateLibrary {
     public static var tagSuffix: String = "%}"
 
     public static var ifStatement: Pattern<String, TemplateInterpreter<String>> {
-        return Pattern([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", options: .notTrimmed) { value, _ in
+        return Pattern([Keyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", options: .notTrimmed) { value, _ in
             guard let content = value as? String, !content.contains(tagPrefix + " else " + tagSuffix) else { return nil }
             return content
-        }, CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, _, _ in
+        }, Keyword("{%"), Keyword("endif"), Keyword("%}")]) { variables, _, _ in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body

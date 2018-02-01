@@ -66,6 +66,16 @@ class TemplateExampleTests: XCTestCase {
         XCTAssertEqual(eval("{% block title5 %}Hello {{name}}{% endblock %}{% block title5 %}{{ parent() }}!{% endblock %}", ["name": "George"]), "Hello George!")
         XCTAssertEqual(eval("{% block title6 %}Hello {{name}}{% endblock %}{% block title6 %}{{ parent(name='Laszlo') }}!{% endblock %}", ["name": "Geroge"]), "Hello Laszlo!")
     }
+    
+    func testSpaceElimination() {
+        XCTAssertEqual(eval("asd   {-}   jkl"), "asdjkl")
+        XCTAssertEqual(eval("{-}   jkl"), "jkl")
+        XCTAssertEqual(eval("asd   {-}"), "asd")
+        
+        XCTAssertEqual(eval("asd   {-}{% if true %}   Hello   {% endif %}   "), "asd   Hello      ")
+        XCTAssertEqual(eval("asd   {-}{% if true %}{-}   Hello   {% endif %}   "), "asdHello      ")
+        XCTAssertEqual(eval("asd   {% if true %}   Hello {-}  {% endif %}   "), "asd      Hello   ")
+    }
 
     // MARK: Data types
 

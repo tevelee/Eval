@@ -100,7 +100,7 @@ class InterpreterTests: XCTestCase {
             print("DEBUG STEP: '\($0.value.pattern)', where \($0.value.variables), rendered to \($0.value.output) from input \($0.key)")
         }
 
-        let ifStatement = Pattern<String, TemplateInterpreter<String>>([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{%"), Keyword("endif"), Keyword("%}")]) { (variables, _, _) -> String? in
+        let ifStatement = Pattern<String, TemplateInterpreter<String>>([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{% endif %}")]) { (variables, _, _) -> String? in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body

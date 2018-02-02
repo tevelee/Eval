@@ -203,8 +203,8 @@ internal class Matcher {
     /// - parameter renderer: If the result is an exactMatch, it uses this renderer block to compute the output based on the matched variables
     /// - parameter variables: The set of variables collected during the execution
     /// - returns: The result of the matching operation
-    // swiftlint:disable:next cyclomatic_complexity
     func match<T>(string: String, from start: Int = 0, renderer: @escaping (_ variables: [String: Any]) -> T?) -> MatchResult<T> {
+        // swiftlint:disable:previous cyclomatic_complexity
         let trimmed = String(string[start...])
         var elementIndex = initialIndex()
         var remainder = trimmed

@@ -230,9 +230,12 @@ class Eval {
             if matches > 0, let currentTag = try Shell.execute("git show HEAD~1:.version")?.output {
                 let currentTag = currentTag.trimmingCharacters(in: .whitespacesAndNewlines)
                 let tag = message.replacingOccurrences(of: "Version ", with: "")
-                let files = ["README.md", ".version", "Eval.podspec"]
+                
+                guard let tags = try Shell.execute("git tag -l")?.output?.components(separatedBy: .whitespacesAndNewlines),
+                    !tags.contains(tag) else { return }
 
                 print("🤖 Applying new version \(tag) in project")
+                let files = ["README.md", ".version", "Eval.podspec"]
                 for file in files {
                     try Shell.executeAndPrint("sed -i '' 's/\(currentTag)/\(tag)/g' \(file)")
                     try Shell.executeAndPrint("git add \(file)")
@@ -240,7 +243,6 @@ class Eval {
                 try Shell.executeAndPrint("git commit --amend --no-edit")
 
                 print("🔖 Tagging \(tag)")
-                try Shell.executeAndPrint("git tag -d \(tag) || true")
                 try Shell.executeAndPrint("git tag \(tag) HEAD")
 
                 print("💁🏻 Pushing changes")
@@ -249,7 +251,6 @@ class Eval {
                 try Shell.executeAndPrint("git push ssh_origin HEAD:master --force --tags")
 
                 print("📦 Releasing package managers")
-                try Shell.executeAndPrint("pod trunk register $COCOAPODS_TRUNK_EMAIL --description='Eval Automated Release' || true")
                 try Shell.executeAndPrint("pod trunk push . || true", timeout: 600)
             }
         }

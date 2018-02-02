@@ -14,7 +14,7 @@
     <a title="Matcher Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">Eval Docs</a> (99% documented)</p>
+        <p><a href="../index.html">Eval Docs</a> (100% documented)</p>
         <p class="header-right"><a href="https://github.com/tevelee/Eval"><img src="../img/gh.png"/>View on GitHub</a></p>
         <p class="header-right"><a href="dash-feed://https%3A%2F%2Ftevelee%2Egithub%2Eio%2Fdocsets%2FEval%2Exml"><img src="../img/dash.png"/>Install in Dash</a></p>
       </div>
@@ -389,7 +389,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>This match method provides the main logic of the <code>Eval</code> framework, performing the pattern matching, trying to identify, whether the input string is somehow related, or completely matches the pattern.</p>
 
                       </div>
                       <div class="declaration">
@@ -400,8 +400,67 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>string</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The input</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>from</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The start of the range to analyse the result in</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>renderer</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If the result is an exactMatch, it uses this renderer block to compute the output based on the matched variables</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>variables</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The set of variables collected during the execution</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The result of the matching operation</p>
+                      </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L207-L257">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Matcher.swift#L206-L257">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

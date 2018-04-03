@@ -93,14 +93,14 @@ class InterpreterTests: XCTestCase {
         XCTAssertNil(interpreter.evaluate("add(1,'a')"))
         XCTAssertNil(interpreter.evaluate("hello"))
 
-        let c = Context()
-        _ = interpreter.evaluate("Date(1009 * 2, sqrt(144), 10 + 3).format('yyyy-MM-dd')", context: c)
+        let context = Context()
+        _ = interpreter.evaluate("Date(1009 * 2, sqrt(144), 10 + 3).format('yyyy-MM-dd')", context: context)
 
-        c.debugInfo.forEach {
+        context.debugInfo.forEach {
             print("DEBUG STEP: '\($0.value.pattern)', where \($0.value.variables), rendered to \($0.value.output) from input \($0.key)")
         }
 
-        let ifStatement = Pattern<String, TemplateInterpreter<String>>([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{% endif %}")]) { (variables, _, _) -> String? in
+        let ifStatement = Pattern<String, TemplateInterpreter<String>>([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{% endif %}")]) { variables, _, _ -> String? in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body
@@ -207,7 +207,7 @@ class InterpreterTests: XCTestCase {
     }
 
     func stringDataType() -> DataType<String> {
-        let singleQuotesLiteral = Literal { (input, _) -> String? in
+        let singleQuotesLiteral = Literal { input, _ -> String? in
             guard let first = input.first, let last = input.last, first == last, first == "'" else { return nil }
             let trimmed = input.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
             return trimmed.contains("'") ? nil : trimmed
@@ -243,7 +243,7 @@ class InterpreterTests: XCTestCase {
 
     func methodCallFunction() -> Function<Double> {
         return Function(patterns: [
-            Pattern(Variable<Any>("lhs") + Keyword(".") + Variable<String>("rhs", options: .notInterpreted)) { (arguments, _, _) -> Double? in
+            Pattern(Variable<Any>("lhs") + Keyword(".") + Variable<String>("rhs", options: .notInterpreted)) { arguments, _, _ -> Double? in
                 if let lhs = arguments["lhs"] as? NSObjectProtocol,
                     let rhs = arguments["rhs"] as? String,
                     let result = lhs.perform(Selector(rhs)) {
@@ -280,7 +280,7 @@ class InterpreterTests: XCTestCase {
     }
 
     func incrementFunction() -> Function<Double> {
-        return Function([Variable<Any>("value", options: .notInterpreted), Keyword("++")]) { (arguments, interpreter, _) -> Double? in
+        return Function([Variable<Any>("value", options: .notInterpreted), Keyword("++")]) { arguments, interpreter, _ -> Double? in
             if let argument = arguments["value"] as? String {
                 if let variable = interpreter.context.variables.first(where: { argument == $0.key }), let value = variable.value as? Double {
                     let incremented = value + 1

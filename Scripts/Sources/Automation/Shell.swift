@@ -57,9 +57,9 @@ class Shell {
         }
 
         let observer = NotificationCenter.default.addObserver(forName: Notification.Name.NSFileHandleDataAvailable, object: fileHandle, queue: nil) { notification in
-            if let fh = notification.object as? FileHandle {
-                process(data: fh.availableData)
-                fh.waitForDataInBackgroundAndNotify()
+            if let noitificationFileHandle = notification.object as? FileHandle {
+                process(data: noitificationFileHandle.availableData)
+                noitificationFileHandle.waitForDataInBackgroundAndNotify()
             }
         }
 

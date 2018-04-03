@@ -24,7 +24,7 @@ import Foundation
 /// A tuple with the variable metadata and its value
 /// - parameter metadata: Name, options, mapping information
 /// - parameter value: The value of the variable
-typealias VariableValue = (metadata: VariableProtocol, value: String)
+internal typealias VariableValue = (metadata: VariableProtocol, value: String)
 
 /// A processor that can process a raw value with extra information, such as interpreter and context
 internal protocol VariableProcessorProtocol {
@@ -181,7 +181,7 @@ internal class Matcher {
             }
         } while true
     }
-    
+
     /// Removes whitespaces characters from the upcoming consecutive input characters, when the context allows to do so
     /// - parameter remainder: The input to remove whitespaces from
     /// - parameter index: The index of the current element
@@ -237,7 +237,7 @@ internal class Matcher {
                         nextElement(&elementIndex)
                     }
                 } else {
-                    variables.merge(embeddedVariables) { (key, _) in key }
+                    variables.merge(embeddedVariables) { key, _ in key }
                     if currentlyActiveVariable != nil {
                         guard registerAndValidateVariable(variables: &variables) else { return .noMatch }
                         currentlyActiveVariable = nil

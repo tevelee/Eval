@@ -13,7 +13,7 @@ class TemplateTests: XCTestCase {
                                            functions: [concat, parenthesis, plusOperator, lessThan],
                                            context: Context(variables: ["name": "Laszlo Teveli"]))
 
-        let ifStatement = Pattern<String, TemplateInterpreter<String>>([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{% endif %}")]) { (variables, _, _) -> String? in
+        let ifStatement = Pattern<String, TemplateInterpreter<String>>([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{% endif %}")]) { variables, _, _ -> String? in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body
@@ -38,10 +38,10 @@ class TemplateTests: XCTestCase {
         let lessThan = infixOperator("<") { (lhs: Double, rhs: Double) in lhs < rhs }
         let interpreter = TypedInterpreter(dataTypes: [numberDataType(), stringDataType(), booleanDataType()], functions: [parenthesis, lessThan], context: Context())
 
-        let braces = Pattern<String, TemplateInterpreter<String>>([OpenKeyword("("), TemplateVariable("body"), CloseKeyword(")")]) { (variables, _, _) -> String? in
+        let braces = Pattern<String, TemplateInterpreter<String>>([OpenKeyword("("), TemplateVariable("body"), CloseKeyword(")")]) { variables, _, _ -> String? in
             return variables["body"] as? String
         }
-        let ifStatement = Pattern<String, TemplateInterpreter<String>>([OpenKeyword("{% if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), CloseKeyword("{% endif %}")]) { (variables, _, _) -> String? in
+        let ifStatement = Pattern<String, TemplateInterpreter<String>>([OpenKeyword("{% if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), CloseKeyword("{% endif %}")]) { variables, _, _ -> String? in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
             if condition {
                 return body
@@ -66,7 +66,7 @@ class TemplateTests: XCTestCase {
     }
 
     func stringDataType() -> DataType<String> {
-        let singleQuotesLiteral = Literal { (input, _) -> String? in
+        let singleQuotesLiteral = Literal { input, _ -> String? in
             guard let first = input.first, let last = input.last, first == last, first == "'" else { return nil }
             let trimmed = input.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
             return trimmed.contains("'") ? nil : trimmed

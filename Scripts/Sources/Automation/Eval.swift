@@ -230,7 +230,7 @@ class Eval {
             if matches > 0, let currentTag = try Shell.execute("git show HEAD~1:.version")?.output {
                 let currentTag = currentTag.trimmingCharacters(in: .whitespacesAndNewlines)
                 let tag = message.replacingOccurrences(of: "Version ", with: "")
-                
+
                 guard let tags = try Shell.execute("git tag -l")?.output?.components(separatedBy: .whitespacesAndNewlines),
                     !tags.contains(tag) else { return }
 

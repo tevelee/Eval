@@ -1,6 +1,6 @@
 @_exported import Eval
-import Foundation
 @_exported import class Eval.Pattern
+import Foundation
 
 public class TemplateLanguage: EvaluatorWithLocalContext {
     public typealias EvaluatedType = String
@@ -67,7 +67,7 @@ public class TemplateLanguage: EvaluatorWithLocalContext {
         }
         return convert(value)
     }
-    
+
     func replaceWhitespaces(_ input: String) -> String {
         let tag = "{-}"
         var input = input
@@ -106,8 +106,8 @@ public class TemplateLanguage: EvaluatorWithLocalContext {
     }
 }
 
-typealias Macro = (arguments: [String], body: String)
-typealias BlockRenderer = (_ context: Context) -> String
+internal typealias Macro = (arguments: [String], body: String)
+internal typealias BlockRenderer = (_ context: Context) -> String
 
 extension Context {
     static let macrosKey: String = "__macros"
@@ -181,7 +181,7 @@ public class TemplateLibrary {
             }
         }
     }
-    
+
     public static var printStatement: Pattern<String, TemplateInterpreter<String>> {
         return Pattern([OpenKeyword("{{"), Variable<Any>("body"), CloseKeyword("}}")]) { variables, interpreter, _ in
             guard let body = variables["body"] else { return nil }
@@ -411,12 +411,12 @@ public class StandardLibrary {
 
     public static var numericType: DataType<Double> {
         let numberLiteral = Literal { value, _ in Double(value) }
-        let pi = Literal("pi", convertsTo: Double.pi)
-        return DataType(type: Double.self, literals: [numberLiteral, pi]) { value, _ in String(format: "%g", value) }
+        let piLiteral = Literal("pi", convertsTo: Double.pi)
+        return DataType(type: Double.self, literals: [numberLiteral, piLiteral]) { value, _ in String(format: "%g", value) }
     }
 
     public static var stringType: DataType<String> {
-        let singleQuotesLiteral = literal(opening: "'", closing: "'") { (input, _) in input }
+        let singleQuotesLiteral = literal(opening: "'", closing: "'") { input, _ in input }
         return DataType(type: String.self, literals: [singleQuotesLiteral]) { value, _ in value }
     }
 
@@ -994,7 +994,7 @@ public class StandardLibrary {
     }
 
     public static var methodCallWithIntResult: Function<Double> {
-        return Function([Variable<Any>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted)]) { (arguments, _, _) -> Double? in
+        return Function([Variable<Any>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted)]) { arguments, _, _ -> Double? in
             if let lhs = arguments["lhs"] as? NSObjectProtocol,
                 let rhs = arguments["rhs"] as? String,
                 let result = lhs.perform(Selector(rhs)) {
@@ -1170,11 +1170,11 @@ extension String {
 
     var html: String {
         var html = ""
-        for c in self {
-            if let entity = String.enc[c] {
+        for character in self {
+            if let entity = String.enc[character] {
                 html.append(entity)
             } else {
-                html.append(c)
+                html.append(character)
             }
         }
         return html

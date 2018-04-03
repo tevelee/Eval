@@ -14,13 +14,13 @@ class TemplateExampleTests: XCTestCase {
     func testIfStatement() {
         XCTAssertEqual(eval("{% if true %}Hello{% endif %} {{ name }}!", ["name": "Teve"]), "Hello Teve!")
     }
-    
+
     func testEmbeddedIfStatement() {
         XCTAssertEqual(eval("Result: {% if x > 1 %}{% if x < 5 %}1<x<5{% endif %}{% endif %}", ["x": 2]), "Result: 1<x<5")
-        
+
         XCTAssertEqual(eval("Result: {% if x > 1 %}{% if x < 5 %}1<x<5{% endif %}{% else %}x<=1{% endif %}", ["x": 2]), "Result: 1<x<5")
         XCTAssertEqual(eval("Result: {% if x >= 5 %}x>=5{% else %}{% if x > 1 %}1<x<5{% endif %}{% endif %}", ["x": 2]), "Result: 1<x<5")
-        
+
         XCTAssertEqual(eval("Result: {% if x > 1 %}{% if x < 5 %}1<x<5{% else %}x>=5{% endif %}{% else %}x<=1{% endif %}", ["x": 2]), "Result: 1<x<5")
         XCTAssertEqual(eval("Result: {% if x >= 5 %}x>=5{% else %}{% if x > 1 %}1<x<5{% else %}x<=1{% endif %}{% endif %}", ["x": 2]), "Result: 1<x<5")
     }
@@ -66,12 +66,12 @@ class TemplateExampleTests: XCTestCase {
         XCTAssertEqual(eval("{% block title5 %}Hello {{name}}{% endblock %}{% block title5 %}{{ parent() }}!{% endblock %}", ["name": "George"]), "Hello George!")
         XCTAssertEqual(eval("{% block title6 %}Hello {{name}}{% endblock %}{% block title6 %}{{ parent(name='Laszlo') }}!{% endblock %}", ["name": "Geroge"]), "Hello Laszlo!")
     }
-    
+
     func testSpaceElimination() {
         XCTAssertEqual(eval("asd   {-}   jkl"), "asdjkl")
         XCTAssertEqual(eval("{-}   jkl"), "jkl")
         XCTAssertEqual(eval("asd   {-}"), "asd")
-        
+
         XCTAssertEqual(eval("asd   {-}{% if true %}   Hello   {% endif %}   "), "asd   Hello      ")
         XCTAssertEqual(eval("asd   {-}{% if true %}{-}   Hello   {% endif %}   "), "asdHello      ")
         XCTAssertEqual(eval("asd   {% if true %}   Hello {-}  {% endif %}   "), "asd      Hello   ")

@@ -1,7 +1,7 @@
 import AppKit
 @_exported import Eval
-import Foundation
 @_exported import class Eval.Pattern
+import Foundation
 
 public class ColorParser: EvaluatorWithLocalContext {
     let interpreter: TypedInterpreter
@@ -48,23 +48,23 @@ extension String {
 
 extension NSColor {
     func blend(with other: NSColor, using factor: CGFloat = 0.5) -> NSColor {
-        let rightFactor = 1.0 - factor
+        let inverseFactor = 1.0 - factor
 
-        var lr: CGFloat = 0
-        var lg: CGFloat = 0
-        var lb: CGFloat = 0
-        var la: CGFloat = 0
-        getRed(&lr, green: &lg, blue: &lb, alpha: &la)
+        var leftRed: CGFloat = 0
+        var leftGreen: CGFloat = 0
+        var leftBlue: CGFloat = 0
+        var leftAlpha: CGFloat = 0
+        getRed(&leftRed, green: &leftGreen, blue: &leftBlue, alpha: &leftAlpha)
 
-        var rr: CGFloat = 0
-        var rg: CGFloat = 0
-        var rb: CGFloat = 0
-        var ra: CGFloat = 0
-        other.getRed(&rr, green: &rg, blue: &rb, alpha: &ra)
+        var rightRed: CGFloat = 0
+        var rightGreen: CGFloat = 0
+        var rightBlue: CGFloat = 0
+        var rightAlpha: CGFloat = 0
+        other.getRed(&rightRed, green: &rightGreen, blue: &rightBlue, alpha: &rightAlpha)
 
-        return NSColor(calibratedRed: lr * factor + rr * rightFactor,
-                       green: lg * factor + rg * rightFactor,
-                       blue: lb * factor + rb * rightFactor,
-                       alpha: la * factor + ra * rightFactor)
+        return NSColor(calibratedRed: leftRed * factor + rightRed * inverseFactor,
+                       green: leftGreen * factor + rightGreen * inverseFactor,
+                       blue: leftBlue * factor + rightBlue * inverseFactor,
+                       alpha: leftAlpha * factor + rightAlpha * inverseFactor)
     }
 }

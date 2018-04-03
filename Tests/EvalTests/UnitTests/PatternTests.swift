@@ -38,6 +38,7 @@ class PatternTests: XCTestCase {
 
     // swiftlint:disable:next function_body_length
     func test_whenMatching_thenExpectingAppropriateResults() {
+        // swiftlint:disable:next nesting
         typealias TestCase = (elements: [PatternElement], input: String, expectedResult: MatchResult<Int>)
 
         let keyword = Keyword("ok")

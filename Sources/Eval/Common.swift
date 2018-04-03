@@ -115,7 +115,7 @@ public class Context {
     /// - returns: A new `InterpreterContext` instance with the current and the parameter variables merged inside
     public func merging(with other: Context?) -> Context {
         if let other = other {
-            return Context(variables: other.variables.merging(self.variables) { (eixstingValue, _) in eixstingValue })
+            return Context(variables: other.variables.merging(self.variables) { eixstingValue, _ in eixstingValue })
         } else {
             return self
         }

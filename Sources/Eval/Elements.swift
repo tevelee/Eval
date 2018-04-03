@@ -162,7 +162,7 @@ public class GenericVariable<T, E: Interpreter> : VariableProtocol, PatternEleme
     /// - parameter map: If provided, then the result of the evaluated variable will be running through this map function. By default the map tries to convert the matched value to the expected type, using the `as?` operator. Defaults to identical map, using the `as?` operator for value transformation
     public init(_ name: String,
                 options: VariableOptions = [],
-                map: @escaping VariableMapper<T, E> = { (value, _) in value as? T }) {
+                map: @escaping VariableMapper<T, E> = { value, _ in value as? T }) {
         self.name = name
         self.options = options
         self.map = map

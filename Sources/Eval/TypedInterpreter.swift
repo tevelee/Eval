@@ -201,7 +201,7 @@ public class DataType<T> : DataTypeProtocol {
     /// - parameter interpreter: An interpreter instance if the content needs any further evaluation
     /// - returns: The value of the `DataType` or `nil` if it cannot be processed
     public func convert(input: String, interpreter: TypedInterpreter) -> Any? {
-        return literals.flatMap { $0.convert(input: input, interpreter: interpreter) }.first
+        return literals.compactMap { $0.convert(input: input, interpreter: interpreter) }.first
     }
 
     /// This is a convenience method, for debugging and value printing purposes, which can return a string from the current data type.

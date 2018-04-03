@@ -160,7 +160,7 @@ class InterpreterTests: XCTestCase {
     func function<T>(_ name: String, body: @escaping ([Any]) -> T?) -> Function<T> {
         return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, context in
             guard let arguments = variables["arguments"] as? String else { return nil }
-            let interpretedArguments: [Any] = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trim(), context: context) }
+            let interpretedArguments: [Any] = arguments.split(separator: ",").compactMap { interpreter.evaluate(String($0).trim(), context: context) }
             return body(interpretedArguments)
         }
     }
@@ -195,7 +195,7 @@ class InterpreterTests: XCTestCase {
             return value
         }, Keyword("("), Variable<String>("arguments", options: .notInterpreted), Keyword(")")]) { variables, interpreter, _ in
             guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
-            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trim()) }
+            let interpretedArguments = arguments.split(separator: ",").compactMap { interpreter.evaluate(String($0).trim()) }
             return body(object, interpretedArguments)
         }
     }

@@ -277,7 +277,7 @@ public class TemplateLibrary {
     public static var importStatement: Pattern<String, TemplateInterpreter<String>> {
         return Pattern([OpenKeyword(tagPrefix + " import"), Variable<String>("file"), CloseKeyword(tagSuffix)]) { variables, interpreter, context in
             guard let file = variables["file"] as? String,
-                let url = Bundle.allBundles.flatMap({ $0.url(forResource: file, withExtension: nil) }).first,
+                let url = Bundle.allBundles.compactMap({ $0.url(forResource: file, withExtension: nil) }).first,
                 let expression = try? String(contentsOf: url) else { return nil }
             return interpreter.evaluate(expression, context: context)
         }
@@ -443,7 +443,7 @@ public class StandardLibrary {
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             let parsedValues : [(key: String, value: CustomStringConvertible?)] = values
                 .map { $0.split(separator: ":").map { interpreter.evaluate(String($0)) } }
-                .flatMap {
+                .compactMap {
                     guard let first = $0.first, let key = first as? String, let value = $0.last else { return nil }
                     return (key: key, value: value as? CustomStringConvertible)
                 }
@@ -487,7 +487,7 @@ public class StandardLibrary {
             guard let arguments = variables["arguments"] as? String,
                 let name = variables["name"] as? String,
                 let macro = interpreter.context.macros[name.trimmingCharacters(in: .whitespacesAndNewlines)] else { return nil }
-            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
+            let interpretedArguments = arguments.split(separator: ",").compactMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
             context.push()
             for (key, value) in zip(macro.arguments, interpretedArguments) {
                 context.variables[key] = value
@@ -811,7 +811,7 @@ public class StandardLibrary {
                 let variable = variables["variable"] as? String,
                 let body = variables["body"] as? String else { return nil }
             context.push()
-            let result: [Any] = object.flatMap { item in
+            let result: [Any] = object.compactMap { item in
                 context.variables[variable] = item
                 return interpreter.evaluate(body, context: context)
             }
@@ -1044,7 +1044,7 @@ public class StandardLibrary {
     public static func function<T>(_ name: String, body: @escaping ([Any]) -> T?) -> Function<T> {
         return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, _ in
             guard let arguments = variables["arguments"] as? String else { return nil }
-            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
+            let interpretedArguments = arguments.split(separator: ",").compactMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
             return body(interpretedArguments)
         }
     }
@@ -1079,7 +1079,7 @@ public class StandardLibrary {
             return value
         }, Keyword("("), Variable<String>("arguments", options: .notInterpreted), Keyword(")")]) { variables, interpreter, _ in
             guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
-            let interpretedArguments = arguments.split(separator: ",").flatMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
+            let interpretedArguments = arguments.split(separator: ",").compactMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
             return body(object, interpretedArguments)
         }
     }

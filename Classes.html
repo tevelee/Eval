@@ -10,6 +10,7 @@
     
   </head>
   <body>
+    <a name="//apple_ref/swift/Section/Classes" class="dashAnchor"></a>
     <a title="Classes  Reference"></a>
     <header>
       <div class="content-wrapper">
@@ -262,7 +263,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Keyword</span><span class="p">:</span> <span class="kt"><a href="Protocols/PatternElement.html">PatternElement</a></span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Keyword</span> <span class="p">:</span> <span class="kt"><a href="Protocols/PatternElement.html">PatternElement</a></span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
 
                         </div>
                       </div>
@@ -294,7 +295,7 @@ Usually used for opening parentheses: <code>OpenKeyword(&quot;[&quot;)</code></p
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OpenKeyword</span><span class="p">:</span> <span class="kt"><a href="Classes/Keyword.html">Keyword</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OpenKeyword</span> <span class="p">:</span> <span class="kt"><a href="Classes/Keyword.html">Keyword</a></span></code></pre>
 
                         </div>
                       </div>
@@ -326,7 +327,7 @@ Usually used for closing parentheses: <code>CloseKeyword(&quot;]&quot;)</code></
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">CloseKeyword</span><span class="p">:</span> <span class="kt"><a href="Classes/Keyword.html">Keyword</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">CloseKeyword</span> <span class="p">:</span> <span class="kt"><a href="Classes/Keyword.html">Keyword</a></span></code></pre>
 
                         </div>
                       </div>
@@ -358,7 +359,7 @@ as they use it when mapping their values</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">GenericVariable</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">E</span><span class="p">:</span> <span class="kt"><a href="Protocols/Interpreter.html">Interpreter</a></span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/VariableProtocol.html">VariableProtocol</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/PatternElement.html">PatternElement</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">GenericVariable</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">E</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/VariableProtocol.html">VariableProtocol</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/PatternElement.html">PatternElement</a></span> <span class="k">where</span> <span class="kt">E</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Interpreter.html">Interpreter</a></span></code></pre>
 
                         </div>
                       </div>
@@ -426,7 +427,7 @@ Typically used in web applications, where the rendering of an HTML page is provi
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">StringTemplateInterpreter</span><span class="p">:</span> <span class="kt"><a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">StringTemplateInterpreter</span> <span class="p">:</span> <span class="kt"><a href="Classes/TemplateInterpreter.html">TemplateInterpreter</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -458,7 +459,7 @@ It&rsquo;s perfect for expressions, that have a body, that needs to be further i
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TemplateVariable</span><span class="p">:</span> <span class="kt"><a href="Classes/GenericVariable.html">GenericVariable</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a></span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TemplateVariable</span> <span class="p">:</span> <span class="kt"><a href="Classes/GenericVariable.html">GenericVariable</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt"><a href="Classes/StringTemplateInterpreter.html">StringTemplateInterpreter</a></span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -493,7 +494,7 @@ It&rsquo;s perfect for expressions, that have a body, that needs to be further i
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TypedInterpreter</span><span class="p">:</span> <span class="kt"><a href="Protocols/Interpreter.html">Interpreter</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/Printer.html">Printer</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TypedInterpreter</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Interpreter.html">Interpreter</a></span><span class="p">,</span> <span class="kt"><a href="Protocols/Printer.html">Printer</a></span></code></pre>
 
                         </div>
                       </div>
@@ -651,7 +652,7 @@ It&rsquo;s perfect for expressions, that have a body, that needs to be further i
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">internal</span> <span class="kd">class</span> <span class="kt">VariableProcessor</span><span class="o">&lt;</span><span class="kt">E</span><span class="p">:</span> <span class="kt"><a href="Protocols/Interpreter.html">Interpreter</a></span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/VariableProcessorProtocol.html">VariableProcessorProtocol</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">internal</span> <span class="kd">class</span> <span class="kt">VariableProcessor</span><span class="o">&lt;</span><span class="kt">E</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/VariableProcessorProtocol.html">VariableProcessorProtocol</a></span> <span class="k">where</span> <span class="kt">E</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Interpreter.html">Interpreter</a></span></code></pre>
 
                         </div>
                       </div>
@@ -717,7 +718,7 @@ It&rsquo;s perfect for expressions, that have a body, that needs to be further i
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Pattern</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">I</span><span class="p">:</span> <span class="kt"><a href="Protocols/Interpreter.html">Interpreter</a></span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Pattern</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">I</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">I</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Interpreter.html">Interpreter</a></span></code></pre>
 
                         </div>
                       </div>
@@ -733,7 +734,7 @@ It&rsquo;s perfect for expressions, that have a body, that needs to be further i
         </section>
         <section id="footer">
           <p>&copy; 2018 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2018-08-13)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

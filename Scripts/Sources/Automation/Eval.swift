@@ -187,7 +187,7 @@ class Eval {
 
             print("📦 📤 Pushing")
             let remote = "origin"
-            try Shell.executeAndPrint("git -C \(dir) push \(remote) \(branch)", timeout: 30)
+            try Shell.executeAndPrint("git -C \(dir) push --force-with-lease \(remote) \(branch)", timeout: 30)
         } else {
             throw CIError.logicalError(message: "Repository URL not found")
         }
@@ -196,6 +196,8 @@ class Eval {
     static func runCocoaPodsLinter() throws {
         print("🔮 Validating CocoaPods support")
         let flags = TravisCI.isRunningLocally() ? "--verbose" : ""
+        try Shell.executeAndPrint("export EXPANDED_CODE_SIGN_IDENTITY=-", timeout: 10)
+        try Shell.executeAndPrint("export EXPANDED_CODE_SIGN_IDENTITY_NAME=-", timeout: 10)
         try Shell.executeAndPrint("bundle exec pod lib lint \(flags)", timeout: 300)
     }
 
@@ -247,8 +249,8 @@ class Eval {
 
                 print("💁🏻 Pushing changes")
                 try Shell.executeAndPrint("git remote add ssh_origin git@github.com:tevelee/Eval.git")
-                try Shell.executeAndPrint("git push ssh_origin HEAD:master --force")
-                try Shell.executeAndPrint("git push ssh_origin HEAD:master --force --tags")
+                try Shell.executeAndPrint("git push ssh_origin HEAD:master --force-with-lease")
+                try Shell.executeAndPrint("git push ssh_origin HEAD:master --force-with-lease --tags")
 
                 print("📦 Releasing package managers")
                 try Shell.executeAndPrint("pod trunk push . || true", timeout: 600)

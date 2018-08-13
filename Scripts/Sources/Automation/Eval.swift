@@ -187,7 +187,7 @@ class Eval {
 
             print("📦 📤 Pushing")
             let remote = "origin"
-            try Shell.executeAndPrint("git -C \(dir) push --force-with-lease \(remote) \(branch)", timeout: 30)
+            try Shell.executeAndPrint("git -C \(dir) push --force \(remote) \(branch)", timeout: 30)
         } else {
             throw CIError.logicalError(message: "Repository URL not found")
         }
@@ -249,8 +249,8 @@ class Eval {
 
                 print("💁🏻 Pushing changes")
                 try Shell.executeAndPrint("git remote add ssh_origin git@github.com:tevelee/Eval.git")
-                try Shell.executeAndPrint("git push ssh_origin HEAD:master --force-with-lease")
-                try Shell.executeAndPrint("git push ssh_origin HEAD:master --force-with-lease --tags")
+                try Shell.executeAndPrint("git push ssh_origin HEAD:master --force")
+                try Shell.executeAndPrint("git push ssh_origin HEAD:master --force --tags")
 
                 print("📦 Releasing package managers")
                 try Shell.executeAndPrint("pod trunk push . || true", timeout: 600)

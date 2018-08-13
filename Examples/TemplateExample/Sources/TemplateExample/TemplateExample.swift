@@ -428,7 +428,7 @@ public class StandardLibrary {
 
     public static var arrayType: DataType<[CustomStringConvertible]> {
         let arrayLiteral = literal(opening: "[", closing: "]") { input, interpreter -> [CustomStringConvertible]? in
-            return input
+            input
                 .split(separator: ",")
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                 .map { interpreter.evaluate(String($0)) as? CustomStringConvertible ?? String($0) }
@@ -929,13 +929,13 @@ public class StandardLibrary {
 
     public static var loopIsFirst: Function<Bool?> {
         return Function([Variable<Any>("value"), Keyword("is first")]) { _, _, context in
-            return context.variables["__first"] as? Bool
+            context.variables["__first"] as? Bool
         }
     }
 
     public static var loopIsLast: Function<Bool?> {
         return Function([Variable<Any>("value"), Keyword("is last")]) { _, _, context in
-            return context.variables["__last"] as? Bool
+            context.variables["__last"] as? Bool
         }
     }
 
@@ -977,7 +977,7 @@ public class StandardLibrary {
 
     public static var dictionaryKeys: Function<[String]> {
         return objectFunction("keys") { (object: [String: Any?]) -> [String] in
-            return object.keys.sorted()
+            object.keys.sorted()
         }
     }
 

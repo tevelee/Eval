@@ -9,9 +9,9 @@ public class AttributedStringTemplateInterpreter: TemplateInterpreter<NSAttribut
 
     override public func evaluate(_ expression: String, context: Context = Context()) -> NSAttributedString {
         return evaluate(expression, context: context, reducer: (initialValue: NSAttributedString(), reduceValue: { existing, next in
-            return existing.appending(next)
+            existing.appending(next)
         }, reduceCharacter: { existing, next in
-            return existing.appending(NSAttributedString(string: String(next)))
+            existing.appending(NSAttributedString(string: String(next)))
         }))
     }
 }

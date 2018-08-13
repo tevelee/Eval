@@ -104,7 +104,7 @@ public class Pattern<T, I: Interpreter> {
         let processor = VariableProcessor(interpreter: interpreter, context: context)
         let matcher = Matcher(elements: elements, processor: processor, options: options)
         let result = matcher.match(string: string, from: start) { variables in
-            return self.matcher(variables, interpreter, context)
+            self.matcher(variables, interpreter, context)
         }
 
         if case let .exactMatch(_, output, variables) = result {

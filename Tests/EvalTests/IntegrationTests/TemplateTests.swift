@@ -39,7 +39,7 @@ class TemplateTests: XCTestCase {
         let interpreter = TypedInterpreter(dataTypes: [numberDataType(), stringDataType(), booleanDataType()], functions: [parenthesis, lessThan], context: Context())
 
         let braces = Pattern<String, TemplateInterpreter<String>>([OpenKeyword("("), TemplateVariable("body"), CloseKeyword(")")]) { variables, _, _ -> String? in
-            return variables["body"] as? String
+            variables["body"] as? String
         }
         let ifStatement = Pattern<String, TemplateInterpreter<String>>([OpenKeyword("{% if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), CloseKeyword("{% endif %}")]) { variables, _, _ -> String? in
             guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }

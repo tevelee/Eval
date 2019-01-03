@@ -200,11 +200,13 @@ internal class Matcher {
     /// This match method provides the main logic of the `Eval` framework, performing the pattern matching, trying to identify, whether the input string is somehow related, or completely matches the pattern.
     /// - parameter string: The input
     /// - parameter from: The start of the range to analyse the result in
+    /// - parameter connectedRanges: Ranges of string indices that are connected with opening-closing tag pairs, respectively
     /// - parameter renderer: If the result is an exactMatch, it uses this renderer block to compute the output based on the matched variables
     /// - parameter variables: The set of variables collected during the execution
     /// - returns: The result of the matching operation
-    func match<T>(string: String, from start: Int = 0, renderer: @escaping (_ variables: [String: Any]) -> T?) -> MatchResult<T> {
+    func match<T>(string: String, from start: String.Index?, connectedRanges: [ClosedRange<String.Index>] = [], renderer: @escaping (_ variables: [String: Any]) -> T?) -> MatchResult<T> {
         // swiftlint:disable:previous cyclomatic_complexity
+        let start = start ?? string.startIndex
         let trimmed = String(string[start...])
         var elementIndex = initialIndex()
         var remainder = trimmed
@@ -231,10 +233,17 @@ internal class Matcher {
                     nextElement(&elementIndex)
                 }
             case let .exactMatch(length, _, embeddedVariables):
-                if isEmbedded(element: element, in: String(string[start...]), at: trimmed.count - remainder.count) {
-                    let isSuccess = tryToAppendCurrentVariable(remainder: &remainder)
-                    if !isSuccess {
+                let position = options.contains(.backwardMatch) ? remainder.endIndex : trimmed.index(trimmed.endIndex, offsetBy: -remainder.count)
+                let isOpeningOrClosingKeyword = (element as? Keyword)?.type != .generic
+                if isEmbedded(element: element, in: String(string[start...]), at: position) {
+                    if currentlyActiveVariable != nil {
+                        _ = tryToAppendCurrentVariable(remainder: &remainder)
+                    } else {
                         nextElement(&elementIndex)
+                    }
+                } else if connectedRanges.contains(where: { $0.contains(position) }) && !isOpeningOrClosingKeyword {
+                    if currentlyActiveVariable != nil {
+                        _ = tryToAppendCurrentVariable(remainder: &remainder)
                     }
                 } else {
                     variables.merge(embeddedVariables) { key, _ in key }
@@ -244,13 +253,15 @@ internal class Matcher {
                     }
                     nextElement(&elementIndex)
                     remainder = drop(remainder, length: length)
-                    skipWhitespacesIfNeeded(&remainder, index: elementIndex)
+                    if elementIndex < elements.count && element is Keyword {
+                        skipWhitespacesIfNeeded(&remainder, index: elementIndex)
+                    }
                 }
             }
         } while notFinished(elementIndex)
 
         if let renderedOutput = renderer(variables) {
-            return .exactMatch(length: string.count - start - remainder.count, output: renderedOutput, variables: variables)
+            return .exactMatch(length: string.count - string.distance(from: string.startIndex, to: start) - remainder.count, output: renderedOutput, variables: variables)
         } else {
             return .noMatch
         }
@@ -261,8 +272,8 @@ internal class Matcher {
     /// - parameter in: The input
     /// - parameter at: The starting position to check from
     /// - returns: Whether the element conditions apply and the position is before the last one
-    func isEmbedded(element: PatternElement, in string: String, at currentPosition: Int) -> Bool {
-        if let closingTag = element as? Keyword, closingTag.type == .closingStatement, let closingPosition = positionOfClosingTag(in: string),
+    func isEmbedded(element: PatternElement, in string: String, at currentPosition: String.Index) -> Bool {
+        if let closingTag = element as? Keyword, closingTag.type == .closingStatement, let closingPosition = positionOfClosingTag(in: string, from: string.startIndex),
             currentPosition < closingPosition {
             return true
         }
@@ -273,28 +284,28 @@ internal class Matcher {
     /// - parameter in: The input
     /// - parameter from: The starting position of the checking range
     /// - returns: `nil` if the `CloseKeyword` pair cannot be found. The position otherwise
-    func positionOfClosingTag(in string: String, from start: Int = 0) -> Int? {
+    func positionOfClosingTag(in string: String, from start: String.Index) -> String.Index? {
         if let opening = elements.first(where: { ($0 as? Keyword)?.type == .openingStatement }) as? Keyword,
             let closing = elements.first(where: { ($0 as? Keyword)?.type == .closingStatement }) as? Keyword {
             var counter = 0
             var position = start
             repeat {
                 var isCloseTagEarlier = false
-                if let open = string.position(of: opening.name, from: position),
-                    let close = string.position(of: closing.name, from: position),
-                    close < open {
+                let relevantString = string[position...]
+                let open = relevantString.range(of: opening.name)?.lowerBound
+                let close = relevantString.range(of: closing.name)?.lowerBound
+                if let open = open, let close = close, close < open {
                     isCloseTagEarlier = true
                 }
-
-                if let open = string.position(of: opening.name, from: position), !isCloseTagEarlier {
+                if let open = open, !isCloseTagEarlier {
                     counter += 1
-                    position = open + opening.name.count
-                } else if let close = string.position(of: closing.name, from: position) {
+                    position = string.index(open, offsetBy: opening.name.count)
+                } else if let close = close {
                     counter -= 1
                     if counter == 0 {
                         return close
                     }
-                    position = close + closing.name.count
+                    position = string.index(close, offsetBy: closing.name.count)
                 } else {
                     break
                 }

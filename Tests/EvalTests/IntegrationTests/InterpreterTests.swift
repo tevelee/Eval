@@ -124,20 +124,45 @@ class InterpreterTests: XCTestCase {
         let parenthesis = Function<Any>([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { variables, _, _ in variables["body"] }
         let addition = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
         let interpreter = TypedInterpreter(dataTypes: [numberDataType(), stringDataType()],
-                                           functions: [parenthesis, addition],
-                                           context: Context())
+                                           functions: [parenthesis, addition])
 
         XCTAssertEqual(interpreter.evaluate("(1)") as! Double, 1)
         XCTAssertEqual(interpreter.evaluate("(1) + (2)") as! Double, 3)
         XCTAssertEqual(interpreter.evaluate("(1 + (2))") as! Double, 3)
+        XCTAssertEqual(interpreter.evaluate("(1 + 2)") as! Double, 3)
         XCTAssertEqual(interpreter.evaluate("((1) + 2)") as! Double, 3)
         XCTAssertEqual(interpreter.evaluate("((1) + (2))") as! Double, 3)
+    }
+    
+    func test_whenEmbeddingTagsWithNonCummitativeOperation_thenInterpretationWorksCorrectly() {
+        let parenthesis = Function<Any>([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { variables, _, _ in variables["body"] }
+        let addition = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
+        let subtraction = infixOperator("-") { (lhs: Double, rhs: Double) in lhs - rhs }
+        let interpreter = TypedInterpreter(dataTypes: [numberDataType(), stringDataType()],
+                                           functions: [parenthesis, subtraction, addition])
+        
+        XCTAssertEqual(interpreter.evaluate("6 - 4 - 2") as! Double, 0)
+        XCTAssertEqual(interpreter.evaluate("6 - (4 + 2)") as! Double, 0)
+        XCTAssertEqual(interpreter.evaluate("6 - (4 - 2)") as! Double, 4)
+        XCTAssertEqual(interpreter.evaluate("12 - (6 - (4 - 2))") as! Double, 8)
+    }
+
+    
+    func test_whenStartsWithParentheses_thenInterpretationWorksCorrectly() {
+        let parenthesis = Function<Any>([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { variables, _, _ in variables["body"] }
+        let addition = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
+        let multiplication = infixOperator("*") { (lhs: Double, rhs: Double) in lhs * rhs }
+        let interpreter = TypedInterpreter(dataTypes: [numberDataType(), stringDataType()],
+                                           functions: [parenthesis, multiplication, addition])
+        
+        XCTAssertEqual(interpreter.evaluate("(2 + 3)") as! Double, 5)
+        XCTAssertEqual(interpreter.evaluate("(2 + 3) * 4") as! Double, 20)
     }
 
     // MARK: Helpers - operators
 
     func infixOperator<A, B, T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T?> {
-        return Function([Variable<A>("lhs"), Keyword(symbol), Variable<B>("rhs")]) { arguments, _, _ in
+        return Function([Variable<A>("lhs"), Keyword(symbol), Variable<B>("rhs")], options: .backwardMatch) { arguments, _, _ in
             guard let lhs = arguments["lhs"] as? A, let rhs = arguments["rhs"] as? B else { return nil }
             return body(lhs, rhs)
         }
@@ -245,6 +270,7 @@ class InterpreterTests: XCTestCase {
         return Function(patterns: [
             Pattern(Variable<Any>("lhs") + Keyword(".") + Variable<String>("rhs", options: .notInterpreted)) { arguments, _, _ -> Double? in
                 if let lhs = arguments["lhs"] as? NSObjectProtocol,
+                    !(lhs is NSNull),
                     let rhs = arguments["rhs"] as? String,
                     let result = lhs.perform(Selector(rhs)) {
                     return Double(Int(bitPattern: result.toOpaque()))

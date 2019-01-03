@@ -3,6 +3,15 @@ import class Eval.Pattern
 import XCTest
 
 class TemplateTests: XCTestCase {
+    func test_flow() {
+        let parenthesis = Function([Keyword("("), Variable<Any>("body"), Keyword(")")]) { arguments, _, _ in arguments["body"] }
+        let subtractOperator = infixOperator("-") { (lhs: Double, rhs: Double) in lhs - rhs }
+        
+        let interpreter = TypedInterpreter(dataTypes: [numberDataType()], functions: [parenthesis, subtractOperator])
+        
+        XCTAssertEqual(interpreter.evaluate("6 - (4 - 2)") as! Double, 4)
+    }
+    
     func test_whenAddingALotOfFunctions_thenInterpretationWorksCorrectly() {
         let parenthesis = Function([Keyword("("), Variable<Any>("body"), Keyword(")")]) { arguments, _, _ in arguments["body"] }
         let plusOperator = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
@@ -80,7 +89,7 @@ class TemplateTests: XCTestCase {
 
     // MARK: Helpers - operators
 
-    func infixOperator<A, B, T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T?> {
+        func infixOperator<A, B, T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T?> {
         return Function([Variable<A>("lhs"), Keyword(symbol), Variable<B>("rhs")]) { arguments, _, _ in
             guard let lhs = arguments["lhs"] as? A, let rhs = arguments["rhs"] as? B else { return nil }
             return body(lhs, rhs)

@@ -41,38 +41,10 @@ class UtilTests: XCTestCase {
         XCTAssertEqual(array, [1, 2, 3, 4])
     }
 
-    // MARK: String subscript
-
-    func test_whenSubscriptingStringWithInt_thenReturnCharacter() {
-        XCTAssertEqual("asd"[1], "s")
-    }
-
-    func test_whenSubscriptingStringWithIntRange_thenReturnSubstring() {
-        XCTAssertEqual("Hello there"[0..<5], "Hello")
-    }
-
-    func test_whenSubscriptingStringWithIntLeftOpenRange_thenReturnSubstring() {
-        XCTAssertEqual("Hello there"[..<5], "Hello")
-    }
-
-    func test_whenSubscriptingStringWithIntRightOpenRange_thenReturnSubstring() {
-        XCTAssertEqual("Hello there"[6...], "there")
-    }
-
-    // MARK: String subscript
+    // MARK: String trim
 
     func test_whenTrimminString_thenRemovesWhitespaces() {
         XCTAssertEqual("   asd   ".trim(), "asd")
         XCTAssertEqual(" \t  asd \n  ".trim(), "asd")
-    }
-
-    // MARK: String search
-
-    func test_whenSearchingNextExistingOccurence_thenReturnsPosition() {
-        XCTAssertEqual("ab ab cd ab cd".position(of: "cd", from: 8), 12)
-    }
-
-    func test_whenSearchingNextNonexistingOccurence_thenReturnsNil() {
-        XCTAssertNil("ab ab cd ab cd".position(of: "yo"))
     }
 }

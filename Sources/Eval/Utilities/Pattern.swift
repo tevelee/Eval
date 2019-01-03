@@ -99,11 +99,13 @@ public class Pattern<T, I: Interpreter> {
     /// - parameter from: The start of the range to analyse the result in
     /// - parameter interpreter: An interpreter instance - if the variables need any further evaluation
     /// - parameter context: The context - if the block uses any contextual data
+    /// - parameter connectedRanges: Ranges of string indices that are connected with opening-closing tag pairs, respectively
     /// - returns: The result of the matching operation
-    func matches(string: String, from start: Int = 0, interpreter: I, context: Context) -> MatchResult<T> {
+    func matches(string: String, from start: String.Index? = nil, interpreter: I, context: Context, connectedRanges: [ClosedRange<String.Index>] = []) -> MatchResult<T> {
+        let start = start ?? string.startIndex
         let processor = VariableProcessor(interpreter: interpreter, context: context)
         let matcher = Matcher(elements: elements, processor: processor, options: options)
-        let result = matcher.match(string: string, from: start) { variables in
+        let result = matcher.match(string: string, from: start, connectedRanges: connectedRanges) { variables in
             self.matcher(variables, interpreter, context)
         }
 

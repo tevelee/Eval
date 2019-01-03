@@ -142,7 +142,7 @@ internal protocol VariableProtocol {
 
 /// Generic superclass of `Variable`s which are aware of their `Interpreter` classes,
 /// as they use it when mapping their values
-public class GenericVariable<T, E: Interpreter> : VariableProtocol, PatternElement {
+public class GenericVariable<T, E: Interpreter> : VariableProtocol, PatternElement, Equatable {
     /// Maps and validates the variable value to another
     /// - parameter input: The first parameter is the value is going to be transformed
     /// - parameter interpreter: Helps the mapper function to parse and interpret the contents
@@ -193,5 +193,9 @@ public class GenericVariable<T, E: Interpreter> : VariableProtocol, PatternEleme
     func performMap(input: Any, interpreter: Any) -> Any? {
         guard let interpreter = interpreter as? E else { return nil }
         return map(input, interpreter)
+    }
+    
+    public static func == (lhs: GenericVariable<T, E>, rhs: GenericVariable<T, E>) -> Bool {
+        return lhs.name == rhs.name && lhs.options == rhs.options
     }
 }

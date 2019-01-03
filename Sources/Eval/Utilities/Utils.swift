@@ -46,45 +46,9 @@ internal func += <A> (array: inout [A], element: A) {
 
 /// Helpers on `String` to provide `Int` based subscription features and easier usage
 extension String {
-    /// Syntactic sugar for Int based string subsription
-    /// - parameter offset: The position of the desired character
-    /// - returns: The `Character` at the given position
-    subscript (offset: Int) -> Character {
-        return self[index(startIndex, offsetBy: offset)]
-    }
-
-    /// Syntactic sugar for Int range based string subsription (1...3)
-    /// - parameter range: The range of the desired substring
-    /// - returns: The `Substring` at the given range
-    subscript (range: CountableRange<Int>) -> Substring {
-        return self[index(startIndex, offsetBy: range.startIndex) ..< index(startIndex, offsetBy: range.endIndex)]
-    }
-
-    /// Syntactic sugar for Int range based string subsription (..<4)
-    /// - parameter range: The range of the desired substring
-    /// - returns: The `Substring` at the given range
-    subscript (range: PartialRangeUpTo<Int>) -> Substring {
-        return self[..<index(startIndex, offsetBy: range.upperBound)]
-    }
-
-    /// Syntactic sugar for Int range based string subsription (1...)
-    /// - parameter range: The range of the desired substring
-    /// - returns: The `Substring` at the given range
-    subscript (range: CountablePartialRangeFrom<Int>) -> Substring {
-        return self[index(startIndex, offsetBy: range.lowerBound)...]
-    }
-
     /// Shorter syntax for trimming
     /// - returns: The `String` without the prefix and postfix whitespace characters
     func trim() -> String {
         return trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-
-    /// Helper to find the next Int based index for a substring, from a given position
-    /// - parameter target: The String to search for
-    /// - parameter from: The location where the range starts. The ending location if the end of the string
-    /// - returns: The position of the string - if found. `nil` otherwise
-    func position(of target: String, from: Int = 0) -> Int? {
-        return range(of: target, options: [], range: Range(uncheckedBounds: (index(startIndex, offsetBy: from), endIndex)))?.lowerBound.encodedOffset
     }
 }

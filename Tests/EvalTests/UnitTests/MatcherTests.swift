@@ -11,7 +11,8 @@ class MatcherTests: XCTestCase {
         let processor = VariableProcessor(interpreter: DummyInterpreter(), context: Context())
         let matcher = Matcher(elements: [opening, closing], processor: processor, options: [])
 
-        let result = matcher.isEmbedded(element: closing, in: "(input(random))", at: 0)
+        let input = "(input(random))"
+        let result = matcher.isEmbedded(element: closing, in: input, at: input.startIndex)
 
         XCTAssertTrue(result)
     }
@@ -22,7 +23,8 @@ class MatcherTests: XCTestCase {
         let processor = VariableProcessor(interpreter: DummyInterpreter(), context: Context())
         let matcher = Matcher(elements: [opening, closing], processor: processor, options: [])
 
-        let result = matcher.isEmbedded(element: opening, in: "input", at: 0)
+        let input = "input"
+        let result = matcher.isEmbedded(element: opening, in: input, at: input.startIndex)
 
         XCTAssertFalse(result)
     }
@@ -33,7 +35,8 @@ class MatcherTests: XCTestCase {
         let processor = VariableProcessor(interpreter: DummyInterpreter(), context: Context())
         let matcher = Matcher(elements: [opening, closing], processor: processor, options: [])
 
-        let result = matcher.isEmbedded(element: closing, in: "input(random)", at: 25)
+        let input = "input(random)"
+        let result = matcher.isEmbedded(element: closing, in: input, at: input.index(input.startIndex, offsetBy: 12))
 
         XCTAssertFalse(result)
     }
@@ -46,8 +49,9 @@ class MatcherTests: XCTestCase {
         let processor = VariableProcessor(interpreter: DummyInterpreter(), context: Context())
         let matcher = Matcher(elements: [opening, closing], processor: processor, options: [])
 
-        XCTAssertEqual(matcher.positionOfClosingTag(in: "(input(random))", from: 0), 14)
-        XCTAssertEqual(matcher.positionOfClosingTag(in: "(input(random))", from: 1), 13)
+        let input = "(input(random))"
+        XCTAssertEqual(matcher.positionOfClosingTag(in: input, from: input.startIndex), input.index(input.startIndex, offsetBy: 14))
+        XCTAssertEqual(matcher.positionOfClosingTag(in: input, from: input.index(after: input.startIndex)), input.index(input.startIndex, offsetBy: 13))
     }
 
     func test_whenNotEmbedding_thenClosingPositionIsNil() {
@@ -56,7 +60,8 @@ class MatcherTests: XCTestCase {
         let processor = VariableProcessor(interpreter: DummyInterpreter(), context: Context())
         let matcher = Matcher(elements: [opening, closing], processor: processor, options: [])
 
-        XCTAssertNil(matcher.positionOfClosingTag(in: "input", from: 0))
+        let input = "input"
+        XCTAssertNil(matcher.positionOfClosingTag(in: input, from: input.startIndex))
     }
 
     func test_whenEmbeddingButLate_thenClosingPositionIsNil() {
@@ -65,6 +70,7 @@ class MatcherTests: XCTestCase {
         let processor = VariableProcessor(interpreter: DummyInterpreter(), context: Context())
         let matcher = Matcher(elements: [opening, closing], processor: processor, options: [])
 
-        XCTAssertNil(matcher.positionOfClosingTag(in: "(input(random))", from: 8))
+        let input = "(input(random))"
+        XCTAssertNil(matcher.positionOfClosingTag(in: input, from: input.index(input.startIndex, offsetBy: 8)))
     }
 }

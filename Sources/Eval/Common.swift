@@ -139,10 +139,11 @@ public class Context {
 /// - parameter from: The start of the checked range
 /// - parameter interpreter: An interpreter instance - if variables need any further evaluation
 /// - parameter context: The context - if variables need any contextual information
+/// - parameter connectedRanges: Ranges of string indices that are connected with opening-closing tag pairs, respectively
 /// - returns: The result of the match operation
-internal func matchStatement<T, E>(amongst statements: [Pattern<T, E>], in input: String, from start: Int = 0, interpreter: E, context: Context) -> MatchResult<T> {
+internal func matchStatement<T, E>(amongst statements: [Pattern<T, E>], in input: String, from start: String.Index? = nil, interpreter: E, context: Context, connectedRanges: [ClosedRange<String.Index>] = []) -> MatchResult<T> {
     let results = statements.lazy.map { statement -> (element: Pattern<T, E>, result: MatchResult<T>) in
-        let result = statement.matches(string: input, from: start, interpreter: interpreter, context: context)
+        let result = statement.matches(string: input, from: start, interpreter: interpreter, context: context, connectedRanges: connectedRanges)
         return (element: statement, result: result)
     }
     if let matchingElement = results.first(where: { $0.result.isMatch() }) {
@@ -151,4 +152,54 @@ internal func matchStatement<T, E>(amongst statements: [Pattern<T, E>], in input
         return .possibleMatch
     }
     return .noMatch
+}
+
+/// Independent helper function that determines the pairs of opening and closing keywords
+/// - parameter input: The input string to search ranges in
+/// - parameter statements: Patterns that contain the opening and closing keyword types that should be matched
+/// - returns: The ranges of opening-closing pairs, keeping logical hierarchy
+internal func collectConnectedRanges(input: String, statements: [Pattern<Any, TypedInterpreter>]) -> [ClosedRange<String.Index>] {
+    return statements.compactMap { pattern -> [ClosedRange<String.Index>] in
+        let keywords = pattern.elements.compactMap { $0 as? Keyword }
+        let openingKeywords = keywords.filter { $0.type == .openingStatement }
+        let closingKeywords = keywords.filter { $0.type == .closingStatement }
+    
+        guard !openingKeywords.isEmpty && !closingKeywords.isEmpty else { return [] }
+        
+        var ranges : [ClosedRange<String.Index>] = []
+        var rangeStart : [String.Index] = []
+        var position = input.startIndex
+        repeat {
+            let relevantInput = input[position...]
+            let start = openingKeywords
+                .first { relevantInput.contains($0.name) }
+                .map { relevantInput.range(of: $0.name)!.lowerBound }
+            let end = closingKeywords
+                .first { relevantInput.contains($0.name) }
+                .map { relevantInput.range(of: $0.name)!.lowerBound }
+            if let start = start, let end = end {
+                if start < end {
+                    rangeStart.append(start)
+                } else {
+                    let lastOpening = rangeStart.removeLast()
+                    ranges.append(lastOpening...end)
+                }
+                position = input.index(after: min(start, end))
+            } else if let start = start {
+                rangeStart.append(start)
+                position = input.index(after: start)
+            } else if let end = end {
+                if rangeStart.isEmpty {
+                    return []
+                }
+                let lastOpening = rangeStart.removeLast()
+                ranges.append(lastOpening...end)
+                position = input.index(after: end)
+            } else {
+                break
+            }
+        } while position < input.endIndex
+    
+        return ranges
+    }.reduce([], +)
 }

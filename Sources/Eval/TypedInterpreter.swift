@@ -70,21 +70,24 @@ public class TypedInterpreter: Interpreter, Printer {
     public func evaluate(_ expression: String, context: Context) -> Any? {
         context.merge(with: self.context) { existing, _ in existing }
         let expression = expression.trim()
+        let patterns = functions.compactMap { ($0 as? Function<Any>)?.patterns }.reduce([Pattern]()) { list, item in list + item }
+        let connectedRanges = collectConnectedRanges(input: expression, statements: patterns)
 
-        return functionFromCache(for: expression, using: context)
+        return functionFromCache(for: expression, using: context, connectedRanges: connectedRanges)
             ?? dataTypeFromCache(for: expression)
             ?? dataType(for: expression)
             ?? variable(for: expression, using: context)
-            ?? function(for: expression, using: context)
+            ?? function(for: expression, using: context, connectedRanges: connectedRanges)
     }
 
     /// If the expression belongs to a cached function, it uses the function converter to evaluate it
     /// - parameter expression: The expression to evaluate
     /// - parameter context: The context to be using when the evaluation happens
+    /// - parameter connectedRanges: Ranges of string indices that are connected with opening-closing tag pairs, respectively
     /// - returns: The value - if the expression is interpreted. `nil` otherwise
-    func functionFromCache(for expression: String, using context: Context) -> Any? {
+    func functionFromCache(for expression: String, using context: Context, connectedRanges: [ClosedRange<String.Index>]) -> Any? {
         guard let cachedFunction = functionCache[expression],
-            let value = cachedFunction.convert(input: expression, interpreter: self, context: context) else { return nil }
+            let value = cachedFunction.convert(input: expression, interpreter: self, context: context, connectedRanges: connectedRanges) else { return nil }
         return value
     }
 
@@ -100,10 +103,11 @@ public class TypedInterpreter: Interpreter, Printer {
     /// If the expression is recognised as a function, it uses that function to evaluate the value
     /// - parameter expression: The expression to evaluate
     /// - parameter context: The context to be using when the evaluation happens
+    /// - parameter connectedRanges: Ranges of string indices that are connected with opening-closing tag pairs, respectively
     /// - returns: The value - if the expression is interpreted. `nil` otherwise
-    func function(for expression: String, using context: Context) -> Any? {
+    func function(for expression: String, using context: Context, connectedRanges: [ClosedRange<String.Index>]) -> Any? {
         for function in functions.reversed() {
-            if let value = function.convert(input: expression, interpreter: self, context: context) {
+            if let value = function.convert(input: expression, interpreter: self, context: context, connectedRanges: connectedRanges) {
                 functionCache[expression] = function
                 return value
             }
@@ -254,8 +258,9 @@ public protocol FunctionProtocol {
     /// - parameter input: The input to convert as a `DataType` value
     /// - parameter interpreter: An interpreter instance if the content needs any further evaluation
     /// - parameter context: The context - if vaiables need any contextual information
+    /// - parameter connectedRanges: Ranges of string indices that are connected with opening-closing tag pairs, respectively
     /// - returns: A valid value of any `DataType` or `nil` if it cannot be processed
-    func convert(input: String, interpreter: TypedInterpreter, context: Context) -> Any?
+    func convert(input: String, interpreter: TypedInterpreter, context: Context, connectedRanges: [ClosedRange<String.Index>]) -> Any?
 }
 
 /// `Function`s can process values in given `DataType`s, allowing the expressions to be feature-rich
@@ -281,9 +286,10 @@ public class Function<T> : FunctionProtocol {
     /// - parameter input: The input to convert as a `DataType` value
     /// - parameter interpreter: An interpreter instance if the content needs any further evaluation
     /// - parameter context: The context - if vaiables need any contextual information
+    /// - parameter connectedRanges: Ranges of string indices that are connected with opening-closing tag pairs, respectively
     /// - returns: A valid value of any `DataType` or `nil` if it cannot be processed
-    public func convert(input: String, interpreter: TypedInterpreter, context: Context) -> Any? {
-        guard case let .exactMatch(_, output, _) = matchStatement(amongst: patterns, in: input, interpreter: interpreter, context: context) else { return nil }
+    public func convert(input: String, interpreter: TypedInterpreter, context: Context, connectedRanges: [ClosedRange<String.Index>] = []) -> Any? {
+        guard case let .exactMatch(_, output, _) = matchStatement(amongst: patterns, in: input, interpreter: interpreter, context: context, connectedRanges: connectedRanges) else { return nil }
         return output
     }
 }

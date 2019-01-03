@@ -92,20 +92,20 @@ open class TemplateInterpreter<T> : Interpreter {
         context.merge(with: self.context) { existing, _ in existing }
         var output = reducer.initialValue
 
-        var position = 0
+        var position = expression.startIndex
         repeat {
             let result = matchStatement(amongst: statements, in: expression, from: position, interpreter: self, context: context)
             switch result {
             case .noMatch, .possibleMatch:
                 output = reducer.reduceCharacter(output, expression[position])
-                position += 1
+                position = expression.index(after: position)
             case let .exactMatch(length, matchOutput, _):
                 output = reducer.reduceValue(output, matchOutput)
-                position += length
+                position = expression.index(position, offsetBy: length)
             default:
                 assertionFailure("Invalid result")
             }
-        } while position < expression.count
+        } while position < expression.endIndex
 
         return output
     }
@@ -123,7 +123,9 @@ public class StringTemplateInterpreter: TemplateInterpreter<String> {
     /// - returns: The output of the evaluation
     public override func evaluate(_ expression: String, context: Context) -> String {
         guard !expression.isEmpty else { return "" }
-        return evaluate(expression, context: context, reducer: (initialValue: "", reduceValue: { existing, next in existing + next }, reduceCharacter: { existing, next in existing + String(next) }))
+        return evaluate(expression, context: context, reducer: (initialValue: "",
+                                                                reduceValue: { existing, next in existing + next },
+                                                                reduceCharacter: { existing, next in existing + String(next) }))
     }
 }
 

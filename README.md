@@ -1,7 +1,7 @@
 # { Eval }
 
 [![Travis CI status](https://travis-ci.org/tevelee/Eval.svg?branch=master)](https://travis-ci.org/tevelee/Eval)
-[![Framework version](https://img.shields.io/badge/Version-1.3.4-yellow.svg)]()
+[![Framework version](https://img.shields.io/badge/Version-1.3.5-yellow.svg)]()
 [![Swift version](https://img.shields.io/badge/Swift-4.2-orange.svg)]()
 [![Code Documentation Coverage](https://tevelee.github.io/Eval/badge.svg)](https://tevelee.github.io/Eval)
 [![Code Test Coverage](https://codecov.io/gh/tevelee/Eval/branch/master/graph/badge.svg)](https://codecov.io/gh/tevelee/Eval)
@@ -198,7 +198,7 @@ You have a few options to include the library in your app.
 Just add the following line to your dependencies:
 
 ```swift
-.package(url: "https://github.com/tevelee/Eval.git", from: "1.3.4"),
+.package(url: "https://github.com/tevelee/Eval.git", from: "1.3.5"),
 ```
 
 And reference it by name in your targets:
@@ -220,7 +220,7 @@ swift package resolve
 Just add the following line to your `Podfile`:
 
 ```ruby
-pod 'Eval', '~> 1.3.4'
+pod 'Eval', '~> 1.3.5'
 ```
 And install the new dependency:
 
@@ -233,7 +233,7 @@ pod install
 Just add the following line to your `Cartfile`:
 
 ```ruby
-github "tevelee/Eval" >= 1.3.4
+github "tevelee/Eval" >= 1.3.5
 ```
 And install the new dependency:
 

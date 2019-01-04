@@ -40,7 +40,7 @@ internal class VariableProcessor<E: Interpreter> : VariableProcessorProtocol {
     let interpreter: E
     /// The context to use during the processing
     let context: Context
-
+    
     /// Initialiser of the processor
     /// - parameter interpreter: An interpreter instance to use during the processing
     /// - parameter context: The context to use during the processing
@@ -48,7 +48,7 @@ internal class VariableProcessor<E: Interpreter> : VariableProcessorProtocol {
         self.interpreter = interpreter
         self.context = context
     }
-
+    
     /// Maps and evaluates variable content, based on its interpretation settings
     /// - parameter variable: The variable to process
     /// - returns: The result of the matching operation
@@ -65,26 +65,22 @@ internal class VariableProcessor<E: Interpreter> : VariableProcessorProtocol {
 
 /// This class provides the main logic of the `Eval` framework, performing the pattern matching details
 internal class Matcher {
-    /// The elements in the pattern
-    let elements: [PatternElement]
+    /// The pattern to match against
+    let pattern: PatternProtocol
     /// A processor that is able to evaluate the variables with extra information, such as context and interpreter
     let processor: VariableProcessorProtocol
-    /// Options for configuring the behaviour of the algorithm
-    let options: PatternOptions
-
+    
     /// Initialiser of the matcher
-    /// - parameter elements: The elements in the pattern
+    /// - parameter pattern: The pattern to match against
     /// - parameter processor: A processor that is able to evaluate the variables with extra information, such as context and interpreter
-    /// - parameter options: Options for configuring the behaviour of the algorithm
-    init(elements: [PatternElement], processor: VariableProcessorProtocol, options: PatternOptions) {
-        self.elements = elements
+    init(pattern: PatternProtocol, processor: VariableProcessorProtocol) {
+        self.pattern = pattern
         self.processor = processor
-        self.options = options
     }
-
+    
     /// The active variable that can be appended during the execution, used by the helper methods
     private var currentlyActiveVariable: VariableValue?
-
+    
     /// Tries to append the next input character to the currently active variables - if we have any
     /// - returns: Whether the append was successful
     private func tryToAppendCurrentVariable(remainder: inout String) -> Bool {
@@ -93,7 +89,7 @@ internal class Matcher {
         }
         return currentlyActiveVariable != nil
     }
-
+    
     /// Appends the next character to the provided variables
     /// - parameter variable: The variable to append to
     /// - parameter remainder: The remainder of the evaluated input
@@ -101,14 +97,14 @@ internal class Matcher {
         if remainder.isEmpty {
             currentlyActiveVariable = (variable.metadata, variable.value)
         } else {
-            if options.contains(.backwardMatch) {
+            if pattern.options.contains(.backwardMatch) {
                 currentlyActiveVariable = (variable.metadata, String(describing: remainder.removeLast()) + variable.value)
             } else {
                 currentlyActiveVariable = (variable.metadata, variable.value + String(describing: remainder.removeFirst()))
             }
         }
     }
-
+    
     /// An element to initialise the variable with
     /// - parameter element: The variable element
     private func initialiseVariable(_ element: PatternElement) {
@@ -116,7 +112,7 @@ internal class Matcher {
             currentlyActiveVariable = (variable, "")
         }
     }
-
+    
     /// When the recognition of a variable arrives to the final stage, function finalises its value and appends the variables array
     /// - returns: Whether the registration was successful (the finalisation resulted in a valid value)
     private func registerAndValidateVariable(variables: inout [String: Any]) -> Bool {
@@ -127,52 +123,52 @@ internal class Matcher {
         }
         return false
     }
-
+    
     /// Increments the elementIndex value
     /// - parameter elementIndex: The index to be incremented
     private func nextElement(_ elementIndex: inout Int) {
-        elementIndex += options.contains(.backwardMatch) ? -1 : 1
+        elementIndex += pattern.options.contains(.backwardMatch) ? -1 : 1
     }
-
+    
     /// Checks whether the current index is the last one
     /// - parameter elementIndex: The index to be checked
     /// - returns: Whether the index is the last one of the elements array
     private func notFinished(_ elementIndex: Int) -> Bool {
-        if options.contains(.backwardMatch) {
-            return elementIndex >= elements.startIndex
+        if pattern.options.contains(.backwardMatch) {
+            return elementIndex >= pattern.elements.startIndex
         } else {
-            return elementIndex < elements.endIndex
+            return elementIndex < pattern.elements.endIndex
         }
     }
-
+    
     /// Helper method to determine the first index of the collection, based on its options
     /// - returns: The first index of the collection
     private func initialIndex() -> Int {
-        if options.contains(.backwardMatch) {
-            return elements.index(before: elements.endIndex)
+        if pattern.options.contains(.backwardMatch) {
+            return pattern.elements.index(before: pattern.elements.endIndex)
         } else {
-            return elements.startIndex
+            return pattern.elements.startIndex
         }
     }
-
+    
     /// Removes and returns the next character from the input
     /// - parameter remainder: The remainder of the input
     /// - parameter length: The number of characters to be removed
     /// - returns: The last few characers from the input, defined by the `length` parameter
     private func drop(_ remainder: String, length: Int) -> String {
-        if options.contains(.backwardMatch) {
+        if pattern.options.contains(.backwardMatch) {
             return String(remainder.dropLast(length))
         } else {
             return String(remainder.dropFirst(length))
         }
     }
-
+    
     /// Removes whitespaces characters from the upcoming consecutive input characters
     /// - parameter remainder: The input to remove whitespaces from
     private func skipWhitespaces(_ remainder: inout String) {
         let whitespaces = CharacterSet.whitespacesAndNewlines
         repeat {
-            if options.contains(.backwardMatch), let last = remainder.last?.unicodeScalars.first, whitespaces.contains(last) {
+            if pattern.options.contains(.backwardMatch), let last = remainder.last?.unicodeScalars.first, whitespaces.contains(last) {
                 _ = remainder.removeLast()
             } else if let first = remainder.first?.unicodeScalars.first, whitespaces.contains(first) {
                 _ = remainder.removeFirst()
@@ -181,7 +177,7 @@ internal class Matcher {
             }
         } while true
     }
-
+    
     /// Removes whitespaces characters from the upcoming consecutive input characters, when the context allows to do so
     /// - parameter remainder: The input to remove whitespaces from
     /// - parameter index: The index of the current element
@@ -189,14 +185,14 @@ internal class Matcher {
         var shouldTrim = false
         if let variable = currentlyActiveVariable {
             shouldTrim = variable.metadata.options.trimmed
-        } else if index < elements.endIndex && elements[index] is Keyword {
+        } else if index < pattern.elements.endIndex && pattern.elements[index] is Keyword {
             shouldTrim = true
         }
         if shouldTrim && notFinished(index) {
             skipWhitespaces(&remainder)
         }
     }
-
+    
     /// This match method provides the main logic of the `Eval` framework, performing the pattern matching, trying to identify, whether the input string is somehow related, or completely matches the pattern.
     /// - parameter string: The input
     /// - parameter from: The start of the range to analyse the result in
@@ -211,11 +207,11 @@ internal class Matcher {
         var elementIndex = initialIndex()
         var remainder = trimmed
         var variables: [String: Any] = [:]
-
+        
         repeat {
-            let element = elements[elementIndex]
-            let result = element.matches(prefix: remainder, options: options)
-
+            let element = pattern.elements[elementIndex]
+            let result = element.matches(prefix: remainder, options: pattern.options)
+            
             switch result {
             case .noMatch:
                 guard tryToAppendCurrentVariable(remainder: &remainder) else { return .noMatch }
@@ -233,7 +229,7 @@ internal class Matcher {
                     nextElement(&elementIndex)
                 }
             case let .exactMatch(length, _, embeddedVariables):
-                let position = options.contains(.backwardMatch) ? remainder.endIndex : trimmed.index(trimmed.endIndex, offsetBy: -remainder.count)
+                let position = pattern.options.contains(.backwardMatch) ? remainder.endIndex : trimmed.index(trimmed.endIndex, offsetBy: -remainder.count)
                 let isOpeningOrClosingKeyword = (element as? Keyword)?.type != .generic
                 if isEmbedded(element: element, in: String(string[start...]), at: position) {
                     if currentlyActiveVariable != nil {
@@ -253,20 +249,20 @@ internal class Matcher {
                     }
                     nextElement(&elementIndex)
                     remainder = drop(remainder, length: length)
-                    if elementIndex < elements.count && element is Keyword {
+                    if elementIndex < pattern.elements.count && element is Keyword {
                         skipWhitespacesIfNeeded(&remainder, index: elementIndex)
                     }
                 }
             }
         } while notFinished(elementIndex)
-
+        
         if let renderedOutput = renderer(variables) {
             return .exactMatch(length: string.count - string.distance(from: string.startIndex, to: start) - remainder.count, output: renderedOutput, variables: variables)
         } else {
             return .noMatch
         }
     }
-
+    
     /// Determines whether the current character is an `OpenKeyword`, so there might be another embedded match later
     /// - parameter element: The element to check whether it's an `OpenKeyword`
     /// - parameter in: The input
@@ -279,14 +275,14 @@ internal class Matcher {
         }
         return false
     }
-
+    
     /// Determines whether the current character is an `OpenKeyword` and fins the position of its appropriate `ClosingKeyword` pair
     /// - parameter in: The input
     /// - parameter from: The starting position of the checking range
     /// - returns: `nil` if the `CloseKeyword` pair cannot be found. The position otherwise
     func positionOfClosingTag(in string: String, from start: String.Index) -> String.Index? {
-        if let opening = elements.first(where: { ($0 as? Keyword)?.type == .openingStatement }) as? Keyword,
-            let closing = elements.first(where: { ($0 as? Keyword)?.type == .closingStatement }) as? Keyword {
+        if let opening = pattern.elements.first(where: { ($0 as? Keyword)?.type == .openingStatement }) as? Keyword,
+            let closing = pattern.elements.first(where: { ($0 as? Keyword)?.type == .closingStatement }) as? Keyword {
             var counter = 0
             var position = start
             repeat {

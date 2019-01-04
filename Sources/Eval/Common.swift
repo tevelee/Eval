@@ -70,6 +70,8 @@ public struct ExpressionInfo {
     var output: Any
     /// A stringified version of the elements of the `Matcher` object
     var pattern: String
+    /// The name of the pattern
+    var patternName: String
     /// All the variables computed during the evaluation
     var variables: [String: Any]
 }

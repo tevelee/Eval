@@ -9,7 +9,7 @@ class MatcherTests: XCTestCase {
         let opening = Keyword("(", type: .openingStatement)
         let closing = Keyword(")", type: .closingStatement)
         let processor = VariableProcessor(interpreter: DummyInterpreter(), context: Context())
-        let matcher = Matcher(elements: [opening, closing], processor: processor, options: [])
+        let matcher = Matcher(pattern: pattern([opening, closing]), processor: processor)
 
         let input = "(input(random))"
         let result = matcher.isEmbedded(element: closing, in: input, at: input.startIndex)
@@ -21,7 +21,7 @@ class MatcherTests: XCTestCase {
         let opening = Keyword("(", type: .openingStatement)
         let closing = Keyword(")", type: .closingStatement)
         let processor = VariableProcessor(interpreter: DummyInterpreter(), context: Context())
-        let matcher = Matcher(elements: [opening, closing], processor: processor, options: [])
+        let matcher = Matcher(pattern: pattern([opening, closing]), processor: processor)
 
         let input = "input"
         let result = matcher.isEmbedded(element: opening, in: input, at: input.startIndex)
@@ -33,7 +33,7 @@ class MatcherTests: XCTestCase {
         let opening = Keyword("(", type: .openingStatement)
         let closing = Keyword(")", type: .closingStatement)
         let processor = VariableProcessor(interpreter: DummyInterpreter(), context: Context())
-        let matcher = Matcher(elements: [opening, closing], processor: processor, options: [])
+        let matcher = Matcher(pattern: pattern([opening, closing]), processor: processor)
 
         let input = "input(random)"
         let result = matcher.isEmbedded(element: closing, in: input, at: input.index(input.startIndex, offsetBy: 12))
@@ -47,7 +47,7 @@ class MatcherTests: XCTestCase {
         let opening = Keyword("(", type: .openingStatement)
         let closing = Keyword(")", type: .closingStatement)
         let processor = VariableProcessor(interpreter: DummyInterpreter(), context: Context())
-        let matcher = Matcher(elements: [opening, closing], processor: processor, options: [])
+        let matcher = Matcher(pattern: pattern([opening, closing]), processor: processor)
 
         let input = "(input(random))"
         XCTAssertEqual(matcher.positionOfClosingTag(in: input, from: input.startIndex), input.index(input.startIndex, offsetBy: 14))
@@ -58,7 +58,7 @@ class MatcherTests: XCTestCase {
         let opening = Keyword("(", type: .openingStatement)
         let closing = Keyword(")", type: .closingStatement)
         let processor = VariableProcessor(interpreter: DummyInterpreter(), context: Context())
-        let matcher = Matcher(elements: [opening, closing], processor: processor, options: [])
+        let matcher = Matcher(pattern: pattern([opening, closing]), processor: processor)
 
         let input = "input"
         XCTAssertNil(matcher.positionOfClosingTag(in: input, from: input.startIndex))
@@ -68,9 +68,13 @@ class MatcherTests: XCTestCase {
         let opening = Keyword("(", type: .openingStatement)
         let closing = Keyword(")", type: .closingStatement)
         let processor = VariableProcessor(interpreter: DummyInterpreter(), context: Context())
-        let matcher = Matcher(elements: [opening, closing], processor: processor, options: [])
+        let matcher = Matcher(pattern: pattern([opening, closing]), processor: processor)
 
         let input = "(input(random))"
         XCTAssertNil(matcher.positionOfClosingTag(in: input, from: input.index(input.startIndex, offsetBy: 8)))
+    }
+    
+    private func pattern(_ elements: [PatternElement]) -> Eval.Pattern<Any, DummyInterpreter> {
+        return Pattern(elements) { _, _, _ in "" }
     }
 }

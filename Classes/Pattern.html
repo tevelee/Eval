@@ -163,6 +163,9 @@
                 <a href="../Protocols/PatternElement.html">PatternElement</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/PatternProtocol.html">PatternProtocol</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/Printer.html">Printer</a>
               </li>
               <li class="nav-group-task">
@@ -206,11 +209,11 @@
             <h1>Pattern</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Pattern</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">I</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">I</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Interpreter.html">Interpreter</a></span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Pattern</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">I</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/PatternProtocol.html">PatternProtocol</a></span> <span class="k">where</span> <span class="kt">I</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Interpreter.html">Interpreter</a></span></code></pre>
 
                 </div>
               </div>
-            <p>Matchers are the heart of the Eval framework, providing pattern matching capabilities to the library.</p>
+            <p>Pattern consists of array of elements</p>
 
           </section>
           <section class="section task-group-section">
@@ -242,7 +245,7 @@ This collection should be provided during the initialisation, and cannot be modi
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L51">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L64">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -272,7 +275,7 @@ This collection should be provided during the initialisation, and cannot be modi
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L54">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L67">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -297,12 +300,12 @@ This collection should be provided during the initialisation, and cannot be modi
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">options</span><span class="p">:</span> <span class="kt"><a href="../Structs/PatternOptions.html">PatternOptions</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">options</span><span class="p">:</span> <span class="kt"><a href="../Structs/PatternOptions.html">PatternOptions</a></span></code></pre>
 
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L57">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L70">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -310,9 +313,39 @@ This collection should be provided during the initialisation, and cannot be modi
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval7PatternCACyxq_GSayAA0B7Element_pG_AA0B7OptionsV7optionsxSgs10DictionaryVySSypG_q_AA7ContextCtc7matchertcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(_:options:matcher:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval7PatternCACyxq_GSayAA0B7Element_pG_AA0B7OptionsV7optionsxSgs10DictionaryVySSypG_q_AA7ContextCtc7matchertcfc">init(_:options:matcher:)</a>
+                    <a name="/s:4Eval7PatternC4nameSSvp"></a>
+                    <a name="//apple_ref/swift/Property/name" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval7PatternC4nameSSvp">name</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Optional name to identify the pattern. If not provided during initialisation, it will fall back to the textual representation of the elements array</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L73">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval7PatternCACyxq_GSayAA0B7Element_pG_SSSg4nameAA0B7OptionsV7optionsxSgs10DictionaryVySSypG_q_AA7ContextCtc7matchertcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(_:name:options:matcher:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval7PatternCACyxq_GSayAA0B7Element_pG_SSSg4nameAA0B7OptionsV7optionsxSgs10DictionaryVySSypG_q_AA7ContextCtc7matchertcfc">init(_:name:options:matcher:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -328,6 +361,7 @@ This collection should be provided during the initialisation, and cannot be modi
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">elements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/PatternElement.html">PatternElement</a></span><span class="p">],</span>
+            <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
             <span class="nv">options</span><span class="p">:</span> <span class="kt"><a href="../Structs/PatternOptions.html">PatternOptions</a></span> <span class="o">=</span> <span class="p">[],</span>
             <span class="nv">matcher</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:4Eval12MatcherBlocka">MatcherBlock</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">I</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
@@ -346,6 +380,18 @@ This collection should be provided during the initialisation, and cannot be modi
                               <td>
                                 <div>
                                   <p>The pattern to recognise</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>name</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Optional identifier for the pattern. Defaults to the string representation of the elements</p>
                                 </div>
                               </td>
                             </tr>
@@ -377,7 +423,7 @@ This collection should be provided during the initialisation, and cannot be modi
                         </table>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L63-L69">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L80-L88">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -442,7 +488,7 @@ This collection should be provided during the initialisation, and cannot be modi
                         <p>A new collection of elements, where the last element is replaced, whether it&rsquo;s a variable with shortest flag on</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L75-L94">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L94-L113">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -544,7 +590,7 @@ Uses the <code><a href="../Classes/Matcher.html">Matcher</a></code> class for th
                         <p>The result of the matching operation</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L104-L118">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L123-L137">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -552,9 +598,43 @@ Uses the <code><a href="../Classes/Matcher.html">Matcher</a></code> class for th
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval7PatternC7patternSSyF"></a>
-                    <a name="//apple_ref/swift/Method/pattern()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval7PatternC7patternSSyF">pattern()</a>
+                    <a name="/s:4Eval7PatternC16elementsAsStringSSyF"></a>
+                    <a name="//apple_ref/swift/Method/elementsAsString()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval7PatternC16elementsAsStringSSyF">elementsAsString()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A textual representation of the Pattern&rsquo;s elements array</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">elementsAsString</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A stringified version of the input elements</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L141-L143">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval7PatternC9stringifySSSayAA0B7Element_pG8elements_tFZ"></a>
+                    <a name="//apple_ref/swift/Method/stringify(elements:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval7PatternC9stringifySSSayAA0B7Element_pG8elements_tFZ">stringify(elements:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -569,7 +649,7 @@ Uses the <code><a href="../Classes/Matcher.html">Matcher</a></code> class for th
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">pattern</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">stringify</span><span class="p">(</span><span class="nv">elements</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Protocols/PatternElement.html">PatternElement</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -578,7 +658,7 @@ Uses the <code><a href="../Classes/Matcher.html">Matcher</a></code> class for th
                         <p>A stringified version of the input elements</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L122-L131">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L147-L156">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -588,7 +668,7 @@ Uses the <code><a href="../Classes/Matcher.html">Matcher</a></code> class for th
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2019-01-03)</p>
+          <p>&copy; 2019 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2019-01-04)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

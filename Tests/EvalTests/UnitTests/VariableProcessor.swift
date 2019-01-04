@@ -17,7 +17,7 @@ class VariableProcessorTests: XCTestCase {
     // process
 
     func test_whenProcessing_thenUsesMap() {
-        let variable: VariableValue = (metadata: GenericVariable<String, DummyInterpreter>("name") { _, _ in "xyz" }, value: "asd")
+        let variable: VariableValue = (metadata: GenericVariable<String, DummyInterpreter>("name") { _ in "xyz" }, value: "asd")
         let processor = VariableProcessor(interpreter: DummyInterpreter(), context: Context())
 
         let result = processor.process(variable)

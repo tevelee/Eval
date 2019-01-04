@@ -137,11 +137,11 @@ public class TemplateVariable: GenericVariable<String, StringTemplateInterpreter
     /// - parameter options: Options that modify the behaviour of the variable matching, and the output that the framework provides
     /// - parameter map: If provided, then the result of the evaluated variable will be running through this map function
     /// Whether the processed variable sould be trimmed (removing whitespaces from both sides). Defaults to `true`
-    public override init(_ name: String, options: VariableOptions = [], map: @escaping VariableMapper<String, StringTemplateInterpreter> = { value, _ in value as? String }) {
-        super.init(name, options: options.union(.notInterpreted)) { value, interpreter in
-            guard let stringValue = value as? String else { return "" }
-            let result = options.interpreted ? interpreter.evaluate(stringValue) : stringValue
-            return map(result, interpreter)
+    public override init(_ name: String, options: VariableOptions = [], map: @escaping VariableMapper<String, StringTemplateInterpreter> = { $0.value as? String }) {
+        super.init(name, options: options.union(.notInterpreted)) {
+            guard let stringValue = $0.value as? String else { return "" }
+            let result = options.interpreted ? $0.interpreter.evaluate(stringValue) : stringValue
+            return map(VariableBody(value: result, interpreter: $0.interpreter))
         }
     }
 }

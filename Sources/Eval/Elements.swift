@@ -140,21 +140,28 @@ internal protocol VariableProtocol {
     func performMap(input: Any, interpreter: Any) -> Any?
 }
 
+/// It's a data transfer object passed in the `Variable` matcher block
+public struct VariableBody<I: Interpreter> {
+    /// The raw value to match
+    public var value: Any
+    /// An interpreter instance if the raw value needs any further evaluation
+    public var interpreter: I
+}
+
 /// Generic superclass of `Variable`s which are aware of their `Interpreter` classes,
 /// as they use it when mapping their values
-public class GenericVariable<T, E: Interpreter> : VariableProtocol, PatternElement, Equatable {
+public class GenericVariable<T, I: Interpreter> : VariableProtocol, PatternElement, Equatable {
     /// Maps and validates the variable value to another
-    /// - parameter input: The first parameter is the value is going to be transformed
-    /// - parameter interpreter: Helps the mapper function to parse and interpret the contents
+    /// - parameter body: Struct containing the raw matched value and an interpreter object
     /// - returns: The transformed value or nil, if the value was validated with a negative result
-    public typealias VariableMapper<T, E> = (_ input: Any, _ interpreter: E) -> T?
+    public typealias VariableMapper<T, I: Interpreter> = (_ body: VariableBody<I>) -> T?
 
     /// Unique identifier of the variable that is used when matching and returning them in the matcher.
     let name: String
     /// Options that modify the behaviour of the variable matching, and the output that the framework provides
     let options: VariableOptions
     /// The result of the evaluated variable will be running through this map function, transforming its value. By default the map tries to convert the matched value to the expected type, using the `as?` operator.
-    let map: VariableMapper<T, E>
+    let map: VariableMapper<T, I>
 
     /// Initialiser for all the properties
     /// - parameter name: `GenericVariable`s have a name (unique identifier), that is used when matching and returning them in the matcher.
@@ -162,7 +169,7 @@ public class GenericVariable<T, E: Interpreter> : VariableProtocol, PatternEleme
     /// - parameter map: If provided, then the result of the evaluated variable will be running through this map function. By default the map tries to convert the matched value to the expected type, using the `as?` operator. Defaults to identical map, using the `as?` operator for value transformation
     public init(_ name: String,
                 options: VariableOptions = [],
-                map: @escaping VariableMapper<T, E> = { value, _ in value as? T }) {
+                map: @escaping VariableMapper<T, I> = { $0.value as? T }) {
         self.name = name
         self.options = options
         self.map = map
@@ -179,9 +186,9 @@ public class GenericVariable<T, E: Interpreter> : VariableProtocol, PatternEleme
     /// - parameter map: The transformation function
     /// - parameter value: The value to be mapped
     /// - returns: A new variable instance using the value mapper block
-    public func mapped<K>(_ map: @escaping (_ value: T) -> K?) -> GenericVariable<K, E> {
-        return GenericVariable<K, E>(name, options: options) { value, interpreter in
-            guard let value = self.map(value, interpreter) else { return nil }
+    public func mapped<K>(_ map: @escaping (_ value: T) -> K?) -> GenericVariable<K, I> {
+        return GenericVariable<K, I>(name, options: options) {
+            guard let value = self.map($0) else { return nil }
             return map(value)
         }
     }
@@ -191,11 +198,11 @@ public class GenericVariable<T, E: Interpreter> : VariableProtocol, PatternEleme
     /// - parameter interpreter: Helps the mapper function to parse and interpret the contents
     /// - returns: The transformed value or nil - if the value was validated with a negative result
     func performMap(input: Any, interpreter: Any) -> Any? {
-        guard let interpreter = interpreter as? E else { return nil }
-        return map(input, interpreter)
+        guard let interpreter = interpreter as? I else { return nil }
+        return map(VariableBody(value: input, interpreter: interpreter))
     }
-    
-    public static func == (lhs: GenericVariable<T, E>, rhs: GenericVariable<T, E>) -> Bool {
+
+    public static func == (lhs: GenericVariable<T, I>, rhs: GenericVariable<T, I>) -> Bool {
         return lhs.name == rhs.name && lhs.options == rhs.options
     }
 }

@@ -7,8 +7,8 @@ class DataTypeTests: XCTestCase {
 
     func test_whenInitialised_then() {
         let type = Double.self
-        let literal = Literal { value, _ in Double(value) }
-        let print: (Double, Printer) -> String = { value, _ in String(value) }
+        let literal = Literal { Double($0.value) }
+        let print: (DataTypeBody<Double>) -> String = { String($0.value) }
 
         let dataType = DataType(type: type, literals: [literal], print: print)
 
@@ -20,7 +20,7 @@ class DataTypeTests: XCTestCase {
     // MARK: convert
 
     func test_whenConverting_thenGeneratesStringValue() {
-        let dataType = DataType(type: Double.self, literals: [Literal { value, _ in Double(value) }]) { value, _ in String(value) }
+        let dataType = DataType(type: Double.self, literals: [Literal { Double($0.value) }]) { String($0.value) }
 
         let result = dataType.convert(input: "1", interpreter: TypedInterpreter())
 
@@ -28,7 +28,7 @@ class DataTypeTests: XCTestCase {
     }
 
     func test_whenConvertingInvalidValue_thenGeneratesNilValue() {
-        let dataType = DataType(type: Double.self, literals: [Literal { value, _ in Double(value) }]) { value, _ in String(value) }
+        let dataType = DataType(type: Double.self, literals: [Literal { Double($0.value) }]) { String($0.value) }
 
         let result = dataType.convert(input: "a", interpreter: TypedInterpreter())
 
@@ -38,9 +38,9 @@ class DataTypeTests: XCTestCase {
     // MARK: print
 
     func test_whenPrinting_thenGeneratesStringValue() {
-        let dataType = DataType(type: Double.self, literals: [Literal { value, _ in Double(value) }]) { _, _ in "printed value" }
+        let dataType = DataType(type: Double.self, literals: [Literal { Double($0.value) }]) { _ in "printed value" }
 
-        let result = dataType.print(1, TypedInterpreter())
+        let result = dataType.print(value: 1.0, printer: TypedInterpreter())
 
         XCTAssertEqual(result, "printed value")
     }

@@ -165,20 +165,20 @@ internal func collectConnectedRanges(input: String, statements: [Pattern<Any, Ty
         let keywords = pattern.elements.compactMap { $0 as? Keyword }
         let openingKeywords = keywords.filter { $0.type == .openingStatement }
         let closingKeywords = keywords.filter { $0.type == .closingStatement }
-    
+
         guard !openingKeywords.isEmpty && !closingKeywords.isEmpty else { return [] }
-        
-        var ranges : [ClosedRange<String.Index>] = []
-        var rangeStart : [String.Index] = []
+
+        var ranges: [ClosedRange<String.Index>] = []
+        var rangeStart: [String.Index] = []
         var position = input.startIndex
         repeat {
             let relevantInput = input[position...]
             let start = openingKeywords
                 .first { relevantInput.contains($0.name) }
-                .map { relevantInput.range(of: $0.name)!.lowerBound }
+                .flatMap { relevantInput.range(of: $0.name)?.lowerBound }
             let end = closingKeywords
                 .first { relevantInput.contains($0.name) }
-                .map { relevantInput.range(of: $0.name)!.lowerBound }
+                .flatMap { relevantInput.range(of: $0.name)?.lowerBound }
             if let start = start, let end = end {
                 if start < end {
                     rangeStart.append(start)
@@ -201,7 +201,7 @@ internal func collectConnectedRanges(input: String, statements: [Pattern<Any, Ty
                 break
             }
         } while position < input.endIndex
-    
+
         return ranges
     }.reduce([], +)
 }

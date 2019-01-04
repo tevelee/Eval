@@ -43,9 +43,9 @@ public class AttributedStringInterpreter: EvaluatorWithLocalContext {
         return interpreter.evaluate(expression, context: context)
     }
 
-    static func attributeMatcher(name: String, attributes: [NSAttributedStringKey: Any]) -> Pattern<NSAttributedString, TemplateInterpreter<NSAttributedString>> {
-        return Pattern([OpenKeyword("<\(name)>"), GenericVariable<String, AttributedStringTemplateInterpreter>("body", options: .notInterpreted), CloseKeyword("</\(name)>")]) { variables, _, _ in
-            guard let body = variables["body"] as? String else { return nil }
+    static func attributeMatcher(name: String, attributes: [NSAttributedString.Key: Any]) -> Pattern<NSAttributedString, TemplateInterpreter<NSAttributedString>> {
+        return Pattern([OpenKeyword("<\(name)>"), GenericVariable<String, AttributedStringTemplateInterpreter>("body", options: .notInterpreted), CloseKeyword("</\(name)>")]) {
+            guard let body = $0.variables["body"] as? String else { return nil }
             return NSAttributedString(string: body, attributes: attributes)
         }
     }

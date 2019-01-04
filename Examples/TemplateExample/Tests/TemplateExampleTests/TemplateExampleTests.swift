@@ -332,7 +332,7 @@ class TemplateExampleTests: XCTestCase {
     }
 
     func testDefault() {
-        XCTAssertEqual(eval("{{ null.default('fallback') }}", ["array": []]), "fallback")
+        XCTAssertEqual(eval("{{ null.default('fallback') }}"), "fallback")
         XCTAssertEqual(eval("{{ array.last.default('none') }}", ["array": [1]]), "1")
         XCTAssertEqual(eval("{{ array.last.default('none') }}", ["array": []]), "none")
         XCTAssertEqual(eval("{{ array.last.default(2) }}", ["array": []]), "2")

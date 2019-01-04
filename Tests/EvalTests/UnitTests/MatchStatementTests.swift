@@ -6,7 +6,7 @@ class MatchStatementTests: XCTestCase {
 
     func test_whenMatchingOne_returnsMatch() {
         let input = "input"
-        let matcher = Pattern<Int, DummyInterpreter>([Keyword("in")]) { _, _, _ in 1 }
+        let matcher = Pattern<Int, DummyInterpreter>([Keyword("in")]) { _ in 1 }
 
         let result1 = matcher.matches(string: input, interpreter: DummyInterpreter(), context: Context())
         let result2 = matchStatement(amongst: [matcher], in: input, interpreter: DummyInterpreter(), context: Context())
@@ -16,8 +16,8 @@ class MatchStatementTests: XCTestCase {
 
     func test_whenMatchingTwo_returnsMatch() {
         let input = "input"
-        let matcher1 = Pattern<Int, DummyInterpreter>([Keyword("in")]) { _, _, _ in 1 }
-        let matcher2 = Pattern<Int, DummyInterpreter>([Keyword("on")]) { _, _, _ in 2 }
+        let matcher1 = Pattern<Int, DummyInterpreter>([Keyword("in")]) { _ in 1 }
+        let matcher2 = Pattern<Int, DummyInterpreter>([Keyword("on")]) { _ in 2 }
 
         let result = matchStatement(amongst: [matcher1, matcher2], in: input, interpreter: DummyInterpreter(), context: Context())
 
@@ -26,8 +26,8 @@ class MatchStatementTests: XCTestCase {
 
     func test_whenMatchingTwoMatches_returnsTheFirstMatch() {
         let input = "input"
-        let matcher1 = Pattern<Int, DummyInterpreter>([Keyword("in")]) { _, _, _ in 1 }
-        let matcher2 = Pattern<Int, DummyInterpreter>([Keyword("inp")]) { _, _, _ in 2 }
+        let matcher1 = Pattern<Int, DummyInterpreter>([Keyword("in")]) { _ in 1 }
+        let matcher2 = Pattern<Int, DummyInterpreter>([Keyword("inp")]) { _ in 2 }
 
         let result = matchStatement(amongst: [matcher1, matcher2], in: input, interpreter: DummyInterpreter(), context: Context())
 
@@ -36,8 +36,8 @@ class MatchStatementTests: XCTestCase {
 
     func test_whenMatchingInvalid_returnsNoMatch() {
         let input = "xxx"
-        let matcher1 = Pattern<Int, DummyInterpreter>([Keyword("in")]) { _, _, _ in 1 }
-        let matcher2 = Pattern<Int, DummyInterpreter>([Keyword("on")]) { _, _, _ in 2 }
+        let matcher1 = Pattern<Int, DummyInterpreter>([Keyword("in")]) { _ in 1 }
+        let matcher2 = Pattern<Int, DummyInterpreter>([Keyword("on")]) { _ in 2 }
 
         let result = matchStatement(amongst: [matcher1, matcher2], in: input, interpreter: DummyInterpreter(), context: Context())
 
@@ -46,8 +46,8 @@ class MatchStatementTests: XCTestCase {
 
     func test_whenMatchingPrefix_returnsPossibleMatch() {
         let input = "i"
-        let matcher1 = Pattern<Int, DummyInterpreter>([Keyword("in")]) { _, _, _ in 1 }
-        let matcher2 = Pattern<Int, DummyInterpreter>([Keyword("on")]) { _, _, _ in 2 }
+        let matcher1 = Pattern<Int, DummyInterpreter>([Keyword("in")]) { _ in 1 }
+        let matcher2 = Pattern<Int, DummyInterpreter>([Keyword("on")]) { _ in 2 }
 
         let result = matchStatement(amongst: [matcher1, matcher2], in: input, interpreter: DummyInterpreter(), context: Context())
 

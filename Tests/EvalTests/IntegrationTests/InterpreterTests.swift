@@ -34,7 +34,7 @@ class InterpreterTests: XCTestCase {
             guard let foo = arguments["foo"] as? Double, let bar = arguments["bar"] as? Double else { return nil }
             return foo + bar
         }
-        let parenthesis = Function([Keyword("("), Variable<Any>("body"), Keyword(")")]) { arguments, _, _ in arguments["body"] }
+        let parenthesis = Function([Keyword("("), Variable<Any>("body"), Keyword(")")]) { $0.variables["body"] }
         let plusOperator = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
         let concat = infixOperator("+") { (lhs: String, rhs: String) in lhs + rhs }
         let multipicationOperator = infixOperator("*") { (lhs: Double, rhs: Double) in lhs * rhs }
@@ -100,17 +100,17 @@ class InterpreterTests: XCTestCase {
             print("DEBUG STEP: '\($0.value.pattern)', where \($0.value.variables), rendered to \($0.value.output) from input \($0.key)")
         }
 
-        let ifStatement = Pattern<String, TemplateInterpreter<String>>([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{% endif %}")]) { variables, _, _ -> String? in
-            guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
+        let ifStatement = Pattern<String, TemplateInterpreter<String>>([Keyword("{%"), Keyword("if"), Variable<Bool>("condition"), Keyword("%}"), TemplateVariable("body"), Keyword("{% endif %}")]) {
+            guard let condition = $0.variables["condition"] as? Bool, let body = $0.variables["body"] as? String else { return nil }
             if condition {
                 return body
             }
             return nil
         }
 
-        let printStatement = Pattern([Keyword("{{"), Variable<Any>("body"), Keyword("}}")]) { (variables, interpreter: TemplateInterpreter<String>, _) -> String? in
-            guard let body = variables["body"] else { return nil }
-            return interpreter.typedInterpreter.print(body)
+        let printStatement = Pattern<String, TemplateInterpreter<String>>([Keyword("{{"), Variable<Any>("body"), Keyword("}}")]) {
+            guard let body = $0.variables["body"] else { return nil }
+            return $0.interpreter.typedInterpreter.print(body)
         }
 
         let template = StringTemplateInterpreter(statements: [ifStatement, printStatement], interpreter: interpreter, context: Context())
@@ -121,7 +121,7 @@ class InterpreterTests: XCTestCase {
     }
 
     func test_whenEmbeddingTags_thenInterpretationWorksCorrectly() {
-        let parenthesis = Function<Any>([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { variables, _, _ in variables["body"] }
+        let parenthesis = Function<Any>([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { $0.variables["body"] }
         let addition = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
         let interpreter = TypedInterpreter(dataTypes: [numberDataType(), stringDataType()],
                                            functions: [parenthesis, addition])
@@ -133,28 +133,27 @@ class InterpreterTests: XCTestCase {
         XCTAssertEqual(interpreter.evaluate("((1) + 2)") as! Double, 3)
         XCTAssertEqual(interpreter.evaluate("((1) + (2))") as! Double, 3)
     }
-    
+
     func test_whenEmbeddingTagsWithNonCummitativeOperation_thenInterpretationWorksCorrectly() {
-        let parenthesis = Function<Any>([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { variables, _, _ in variables["body"] }
+        let parenthesis = Function<Any>([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { $0.variables["body"] }
         let addition = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
         let subtraction = infixOperator("-") { (lhs: Double, rhs: Double) in lhs - rhs }
         let interpreter = TypedInterpreter(dataTypes: [numberDataType(), stringDataType()],
                                            functions: [parenthesis, subtraction, addition])
-        
+
         XCTAssertEqual(interpreter.evaluate("6 - 4 - 2") as! Double, 0)
         XCTAssertEqual(interpreter.evaluate("6 - (4 + 2)") as! Double, 0)
         XCTAssertEqual(interpreter.evaluate("6 - (4 - 2)") as! Double, 4)
         XCTAssertEqual(interpreter.evaluate("12 - (6 - (4 - 2))") as! Double, 8)
     }
 
-    
     func test_whenStartsWithParentheses_thenInterpretationWorksCorrectly() {
-        let parenthesis = Function<Any>([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { variables, _, _ in variables["body"] }
+        let parenthesis = Function<Any>([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { $0.variables["body"] }
         let addition = infixOperator("+") { (lhs: Double, rhs: Double) in lhs + rhs }
         let multiplication = infixOperator("*") { (lhs: Double, rhs: Double) in lhs * rhs }
         let interpreter = TypedInterpreter(dataTypes: [numberDataType(), stringDataType()],
                                            functions: [parenthesis, multiplication, addition])
-        
+
         XCTAssertEqual(interpreter.evaluate("(2 + 3)") as! Double, 5)
         XCTAssertEqual(interpreter.evaluate("(2 + 3) * 4") as! Double, 20)
     }
@@ -162,42 +161,42 @@ class InterpreterTests: XCTestCase {
     // MARK: Helpers - operators
 
     func infixOperator<A, B, T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T?> {
-        return Function([Variable<A>("lhs"), Keyword(symbol), Variable<B>("rhs")], options: .backwardMatch) { arguments, _, _ in
-            guard let lhs = arguments["lhs"] as? A, let rhs = arguments["rhs"] as? B else { return nil }
+        return Function([Variable<A>("lhs"), Keyword(symbol), Variable<B>("rhs")], options: .backwardMatch) {
+            guard let lhs = $0.variables["lhs"] as? A, let rhs = $0.variables["rhs"] as? B else { return nil }
             return body(lhs, rhs)
         }
     }
 
     func prefixOperator<A, T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T?> {
-        return Function([Keyword(symbol), Variable<A>("value")]) { arguments, _, _ in
-            guard let value = arguments["value"] as? A else { return nil }
+        return Function([Keyword(symbol), Variable<A>("value")]) {
+            guard let value = $0.variables["value"] as? A else { return nil }
             return body(value)
         }
     }
 
     func suffixOperator<A, T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T?> {
-        return Function([Variable<A>("value"), Keyword(symbol)]) { arguments, _, _ in
-            guard let value = arguments["value"] as? A else { return nil }
+        return Function([Variable<A>("value"), Keyword(symbol)]) {
+            guard let value = $0.variables["value"] as? A else { return nil }
             return body(value)
         }
     }
 
     func function<T>(_ name: String, body: @escaping ([Any]) -> T?) -> Function<T> {
-        return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, context in
-            guard let arguments = variables["arguments"] as? String else { return nil }
-            let interpretedArguments: [Any] = arguments.split(separator: ",").compactMap { interpreter.evaluate(String($0).trim(), context: context) }
+        return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { match in
+            guard let arguments = match.variables["arguments"] as? String else { return nil }
+            let interpretedArguments: [Any] = arguments.split(separator: ",").compactMap { match.interpreter.evaluate(String($0).trim(), context: match.context) }
             return body(interpretedArguments)
         }
     }
 
     func functionWithNamedParameters<T>(_ name: String, body: @escaping ([String: Any]) -> T?) -> Function<T> {
-        return Function([Keyword(name), Keyword("("), Variable<String>("arguments", options: .notInterpreted), Keyword(")")]) { variables, interpreter, _ in
-            guard let arguments = variables["arguments"] as? String else { return nil }
+        return Function([Keyword(name), Keyword("("), Variable<String>("arguments", options: .notInterpreted), Keyword(")")]) {
+            guard let arguments = $0.variables["arguments"] as? String else { return nil }
             var interpretedArguments: [String: Any] = [:]
             for argument in arguments.split(separator: ",") {
                 let parts = String(argument).trim().split(separator: "=")
                 if let key = parts.first, let value = parts.last {
-                    interpretedArguments[String(key)] = interpreter.evaluate(String(value))
+                    interpretedArguments[String(key)] = $0.interpreter.evaluate(String(value))
                 }
             }
             return body(interpretedArguments)
@@ -205,22 +204,22 @@ class InterpreterTests: XCTestCase {
     }
 
     func objectFunction<O, T>(_ name: String, body: @escaping (O) -> T?) -> Function<T> {
-        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value, _ in
-            guard let value = value as? String, value == name else { return nil }
+        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) {
+            guard let value = $0.value as? String, value == name else { return nil }
             return value
-        }]) { variables, _, _ in
-            guard let object = variables["lhs"] as? O, variables["rhs"] != nil else { return nil }
+        }]) {
+            guard let object = $0.variables["lhs"] as? O, $0.variables["rhs"] != nil else { return nil }
             return body(object)
         }
     }
 
     func objectFunctionWithParameters<O, T>(_ name: String, body: @escaping (O, [Any]) -> T?) -> Function<T> {
-        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value, _ in
-            guard let value = value as? String, value == name else { return nil }
+        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) {
+            guard let value = $0.value as? String, value == name else { return nil }
             return value
-        }, Keyword("("), Variable<String>("arguments", options: .notInterpreted), Keyword(")")]) { variables, interpreter, _ in
-            guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
-            let interpretedArguments = arguments.split(separator: ",").compactMap { interpreter.evaluate(String($0).trim()) }
+        }, Keyword("("), Variable<String>("arguments", options: .notInterpreted), Keyword(")")]) { match in
+            guard let object = match.variables["lhs"] as? O, match.variables["rhs"] != nil, let arguments = match.variables["arguments"] as? String else { return nil }
+            let interpretedArguments = arguments.split(separator: ",").compactMap { match.interpreter.evaluate(String($0).trim()) }
             return body(object, interpretedArguments)
         }
     }
@@ -228,16 +227,18 @@ class InterpreterTests: XCTestCase {
     // MARK: Helpers - data types
 
     func numberDataType() -> DataType<Double> {
-        return DataType(type: Double.self, literals: [Literal { value, _ in Double(value) }, Literal("pi", convertsTo: Double.pi) ]) { value, _ in String(describing: value) }
+        return DataType(type: Double.self,
+                        literals: [Literal { Double($0.value) },
+                                   Literal("pi", convertsTo: Double.pi)]) { String(describing: $0.value) }
     }
 
     func stringDataType() -> DataType<String> {
-        let singleQuotesLiteral = Literal { input, _ -> String? in
-            guard let first = input.first, let last = input.last, first == last, first == "'" else { return nil }
-            let trimmed = input.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
+        let singleQuotesLiteral = Literal { literal -> String? in
+            guard let first = literal.value.first, let last = literal.value.last, first == last, first == "'" else { return nil }
+            let trimmed = literal.value.trimmingCharacters(in: CharacterSet(charactersIn: "'"))
             return trimmed.contains("'") ? nil : trimmed
         }
-        return DataType(type: String.self, literals: [singleQuotesLiteral]) { value, _ in value }
+        return DataType(type: String.self, literals: [singleQuotesLiteral]) { $0.value }
     }
 
     func dateDataType() -> DataType<Date> {
@@ -245,33 +246,33 @@ class InterpreterTests: XCTestCase {
         dateFormatter.calendar = Calendar(identifier: .gregorian)
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
 
-        return DataType(type: Date.self, literals: [Literal<Date>("now", convertsTo: Date())]) { value, _ in dateFormatter.string(from: value) }
+        return DataType(type: Date.self, literals: [Literal<Date>("now", convertsTo: Date())]) { dateFormatter.string(from: $0.value) }
     }
 
     func arrayDataType() -> DataType<[CustomStringConvertible]> {
-        let arrayLiteral = Literal { input, interpreter -> [CustomStringConvertible]? in
-            guard let first = input.first, let last = input.last, first == "[", last == "]" else { return nil }
-            return input
+        let arrayLiteral = Literal { literal -> [CustomStringConvertible]? in
+            guard let first = literal.value.first, let last = literal.value.last, first == "[", last == "]" else { return nil }
+            return literal.value
                 .trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
                 .split(separator: ",")
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-                .map { interpreter.evaluate(String($0)) as? CustomStringConvertible ?? String($0) }
+                .map { literal.interpreter.evaluate(String($0)) as? CustomStringConvertible ?? String($0) }
         }
-        return DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { value, _ in value.map { $0.description }.joined(separator: ",") }
+        return DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { $0.value.map { $0.description }.joined(separator: ",") }
     }
 
     func booleanDataType() -> DataType<Bool> {
-        return DataType(type: Bool.self, literals: [Literal("false", convertsTo: false), Literal("true", convertsTo: true)]) { value, _ in value ? "true" : "false" }
+        return DataType(type: Bool.self, literals: [Literal("false", convertsTo: false), Literal("true", convertsTo: true)]) { $0.value ? "true" : "false" }
     }
 
     // MARK: Helpers - functions
 
     func methodCallFunction() -> Function<Double> {
         return Function(patterns: [
-            Pattern(Variable<Any>("lhs") + Keyword(".") + Variable<String>("rhs", options: .notInterpreted)) { arguments, _, _ -> Double? in
-                if let lhs = arguments["lhs"] as? NSObjectProtocol,
+            Pattern(Variable<Any>("lhs") + Keyword(".") + Variable<String>("rhs", options: .notInterpreted)) {
+                if let lhs = $0.variables["lhs"] as? NSObjectProtocol,
                     !(lhs is NSNull),
-                    let rhs = arguments["rhs"] as? String,
+                    let rhs = $0.variables["rhs"] as? String,
                     let result = lhs.perform(Selector(rhs)) {
                     return Double(Int(bitPattern: result.toOpaque()))
                 }
@@ -306,13 +307,13 @@ class InterpreterTests: XCTestCase {
     }
 
     func incrementFunction() -> Function<Double> {
-        return Function([Variable<Any>("value", options: .notInterpreted), Keyword("++")]) { arguments, interpreter, _ -> Double? in
-            if let argument = arguments["value"] as? String {
-                if let variable = interpreter.context.variables.first(where: { argument == $0.key }), let value = variable.value as? Double {
+        return Function([Variable<Any>("value", options: .notInterpreted), Keyword("++")]) {
+            if let argument = $0.variables["value"] as? String {
+                if let variable = $0.interpreter.context.variables.first(where: { argument == $0.key }), let value = variable.value as? Double {
                     let incremented = value + 1
-                    interpreter.context.variables[variable.key] = incremented
+                    $0.interpreter.context.variables[variable.key] = incremented
                     return incremented
-                } else if let argument = interpreter.evaluate(argument) as? Double {
+                } else if let argument = $0.interpreter.evaluate(argument) as? Double {
                     return argument + 1
                 }
             }

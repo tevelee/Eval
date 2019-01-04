@@ -73,8 +73,8 @@ class MatcherTests: XCTestCase {
         let input = "(input(random))"
         XCTAssertNil(matcher.positionOfClosingTag(in: input, from: input.index(input.startIndex, offsetBy: 8)))
     }
-    
+
     private func pattern(_ elements: [PatternElement]) -> Eval.Pattern<Any, DummyInterpreter> {
-        return Pattern(elements) { _, _, _ in "" }
+        return Pattern(elements) { _ in "" }
     }
 }

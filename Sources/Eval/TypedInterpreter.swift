@@ -173,6 +173,14 @@ public protocol DataTypeProtocol {
     func print(value input: Any, printer: Printer) -> String?
 }
 
+/// It's a data transfer object passed in the `DataType` converter block
+public struct DataTypeBody<T> {
+    /// Value of the data type to match
+    public var value: T
+    /// A printer instance to use to Stringify the value
+    public var printer: Printer
+}
+
 /// The implementation of a `DataType` uses the `DataTypeProtocol` to convert input to a strongly typed data and print it if needed
 public class DataType<T> : DataTypeProtocol {
     /// The existing type to map to an internal one
@@ -180,9 +188,9 @@ public class DataType<T> : DataTypeProtocol {
     /// Array of literals that tell the framework how to transform certain types to an internal `DataType` representation
     let literals: [Literal<T>]
     /// A method to convert an internal representation to strings - for debugging and output representation purposes
-    /// - parameter value: The value to print
+    /// - parameter body: Struct containing the value and a printer instance
     /// - parameter printer: An interpreter instance if the content recursively contains further data types to print
-    let print: (_ value: T, _ printer: Printer) -> String
+    private let print: (_ body: DataTypeBody<T>) -> String
 
     /// To be able to bridge the outside world effectively, it needs to provide an already existing Swift or user-defined type. This can be class, struct, enum, or anything else, for example, block or function (which is not recommended).
     /// The literals tell the framework which strings can be represented in the given data type
@@ -190,11 +198,10 @@ public class DataType<T> : DataTypeProtocol {
     /// - parameter type: The existing type to map to an internal one
     /// - parameter literals: Array of literals that tell the framework how to transform certain types to an internal `DataType` representation
     /// - parameter print: A method to convert an internal representation to strings - for debugging and output representation purposes
-    /// - parameter value: The value to print
-    /// - parameter printer: An interpreter instance if the content recursively contains further data types to print
+    /// - parameter body: Struct containing the value and a printer instance
     public init (type: T.Type,
                  literals: [Literal<T>],
-                 print: @escaping (_ value: T, _ printer: Printer) -> String) {
+                 print: @escaping (_ body: DataTypeBody<T>) -> String) {
         self.type = type
         self.literals = literals
         self.print = print
@@ -215,23 +222,36 @@ public class DataType<T> : DataTypeProtocol {
     /// - returns: The string representation of the value or `nil` if it cannot be processed
     public func print(value input: Any, printer: Printer) -> String? {
         guard let input = input as? T else { return nil }
-        return self.print(input, printer)
+        return self.print(DataTypeBody(value: input, printer: printer))
+    }
+}
+
+/// It's a data transfer object passed in the `Literal` converter block
+public struct LiteralBody {
+    /// Value of the literal to match
+    public var value: String
+    /// An interpreter instance if the raw value needs any further evaluation
+    public var interpreter: TypedInterpreter
+
+    /// - parameter value: Value of the literal to match
+    /// - parameter interpreter: An interpreter instance if the raw value needs any further evaluation
+    public init(value: String, interpreter: TypedInterpreter) {
+        self.value = value
+        self.interpreter = interpreter
     }
 }
 
 /// `Literal`s are used by `DataType`s to be able to recognise static values, that can be expressed as a given type
 public class Literal<T> {
     /// For the conversion it uses the registered literals, to be able to process the input and return an existing type
-    /// - parameter input: The input to convert as a `DataType` value
-    /// - parameter interpreter: An interpreter instance if the content needs any further evaluation
+    /// - parameter body: Struct ontaining the raw matched value and an interpreter
     /// - returns: The value of the `DataType` or `nil` if it cannot be processed
-    let convert: (_ input: String, _ interpreter: TypedInterpreter) -> T?
+    let convert: (_ body: LiteralBody) -> T?
 
     /// In case of more complicated expression, this initialiser accepts a `convert` block, which can be used to process any value. Return nil, if the input cannot be accepted and converted.
     /// - parameter convert: The conversion block to process values
-    /// - parameter input: The input to convert as a `DataType` value
-    /// - parameter interpreter: An interpreter instance if the content needs any further evaluation
-    public init(convert: @escaping (_ input: String, _ interpreter: TypedInterpreter) -> T?) {
+    /// - parameter body: Struct ontaining the raw matched value and an interpreter
+    public init(convert: @escaping (_ body: LiteralBody) -> T?) {
         self.convert = convert
     }
 
@@ -239,7 +259,7 @@ public class Literal<T> {
     /// - parameter check: The string to check for in the input string (with exact match)
     /// - parameter convertsTo: Statically typed associated value. As it is expressed as an autoclosure, the provided expression will be evaluated at recognition time, not initialisation time. For example, Date() is perfectly acceptable to use here.
     public init(_ check: String, convertsTo value: @autoclosure @escaping () -> T) {
-        self.convert = { input, _ in check == input ? value() : nil }
+        self.convert = { check == $0.value ? value() : nil }
     }
 
     /// For the conversion it uses the registered literals, to be able to process the input and return an existing type
@@ -247,7 +267,7 @@ public class Literal<T> {
     /// - parameter interpreter: An interpreter instance if the content needs any further evaluation
     /// - returns: The value of the `DataType` or `nil` if it cannot be processed
     func convert(input: String, interpreter: TypedInterpreter) -> T? {
-        return convert(input, interpreter)
+        return convert(LiteralBody(value: input, interpreter: interpreter))
     }
 }
 

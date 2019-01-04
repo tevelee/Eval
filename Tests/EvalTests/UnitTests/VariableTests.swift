@@ -6,7 +6,7 @@ class VariableTests: XCTestCase {
     // MARK: init
 
     func test_whenInitialised_thenPropertiesAreSet() {
-        let variable = GenericVariable<String, DummyInterpreter>("name", options: .acceptsNilValue) { _, _ in nil }
+        let variable = GenericVariable<String, DummyInterpreter>("name", options: .acceptsNilValue) { _ in nil }
 
         XCTAssertEqual(variable.name, "name")
         XCTAssertEqual(variable.options, .acceptsNilValue)
@@ -44,7 +44,7 @@ class VariableTests: XCTestCase {
     // MARK: performMap
 
     func test_whenCallingPerformMap_thenUsesMapClosure() {
-        let variable = GenericVariable<Int, DummyInterpreter>("name") { _, _ in 123 }
+        let variable = GenericVariable<Int, DummyInterpreter>("name") { _ in 123 }
         let result = variable.performMap(input: 1, interpreter: DummyInterpreter())
 
         XCTAssertEqual(result as! Int, 123)

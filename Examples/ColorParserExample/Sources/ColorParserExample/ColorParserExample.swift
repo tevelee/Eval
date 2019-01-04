@@ -11,22 +11,22 @@ public class ColorParser: EvaluatorWithLocalContext {
     }
 
     static func colorDataType() -> DataType<NSColor> {
-        let hex = Literal { value, _ -> NSColor? in
-            guard value.first == "#", value.count == 7,
-            let red = Int(value[1...2], radix: 16),
-            let green = Int(value[3...4], radix: 16),
-            let blue = Int(value[5...6], radix: 16) else { return nil }
+        let hex = Literal<NSColor> {
+            guard $0.value.first == "#", $0.value.count == 7,
+            let red = Int($0.value[1...2], radix: 16),
+            let green = Int($0.value[3...4], radix: 16),
+            let blue = Int($0.value[5...6], radix: 16) else { return nil }
             return NSColor(calibratedRed: CGFloat(red), green: CGFloat(green), blue: CGFloat(blue), alpha: 1)
         }
 
         let red = Literal("red", convertsTo: NSColor.red)
 
-        return DataType(type: NSColor.self, literals: [hex, red]) { value, _ in value.description }
+        return DataType(type: NSColor.self, literals: [hex, red]) { $0.value.description }
     }
 
     static func mixFunction() -> Function<NSColor> {
-        return Function([Variable<NSColor>("lhs"), Keyword("mixed with"), Variable<NSColor>("rhs")]) { variables, _, _ in
-            guard let lhs = variables["lhs"] as? NSColor, let rhs = variables["rhs"] as? NSColor else { return nil }
+        return Function([Variable<NSColor>("lhs"), Keyword("mixed with"), Variable<NSColor>("rhs")]) {
+            guard let lhs = $0.variables["lhs"] as? NSColor, let rhs = $0.variables["rhs"] as? NSColor else { return nil }
             return lhs.blend(with: rhs)
         }
     }

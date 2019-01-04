@@ -6,7 +6,7 @@ class LiteralTests: XCTestCase {
     // MARK: init
 
     func test_whenInitialisedWithBlock_thenParameterIsSaved() {
-        let block: (String, TypedInterpreter) -> Double? = { value, _ in Double(value) }
+        let block: (LiteralBody) -> Double? = { Double($0.value) }
 
         let literal = Literal(convert: block)
 
@@ -22,7 +22,7 @@ class LiteralTests: XCTestCase {
     // MARK: convert
 
     func test_whenConverting_thenCallsBlock() {
-        let block: (String, TypedInterpreter) -> Int? = { _, _ in 123 }
+        let block: (LiteralBody) -> Int? = { _ in 123 }
         let literal = Literal(convert: block)
 
         let result = literal.convert(input: "asd", interpreter: TypedInterpreter())

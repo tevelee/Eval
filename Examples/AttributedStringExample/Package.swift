@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:4.2
 
 import PackageDescription
 
@@ -10,7 +10,7 @@ let package = Package(
             targets: ["AttributedStringExample"])
     ],
     dependencies: [
-        .package(url: "../../", from: "1.0.0")
+        .package(url: "../../", from: "1.4.0")
     ],
     targets: [
         .target(

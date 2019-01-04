@@ -18,8 +18,8 @@ public class TemplateLanguage: EvaluatorWithLocalContext {
         let language = StringTemplateInterpreter(statements: templates, interpreter: interpreter, context: context)
         self.language = language
 
-        let block = Pattern<String, TemplateInterpreter<String>>([OpenKeyword("{{{"), TemplateVariable("name", options: .notInterpreted), CloseKeyword("}}}")]) { variables, _, _ in
-            guard let name = variables["name"] as? String else { return nil }
+        let block = Pattern<String, TemplateInterpreter<String>>([OpenKeyword("{{{"), TemplateVariable("name", options: .notInterpreted), CloseKeyword("}}}")]) {
+            guard let name = $0.variables["name"] as? String else { return nil }
             return language.context.blocks[name]?.last?(language.context)
         }
         macroReplacer = StringTemplateInterpreter(statements: [block])
@@ -153,39 +153,32 @@ public class TemplateLibrary {
     public static var tagSuffix: String = "%}"
 
     public static var ifStatement: Pattern<String, TemplateInterpreter<String>> {
-        return Pattern([Keyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", options: .notTrimmed) { value, _ in
-            guard let content = value as? String, !content.contains(tagPrefix + " else " + tagSuffix) else { return nil }
+        return Pattern([Keyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", options: .notTrimmed) {
+            guard let content = $0.value as? String, !content.contains(tagPrefix + " else " + tagSuffix) else { return nil }
             return content
-        }, Keyword("{%"), Keyword("endif"), Keyword("%}")]) { variables, _, _ in
-            guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
-            if condition {
-                return body
-            }
-            return ""
+        }, Keyword("{%"), Keyword("endif"), Keyword("%}")]) {
+            guard let condition = $0.variables["condition"] as? Bool, let body = $0.variables["body"] as? String else { return nil }
+            return condition ? body : ""
         }
     }
 
     public static var ifElseStatement: Pattern<String, TemplateInterpreter<String>> {
-        return Pattern([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", options: .notTrimmed) { value, _ in
-            guard let content = value as? String, !content.contains(tagPrefix + " else " + tagSuffix) else { return nil }
+        return Pattern([OpenKeyword(tagPrefix + " if"), Variable<Bool>("condition"), Keyword(tagSuffix), TemplateVariable("body", options: .notTrimmed) {
+            guard let content = $0.value as? String, !content.contains(tagPrefix + " else " + tagSuffix) else { return nil }
             return content
-        }, Keyword(tagPrefix + " else " + tagSuffix), TemplateVariable("else", options: .notTrimmed) { value, _ in
-            guard let content = value as? String, !content.contains(tagPrefix + " else " + tagSuffix) else { return nil }
+        }, Keyword(tagPrefix + " else " + tagSuffix), TemplateVariable("else", options: .notTrimmed) {
+            guard let content = $0.value as? String, !content.contains(tagPrefix + " else " + tagSuffix) else { return nil }
             return content
-        }, CloseKeyword(tagPrefix + " endif " + tagSuffix)]) { variables, _, _ in
-            guard let condition = variables["condition"] as? Bool, let body = variables["body"] as? String else { return nil }
-            if condition {
-                return body
-            } else {
-                return variables["else"] as? String
-            }
+        }, CloseKeyword(tagPrefix + " endif " + tagSuffix)]) {
+            guard let condition = $0.variables["condition"] as? Bool, let body = $0.variables["body"] as? String else { return nil }
+            return condition ? body : $0.variables["else"] as? String
         }
     }
 
     public static var printStatement: Pattern<String, TemplateInterpreter<String>> {
-        return Pattern([OpenKeyword("{{"), Variable<Any>("body"), CloseKeyword("}}")]) { variables, interpreter, _ in
-            guard let body = variables["body"] else { return nil }
-            return interpreter.typedInterpreter.print(body)
+        return Pattern([OpenKeyword("{{"), Variable<Any>("body"), CloseKeyword("}}")]) {
+            guard let body = $0.variables["body"] else { return nil }
+            return $0.interpreter.typedInterpreter.print(body)
         }
     }
 
@@ -195,36 +188,36 @@ public class TemplateLibrary {
                         Variable<[Any]>("items"),
                         Keyword(tagSuffix),
                         GenericVariable<String, StringTemplateInterpreter>("body", options: [.notInterpreted, .notTrimmed]),
-                        CloseKeyword(tagPrefix + " endfor " + tagSuffix)]) { variables, interpreter, context in
-            guard let variableName = variables["variable"] as? String,
-                let items = variables["items"] as? [Any],
-                let body = variables["body"] as? String else { return nil }
+                        CloseKeyword(tagPrefix + " endfor " + tagSuffix)]) {
+            guard let variableName = $0.variables["variable"] as? String,
+                let items = $0.variables["items"] as? [Any],
+                let body = $0.variables["body"] as? String else { return nil }
             var result = ""
-            context.push()
-            context.variables["__loop"] = items
+            $0.context.push()
+            $0.context.variables["__loop"] = items
             for (index, item) in items.enumerated() {
-                context.variables["__first"] = index == items.startIndex
-                context.variables["__last"] = index == items.index(before: items.endIndex)
-                context.variables[variableName] = item
-                result += interpreter.evaluate(body, context: context)
+                $0.context.variables["__first"] = index == items.startIndex
+                $0.context.variables["__last"] = index == items.index(before: items.endIndex)
+                $0.context.variables[variableName] = item
+                result += $0.interpreter.evaluate(body, context: $0.context)
             }
-            context.pop()
+            $0.context.pop()
             return result
         }
     }
 
     public static var setStatement: Pattern<String, TemplateInterpreter<String>> {
-        return Pattern([OpenKeyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword(tagSuffix), TemplateVariable("body"), CloseKeyword(tagPrefix + " endset " + tagSuffix)]) { variables, interpreter, context in
-            guard let variableName = variables["variable"] as? String, let body = variables["body"] as? String else { return nil }
-            interpreter.context.variables[variableName] = body
+        return Pattern([OpenKeyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword(tagSuffix), TemplateVariable("body"), CloseKeyword(tagPrefix + " endset " + tagSuffix)]) {
+            guard let variableName = $0.variables["variable"] as? String, let body = $0.variables["body"] as? String else { return nil }
+            $0.interpreter.context.variables[variableName] = body
             return ""
         }
     }
 
     public static var setUsingBodyStatement: Pattern<String, TemplateInterpreter<String>> {
-        return Pattern([OpenKeyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword("="), Variable<Any>("value"), CloseKeyword(tagSuffix)]) { variables, interpreter, context in
-            guard let variableName = variables["variable"] as? String else { return nil }
-            interpreter.context.variables[variableName] = variables["value"]
+        return Pattern([OpenKeyword(tagPrefix + " set"), TemplateVariable("variable"), Keyword("="), Variable<Any>("value"), CloseKeyword(tagSuffix)]) {
+            guard let variableName = $0.variables["variable"] as? String else { return nil }
+            $0.interpreter.context.variables[variableName] = $0.variables["value"]
             return ""
         }
     }
@@ -234,58 +227,58 @@ public class TemplateLibrary {
                         GenericVariable<String, StringTemplateInterpreter>("name", options: .notInterpreted),
                         Keyword(tagSuffix),
                         GenericVariable<String, StringTemplateInterpreter>("body", options: .notInterpreted),
-                        CloseKeyword(tagPrefix + " endblock " + tagSuffix)]) { variables, interpreter, localContext in
-            guard let name = variables["name"] as? String, let body = variables["body"] as? String else { return nil }
+                        CloseKeyword(tagPrefix + " endblock " + tagSuffix)]) { match in
+            guard let name = match.variables["name"] as? String, let body = match.variables["body"] as? String else { return nil }
             let block: BlockRenderer = { context in
                 context.push()
-                context.merge(with: localContext) { existing, _ in existing }
+                context.merge(with: match.context) { existing, _ in existing }
                 context.variables["__block"] = name
                 if let last = context.blocks[name] {
                     context.blocks[name] = Array(last.dropLast())
                 }
-                let result = interpreter.evaluate(body, context: context)
+                let result = match.interpreter.evaluate(body, context: context)
                 context.pop()
                 return result
             }
-            if let last = interpreter.context.blocks[name] {
-                interpreter.context.blocks[name] = last + [block]
+            if let last = match.interpreter.context.blocks[name] {
+                match.interpreter.context.blocks[name] = last + [block]
                 return ""
             } else {
-                interpreter.context.blocks[name] = [block]
+                match.interpreter.context.blocks[name] = [block]
                 return "{{{\(name)}}}"
             }
         }
     }
 
     public static var macroStatement: Pattern<String, TemplateInterpreter<String>> {
-        return Pattern([OpenKeyword(tagPrefix + " macro"), GenericVariable<String, StringTemplateInterpreter>("name", options: .notInterpreted), Keyword("("), GenericVariable<[String], StringTemplateInterpreter>("arguments", options: .notInterpreted) { arguments, _ in
-                guard let arguments = arguments as? String else { return nil }
+        return Pattern([OpenKeyword(tagPrefix + " macro"), GenericVariable<String, StringTemplateInterpreter>("name", options: .notInterpreted), Keyword("("), GenericVariable<[String], StringTemplateInterpreter>("arguments", options: .notInterpreted) {
+                guard let arguments = $0.value as? String else { return nil }
                 return arguments.split(separator: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-        }, Keyword(")"), Keyword(tagSuffix), GenericVariable<String, StringTemplateInterpreter>("body", options: .notInterpreted), CloseKeyword(tagPrefix + " endmacro " + tagSuffix)]) { variables, interpreter, context in
-            guard let name = variables["name"] as? String,
-                let arguments = variables["arguments"] as? [String],
-                let body = variables["body"] as? String else { return nil }
-            interpreter.context.macros[name] = (arguments: arguments, body: body)
+        }, Keyword(")"), Keyword(tagSuffix), GenericVariable<String, StringTemplateInterpreter>("body", options: .notInterpreted), CloseKeyword(tagPrefix + " endmacro " + tagSuffix)]) {
+            guard let name = $0.variables["name"] as? String,
+                let arguments = $0.variables["arguments"] as? [String],
+                let body = $0.variables["body"] as? String else { return nil }
+            $0.interpreter.context.macros[name] = (arguments: arguments, body: body)
             return ""
         }
     }
 
     public static var commentStatement: Pattern<String, TemplateInterpreter<String>> {
-        return Pattern([OpenKeyword("{#"), GenericVariable<String, StringTemplateInterpreter>("body", options: .notInterpreted), CloseKeyword("#}")]) { _, _, _ in "" }
+        return Pattern([OpenKeyword("{#"), GenericVariable<String, StringTemplateInterpreter>("body", options: .notInterpreted), CloseKeyword("#}")]) { _ in "" }
     }
 
     public static var importStatement: Pattern<String, TemplateInterpreter<String>> {
-        return Pattern([OpenKeyword(tagPrefix + " import"), Variable<String>("file"), CloseKeyword(tagSuffix)]) { variables, interpreter, context in
-            guard let file = variables["file"] as? String,
+        return Pattern([OpenKeyword(tagPrefix + " import"), Variable<String>("file"), CloseKeyword(tagSuffix)]) {
+            guard let file = $0.variables["file"] as? String,
                 let url = Bundle.allBundles.compactMap({ $0.url(forResource: file, withExtension: nil) }).first,
                 let expression = try? String(contentsOf: url) else { return nil }
-            return interpreter.evaluate(expression, context: context)
+            return $0.interpreter.evaluate(expression, context: $0.context)
         }
     }
 
     public static var spacelessStatement: Pattern<String, TemplateInterpreter<String>> {
-        return Pattern([OpenKeyword(tagPrefix + " spaceless " + tagSuffix), TemplateVariable("body"), CloseKeyword(tagPrefix + " endspaceless " + tagSuffix)]) { variables, _, _ in
-            guard let body = variables["body"] as? String else { return nil }
+        return Pattern([OpenKeyword(tagPrefix + " spaceless " + tagSuffix), TemplateVariable("body"), CloseKeyword(tagPrefix + " endspaceless " + tagSuffix)]) {
+            guard let body = $0.variables["body"] as? String else { return nil }
             return body.self.components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }.joined()
         }
     }
@@ -410,51 +403,51 @@ public class StandardLibrary {
     // MARK: Types
 
     public static var numericType: DataType<Double> {
-        let numberLiteral = Literal { value, _ in Double(value) }
+        let numberLiteral = Literal { Double($0.value) }
         let piLiteral = Literal("pi", convertsTo: Double.pi)
-        return DataType(type: Double.self, literals: [numberLiteral, piLiteral]) { value, _ in String(format: "%g", value) }
+        return DataType(type: Double.self, literals: [numberLiteral, piLiteral]) { String(format: "%g", $0.value) }
     }
 
     public static var stringType: DataType<String> {
-        let singleQuotesLiteral = literal(opening: "'", closing: "'") { input, _ in input }
-        return DataType(type: String.self, literals: [singleQuotesLiteral]) { value, _ in value }
+        let singleQuotesLiteral = literal(opening: "'", closing: "'") { $0.value }
+        return DataType(type: String.self, literals: [singleQuotesLiteral]) { $0.value }
     }
 
     public static var dateType: DataType<Date> {
         let dateFormatter = DateFormatter(with: "yyyy-MM-dd HH:mm:ss")
         let now = Literal<Date>("now", convertsTo: Date())
-        return DataType(type: Date.self, literals: [now]) { value, _ in dateFormatter.string(from: value) }
+        return DataType(type: Date.self, literals: [now]) { dateFormatter.string(from: $0.value) }
     }
 
     public static var arrayType: DataType<[CustomStringConvertible]> {
-        let arrayLiteral = literal(opening: "[", closing: "]") { input, interpreter -> [CustomStringConvertible]? in
-            input
+        let arrayLiteral = literal(opening: "[", closing: "]") { literal -> [CustomStringConvertible]? in
+            literal.value
                 .split(separator: ",")
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-                .map { interpreter.evaluate(String($0)) as? CustomStringConvertible ?? String($0) }
+                .map { literal.interpreter.evaluate(String($0)) as? CustomStringConvertible ?? String($0) }
         }
-        return DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { value, printer in value.map { printer.print($0) }.joined(separator: ",") }
+        return DataType(type: [CustomStringConvertible].self, literals: [arrayLiteral]) { dataType in dataType.value.map { dataType.printer.print($0) }.joined(separator: ",") }
     }
 
     public static var dictionaryType: DataType<[String: CustomStringConvertible?]> {
-        let dictionaryLiteral = literal(opening: "{", closing: "}") { input, interpreter -> [String: CustomStringConvertible?]? in
-            let values = input
+        let dictionaryLiteral = literal(opening: "{", closing: "}") { body -> [String: CustomStringConvertible?]? in
+            let values = body.value
                 .split(separator: ",")
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             let parsedValues : [(key: String, value: CustomStringConvertible?)] = values
-                .map { $0.split(separator: ":").map { interpreter.evaluate(String($0)) } }
+                .map { $0.split(separator: ":").map { body.interpreter.evaluate(String($0)) } }
                 .compactMap {
                     guard let first = $0.first, let key = first as? String, let value = $0.last else { return nil }
                     return (key: key, value: value as? CustomStringConvertible)
                 }
             return Dictionary(grouping: parsedValues) { $0.key }.mapValues { $0.first?.value }
         }
-        return DataType(type: [String: CustomStringConvertible?].self, literals: [dictionaryLiteral]) { value, printer in
-            let items = value.map { key, value in
+        return DataType(type: [String: CustomStringConvertible?].self, literals: [dictionaryLiteral]) { dataType in
+            let items = dataType.value.map { key, value in
                 if let value = value {
-                    return "\(printer.print(key)): \(printer.print(value))"
+                    return "\(dataType.printer.print(key)): \(dataType.printer.print(value))"
                 } else {
-                    return "\(printer.print(key)): nil"
+                    return "\(dataType.printer.print(key)): nil"
                 }
             }.sorted().joined(separator: ", ")
             return "[\(items)]"
@@ -464,63 +457,63 @@ public class StandardLibrary {
     public static var booleanType: DataType<Bool> {
         let trueLiteral = Literal("true", convertsTo: true)
         let falseLiteral = Literal("false", convertsTo: false)
-        return DataType(type: Bool.self, literals: [trueLiteral, falseLiteral]) { value, _ in value ? "true" : "false" }
+        return DataType(type: Bool.self, literals: [trueLiteral, falseLiteral]) { $0.value ? "true" : "false" }
     }
 
     public static var emptyType: DataType<Any?> {
         let nullLiteral = Literal<Any?>("null", convertsTo: nil)
         let nilLiteral = Literal<Any?>("nil", convertsTo: nil)
-        return DataType(type: Any?.self, literals: [nullLiteral, nilLiteral]) { _, _ in "null" }
+        return DataType<Any?>(type: Any?.self, literals: [nullLiteral, nilLiteral]) { _ in "null" }
     }
 
     // MARK: Functions
 
-    public static var parentheses: Function<Any> {
-        return Function([OpenKeyword("("), Variable<Any>("body"), CloseKeyword(")")]) { arguments, _, _ in arguments["body"] }
+    public static var parentheses: Function<Double> {
+        return Function([OpenKeyword("("), Variable<Double>("body"), CloseKeyword(")")]) { $0.variables["body"] as? Double }
     }
 
     public static var macro: Function<Any> {
-        return Function([Variable<String>("name", options: .notInterpreted) { value, interpreter in
-            guard let value = value as? String else { return nil }
-            return interpreter.context.macros.keys.contains(value) ? value : nil
-        }, OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, context in
-            guard let arguments = variables["arguments"] as? String,
-                let name = variables["name"] as? String,
-                let macro = interpreter.context.macros[name.trimmingCharacters(in: .whitespacesAndNewlines)] else { return nil }
-            let interpretedArguments = arguments.split(separator: ",").compactMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
-            context.push()
+        return Function([Variable<String>("name", options: .notInterpreted) {
+            guard let value = $0.value as? String else { return nil }
+            return $0.interpreter.context.macros.keys.contains(value) ? value : nil
+        }, Keyword("("), Variable<String>("arguments", options: .notInterpreted), Keyword(")")]) { match in
+            guard let arguments = match.variables["arguments"] as? String,
+                let name = match.variables["name"] as? String,
+                let macro = match.interpreter.context.macros[name.trimmingCharacters(in: .whitespacesAndNewlines)] else { return nil }
+            let interpretedArguments = arguments.split(separator: ",").compactMap { match.interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
+            match.context.push()
             for (key, value) in zip(macro.arguments, interpretedArguments) {
-                context.variables[key] = value
+                match.context.variables[key] = value
             }
-            let result = interpreter.evaluate(macro.body, context: context)
-            context.pop()
+            let result = match.interpreter.evaluate(macro.body, context: match.context)
+            match.context.pop()
             return result
         }
     }
 
     public static var blockParent: Function<Any> {
-        return Function([Keyword("parent"), OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, context in
-            guard let arguments = variables["arguments"] as? String else { return nil }
+        return Function([Keyword("parent"), Keyword("("), Variable<String>("arguments", options: .notInterpreted), Keyword(")")]) {
+            guard let arguments = $0.variables["arguments"] as? String else { return nil }
             var interpretedArguments: [String: Any] = [:]
             for argument in arguments.split(separator: ",") {
                 let parts = String(argument).trimmingCharacters(in: .whitespacesAndNewlines).split(separator: "=")
                 if let key = parts.first, let value = parts.last {
-                    interpretedArguments[String(key)] = interpreter.evaluate(String(value))
+                    interpretedArguments[String(key)] = $0.interpreter.evaluate(String(value))
                 }
             }
-            guard let name = context.variables["__block"] as? String, let block = context.blocks[name]?.last else { return nil }
-            context.push()
-            context.variables.merge(interpretedArguments) { _, new in new }
-            let result = block(context)
-            context.pop()
+            guard let name = $0.context.variables["__block"] as? String, let block = $0.context.blocks[name]?.last else { return nil }
+            $0.context.push()
+            $0.context.variables.merge(interpretedArguments) { _, new in new }
+            let result = block($0.context)
+            $0.context.pop()
             return result
         }
     }
 
     public static var ternaryOperator: Function<Any> {
-        return Function([Variable<Bool>("condition"), Keyword("?"), Variable<Any>("body"), Keyword(": "), Variable<Any>("else")]) { arguments, _, _ in
-            guard let condition = arguments["condition"] as? Bool else { return nil }
-            return condition ? arguments["body"] : arguments["else"]
+        return Function([Variable<Bool>("condition"), Keyword("?"), Variable<Any>("body"), Keyword(": "), Variable<Any>("else")]) {
+            guard let condition = $0.variables["condition"] as? Bool else { return nil }
+            return condition ? $0.variables["body"] : $0.variables["else"]
         }
     }
 
@@ -696,12 +689,12 @@ public class StandardLibrary {
     }
 
     public static var defaultValue: Function<Any> {
-        return Function([Variable<Any>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value, _ in
-            guard let value = value as? String, value == "default" else { return nil }
+        return Function([Variable<Any>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) {
+            guard let value = $0.value as? String, value == "default" else { return nil }
             return value
-        }, Keyword("("), Variable<Any>("fallback"), Keyword(")")], options: .backwardMatch) { variables, _, _ in
-            guard let value = variables["lhs"], variables["rhs"] != nil else { return nil }
-            return isNilOrWrappedNil(value: value) ? variables["fallback"] : value
+        }, Keyword("("), Variable<Any>("fallback"), Keyword(")")], options: .backwardMatch) {
+            guard let value = $0.variables["lhs"], $0.variables["rhs"] != nil else { return nil }
+            return isNilOrWrappedNil(value: value) ? $0.variables["fallback"] : value
         }
     }
 
@@ -767,21 +760,21 @@ public class StandardLibrary {
     }
 
     public static var arraySplitFunction: Function<[String]> {
-        return Function([Variable<String>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value, _ in
-            guard let value = value as? String, value == "split" else { return nil }
+        return Function([Variable<String>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) {
+            guard let value = $0.value as? String, value == "split" else { return nil }
             return value
-        }, Keyword("("), Variable<String>("separator"), Keyword(")")]) { variables, _, _ in
-            guard let object = variables["lhs"] as? String, variables["rhs"] != nil, let separator = variables["separator"] as? String else { return nil }
+        }, Keyword("("), Variable<String>("separator"), Keyword(")")]) {
+            guard let object = $0.variables["lhs"] as? String, $0.variables["rhs"] != nil, let separator = $0.variables["separator"] as? String else { return nil }
             return object.split(separator: Character(separator)).map { String($0) }
         }
     }
 
     public static var arrayMergeFunction: Function<[Any]> {
-        return Function([Variable<[Any]>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value, _ in
-            guard let value = value as? String, value == "merge" else { return nil }
+        return Function([Variable<[Any]>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) {
+            guard let value = $0.value as? String, value == "merge" else { return nil }
             return value
-        }, Keyword("("), Variable<[Any]>("other"), Keyword(")")]) { variables, _, _ in
-            guard let object = variables["lhs"] as? [Any], variables["rhs"] != nil, let other = variables["other"] as? [Any] else { return nil }
+        }, Keyword("("), Variable<[Any]>("other"), Keyword(")")]) {
+            guard let object = $0.variables["lhs"] as? [Any], $0.variables["rhs"] != nil, let other = $0.variables["other"] as? [Any] else { return nil }
             return object + other
         }
     }
@@ -803,63 +796,63 @@ public class StandardLibrary {
     }
 
     public static var arrayMapFunction: Function<[Any]> {
-        return Function([Variable<[Any]>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value, _ in
-            guard let value = value as? String, value == "map" else { return nil }
+        return Function([Variable<[Any]>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) {
+            guard let value = $0.value as? String, value == "map" else { return nil }
             return value
-        }, Keyword("("), Variable<String>("variable", options: .notInterpreted), Keyword("=>"), Variable<Any>("body", options: .notInterpreted), Keyword(")")]) { variables, interpreter, context in
-            guard let object = variables["lhs"] as? [Any], variables["rhs"] != nil,
-                let variable = variables["variable"] as? String,
-                let body = variables["body"] as? String else { return nil }
-            context.push()
+        }, Keyword("("), Variable<String>("variable", options: .notInterpreted), Keyword("=>"), Variable<Any>("body", options: .notInterpreted), Keyword(")")]) { match in
+            guard let object = match.variables["lhs"] as? [Any], match.variables["rhs"] != nil,
+                let variable = match.variables["variable"] as? String,
+                let body = match.variables["body"] as? String else { return nil }
+            match.context.push()
             let result: [Any] = object.compactMap { item in
-                context.variables[variable] = item
-                return interpreter.evaluate(body, context: context)
+                match.context.variables[variable] = item
+                return match.interpreter.evaluate(body, context: match.context)
             }
-            context.pop()
+            match.context.pop()
             return result
         }
     }
 
     public static var arrayFilterFunction: Function<[Any]> {
-        return Function([Variable<[Any]>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value, _ in
-            guard let value = value as? String, value == "filter" else { return nil }
+        return Function([Variable<[Any]>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) {
+            guard let value = $0.value as? String, value == "filter" else { return nil }
             return value
-        }, Keyword("("), Variable<String>("variable", options: .notInterpreted), Keyword("=>"), Variable<Any>("body", options: .notInterpreted), Keyword(")")]) { variables, interpreter, context in
-            guard let object = variables["lhs"] as? [Any], variables["rhs"] != nil,
-                let variable = variables["variable"] as? String,
-                let body = variables["body"] as? String else { return nil }
-            context.push()
+        }, Keyword("("), Variable<String>("variable", options: .notInterpreted), Keyword("=>"), Variable<Any>("body", options: .notInterpreted), Keyword(")")]) { match in
+            guard let object = match.variables["lhs"] as? [Any], match.variables["rhs"] != nil,
+                let variable = match.variables["variable"] as? String,
+                let body = match.variables["body"] as? String else { return nil }
+            match.context.push()
             let result: [Any] = object.filter { item in
-                context.variables[variable] = item
-                if let result = interpreter.evaluate(body, context: context) as? Bool {
+                match.context.variables[variable] = item
+                if let result = match.interpreter.evaluate(body, context: match.context) as? Bool {
                     return result
                 }
                 return false
             }
-            context.pop()
+            match.context.pop()
             return result
         }
     }
 
     public static var dictionaryFilterFunction: Function<[String: Any]> {
-        return Function([Variable<[String: Any]>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value, _ in
-            guard let value = value as? String, value == "filter" else { return nil }
+        return Function([Variable<[String: Any]>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) {
+            guard let value = $0.value as? String, value == "filter" else { return nil }
             return value
-        }, Keyword("("), Variable<String>("key", options: .notInterpreted), Keyword(","), Variable<String>("value", options: .notInterpreted), Keyword("=>"), Variable<Any>("body", options: .notInterpreted), Keyword(")")]) { variables, interpreter, context in
-                guard let object = variables["lhs"] as? [String: Any], variables["rhs"] != nil,
-                    let keyVariable = variables["key"] as? String,
-                    let valueVariable = variables["value"] as? String,
-                    let body = variables["body"] as? String else { return nil }
-                context.push()
+        }, Keyword("("), Variable<String>("key", options: .notInterpreted), Keyword(","), Variable<String>("value", options: .notInterpreted), Keyword("=>"), Variable<Any>("body", options: .notInterpreted), Keyword(")")]) { match in
+                guard let object = match.variables["lhs"] as? [String: Any], match.variables["rhs"] != nil,
+                    let keyVariable = match.variables["key"] as? String,
+                    let valueVariable = match.variables["value"] as? String,
+                    let body = match.variables["body"] as? String else { return nil }
+                match.context.push()
                 let result: [String: Any] = object.filter { key, value in
-                    context.variables[keyVariable] = key
-                    context.variables[valueVariable] = value
-                    if let result = interpreter.evaluate(body, context: context) as? Bool {
+                    match.context.variables[keyVariable] = key
+                    match.context.variables[valueVariable] = value
+                    if let result = match.interpreter.evaluate(body, context: match.context) as? Bool {
                         return result
                     }
                     return false
                 }
-                context.pop()
+                match.context.pop()
                 return result
         }
     }
@@ -928,27 +921,27 @@ public class StandardLibrary {
     }
 
     public static var loopIsFirst: Function<Bool?> {
-        return Function([Variable<Any>("value"), Keyword("is first")]) { _, _, context in
-            context.variables["__first"] as? Bool
+        return Function([Variable<Any>("value"), Keyword("is first")]) {
+            $0.context.variables["__first"] as? Bool
         }
     }
 
     public static var loopIsLast: Function<Bool?> {
-        return Function([Variable<Any>("value"), Keyword("is last")]) { _, _, context in
-            context.variables["__last"] as? Bool
+        return Function([Variable<Any>("value"), Keyword("is last")]) {
+            $0.context.variables["__last"] as? Bool
         }
     }
 
     public static var loopIsNotFirst: Function<Bool?> {
-        return Function([Variable<Any>("value"), Keyword("is not first")]) { _, _, context in
-            guard let isFirst = context.variables["__first"] as? Bool else { return nil }
+        return Function([Variable<Any>("value"), Keyword("is not first")]) {
+            guard let isFirst = $0.context.variables["__first"] as? Bool else { return nil }
             return !isFirst
         }
     }
 
     public static var loopIsNotLast: Function<Bool?> {
-        return Function([Variable<Any>("value"), Keyword("is not last")]) { _, _, context in
-            guard let isLast = context.variables["__last"] as? Bool else { return nil }
+        return Function([Variable<Any>("value"), Keyword("is not last")]) {
+            guard let isLast = $0.context.variables["__last"] as? Bool else { return nil }
             return !isLast
         }
     }
@@ -962,15 +955,15 @@ public class StandardLibrary {
     }
 
     public static var arraySubscript: Function<Any?> {
-        return Function([Variable<[Any]>("array"), Keyword("."), Variable<Double>("index")]) { variables, _, _ in
-            guard let array = variables["array"] as? [Any], let index = variables["index"] as? Double, index > 0, Int(index) < array.count else { return nil }
+        return Function([Variable<[Any]>("array"), Keyword("."), Variable<Double>("index")]) {
+            guard let array = $0.variables["array"] as? [Any], let index = $0.variables["index"] as? Double, index > 0, Int(index) < array.count else { return nil }
             return array[Int(index)]
         }
     }
 
     public static var dictionarySubscript: Function<Any?> {
-        return Function([Variable<[String: Any]>("dictionary"), Keyword("."), Variable<String>("key", options: .notInterpreted)]) { variables, _, _ in
-            guard let dictionary = variables["dictionary"] as? [String: Any], let key = variables["key"] as? String else { return nil }
+        return Function([Variable<[String: Any]>("dictionary"), Keyword("."), Variable<String>("key", options: .notInterpreted)]) {
+            guard let dictionary = $0.variables["dictionary"] as? [String: Any], let key = $0.variables["key"] as? String else { return nil }
             return dictionary[key]
         }
     }
@@ -994,9 +987,9 @@ public class StandardLibrary {
     }
 
     public static var methodCallWithIntResult: Function<Double> {
-        return Function([Variable<Any>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted)]) { arguments, _, _ -> Double? in
-            if let lhs = arguments["lhs"] as? NSObjectProtocol,
-                let rhs = arguments["rhs"] as? String,
+        return Function([Variable<Any>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted)]) {
+            if let lhs = $0.variables["lhs"] as? NSObjectProtocol,
+                let rhs = $0.variables["rhs"] as? String,
                 let result = lhs.perform(Selector(rhs)) {
                 return Double(Int(bitPattern: result.toOpaque()))
             }
@@ -1006,35 +999,35 @@ public class StandardLibrary {
 
     // MARK: Literal helpers
 
-    public static func literal<T>(opening: String, closing: String, convert: @escaping (_ input: String, _ interpreter: TypedInterpreter) -> T?) -> Literal<T> {
-        return Literal { input, interpreter -> T? in
-            guard input.hasPrefix(opening), input.hasSuffix(closing), input.count > 1 else { return nil }
-            let inputWithoutOpening = String(input.suffix(from: input.index(input.startIndex, offsetBy: opening.count)))
+    public static func literal<T>(opening: String, closing: String, convert: @escaping (_ literal: LiteralBody) -> T?) -> Literal<T> {
+        return Literal { literal -> T? in
+            guard literal.value.hasPrefix(opening), literal.value.hasSuffix(closing), literal.value.count > 1 else { return nil }
+            let inputWithoutOpening = String(literal.value.suffix(from: literal.value.index(literal.value.startIndex, offsetBy: opening.count)))
             let inputWithoutSides = String(inputWithoutOpening.prefix(upTo: inputWithoutOpening.index(inputWithoutOpening.endIndex, offsetBy: -closing.count)))
             guard !inputWithoutSides.contains(opening) && !inputWithoutSides.contains(closing) else { return nil }
-            return convert(inputWithoutSides, interpreter)
+            return convert(LiteralBody(value: inputWithoutSides, interpreter: literal.interpreter))
         }
     }
 
     // MARK: Operator helpers
 
     public static func infixOperator<A, B, T>(_ symbol: String, body: @escaping (A, B) -> T) -> Function<T> {
-        return Function([Variable<A>("lhs"), Keyword(symbol), Variable<B>("rhs")], options: .backwardMatch) { arguments, _, _ in
-            guard let lhs = arguments["lhs"] as? A, let rhs = arguments["rhs"] as? B else { return nil }
+        return Function([Variable<A>("lhs"), Keyword(symbol), Variable<B>("rhs")], options: .backwardMatch) {
+            guard let lhs = $0.variables["lhs"] as? A, let rhs = $0.variables["rhs"] as? B else { return nil }
             return body(lhs, rhs)
         }
     }
 
     public static func prefixOperator<A, T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T> {
-        return Function([Keyword(symbol), Variable<A>("value")]) { arguments, _, _ in
-            guard let value = arguments["value"] as? A else { return nil }
+        return Function([Keyword(symbol), Variable<A>("value")]) {
+            guard let value = $0.variables["value"] as? A else { return nil }
             return body(value)
         }
     }
 
     public static func suffixOperator<A, T>(_ symbol: String, body: @escaping (A) -> T) -> Function<T> {
-        return Function([Variable<A>("value"), Keyword(symbol)]) { arguments, _, _ in
-            guard let value = arguments["value"] as? A else { return nil }
+        return Function([Variable<A>("value"), Keyword(symbol)]) {
+            guard let value = $0.variables["value"] as? A else { return nil }
             return body(value)
         }
     }
@@ -1042,21 +1035,21 @@ public class StandardLibrary {
     // MARK: Function helpers
 
     public static func function<T>(_ name: String, body: @escaping ([Any]) -> T?) -> Function<T> {
-        return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, _ in
-            guard let arguments = variables["arguments"] as? String else { return nil }
-            let interpretedArguments = arguments.split(separator: ",").compactMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
+        return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { match in
+            guard let arguments = match.variables["arguments"] as? String else { return nil }
+            let interpretedArguments = arguments.split(separator: ",").compactMap { match.interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
             return body(interpretedArguments)
         }
     }
 
     public static func functionWithNamedParameters<T>(_ name: String, body: @escaping ([String: Any]) -> T?) -> Function<T> {
-        return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, _ in
-            guard let arguments = variables["arguments"] as? String else { return nil }
+        return Function([Keyword(name), OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) {
+            guard let arguments = $0.variables["arguments"] as? String else { return nil }
             var interpretedArguments: [String: Any] = [:]
             for argument in arguments.split(separator: ",") {
                 let parts = String(argument).trimmingCharacters(in: .whitespacesAndNewlines).split(separator: "=")
                 if let key = parts.first, let value = parts.last {
-                    interpretedArguments[String(key)] = interpreter.evaluate(String(value))
+                    interpretedArguments[String(key)] = $0.interpreter.evaluate(String(value))
                 }
             }
             return body(interpretedArguments)
@@ -1064,37 +1057,37 @@ public class StandardLibrary {
     }
 
     public static func objectFunction<O, T>(_ name: String, body: @escaping (O) -> T?) -> Function<T> {
-        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value, _ in
-            guard let value = value as? String, value == name else { return nil }
+        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) {
+            guard let value = $0.value as? String, value == name else { return nil }
             return value
-        }], options: .backwardMatch) { variables, _, _ in
-            guard let object = variables["lhs"] as? O, variables["rhs"] != nil else { return nil }
+        }], options: .backwardMatch) {
+            guard let object = $0.variables["lhs"] as? O, $0.variables["rhs"] != nil else { return nil }
             return body(object)
         }
     }
 
     public static func objectFunctionWithParameters<O, T>(_ name: String, body: @escaping (O, [Any]) -> T?) -> Function<T> {
-        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value, _ in
-            guard let value = value as? String, value == name else { return nil }
+        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) {
+            guard let value = $0.value as? String, value == name else { return nil }
             return value
-        }, Keyword("("), Variable<String>("arguments", options: .notInterpreted), Keyword(")")]) { variables, interpreter, _ in
-            guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
-            let interpretedArguments = arguments.split(separator: ",").compactMap { interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
+        }, Keyword("("), Variable<String>("arguments", options: .notInterpreted), Keyword(")")]) { match in
+            guard let object = match.variables["lhs"] as? O, match.variables["rhs"] != nil, let arguments = match.variables["arguments"] as? String else { return nil }
+            let interpretedArguments = arguments.split(separator: ",").compactMap { match.interpreter.evaluate(String($0).trimmingCharacters(in: .whitespacesAndNewlines)) }
             return body(object, interpretedArguments)
         }
     }
 
     public static func objectFunctionWithNamedParameters<O, T>(_ name: String, body: @escaping (O, [String: Any]) -> T?) -> Function<T> {
-        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) { value, _ in
-            guard let value = value as? String, value == name else { return nil }
+        return Function([Variable<O>("lhs"), Keyword("."), Variable<String>("rhs", options: .notInterpreted) {
+            guard let value = $0.value as? String, value == name else { return nil }
             return value
-        }, OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { variables, interpreter, _ in
-            guard let object = variables["lhs"] as? O, variables["rhs"] != nil, let arguments = variables["arguments"] as? String else { return nil }
+        }, OpenKeyword("("), Variable<String>("arguments", options: .notInterpreted), CloseKeyword(")")]) { match in
+            guard let object = match.variables["lhs"] as? O, match.variables["rhs"] != nil, let arguments = match.variables["arguments"] as? String else { return nil }
             var interpretedArguments: [String: Any] = [:]
             for argument in arguments.split(separator: ",") {
                 let parts = String(argument).trimmingCharacters(in: .whitespacesAndNewlines).split(separator: "=")
                 if let key = parts.first, let value = parts.last {
-                    interpretedArguments[String(key)] = interpreter.evaluate(String(value))
+                    interpretedArguments[String(key)] = match.interpreter.evaluate(String(value))
                 }
             }
             return body(object, interpretedArguments)

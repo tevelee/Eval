@@ -7,7 +7,7 @@ class FunctionTests: XCTestCase {
     // MARK: init
 
     func test_whenInitialised_thenPatternsAreSaved() {
-        let pattern = Pattern<Int, TypedInterpreter>([Keyword("in")]) { _, _, _ in 1 }
+        let pattern = Pattern<Int, TypedInterpreter>([Keyword("in")]) { _ in 1 }
 
         let function = Function(patterns: [pattern])
 
@@ -18,7 +18,7 @@ class FunctionTests: XCTestCase {
     func test_whenInitialisedWithOnePatters_thenPatternIsSaved() {
         let pattern = [Keyword("in")]
 
-        let function = Function(pattern) { _, _, _ in 1 }
+        let function = Function(pattern) { _ in 1 }
 
         XCTAssertEqual(function.patterns.count, 1)
         XCTAssertEqual(function.patterns[0].elements.count, 1)
@@ -28,7 +28,7 @@ class FunctionTests: XCTestCase {
     // MARK: convert
 
     func test_whenConverting_thenResultIsValid() {
-        let function = Function([Keyword("in")]) { _, _, _ in 1 }
+        let function = Function([Keyword("in")]) { _ in 1 }
 
         let result = function.convert(input: "input", interpreter: TypedInterpreter(), context: Context())
 
@@ -36,7 +36,7 @@ class FunctionTests: XCTestCase {
     }
 
     func test_whenConvertingInvalidValue_thenConversionReturnsNil() {
-        let function = Function([Keyword("in")]) { _, _, _ in 1 }
+        let function = Function([Keyword("in")]) { _ in 1 }
 
         let result = function.convert(input: "example", interpreter: TypedInterpreter(), context: Context())
 

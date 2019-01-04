@@ -39,35 +39,54 @@ public struct PatternOptions: OptionSet {
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
-
+    
     /// Searches of the elements of the pattern backward from the end of the output. Othwerise, if not present, it matches from the beginning.
     public static let backwardMatch: PatternOptions = PatternOptions(rawValue: 1 << 0)
 }
 
-/// Matchers are the heart of the Eval framework, providing pattern matching capabilities to the library.
-public class Pattern<T, I: Interpreter> {
+/// Pattern consists of array of elements
+public protocol PatternProtocol {
+    /// `Matcher` instances are capable of recognising patterns described in the `elements` collection. It only remains effective, if the `Variable` instances are surrounded by `Keyword` instances, so no two `Variable`s should be next to each other. Otherwise, their matching result and value would be undefined.
+    /// This collection should be provided during the initialisation, and cannot be modified once the `Matcher` instance has been created.
+    var elements: [PatternElement] { get }
+    
+    /// Options that modify the pattern matching algorithm
+    var options: PatternOptions { get }
+    
+    /// Optional name to identify the pattern. If not provided during initialisation, it will fall back to the textual representation of the elements array
+    var name: String { get }
+}
+
+/// Pattern consists of array of elements
+public class Pattern<T, I: Interpreter>: PatternProtocol {
     /// `Matcher` instances are capable of recognising patterns described in the `elements` collection. It only remains effective, if the `Variable` instances are surrounded by `Keyword` instances, so no two `Variable`s should be next to each other. Otherwise, their matching result and value would be undefined.
     /// This collection should be provided during the initialisation, and cannot be modified once the `Matcher` instance has been created.
     public let elements: [PatternElement]
-
+    
     /// The block to process the elements with
     let matcher: MatcherBlock<T, I>
-
+    
     /// Options that modify the pattern matching algorithm
-    let options: PatternOptions
-
+    public let options: PatternOptions
+    
+    /// Optional name to identify the pattern. If not provided during initialisation, it will fall back to the textual representation of the elements array
+    public let name: String
+    
     /// The first parameter is the pattern, that needs to be recognised. The `matcher` ending closure is called whenever the pattern has successfully been recognised and allows the users of this framework to provide custom computations using the matched `Variable` values.
     /// - parameter elemenets: The pattern to recognise
+    /// - parameter name: Optional identifier for the pattern. Defaults to the string representation of the elements
     /// - parameter options: Options that modify the pattern matching algorithm
     /// - parameter matcher: The block to process the input with
     public init(_ elements: [PatternElement],
+                name: String? = nil,
                 options: PatternOptions = [],
                 matcher: @escaping MatcherBlock<T, I>) {
+        self.name = name ?? Pattern.stringify(elements: elements)
         self.matcher = matcher
         self.options = options
         self.elements = Pattern.elementsByReplacingTheLastVariableNotToBeShortestMatch(in: elements, options: options)
     }
-
+    
     /// If the last element in the elements pattern is a variable, shortest match will not match until the end of the input string, but just until the first empty character.
     /// - parameter in: The elements array where the last element should be replaced
     /// - parameter options: Options that modify the pattern matching algorithm
@@ -75,7 +94,7 @@ public class Pattern<T, I: Interpreter> {
     static func elementsByReplacingTheLastVariableNotToBeShortestMatch(in elements: [PatternElement], options: PatternOptions) -> [PatternElement] {
         var elements = elements
         let index = options.contains(.backwardMatch) ? elements.startIndex : elements.index(before: elements.endIndex)
-
+        
         /// Replaces the last element in the elements collection with the new one in the parmeter
         /// - parameter element: The element to be replaced
         /// - parameter new: The replacement
@@ -84,7 +103,7 @@ public class Pattern<T, I: Interpreter> {
             elements.remove(at: index)
             elements.insert(new(element.options.union(.exhaustiveMatch)), at: index)
         }
-
+        
         if let last = elements[index] as? GenericVariable<I.EvaluatedType, I>, !last.options.contains(.exhaustiveMatch) {
             replaceLast(last) { GenericVariable(last.name, options: $0, map: last.map) }
         } else if let last = elements[index] as? VariableProtocol, !last.options.contains(.exhaustiveMatch) { //in case it cannot be converted, let's use Any. Losing type information
@@ -92,7 +111,7 @@ public class Pattern<T, I: Interpreter> {
         }
         return elements
     }
-
+    
     /// This matcher provides the main logic of the `Eval` framework, performing the pattern matching, trying to identify, whether the input string is somehow related, or completely matches the pattern of the `Pattern` instance.
     /// Uses the `Matcher` class for the evaluation
     /// - parameter string: The input
@@ -104,22 +123,28 @@ public class Pattern<T, I: Interpreter> {
     func matches(string: String, from start: String.Index? = nil, interpreter: I, context: Context, connectedRanges: [ClosedRange<String.Index>] = []) -> MatchResult<T> {
         let start = start ?? string.startIndex
         let processor = VariableProcessor(interpreter: interpreter, context: context)
-        let matcher = Matcher(elements: elements, processor: processor, options: options)
+        let matcher = Matcher(pattern: self, processor: processor)
         let result = matcher.match(string: string, from: start, connectedRanges: connectedRanges) { variables in
             self.matcher(variables, interpreter, context)
         }
-
+        
         if case let .exactMatch(_, output, variables) = result {
             let input = String(string[start...])
-            context.debugInfo[input] = ExpressionInfo(input: input, output: output, pattern: pattern(), variables: variables)
+            context.debugInfo[input] = ExpressionInfo(input: input, output: output, pattern: elementsAsString(), patternName: name, variables: variables)
         }
-
+        
         return result
     }
-
+    
+    /// A textual representation of the Pattern's elements array
+    /// - returns: A stringified version of the input elements
+    func elementsAsString() -> String {
+        return Pattern.stringify(elements: elements)
+    }
+    
     /// A textual representation of the elements array
     /// - returns: A stringified version of the input elements
-    func pattern() -> String {
+    static func stringify(elements: [PatternElement]) -> String {
         return elements.map {
             if let keyword = $0 as? Keyword {
                 return keyword.name

@@ -124,19 +124,19 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+                <a href="Functions.html#/s:4Eval1poiySayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval1poiSayxGAC_xtlF">+(_:_:)</a>
+                <a href="Functions.html#/s:4Eval1poiySayxGAC_xtlF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval2peoiySayxGz_xtlF">+=(_:_:)</a>
+                <a href="Functions.html#/s:4Eval2peoiyySayxGz_xtlF">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval22collectConnectedRangesSays11ClosedRangeVySS5IndexVGGSS5input_SayAA7PatternCyypAA16TypedInterpreterCGG10statementstF">collectConnectedRanges(input:statements:)</a>
+                <a href="Functions.html#/s:4Eval22collectConnectedRanges5input10statementsSaySNySS5IndexVGGSS_SayAA7PatternCyypAA16TypedInterpreterCGGtF">collectConnectedRanges(input:statements:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSS5IndexVSg4fromq_11interpreterAA7ContextC7contextSays11ClosedRangeVyAMGG15connectedRangestAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:connectedRanges:)</a>
+                <a href="Functions.html#/s:4Eval14matchStatement7amongst2in4from11interpreter7context15connectedRangesAA11MatchResultOyxGSayAA7PatternCyxq_GG_S2S5IndexVSgq_AA7ContextCSaySNyAQGGtAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:connectedRanges:)</a>
               </li>
             </ul>
           </li>
@@ -179,10 +179,22 @@
             <a href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Structs/DataTypeBody.html">DataTypeBody</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/ExpressionInfo.html">ExpressionInfo</a>
               </li>
               <li class="nav-group-task">
+                <a href="Structs/LiteralBody.html">LiteralBody</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/PatternBody.html">PatternBody</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/PatternOptions.html">PatternOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/VariableBody.html">VariableBody</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/VariableOptions.html">VariableOptions</a>
@@ -209,7 +221,7 @@
             <h1 id='eval' class='heading'>{ Eval }</h1>
 
 <p><a href="https://travis-ci.org/tevelee/Eval"><img src="https://travis-ci.org/tevelee/Eval.svg?branch=master" alt="Travis CI status"></a>
-<a href=""><img src="https://img.shields.io/badge/Version-1.3.5-yellow.svg" alt="Framework version"></a>
+<a href=""><img src="https://img.shields.io/badge/Version-1.4.0-yellow.svg" alt="Framework version"></a>
 <a href=""><img src="https://img.shields.io/badge/Swift-4.2-orange.svg" alt="Swift version"></a>
 <a href="https://tevelee.github.io/Eval"><img src="https://tevelee.github.io/Eval/badge.svg" alt="Code Documentation Coverage"></a>
 <a href="https://codecov.io/gh/tevelee/Eval"><img src="https://codecov.io/gh/tevelee/Eval/branch/master/graph/badge.svg" alt="Code Test Coverage"></a>
@@ -414,7 +426,7 @@
 <h4 id='swift-package-manager' class='heading'>Swift Package Manager</h4>
 
 <p>Just add the following line to your dependencies:</p>
-<pre class="highlight swift"><code><span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/tevelee/Eval.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"1.3.5"</span><span class="p">),</span>
+<pre class="highlight swift"><code><span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/tevelee/Eval.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"1.4.0"</span><span class="p">),</span>
 </code></pre>
 
 <p>And reference it by name in your targets:</p>
@@ -429,7 +441,7 @@
 <h4 id='cocoapods' class='heading'>CocoaPods</h4>
 
 <p>Just add the following line to your <code>Podfile</code>:</p>
-<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s1">'Eval'</span><span class="p">,</span> <span class="s1">'~&gt; 1.3.5'</span>
+<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s1">'Eval'</span><span class="p">,</span> <span class="s1">'~&gt; 1.4.0'</span>
 </code></pre>
 
 <p>And install the new dependency:</p>
@@ -438,7 +450,7 @@
 <h4 id='carthage' class='heading'>Carthage</h4>
 
 <p>Just add the following line to your <code>Cartfile</code>:</p>
-<pre class="highlight ruby"><code><span class="n">github</span> <span class="s2">"tevelee/Eval"</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">5</span>
+<pre class="highlight ruby"><code><span class="n">github</span> <span class="s2">"tevelee/Eval"</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="o">.</span><span class="mi">4</span><span class="o">.</span><span class="mi">0</span>
 </code></pre>
 
 <p>And install the new dependency:</p>
@@ -531,7 +543,7 @@ Definition-wise, this framework provides an easily understandable way of languag
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2019-01-06)</p>
+          <p>&copy; 2019 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2019-01-07)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

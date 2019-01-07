@@ -125,19 +125,19 @@
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+                <a href="../Functions.html#/s:4Eval1poiySayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval1poiSayxGAC_xtlF">+(_:_:)</a>
+                <a href="../Functions.html#/s:4Eval1poiySayxGAC_xtlF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval2peoiySayxGz_xtlF">+=(_:_:)</a>
+                <a href="../Functions.html#/s:4Eval2peoiyySayxGz_xtlF">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval22collectConnectedRangesSays11ClosedRangeVySS5IndexVGGSS5input_SayAA7PatternCyypAA16TypedInterpreterCGG10statementstF">collectConnectedRanges(input:statements:)</a>
+                <a href="../Functions.html#/s:4Eval22collectConnectedRanges5input10statementsSaySNySS5IndexVGGSS_SayAA7PatternCyypAA16TypedInterpreterCGGtF">collectConnectedRanges(input:statements:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSS5IndexVSg4fromq_11interpreterAA7ContextC7contextSays11ClosedRangeVyAMGG15connectedRangestAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:connectedRanges:)</a>
+                <a href="../Functions.html#/s:4Eval14matchStatement7amongst2in4from11interpreter7context15connectedRangesAA11MatchResultOyxGSayAA7PatternCyxq_GG_S2S5IndexVSgq_AA7ContextCSaySNyAQGGtAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:connectedRanges:)</a>
               </li>
             </ul>
           </li>
@@ -180,10 +180,22 @@
             <a href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Structs/DataTypeBody.html">DataTypeBody</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/ExpressionInfo.html">ExpressionInfo</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/LiteralBody.html">LiteralBody</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PatternBody.html">PatternBody</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/PatternOptions.html">PatternOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariableBody.html">VariableBody</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/VariableOptions.html">VariableOptions</a>
@@ -244,7 +256,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L179">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L187">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -274,7 +286,7 @@
                         </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L181">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L189">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -282,70 +294,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval8DataTypeC5printSSx_AA7Printer_ptcvp"></a>
-                    <a name="//apple_ref/swift/Property/print" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval8DataTypeC5printSSx_AA7Printer_ptcvp">print</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>A method to convert an internal representation to strings - for debugging and output representation purposes</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">print</span><span class="p">:</span> <span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">T</span><span class="p">,</span> <span class="n">_</span> <span class="nv">printer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Printer.html">Printer</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>value</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The value to print</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>printer</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>An interpreter instance if the content recursively contains further data types to print</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L185">Show on GitHub</a>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:4Eval8DataTypeCACyxGxm4type_SayAA7LiteralCyxGG8literalsSSx_AA7Printer_ptc5printtcfc"></a>
+                    <a name="/s:4Eval8DataTypeC4type8literals5printACyxGxm_SayAA7LiteralCyxGGSSAA0bC4BodyVyxGctcfc"></a>
                     <a name="//apple_ref/swift/Method/init(type:literals:print:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval8DataTypeCACyxGxm4type_SayAA7LiteralCyxGG8literalsSSx_AA7Printer_ptc5printtcfc">init(type:literals:print:)</a>
+                    <a class="token" href="#/s:4Eval8DataTypeC4type8literals5printACyxGxm_SayAA7LiteralCyxGGSSAA0bC4BodyVyxGctcfc">init(type:literals:print:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -364,7 +315,7 @@ The last print block is used to convert the value of any DataType to a string va
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span> <span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">T</span><span class="o">.</span><span class="k">Type</span><span class="p">,</span>
              <span class="nv">literals</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Literal.html">Literal</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">],</span>
-             <span class="nv">print</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">T</span><span class="p">,</span> <span class="n">_</span> <span class="nv">printer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Printer.html">Printer</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+             <span class="nv">print</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kt"><a href="../Structs/DataTypeBody.html">DataTypeBody</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -411,24 +362,12 @@ The last print block is used to convert the value of any DataType to a string va
                             <tr>
                               <td>
                                 <code>
-                                <em>value</em>
+                                <em>body</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The value to print</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>printer</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>An interpreter instance if the content recursively contains further data types to print</p>
+                                  <p>Struct containing the value and a printer instance</p>
                                 </div>
                               </td>
                             </tr>
@@ -436,7 +375,7 @@ The last print block is used to convert the value of any DataType to a string va
                         </table>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L195-L201">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L202-L208">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -444,9 +383,9 @@ The last print block is used to convert the value of any DataType to a string va
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval8DataTypeC7convertypSgSS5input_AA16TypedInterpreterC11interpretertF"></a>
+                    <a name="/s:4Eval8DataTypeC7convert5input11interpreterypSgSS_AA16TypedInterpreterCtF"></a>
                     <a name="//apple_ref/swift/Method/convert(input:interpreter:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval8DataTypeC7convertypSgSS5input_AA16TypedInterpreterC11interpretertF">convert(input:interpreter:)</a>
+                    <a class="token" href="#/s:4Eval8DataTypeC7convert5input11interpreterypSgSS_AA16TypedInterpreterCtF">convert(input:interpreter:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -501,7 +440,7 @@ The last print block is used to convert the value of any DataType to a string va
                         <p>The value of the <code>DataType</code> or <code>nil</code> if it cannot be processed</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L207-L209">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L214-L216">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -509,9 +448,9 @@ The last print block is used to convert the value of any DataType to a string va
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval8DataTypeC5printSSSgyp5value_AA7Printer_p7printertF"></a>
+                    <a name="/s:4Eval8DataTypeC5print5value7printerSSSgyp_AA7Printer_ptF"></a>
                     <a name="//apple_ref/swift/Method/print(value:printer:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval8DataTypeC5printSSSgyp5value_AA7Printer_p7printertF">print(value:printer:)</a>
+                    <a class="token" href="#/s:4Eval8DataTypeC5print5value7printerSSSgyp_AA7Printer_ptF">print(value:printer:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -567,7 +506,7 @@ It does not need to be unique or always the same for the same input values.</p>
                         <p>The string representation of the value or <code>nil</code> if it cannot be processed</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L216-L219">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L223-L226">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -577,7 +516,7 @@ It does not need to be unique or always the same for the same input values.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2019-01-06)</p>
+          <p>&copy; 2019 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2019-01-07)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

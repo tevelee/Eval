@@ -125,19 +125,19 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+                <a href="Functions.html#/s:4Eval1poiySayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval1poiSayxGAC_xtlF">+(_:_:)</a>
+                <a href="Functions.html#/s:4Eval1poiySayxGAC_xtlF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval2peoiySayxGz_xtlF">+=(_:_:)</a>
+                <a href="Functions.html#/s:4Eval2peoiyySayxGz_xtlF">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval22collectConnectedRangesSays11ClosedRangeVySS5IndexVGGSS5input_SayAA7PatternCyypAA16TypedInterpreterCGG10statementstF">collectConnectedRanges(input:statements:)</a>
+                <a href="Functions.html#/s:4Eval22collectConnectedRanges5input10statementsSaySNySS5IndexVGGSS_SayAA7PatternCyypAA16TypedInterpreterCGGtF">collectConnectedRanges(input:statements:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSS5IndexVSg4fromq_11interpreterAA7ContextC7contextSays11ClosedRangeVyAMGG15connectedRangestAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:connectedRanges:)</a>
+                <a href="Functions.html#/s:4Eval14matchStatement7amongst2in4from11interpreter7context15connectedRangesAA11MatchResultOyxGSayAA7PatternCyxq_GG_S2S5IndexVSgq_AA7ContextCSaySNyAQGGtAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:connectedRanges:)</a>
               </li>
             </ul>
           </li>
@@ -180,10 +180,22 @@
             <a href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Structs/DataTypeBody.html">DataTypeBody</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/ExpressionInfo.html">ExpressionInfo</a>
               </li>
               <li class="nav-group-task">
+                <a href="Structs/LiteralBody.html">LiteralBody</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/PatternBody.html">PatternBody</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/PatternOptions.html">PatternOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/VariableBody.html">VariableBody</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/VariableOptions.html">VariableOptions</a>
@@ -301,7 +313,7 @@ In its last parameter if provides information about the context, and therefore a
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">MatcherBlock</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">E</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">(</span><span class="n">_</span> <span class="nv">variables</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">],</span> <span class="n">_</span> <span class="nv">evaluator</span><span class="p">:</span> <span class="kt">E</span><span class="p">,</span> <span class="n">_</span> <span class="nv">context</span><span class="p">:</span> <span class="kt"><a href="Classes/Context.html">Context</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">MatcherBlock</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">E</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kt"><a href="Structs/PatternBody.html">PatternBody</a></span><span class="o">&lt;</span><span class="kt">E</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -312,36 +324,12 @@ In its last parameter if provides information about the context, and therefore a
                             <tr>
                               <td>
                                 <code>
-                                <em>variables</em>
+                                <em>body</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The key-value pairs of the <code><a href="Classes.html#/s:4Eval8VariableC">Variable</a></code> instances found along the way</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>evaluator</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The evaluator instance to help parsing the content</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>context</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The context if the matcher block needs any contextual information</p>
+                                  <p>Struct containing the matched variables, an interpreter, and a context</p>
                                 </div>
                               </td>
                             </tr>
@@ -353,7 +341,7 @@ In its last parameter if provides information about the context, and therefore a
                         <p>The converted value</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L32">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Utilities/Pattern.swift#L40">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -363,7 +351,7 @@ In its last parameter if provides information about the context, and therefore a
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2019-01-06)</p>
+          <p>&copy; 2019 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2019-01-07)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

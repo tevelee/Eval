@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>PatternElement Protocol Reference</title>
+    <title>LiteralBody Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Protocol/PatternElement" class="dashAnchor"></a>
-    <a title="PatternElement Protocol Reference"></a>
+    <a name="//apple_ref/swift/Struct/LiteralBody" class="dashAnchor"></a>
+    <a title="LiteralBody Structure Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">Eval Docs</a> (100% documented)</p>
@@ -23,7 +23,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">Eval Reference</a>
         <img id="carat" src="../img/carat.png" />
-        PatternElement Protocol Reference
+        LiteralBody Structure Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -218,15 +218,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>PatternElement</h1>
+            <h1>LiteralBody</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">PatternElement</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">LiteralBody</span></code></pre>
 
                 </div>
               </div>
-            <p><code>MatchElement</code>s are used by <code><a href="../Classes/Matcher.html">Matcher</a></code> instances to be able to recognise patterns.
-Currently, the two main kind of <code>MatchElement</code> classes are <code><a href="../Classes/Keyword.html">Keyword</a></code>s and <code><a href="../Classes.html#/s:4Eval8VariableC">Variable</a></code>s</p>
+            <p>It&rsquo;s a data transfer object passed in the <code><a href="../Classes/Literal.html">Literal</a></code> converter block</p>
 
           </section>
           <section class="section task-group-section">
@@ -235,9 +234,9 @@ Currently, the two main kind of <code>MatchElement</code> classes are <code><a h
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval14PatternElementP7matches6prefix7optionsAA11MatchResultOyypGSS_AA0B7OptionsVtF"></a>
-                    <a name="//apple_ref/swift/Method/matches(prefix:options:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval14PatternElementP7matches6prefix7optionsAA11MatchResultOyypGSS_AA0B7OptionsVtF">matches(prefix:options:)</a>
+                    <a name="/s:4Eval11LiteralBodyV5valueSSvp"></a>
+                    <a name="//apple_ref/swift/Property/value" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval11LiteralBodyV5valueSSvp">value</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -245,54 +244,49 @@ Currently, the two main kind of <code>MatchElement</code> classes are <code><a h
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Using this method, an element returns how much the String provided in the <code>prefix</code> parameter matches the current element</p>
+                        <p>Value of the literal to match</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">matches</span><span class="p">(</span><span class="nv">prefix</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="kt"><a href="../Structs/PatternOptions.html">PatternOptions</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Enums/MatchResult.html">MatchResult</a></span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>prefix</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The input</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>options</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Options that modify the matching algorithm</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L232">Show on GitHub</a>
                       </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>The result of the match operation</p>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Eval11LiteralBodyV11interpreterAA16TypedInterpreterCvp"></a>
+                    <a name="//apple_ref/swift/Property/interpreter" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Eval11LiteralBodyV11interpreterAA16TypedInterpreterCvp">interpreter</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An interpreter instance if the raw value needs any further evaluation</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">interpreter</span><span class="p">:</span> <span class="kt"><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></span></code></pre>
+
+                        </div>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/Elements.swift#L31">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L234">Show on GitHub</a>
                       </div>
                     </section>
                   </div>

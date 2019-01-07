@@ -125,19 +125,19 @@
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval1poiSayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
+                <a href="../Functions.html#/s:4Eval1poiySayAA14PatternElement_pGAaC_p_AaC_ptF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval1poiSayxGAC_xtlF">+(_:_:)</a>
+                <a href="../Functions.html#/s:4Eval1poiySayxGAC_xtlF">+(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval2peoiySayxGz_xtlF">+=(_:_:)</a>
+                <a href="../Functions.html#/s:4Eval2peoiyySayxGz_xtlF">+=(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval22collectConnectedRangesSays11ClosedRangeVySS5IndexVGGSS5input_SayAA7PatternCyypAA16TypedInterpreterCGG10statementstF">collectConnectedRanges(input:statements:)</a>
+                <a href="../Functions.html#/s:4Eval22collectConnectedRanges5input10statementsSaySNySS5IndexVGGSS_SayAA7PatternCyypAA16TypedInterpreterCGGtF">collectConnectedRanges(input:statements:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:4Eval14matchStatementAA11MatchResultOyxGSayAA7PatternCyxq_GG7amongst_SS2inSS5IndexVSg4fromq_11interpreterAA7ContextC7contextSays11ClosedRangeVyAMGG15connectedRangestAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:connectedRanges:)</a>
+                <a href="../Functions.html#/s:4Eval14matchStatement7amongst2in4from11interpreter7context15connectedRangesAA11MatchResultOyxGSayAA7PatternCyxq_GG_S2S5IndexVSgq_AA7ContextCSaySNyAQGGtAA11InterpreterR_r0_lF">matchStatement(amongst:in:from:interpreter:context:connectedRanges:)</a>
               </li>
             </ul>
           </li>
@@ -180,10 +180,22 @@
             <a href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Structs/DataTypeBody.html">DataTypeBody</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/ExpressionInfo.html">ExpressionInfo</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/LiteralBody.html">LiteralBody</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PatternBody.html">PatternBody</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/PatternOptions.html">PatternOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/VariableBody.html">VariableBody</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/VariableOptions.html">VariableOptions</a>
@@ -222,9 +234,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval7LiteralC7convertxSgSS_AA16TypedInterpreterCtcvp"></a>
+                    <a name="/s:4Eval7LiteralC7convertyxSgAA0B4BodyVcvp"></a>
                     <a name="//apple_ref/swift/Property/convert" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval7LiteralC7convertxSgSS_AA16TypedInterpreterCtcvp">convert</a>
+                    <a class="token" href="#/s:4Eval7LiteralC7convertyxSgAA0B4BodyVcvp">convert</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -239,7 +251,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">convert</span><span class="p">:</span> <span class="p">(</span><span class="n">_</span> <span class="nv">input</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">_</span> <span class="nv">interpreter</span><span class="p">:</span> <span class="kt"><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">convert</span><span class="p">:</span> <span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kt"><a href="../Structs/LiteralBody.html">LiteralBody</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -250,24 +262,12 @@
                             <tr>
                               <td>
                                 <code>
-                                <em>input</em>
+                                <em>body</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The input to convert as a <code><a href="../Classes/DataType.html">DataType</a></code> value</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>interpreter</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>An interpreter instance if the content needs any further evaluation</p>
+                                  <p>Struct ontaining the raw matched value and an interpreter</p>
                                 </div>
                               </td>
                             </tr>
@@ -279,7 +279,7 @@
                         <p>The value of the <code><a href="../Classes/DataType.html">DataType</a></code> or <code>nil</code> if it cannot be processed</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L228">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L242">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -287,9 +287,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval7LiteralCACyxGxSgSS_AA16TypedInterpreterCtc7convert_tcfc"></a>
+                    <a name="/s:4Eval7LiteralC7convertACyxGxSgAA0B4BodyVc_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(convert:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval7LiteralCACyxGxSgSS_AA16TypedInterpreterCtc7convert_tcfc">init(convert:)</a>
+                    <a class="token" href="#/s:4Eval7LiteralC7convertACyxGxSgAA0B4BodyVc_tcfc">init(convert:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -297,14 +297,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>In case of more complicated expression, this initialiser accepts a <code><a href="../Classes/Literal.html#/s:4Eval7LiteralC7convertxSgSS_AA16TypedInterpreterCtcvp">convert</a></code> block, which can be used to process any value. Return nil, if the input cannot be accepted and converted.</p>
+                        <p>In case of more complicated expression, this initialiser accepts a <code><a href="../Classes/Literal.html#/s:4Eval7LiteralC7convertyxSgAA0B4BodyVcvp">convert</a></code> block, which can be used to process any value. Return nil, if the input cannot be accepted and converted.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">convert</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">input</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">_</span> <span class="nv">interpreter</span><span class="p">:</span> <span class="kt"><a href="../Classes/TypedInterpreter.html">TypedInterpreter</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">convert</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kt"><a href="../Structs/LiteralBody.html">LiteralBody</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?)</span></code></pre>
 
                         </div>
                       </div>
@@ -327,24 +327,12 @@
                             <tr>
                               <td>
                                 <code>
-                                <em>input</em>
+                                <em>body</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The input to convert as a <code><a href="../Classes/DataType.html">DataType</a></code> value</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>interpreter</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>An interpreter instance if the content needs any further evaluation</p>
+                                  <p>Struct ontaining the raw matched value and an interpreter</p>
                                 </div>
                               </td>
                             </tr>
@@ -352,7 +340,7 @@
                         </table>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L234-L236">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L247-L249">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -360,9 +348,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval7LiteralCACyxGSS_xyXK10convertsTotcfc"></a>
+                    <a name="/s:4Eval7LiteralC_10convertsToACyxGSS_xyXAtcfc"></a>
                     <a name="//apple_ref/swift/Method/init(_:convertsTo:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval7LiteralCACyxGSS_xyXK10convertsTotcfc">init(_:convertsTo:)</a>
+                    <a class="token" href="#/s:4Eval7LiteralC_10convertsToACyxGSS_xyXAtcfc">init(_:convertsTo:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -413,7 +401,7 @@
                         </table>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L241-L243">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L254-L256">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -421,9 +409,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:4Eval7LiteralC7convertxSgSS5input_AA16TypedInterpreterC11interpretertF"></a>
+                    <a name="/s:4Eval7LiteralC7convert5input11interpreterxSgSS_AA16TypedInterpreterCtF"></a>
                     <a name="//apple_ref/swift/Method/convert(input:interpreter:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:4Eval7LiteralC7convertxSgSS5input_AA16TypedInterpreterC11interpretertF">convert(input:interpreter:)</a>
+                    <a class="token" href="#/s:4Eval7LiteralC7convert5input11interpreterxSgSS_AA16TypedInterpreterCtF">convert(input:interpreter:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -478,7 +466,7 @@
                         <p>The value of the <code><a href="../Classes/DataType.html">DataType</a></code> or <code>nil</code> if it cannot be processed</p>
                       </div>
                       <div class="slightly-smaller">
-                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L249-L251">Show on GitHub</a>
+                        <a href="https://github.com/tevelee/Eval/tree/master/Sources/Eval/TypedInterpreter.swift#L262-L264">Show on GitHub</a>
                       </div>
                     </section>
                   </div>
@@ -488,7 +476,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2019-01-06)</p>
+          <p>&copy; 2019 <a class="link" href="https://tevelee.github.io" target="_blank" rel="external">Laszlo Teveli</a>. All rights reserved. (Last updated: 2019-01-07)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

@@ -1,6 +1,11 @@
-osx_image: xcode9.4
+osx_image: xcode10
 language: swift
 sudo: true
+env:
+  global:
+    - EXPANDED_CODE_SIGN_IDENTITY="-"
+    - EXPANDED_CODE_SIGN_IDENTITY_NAME="-"
+    - EXPANDED_PROVISIONING_PROFILE="-"
 before_script:
 - sh Scripts/git_auth.sh
 script:

@@ -1,6 +1,12 @@
 {
   "warnings": [
-
+    {
+      "file": "/Users/travis/build/tevelee/Eval/Sources/Eval/Utilities/Matcher.swift",
+      "line": 204,
+      "symbol": "Matcher.match(string:from:connectedRanges:renderer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
   ],
   "source_directory": "/Users/travis/build/tevelee/Eval"
 }

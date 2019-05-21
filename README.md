@@ -2,7 +2,7 @@
 
 [![Travis CI status](https://travis-ci.org/tevelee/Eval.svg?branch=master)](https://travis-ci.org/tevelee/Eval)
 [![Framework version](https://img.shields.io/badge/Version-1.4.0-yellow.svg)]()
-[![Swift version](https://img.shields.io/badge/Swift-4.2-orange.svg)]()
+[![Swift version](https://img.shields.io/badge/Swift-5.0-orange.svg)]()
 [![Code Documentation Coverage](https://tevelee.github.io/Eval/badge.svg)](https://tevelee.github.io/Eval)
 [![Code Test Coverage](https://codecov.io/gh/tevelee/Eval/branch/master/graph/badge.svg)](https://codecov.io/gh/tevelee/Eval)
 [![Platforms](https://img.shields.io/badge/Platforms-iOS%20|%20macOS%20|%20Linux-blue.svg)]()

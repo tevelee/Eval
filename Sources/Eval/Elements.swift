@@ -150,7 +150,7 @@ public struct VariableBody<I: Interpreter> {
 
 /// Generic superclass of `Variable`s which are aware of their `Interpreter` classes,
 /// as they use it when mapping their values
-public class GenericVariable<T, I: Interpreter> : VariableProtocol, PatternElement, Equatable {
+public class GenericVariable<T, I: Interpreter>: VariableProtocol, PatternElement, Equatable {
     /// Maps and validates the variable value to another
     /// - parameter body: Struct containing the raw matched value and an interpreter object
     /// - returns: The transformed value or nil, if the value was validated with a negative result

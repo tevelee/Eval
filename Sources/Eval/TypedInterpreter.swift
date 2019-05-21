@@ -182,7 +182,7 @@ public struct DataTypeBody<T> {
 }
 
 /// The implementation of a `DataType` uses the `DataTypeProtocol` to convert input to a strongly typed data and print it if needed
-public class DataType<T> : DataTypeProtocol {
+public class DataType<T>: DataTypeProtocol {
     /// The existing type to map to an internal one
     let type: T.Type
     /// Array of literals that tell the framework how to transform certain types to an internal `DataType` representation
@@ -284,7 +284,7 @@ public protocol FunctionProtocol {
 }
 
 /// `Function`s can process values in given `DataType`s, allowing the expressions to be feature-rich
-public class Function<T> : FunctionProtocol {
+public class Function<T>: FunctionProtocol {
     /// Although `Function`s typically contain only one pattern, multiple ones can be added, for semantic grouping purposes
     public let patterns: [Pattern<T, TypedInterpreter>]
 
@@ -315,5 +315,5 @@ public class Function<T> : FunctionProtocol {
 }
 
 /// `Variable` represents a named placeholder, so when the matcher recognises a pattern, the values of the variables are passed to them in a block.
-public class Variable<T> : GenericVariable<T, TypedInterpreter> {
+public class Variable<T>: GenericVariable<T, TypedInterpreter> {
 }

@@ -35,7 +35,7 @@ internal protocol VariableProcessorProtocol {
 }
 
 /// A processor that can process a raw value with extra information, such as interpreter and context
-internal class VariableProcessor<E: Interpreter> : VariableProcessorProtocol {
+internal class VariableProcessor<E: Interpreter>: VariableProcessorProtocol {
     /// An interpreter instance to use during the processing
     let interpreter: E
     /// The context to use during the processing

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "Eval"
-  s.version = "1.4.0"
+  s.version = "1.5.0"
   s.summary = "Eval is a lightweight interpreter framework written in  Swift, evaluating expressions at runtime"
   s.description = <<-DESC
 Eval is a lightweight interpreter framework written in Swift, for 📱iOS, 🖥 macOS, and 🐧Linux platforms.

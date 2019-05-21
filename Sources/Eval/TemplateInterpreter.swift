@@ -23,7 +23,7 @@ import Foundation
 
 /// This interpreter is used to evaluate string expressions and return a transformed string, replacing the content where it matches certain patterns.
 /// Typically used in web applications, where the rendering of an HTML page is provided as a template, and the application replaces certain statements, based on input parameters.
-open class TemplateInterpreter<T> : Interpreter {
+open class TemplateInterpreter<T>: Interpreter {
     /// The statements (patterns) registered to the interpreter. If found, these are going to be processed and replaced with the evaluated value
     public let statements: [Pattern<T, TemplateInterpreter<T>>]
 
@@ -41,7 +41,7 @@ open class TemplateInterpreter<T> : Interpreter {
     public typealias EvaluatedType = T
 
     /// The evaluator, that is being used to process variables
-    public lazy var interpreterForEvaluatingVariables: TypedInterpreter = { [unowned self] in typedInterpreter }()
+    public lazy var interpreterForEvaluatingVariables: TypedInterpreter = { typedInterpreter }()
 
     /// The statements, and context parameters are optional, but highly recommended to use with actual values.
     /// In order to properly initialise a `StringTemplateInterpreter`, you'll need a `TypedInterpreter` instance as well.

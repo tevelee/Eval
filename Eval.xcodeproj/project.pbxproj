@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		3AED32EA232D382D00FA2596 /* PerformanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AED32E9232D382D00FA2596 /* PerformanceTest.swift */; };
+		3AED32ED232D3D4D00FA2596 /* Suffix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AED32EB232D3D3500FA2596 /* Suffix.swift */; };
 		OBJ_51 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Common.swift */; };
 		OBJ_52 /* Elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Elements.swift */; };
 		OBJ_53 /* TemplateInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* TemplateInterpreter.swift */; };
@@ -68,6 +70,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3AED32E9232D382D00FA2596 /* PerformanceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTest.swift; sourceTree = "<group>"; };
+		3AED32EB232D3D3500FA2596 /* Suffix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Suffix.swift; sourceTree = "<group>"; };
 		"Eval::Eval::Product" /* Eval.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Eval.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Eval::EvalTests::Product" /* EvalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = EvalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_10 /* Elements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Elements.swift; sourceTree = "<group>"; };
@@ -156,6 +160,8 @@
 			children = (
 				OBJ_21 /* InterpreterTests.swift */,
 				OBJ_22 /* TemplateTests.swift */,
+				3AED32E9232D382D00FA2596 /* PerformanceTest.swift */,
+				3AED32EB232D3D3500FA2596 /* Suffix.swift */,
 			);
 			path = IntegrationTests;
 			sourceTree = "<group>";
@@ -340,9 +346,11 @@
 				OBJ_76 /* InterpreterTests.swift in Sources */,
 				OBJ_77 /* TemplateTests.swift in Sources */,
 				OBJ_78 /* DataTypeTests.swift in Sources */,
+				3AED32ED232D3D4D00FA2596 /* Suffix.swift in Sources */,
 				OBJ_79 /* FunctionTests.swift in Sources */,
 				OBJ_80 /* InterpreterContextTests.swift in Sources */,
 				OBJ_81 /* KeywordTests.swift in Sources */,
+				3AED32EA232D382D00FA2596 /* PerformanceTest.swift in Sources */,
 				OBJ_82 /* LiteralTests.swift in Sources */,
 				OBJ_83 /* MatchResultTests.swift in Sources */,
 				OBJ_84 /* MatchStatementTests.swift in Sources */,
